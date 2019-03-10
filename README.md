@@ -1,5 +1,5 @@
 
-# Webtrees 2 Custom Module: ⚶ Vesta Shared Places
+# ⚶ Vesta Shared Places (Webtrees 2 Custom Module)
 
 This [webtrees](https://www.webtrees.net/) custom module supports shared places as level 0 GEDCOM objects, on the basis of the Gedcom-L agreements. It displays data via the extended 'Facts and Events' tab, enhancing places with data obtained from the respective shared place.
 The project’s website is [cissee.de](https://cissee.de).
@@ -85,7 +85,7 @@ Note that currently only selected parts of this structure are displayed and supp
 * Provides location data to other custom modules.
 * Download the zipped module, including all related modules, [here](https://cissee.de/vesta.latest.zip).
 * Support, suggestions, feature requests: <ric@richard-cissee.de>
-* Issues also via <https://github.com/ric2016/shared_places/issues>
+* Issues also via <https://github.com/vesta-webtrees-2-custom-modules/vesta_shared_places/issues>
 
 ### Installation<a name="installation"/>
 
