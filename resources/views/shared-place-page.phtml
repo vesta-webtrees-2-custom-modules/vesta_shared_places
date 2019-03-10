@@ -1,0 +1,97 @@
+<?php
+use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
+use Cissee\WebtreesExt\ModuleView;
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Functions\FunctionsPrint;
+use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
+use Fisharebest\Webtrees\I18N;
+?>
+
+<?php
+//cf gedcom-record-page.phtml
+?>
+
+<?php if ($sharedPlace->isPendingDeletion()) : ?>
+    <?php if (Auth::isModerator($sharedPlace->tree())) : ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => /* I18N: %1$s is “accept”, %2$s is “reject”. These are links. */ I18N::translate('This shared place has been deleted. You should review the deletion and then %1$s or %2$s it.', '<a href="#" class="alert-link" onclick="accept_changes(\'' . e($sharedPlace->xref()) . '\', \'' . e($sharedPlace->tree()->name()) . '\');">' . I18N::translateContext('You should review the deletion and then accept or reject it.', 'accept') . '</a>', '<a href="#" class="alert-link" onclick="reject_changes(\'' . e($sharedPlace->xref()) . '\', \'' . e($sharedPlace->tree()->name()) . '\');">' . I18N::translateContext('You should review the deletion and then accept or reject it.', 'reject') . '</a>') . ' ' . FunctionsPrint::helpLink('pending_changes')]) ?>
+    <?php elseif (Auth::isEditor($sharedPlace->tree())) : ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => I18N::translate('This shared place has been deleted. The deletion will need to be reviewed by a moderator.') . ' ' . FunctionsPrint::helpLink('pending_changes')]) ?>
+    <?php endif ?>
+<?php elseif ($sharedPlace->isPendingAddition()) : ?>
+    <?php if (Auth::isModerator($sharedPlace->tree())) : ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => /* I18N: %1$s is “accept”, %2$s is “reject”. These are links. */ I18N::translate('This shared place has been edited. You should review the changes and then %1$s or %2$s them.', '<a href="#" class="alert-link" onclick="accept_changes(\'' . e($sharedPlace->xref()) . '\', \'' . e($sharedPlace->tree()->name()) . '\');">' . I18N::translateContext('You should review the changes and then accept or reject them.', 'accept') . '</a>', '<a href="#" class="alert-link" onclick="reject_changes(\'' . e($sharedPlace->xref()) . '\', \'' . e($sharedPlace->tree()->name()) . '\');">' . I18N::translateContext('You should review the changes and then accept or reject them.', 'reject') . '</a>') . ' ' . FunctionsPrint::helpLink('pending_changes')]) ?>
+    <?php elseif (Auth::isEditor($sharedPlace->tree())) : ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => I18N::translate('This shared place has been edited. The changes need to be reviewed by a moderator.') . ' ' . FunctionsPrint::helpLink('pending_changes')]) ?>
+    <?php endif ?>
+<?php endif ?>
+
+<div class="d-flex mb-4">
+    <h2 class="wt-page-title mx-auto">
+        <?= $sharedPlace->fullName() ?>
+    </h2>
+    <?php if ($sharedPlace->canEdit() && !$sharedPlace->isPendingDeletion()) : ?>
+        <?= ModuleView::make($moduleDirectory, 'shared-place-page-menu', ['record' => $sharedPlace]) ?>
+    <?php endif ?>
+</div>
+
+<div class="wt-page-content">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" role="tab" href="#details">
+                <?= I18N::translate('Details') ?>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link<?= empty($individuals) ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#individuals">
+                <?= I18N::translate('Individuals') ?>
+                <?= view('components/badge', ['count' => count($individuals)]) ?>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link<?= empty($families) ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#families">
+                <?= I18N::translate('Families') ?>
+                <?= view('components/badge', ['count' => count($families)]) ?>
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active fade show" role="tabpanel" id="details">
+            <table class="table wt-facts-table">
+                <?php foreach ($facts->toArray() as $fact) : ?>
+                    <?php FunctionsPrintFacts::printFact($fact, $sharedPlace) ?>
+                <?php endforeach ?>
+
+								<?php
+								//cf source-page.phtml
+								?>
+								
+                <?php if ($sharedPlace->canEdit()) : ?>
+                    <?php FunctionsPrintExt::printAddNewFact_LOC($moduleName, $moduleDirectory, $sharedPlace, $facts) ?>
+                    <?php if ($sharedPlace->tree()->getPreference('MEDIA_UPLOAD') >= Auth::accessLevel($sharedPlace->tree())) : ?>
+                        <tr>
+                            <th scope="row">
+                                <?= I18N::translate('Media object') ?>
+                            </th>
+                            <td>
+                                <a href="<?= e(route('add-fact', ['ged' => $sharedPlace->tree()->name(), 'xref' => $sharedPlace->xref(), 'fact' => 'OBJE'])) ?>">
+                                    <?= I18N::translate('Add a media object') ?>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endif ?>
+                <?php endif ?>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" role="tabpanel" id="individuals">
+            <?= view('lists/individuals-table', ['individuals' => $individuals, 'sosa' => false, 'tree' => $tree]) ?>
+        </div>
+
+        <div class="tab-pane fade" role="tabpanel" id="families">
+            <?= view('lists/families-table', ['families' => $families, 'tree' => $tree]) ?>
+        </div>
+    </div>
+</div>
+
+<?= view('modals/ajax') ?>
