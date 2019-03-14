@@ -6,10 +6,10 @@ use Fisharebest\Webtrees\Webtrees;
 
 //webtrees major version switch
 if (defined("WT_MODULES_DIR")) {
-	//this is a webtrees 2.x module. it cannot be used with webtrees 1.x. See README.md.
-	return;
+  //this is a webtrees 2.x module. it cannot be used with webtrees 1.x. See README.md.
+  return;
 } else {
-	$modulesPath = Webtrees::MODULES_PATH;
+  $modulesPath = Webtrees::MODULES_PATH;
 }
 
 //add our own, and other (vesta_common_lib, ...), dependencies
@@ -18,7 +18,7 @@ if (defined("WT_MODULES_DIR")) {
 //so we aren't loading 'too much' here.
 //DO NOT USE $file HERE! see Module.loadModule($file) - we must not change that var!
 foreach (glob(WT_ROOT . $modulesPath . '*/autoload.php') as $autoloadFile) {
-	require_once $autoloadFile;
+  require_once $autoloadFile;
 }
 
-return new SharedPlacesModule(__DIR__);	
+return new SharedPlacesModule(__DIR__);

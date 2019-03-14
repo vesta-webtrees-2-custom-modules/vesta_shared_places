@@ -1,5 +1,9 @@
-<?php use Fisharebest\Webtrees\GedcomTag; ?>
-<?php use Fisharebest\Webtrees\I18N; ?>
+<?php
+
+use Fisharebest\Webtrees\GedcomTag; ?>
+<?php
+
+use Fisharebest\Webtrees\I18N; ?>
 
 <?php
 //[RC] cf add-fact-row.phtml
@@ -12,14 +16,16 @@
         </label>
     </th>
     <td>
-        <form onsubmit="if ($('#add-fact').val() === null) {event.preventDefault();}">
-						<?php
-						//[RC] adjusted
-						?>
-						<input type="hidden" name="route" value="module">
-						<input type="hidden" name="module" value="<?= $moduleName ?>">
+        <form onsubmit="if ($('#add-fact').val() === null) {
+                  event.preventDefault();
+              }">
+                  <?php
+//[RC] adjusted
+                  ?>
+            <input type="hidden" name="route" value="module">
+            <input type="hidden" name="module" value="<?= $moduleName ?>">
             <input type="hidden" name="action" value="AddFact">
-						
+
             <input type="hidden" name="xref" value="<?= e($record->xref()) ?>">
             <input type="hidden" name="ged" value="<?= e($record->tree()->name()) ?>">
             <div class="input-group">
@@ -28,15 +34,15 @@
                         <?= I18N::translate('&lt;select&gt;') ?>
                     </option>
                     <?php foreach ($add_facts as $fact => $fact_name) : ?>
-                        <option value="<?= $fact ?>"><?= $fact_name ?></option>
+                      <option value="<?= $fact ?>"><?= $fact_name ?></option>
                     <?php endforeach ?>
                     <?php if ($record::RECORD_TYPE === 'INDI' || $record::RECORD_TYPE === 'FAM') : ?>
-                        <option value="FACT">
-                        <?= I18N::translate('Custom fact') ?>
-                        </option>
-                    <option value="EVEN">
-                        <?= I18N::translate('Custom event') ?>
-                    </option>
+                      <option value="FACT">
+                          <?= I18N::translate('Custom fact') ?>
+                      </option>
+                      <option value="EVEN">
+                          <?= I18N::translate('Custom event') ?>
+                      </option>
                     <?php endif ?>
                 </select>
                 <div class="input-group-append">
@@ -49,13 +55,15 @@
 
         <div class="wt-quick-facts">
             <?php foreach ($quick_facts as $fact) : ?>
-                <a class="btn btn-link btn-sm wt-quick-fact" href="<?= e(route('add-fact', [
-                    'fact' => $fact,
-                    'xref' => $record->xref(),
-                    'ged'  => $tree->name(),
-                ])) ?>">
-                    <?= GedcomTag::getLabel($fact) ?>
-                </a>
+              <a class="btn btn-link btn-sm wt-quick-fact" href="<?=
+                 e(route('add-fact', [
+                     'fact' => $fact,
+                     'xref' => $record->xref(),
+                     'ged' => $tree->name(),
+                 ]))
+                 ?>">
+                     <?= GedcomTag::getLabel($fact) ?>
+              </a>
             <?php endforeach ?>
         </div>
     </td>

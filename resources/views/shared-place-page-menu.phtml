@@ -1,5 +1,9 @@
-<?php use Fisharebest\Webtrees\Auth; ?>
-<?php use Fisharebest\Webtrees\I18N; ?>
+<?php
+
+use Fisharebest\Webtrees\Auth; ?>
+<?php
+
+use Fisharebest\Webtrees\I18N; ?>
 
 <div class="dropdown wt-page-menu">
     <button class="btn btn-primary dropdown-toggle wt-page-menu-button" type="button" id="page-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -12,11 +16,11 @@
         </a>
 
         <?php if (Auth::isAdmin() || $record->tree()->getPreference('SHOW_GEDCOM_RECORD')) : ?>
-            <div class="dropdown-divider"></div>
+          <div class="dropdown-divider"></div>
 
-            <a class="dropdown-item menu-note-editraw" href="<?= e(route('edit-raw-record', ['ged' => $record->tree()->name(), 'xref' => $record->xref()])) ?>">
-                <?= I18N::translate('Edit the raw GEDCOM') ?>
-            </a>
+          <a class="dropdown-item menu-note-editraw" href="<?= e(route('edit-raw-record', ['ged' => $record->tree()->name(), 'xref' => $record->xref()])) ?>">
+              <?= I18N::translate('Edit the raw GEDCOM') ?>
+          </a>
         <?php endif ?>
     </div>
 </div>
