@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
-use Cissee\WebtreesExt\ModuleView;
 use Fisharebest\Webtrees\Http\Controllers\AbstractEditController;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
@@ -16,12 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 //cf EditRepositoryController
 class EditSharedPlaceController extends AbstractEditController {
 
-  /** @var string The directory where the module is installed */
-  protected $directory;
   protected $moduleName;
 
-  public function __construct(string $directory, string $moduleName) {
-    $this->directory = $directory;
+  public function __construct(string $moduleName) {
     $this->moduleName = $moduleName;
   }
 
@@ -31,9 +27,8 @@ class EditSharedPlaceController extends AbstractEditController {
    * @return Response
    */
   public function createSharedPlace(): Response {
-    return new Response(ModuleView::make($this->directory, 'modals/create-shared-place', [
-                'moduleName' => $this->moduleName,
-                'directory' => $this->directory
+    return new Response(view($this->moduleName . '::modals/create-shared-place', [
+                'moduleName' => $this->moduleName
     ]));
   }
 

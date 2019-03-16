@@ -2,22 +2,29 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
-use Cissee\WebtreesExt\AbstractModuleBaseController;
 use Cissee\WebtreesExt\SharedPlace;
-use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\GedcomRecord;
-use Illuminate\Support\Collection;
+use Fisharebest\Webtrees\Http\Controllers\AbstractBaseController;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Source;
+use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
-class SharedPlacesListController extends AbstractModuleBaseController {
+class SharedPlacesListController extends AbstractBaseController {
 
+  protected $moduleName;
+
+  public function __construct(string $moduleName) {
+    $this->moduleName = $moduleName;
+  }
+  
   public function sharedPlacesList(Tree $tree, $showLinkCounts): Response {
     //TODO: filter places we can't show here, not in view?
     $sharedPlaces = SharedPlacesListController::allSharedPlaces($tree);
 
-    return $this->viewResponse('shared-places-list-page', [
+    return $this->viewResponse($this->moduleName . '::shared-places-list-page', [
                 'tree' => $tree,
                 'sharedPlaces' => $sharedPlaces,
                 'showLinkCounts' => $showLinkCounts,

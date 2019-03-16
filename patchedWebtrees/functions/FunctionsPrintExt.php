@@ -2,7 +2,6 @@
 
 namespace Cissee\WebtreesExt\Functions;
 
-use Cissee\WebtreesExt\ModuleView;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\GedcomTag;
@@ -12,7 +11,7 @@ use Illuminate\Support\Collection;
 
 class FunctionsPrintExt {
 
-  public static function printAddNewFact_LOC(string $moduleName, string $moduleDirectory, GedcomRecord $record, Collection $usedfacts): void {
+  public static function printAddNewFact_LOC(string $moduleName, GedcomRecord $record, Collection $usedfacts): void {
     //$tree = $record->tree();
     //TODO make configurable via module preferences (and tree?)
     //$addfacts    = preg_split("/[, ;:]+/", $tree->getPreference('_LOC_FACTS_ADD'), -1, PREG_SPLIT_NO_EMPTY);
@@ -46,7 +45,7 @@ class FunctionsPrintExt {
     ]);
 
     //[RC] adjusted
-    echo ModuleView::make($moduleDirectory, 'edit/shared-place-add-fact-row', [
+    echo view($moduleName . '::edit/shared-place-add-fact-row', [
         'moduleName' => $moduleName,
         'add_facts' => $translated_addfacts,
         'quick_facts' => $quickfacts,

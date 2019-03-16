@@ -39,11 +39,10 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   use EmptyFunctionsPlace;
   use ModuleListTrait;
 
-  /** @var string The directory where the module is installed */
-  protected $directory;
+  protected $module_service;
 
-  public function __construct($directory) {
-    $this->directory = $directory;
+  public function __construct(ModuleService $module_service) {
+    $this->module_service = $module_service;
   }
 
   public function listTitle(): string {
@@ -122,18 +121,6 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
    */
   public function resourcesFolder(): string {
     return __DIR__ . '/resources/';
-  }
-
-  /**
-   * Additional/updated translations.
-   *
-   * @param string $language
-   *
-   * @return string[]
-   */
-  public function customTranslations(string $language): array {
-    //TODO
-    return [];
   }
 
   /**
@@ -298,7 +285,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function getListAction(Tree $tree): Response {
-    $controller = new SharedPlacesListController($this->directory, $this->name());
+    $controller = new SharedPlacesListController($this->name());
 
     $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
 
@@ -306,17 +293,17 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function getSingleAction(Request $request, Tree $tree): Response {
-    $controller = new SharedPlaceController($this->directory, $this->name());
+    $controller = new SharedPlaceController($this->name());
     return $controller->show($request, $tree);
   }
 
   public function getCreateSharedPlaceAction(): Response {
-    $controller = new EditSharedPlaceController($this->directory, $this->name());
+    $controller = new EditSharedPlaceController($this->name());
     return $controller->createSharedPlace();
   }
 
   public function postCreateSharedPlaceAction(Request $request, Tree $tree): Response {
-    $controller = new EditSharedPlaceController($this->directory, $this->name());
+    $controller = new EditSharedPlaceController($this->name());
     return $controller->createSharedPlaceAction($request, $tree);
   }
 
@@ -324,67 +311,67 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
 
   public function getEditRawRecordAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawRecord($request, $tree);
   }
 
   public function postEditRawRecordAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawRecordAction($request, $tree);
   }
 
   public function getEditRawFactAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawFact($request, $tree);
   }
 
   public function postEditRawFactAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawFactAction($request, $tree);
   }
 
   public function postCopyFactAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->copyFact($request, $tree);
   }
 
   public function postDeleteRecordAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->deleteRecord($request, $tree);
   }
 
   public function postPasteFactAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->pasteFact($request, $tree);
   }
 
   public function postDeleteFactAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editFact($request, $tree);
   }
 
   public function getAddFactAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->addFact($request, $tree);
   }
 
   public function getEditFactAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editFact($request, $tree);
   }
 
   public function postUpdateFactAction(Request $request, Tree $tree): Response {
     //no functional changes here - we just reroute through module
-    $controller = new EditGedcomRecordController(app()->make(ModuleService::class));
+    $controller = new EditGedcomRecordController($this->module_service);
     return $controller->updateFact($request, $tree);
   }
 

@@ -21,4 +21,4 @@ foreach (glob(WT_ROOT . $modulesPath . '*/autoload.php') as $autoloadFile) {
   require_once $autoloadFile;
 }
 
-return new SharedPlacesModule(__DIR__);
+return app(SharedPlacesModule::class);

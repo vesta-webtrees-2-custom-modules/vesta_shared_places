@@ -1,7 +1,6 @@
 <?php
 
 use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
-use Cissee\WebtreesExt\ModuleView;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
@@ -31,7 +30,7 @@ use Fisharebest\Webtrees\I18N;
         <?= $sharedPlace->fullName() ?>
     </h2>
     <?php if ($sharedPlace->canEdit() && !$sharedPlace->isPendingDeletion()) : ?>
-      <?= ModuleView::make($moduleDirectory, 'shared-place-page-menu', ['record' => $sharedPlace]) ?>
+      <?= view($moduleName . '::shared-place-page-menu', ['record' => $sharedPlace]) ?>
     <?php endif ?>
 </div>
 
@@ -68,7 +67,7 @@ use Fisharebest\Webtrees\I18N;
                 ?>
 
                 <?php if ($sharedPlace->canEdit()) : ?>
-                  <?php FunctionsPrintExt::printAddNewFact_LOC($moduleName, $moduleDirectory, $sharedPlace, $facts) ?>
+                  <?php FunctionsPrintExt::printAddNewFact_LOC($moduleName, $sharedPlace, $facts) ?>
                   <?php if ($sharedPlace->tree()->getPreference('MEDIA_UPLOAD') >= Auth::accessLevel($sharedPlace->tree())) : ?>
                     <tr>
                         <th scope="row">

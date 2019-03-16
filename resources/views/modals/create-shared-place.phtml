@@ -1,6 +1,4 @@
 <?php
-
-use Cissee\WebtreesExt\ModuleView;
 use Fisharebest\Webtrees\I18N;
 ?>
 
@@ -16,7 +14,7 @@ e(route('module', [
     <?= view('modals/header', ['title' => I18N::translate('Create a shared place')]) ?>
 
     <div class="modal-body">
-        <?= ModuleView::make($directory, 'modals/shared-place-fields') ?>
+        <?= view($moduleName . '::modals/shared-place-fields') ?>
     </div>
 
     <?= view('modals/footer-save-cancel') ?>

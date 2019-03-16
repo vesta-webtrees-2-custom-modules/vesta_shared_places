@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
-use Cissee\WebtreesExt\AbstractModuleBaseController;
 use Cissee\WebtreesExt\GedcomRecordExt;
 use Cissee\WebtreesExt\SharedPlace;
-use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\Http\Controllers\AbstractBaseController;
+use Fisharebest\Webtrees\Tree;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Collection;
 
 //cf GedcomRecordController, SourceController
-class SharedPlaceController extends AbstractModuleBaseController {
+class SharedPlaceController extends AbstractBaseController {
 
+  protected $moduleName;
+
+  public function __construct(string $moduleName) {
+    $this->moduleName = $moduleName;
+  }
+  
   // Show the shared place's facts in this order:
   private const FACT_ORDER = [
       1 => 'NAME',
@@ -43,9 +49,8 @@ class SharedPlaceController extends AbstractModuleBaseController {
     //we don't need a specific method here
     Auth::checkRecordAccess($record, false);
 
-    return $this->viewResponse('shared-place-page', [
+    return $this->viewResponse($this->moduleName . '::shared-place-page', [
                 'moduleName' => $this->moduleName,
-                'moduleDirectory' => $this->directory,
                 'facts' => $this->facts($record),
                 'families' => $record->linkedFamilies('_LOC'),
                 'individuals' => $record->linkedIndividuals('_LOC'),
