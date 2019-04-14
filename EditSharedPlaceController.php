@@ -7,9 +7,10 @@ namespace Cissee\Webtrees\Module\SharedPlaces;
 use Fisharebest\Webtrees\Http\Controllers\AbstractEditController;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Cissee\WebtreesExt\Requests;
+
 
 //note: for most edit actions, we simply use EditGedcomRecordController!
 //cf EditRepositoryController
@@ -26,8 +27,8 @@ class EditSharedPlaceController extends AbstractEditController {
    *
    * @return Response
    */
-  public function createSharedPlace(): Response {
-    return new Response(view($this->moduleName . '::modals/create-shared-place', [
+  public function createSharedPlace(): ResponseInterface {
+    return response(view($this->moduleName . '::modals/create-shared-place', [
                 'moduleName' => $this->moduleName
     ]));
   }
@@ -40,10 +41,10 @@ class EditSharedPlaceController extends AbstractEditController {
    *
    * @return JsonResponse
    */
-  public function createSharedPlaceAction(Request $request, Tree $tree): JsonResponse {
-    $name = $request->get('shared-place-name', '');
-    $privacy_restriction = $request->get('privacy-restriction', '');
-    $edit_restriction = $request->get('edit-restriction', '');
+  public function createSharedPlaceAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+    $name = Requests::getString($request, 'shared-place-name');
+    $privacy_restriction = Requests::getString($request, 'privacy-restriction');
+    $edit_restriction = Requests::getString($request, 'edit-restriction');
 
     // Fix whitespace
     $name = trim(preg_replace('/\s+/', ' ', $name));
@@ -66,7 +67,7 @@ class EditSharedPlaceController extends AbstractEditController {
 
     // id and text are for select2 / autocomplete //[RC] which we currently do not need
     // html is for interactive modals
-    return new JsonResponse([
+    return response([
         'id' => $record->xref(),
         'text' => 'TODO',
         'html' => view('modals/record-created', [

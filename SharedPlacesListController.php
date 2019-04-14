@@ -10,7 +10,7 @@ use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Collection;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
 
 class SharedPlacesListController extends AbstractBaseController {
 
@@ -20,7 +20,7 @@ class SharedPlacesListController extends AbstractBaseController {
     $this->moduleName = $moduleName;
   }
   
-  public function sharedPlacesList(Tree $tree, $showLinkCounts): Response {
+  public function sharedPlacesList(Tree $tree, $showLinkCounts): ResponseInterface {
     //TODO: filter places we can't show here, not in view?
     $sharedPlaces = SharedPlacesListController::allSharedPlaces($tree);
 

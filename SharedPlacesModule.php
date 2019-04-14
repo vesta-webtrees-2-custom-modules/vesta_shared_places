@@ -26,8 +26,8 @@ use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Fisharebest\Webtrees\Tree;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Vesta\Model\PlaceStructure;
 use Vesta\VestaModuleTrait;
 
@@ -284,7 +284,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     return $html;
   }
 
-  public function getListAction(Tree $tree): Response {
+  public function getListAction(Tree $tree): ResponseInterface {
     $controller = new SharedPlacesListController($this->name());
 
     $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
@@ -292,84 +292,84 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     return $controller->sharedPlacesList($tree, $showLinkCounts);
   }
 
-  public function getSingleAction(Request $request, Tree $tree): Response {
+  public function getSingleAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     $controller = new SharedPlaceController($this->name());
     return $controller->show($request, $tree);
   }
 
-  public function getCreateSharedPlaceAction(): Response {
+  public function getCreateSharedPlaceAction(): ResponseInterface {
     $controller = new EditSharedPlaceController($this->name());
     return $controller->createSharedPlace();
   }
 
-  public function postCreateSharedPlaceAction(Request $request, Tree $tree): Response {
+  public function postCreateSharedPlaceAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     $controller = new EditSharedPlaceController($this->name());
     return $controller->createSharedPlaceAction($request, $tree);
   }
 
   //rerouted EditGedcomRecordController
 
-  public function getEditRawRecordAction(Request $request, Tree $tree): Response {
+  public function getEditRawRecordAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawRecord($request, $tree);
   }
 
-  public function postEditRawRecordAction(Request $request, Tree $tree): Response {
+  public function postEditRawRecordAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawRecordAction($request, $tree);
   }
 
-  public function getEditRawFactAction(Request $request, Tree $tree): Response {
+  public function getEditRawFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawFact($request, $tree);
   }
 
-  public function postEditRawFactAction(Request $request, Tree $tree): Response {
+  public function postEditRawFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawFactAction($request, $tree);
   }
 
-  public function postCopyFactAction(Request $request, Tree $tree): Response {
+  public function postCopyFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->copyFact($request, $tree);
   }
 
-  public function postDeleteRecordAction(Request $request, Tree $tree): Response {
+  public function postDeleteRecordAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->deleteRecord($request, $tree);
   }
 
-  public function postPasteFactAction(Request $request, Tree $tree): Response {
+  public function postPasteFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->pasteFact($request, $tree);
   }
 
-  public function postDeleteFactAction(Request $request, Tree $tree): Response {
+  public function postDeleteFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editFact($request, $tree);
   }
 
-  public function getAddFactAction(Request $request, Tree $tree): Response {
+  public function getAddFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->addFact($request, $tree);
   }
 
-  public function getEditFactAction(Request $request, Tree $tree): Response {
+  public function getEditFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editFact($request, $tree);
   }
 
-  public function postUpdateFactAction(Request $request, Tree $tree): Response {
+  public function postUpdateFactAction(Request $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->updateFact($request, $tree);

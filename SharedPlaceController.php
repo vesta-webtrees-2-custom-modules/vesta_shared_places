@@ -11,8 +11,9 @@ use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Http\Controllers\AbstractBaseController;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Cissee\WebtreesExt\Requests;
 
 //cf GedcomRecordController, SourceController
 class SharedPlaceController extends AbstractBaseController {
@@ -42,8 +43,8 @@ class SharedPlaceController extends AbstractBaseController {
       'RESN',
   ];
 
-  public function show(Request $request, Tree $tree): Response {
-    $xref = $request->get('xref', '');
+  public function show(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+    $xref = Requests::getString($request, 'xref');
     $record = GedcomRecordExt::getInstance($xref, $tree);
 
     //we don't need a specific method here
