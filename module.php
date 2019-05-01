@@ -17,7 +17,7 @@ if (defined("WT_MODULES_DIR")) {
 //whenever a single module is loaded (assuming these autoload.php's are called by the respective module.php's)
 //so we aren't loading 'too much' here.
 //DO NOT USE $file HERE! see Module.loadModule($file) - we must not change that var!
-foreach (glob(WT_ROOT . $modulesPath . '*/autoload.php') as $autoloadFile) {
+foreach (glob(Webtrees::ROOT_DIR . $modulesPath . '*/autoload.php') as $autoloadFile) {
   require_once $autoloadFile;
 }
 
