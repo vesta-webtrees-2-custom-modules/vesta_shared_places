@@ -11,6 +11,7 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Tree;
+use Illuminate\Support\Collection;
 use stdClass;
 
 /**
@@ -129,7 +130,7 @@ class SharedPlace extends GedcomRecord {
     ]);
   }
 
-  public function linkedIndividuals(string $link): array {
+  public function linkedIndividuals(string $link): Collection {
     if (!$this->useIndirectLinks) {
       return parent::linkedIndividuals($link);
     }
@@ -158,10 +159,10 @@ class SharedPlace extends GedcomRecord {
         }
       }
     }
-    return $list;
+    return Collection::wrap($list);
   }
 
-  public function linkedFamilies(string $link): array {
+  public function linkedFamilies(string $link): Collection {
     if (!$this->useIndirectLinks) {
       return parent::linkedFamilies($link);
     }
@@ -191,7 +192,7 @@ class SharedPlace extends GedcomRecord {
       }
     }
 
-    return $list;
+    return Collection::wrap($list);
   }
 
 }

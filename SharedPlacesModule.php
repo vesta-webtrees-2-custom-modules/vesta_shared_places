@@ -99,7 +99,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0-beta.1.1';
+    return '2.0.0-beta.2.1';
   }
 
   public function customModuleLatestVersionUrl(): string {
@@ -369,7 +369,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     return $controller->editFact($request, $tree);
   }
 
-  public function postUpdateFactAction(Request $request, Tree $tree): ResponseInterface {
+  public function postUpdateFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->updateFact($request, $tree);
