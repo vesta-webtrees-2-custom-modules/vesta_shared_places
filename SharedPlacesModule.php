@@ -2,35 +2,44 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
-use Fisharebest\Webtrees\Services\ModuleService;
 use Cissee\Webtrees\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
-use Vesta\Hook\HookInterfaces\EmptyFunctionsPlace;
-use Vesta\Hook\HookInterfaces\FunctionsPlaceInterface;
-use Cissee\WebtreesExt\AbstractModule; //cannot use original AbstractModule because we override setName
+use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\FormatPlaceAdditions;
-use Cissee\WebtreesExt\Services\SearchServiceExt;
-use Fisharebest\Localization\Locale\LocaleInterface;
 use Cissee\WebtreesExt\GedcomRecordExt;
 use Cissee\WebtreesExt\HtmlExt;
+use Cissee\WebtreesExt\Services\SearchServiceExt;
+use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlaceFactory;
+use Fisharebest\Localization\Locale\LocaleInterface;
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
 use Fisharebest\Webtrees\Http\Controllers\EditGedcomRecordController;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Module\ModuleInterface;
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
+use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
+use Fisharebest\Webtrees\Services\ModuleService;
+use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
-use Ramsey\Uuid\Uuid;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Ramsey\Uuid\Uuid;
+use Vesta\Hook\HookInterfaces\EmptyFunctionsPlace;
+use Vesta\Hook\HookInterfaces\FunctionsPlaceInterface;
+use Vesta\Model\GenericViewElement;
 use Vesta\Model\PlaceStructure;
 use Vesta\VestaModuleTrait;
+use function app;
+use function view;
 
+//cannot use original AbstractModule because we override setName
 class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface, ModuleListInterface, ModuleConfigInterface, IndividualFactsTabExtenderInterface, FunctionsPlaceInterface {
 
   use VestaModuleTrait;
@@ -123,16 +132,16 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     return __DIR__ . '/resources/';
   }
 
-  /**
-   *
-   * return SharedPlace|null	 
-   */
-  public function matchViaName(PlaceStructure $place) {
+  public function matchViaName(PlaceStructure $place): ?SharedPlace {
+    return $this->matchName($place->getTree(), $place->getGedcomName());
+  }
+    
+  public function matchName(Tree $tree, $placeGedcomName): ?SharedPlace {
     $searchService = new SearchServiceExt(app(LocaleInterface::class));
-    $sharedPlaces = $searchService->searchSharedPlaces(array($place->getTree()), array("1 NAME " . $place->getGedcomName()));
+    $sharedPlaces = $searchService->searchSharedPlaces(array($tree), array("1 NAME " . $placeGedcomName));
     foreach ($sharedPlaces as $sharedPlace) {
       foreach ($sharedPlace->namesNN() as $name) {
-        if (strtolower($place->getGedcomName()) === strtolower($name)) {
+        if (strtolower($placeGedcomName) === strtolower($name)) {
           //first match wins, we don't expect multiple _LOC with same name
           //(for now) TODO resolve via date?
           return $sharedPlace;
@@ -195,7 +204,74 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
 
     return new FormatPlaceAdditions('', $ll, $tooltip, '', $this->getHtmlForSharedPlaceData($place));
   }
-
+  
+  public function assetsViaViews(): array {
+    return [
+        'css/webtrees.css' => 'css/webtrees',
+        'css/minimal.css' => 'css/minimal'];
+  }
+  
+  //css for icon-fact-create-shared-place
+  public function hFactsTabGetOutputBeforeTab(Individual $person) {
+    //align with current theme (supporting for now default webtrees themes)
+    $themeName = Session::get('theme');
+    if ('minimal' !== $themeName) {
+      if ('fab' === $themeName) {
+        //fab also uses font awesome icons
+        $themeName = 'minimal';
+      } else {
+        //default
+        $themeName = 'webtrees';
+      }      
+    }
+    
+    //note: content actually served via style.phtml!
+    $pre = '<link href="' . $this->assetUrl('css/'.$themeName.'.css') . '" type="text/css" rel="stylesheet" />';
+		return new GenericViewElement($pre, '');
+	}
+  
+  public function hFactsTabGetAdditionalEditControls(
+          Fact $fact): GenericViewElement {
+    
+    if (!Auth::isManager($fact->record()->tree())) {
+      //not editable
+      return new GenericViewElement('', '');
+    }
+    
+    if (!Auth::isManager($fact->record()->tree())) {
+      //not editable
+      return new GenericViewElement('', '');
+    }
+    
+    if ($fact->attribute('PLAC') === '') {
+      //no PLAC, doesn't make sense to edit here
+      return new GenericViewElement('', '');
+    }
+    
+    $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    
+    if (!$useIndirectLinks) {
+      //doesn't make sense to edit here
+      //(fact place must be linked explicitly to shared place anyway;
+      //we provide this functionality in fact place editor itself instead in this case)
+      //(this is also TODO)
+      return new GenericViewElement('', '');
+    }
+    
+    //ok to edit - does a shared place with this name already exist?
+    $sharedPlace = $this->matchName($fact->record()->tree(), $fact->place()->gedcomName());
+    
+    if ($sharedPlace !== null) {
+      //already exists - edit
+      //TODO
+      return new GenericViewElement('', '');
+    }
+    
+    $html = view($this->name() . '::edit/icon-fact-create-shared-place', ['fact' => $fact, 'moduleName' => $this->name()]);
+    
+    return new GenericViewElement($html, '');
+  }
+  
   protected static $seenSharedPlaces = [];
 
   protected function getHtmlForSharedPlaceData(PlaceStructure $place) {
@@ -297,9 +373,9 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     return $controller->show($request, $tree);
   }
 
-  public function getCreateSharedPlaceAction(): ResponseInterface {
+  public function getCreateSharedPlaceAction(ServerRequestInterface $request): ResponseInterface {
     $controller = new EditSharedPlaceController($this->name());
-    return $controller->createSharedPlace();
+    return $controller->createSharedPlace($request);
   }
 
   public function postCreateSharedPlaceAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {

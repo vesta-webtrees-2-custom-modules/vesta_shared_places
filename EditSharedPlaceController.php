@@ -27,9 +27,12 @@ class EditSharedPlaceController extends AbstractEditController {
    *
    * @return Response
    */
-  public function createSharedPlace(): ResponseInterface {
+  public function createSharedPlace(ServerRequestInterface $request): ResponseInterface {
+    $sharedPlaceName = Requests::getString($request, 'shared-place-name');
+    
     return response(view($this->moduleName . '::modals/create-shared-place', [
-                'moduleName' => $this->moduleName
+                'moduleName' => $this->moduleName,
+                'sharedPlaceName' => $sharedPlaceName,
     ]));
   }
 

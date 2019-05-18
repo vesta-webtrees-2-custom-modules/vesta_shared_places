@@ -14,7 +14,7 @@ e(route('module', [
     <?= view('modals/header', ['title' => I18N::translate('Create a shared place')]) ?>
 
     <div class="modal-body">
-        <?= view($moduleName . '::modals/shared-place-fields') ?>
+        <?= view($moduleName . '::modals/shared-place-fields', ['sharedPlaceName' => $sharedPlaceName]) ?>
     </div>
 
     <?= view('modals/footer-save-cancel') ?>
