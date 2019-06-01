@@ -5,6 +5,7 @@ namespace Cissee\Webtrees\Module\SharedPlaces;
 use Cissee\Webtrees\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Cissee\WebtreesExt\AbstractModule;
+use Cissee\WebtreesExt\FactPlaceAdditions;
 use Cissee\WebtreesExt\FormatPlaceAdditions;
 use Cissee\WebtreesExt\GedcomRecordExt;
 use Cissee\WebtreesExt\HtmlExt;
@@ -34,7 +35,11 @@ use Ramsey\Uuid\Uuid;
 use Vesta\Hook\HookInterfaces\EmptyFunctionsPlace;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceInterface;
 use Vesta\Model\GenericViewElement;
+use Vesta\Model\GovReference;
+use Vesta\Model\LocReference;
+use Vesta\Model\MapCoordinates;
 use Vesta\Model\PlaceStructure;
+use Vesta\Model\Trace;
 use Vesta\VestaModuleTrait;
 use function app;
 use function view;
@@ -108,7 +113,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0-beta.2.1';
+    return '2.0.0-beta.2.2';
   }
 
   public function customModuleLatestVersionUrl(): string {
@@ -179,31 +184,6 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
 
     return $this->matchViaLoc($place);
   }
-
-  //FunctionsPlaceInterface
-  public function hPlacesGetLatLon(PlaceStructure $place) {
-    $sharedPlace = $this->match($place);
-    if ($sharedPlace !== null) {
-      $lati = $sharedPlace->getLati();
-      $long = $sharedPlace->getLong();
-
-      if (($lati !== null) && ($long !== null)) {
-        return array($lati, $long);
-      }
-    }
-
-    return null;
-  }
-
-  public function hFactsTabGetFormatPlaceAdditions(PlaceStructure $place) {
-    $ll = $this->hPlacesGetLatLon($place);
-    $tooltip = null;
-    if ($ll) {
-      $tooltip = 'via shared place';
-    }
-
-    return new FormatPlaceAdditions('', $ll, $tooltip, '', $this->getHtmlForSharedPlaceData($place));
-  }
   
   public function assetsViaViews(): array {
     return [
@@ -213,7 +193,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   
   //css for icon-fact-create-shared-place
   public function hFactsTabGetOutputBeforeTab(Individual $person) {
-    //align with current theme (supporting for now default webtrees themes)
+    //align with current theme (supporting - for now - the default webtrees themes)
     $themeName = Session::get('theme');
     if ('minimal' !== $themeName) {
       if ('fab' === $themeName) {
@@ -225,7 +205,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
       }      
     }
     
-    //note: content actually served via style.phtml!
+    //note: content actually served via <theme>.phtml!
     $pre = '<link href="' . $this->assetUrl('css/'.$themeName.'.css') . '" type="text/css" rel="stylesheet" />';
 		return new GenericViewElement($pre, '');
 	}
@@ -233,12 +213,10 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   public function hFactsTabGetAdditionalEditControls(
           Fact $fact): GenericViewElement {
     
-    if (!Auth::isManager($fact->record()->tree())) {
-      //not editable
-      return new GenericViewElement('', '');
-    }
+    return new GenericViewElement('', '');
     
-    if (!Auth::isManager($fact->record()->tree())) {
+    //TODO activate this!
+    if (!Auth::isEditor($fact->record()->tree())) {
       //not editable
       return new GenericViewElement('', '');
     }
@@ -449,6 +427,65 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->updateFact($request, $tree);
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  public function plac2Loc(PlaceStructure $ps): ?LocReference {
+    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    if ($indirect) {
+      $sharedPlace = $this->matchViaName($ps);
+      if ($sharedPlace !== null) {
+        $trace = new Trace('shared place via Shared Places module (mapping via place name)');
+        return new LocReference($sharedPlace->xref(), $sharedPlace->tree(), $trace);
+      }
+    }
+
+    $loc = $ps->getLoc();
+    if ($loc !== null) {
+      $trace = new Trace('shared place via Shared Places module (_LOC tag)');
+      return new LocReference($loc, $ps->getTree(), $trace);
+    }
+
+    return null;
+  }
+  
+  public function loc2Gov(LocReference $loc): ?GovReference {
+    $sharedPlace = GedcomRecordExt::getInstance($loc->getXref(), $loc->getTree());
+    
+    if ($sharedPlace !== null) {
+      $gov = $sharedPlace->getGov();
+      if ($gov !== null) {
+        $trace = $loc->getTrace();
+        $trace->add('GOV-Id via Shared Places module (gedcom _GOV tag)');
+        return new GovReference($gov, $trace);
+      }
+    }
+    
+    return null;
+  }
+  
+  public function loc2Map(LocReference $loc): ?MapCoordinates {
+    $sharedPlace = GedcomRecordExt::getInstance($loc->getXref(), $loc->getTree());
+    
+    if ($sharedPlace !== null) {
+      $lati = $sharedPlace->getLati();
+      $long = $sharedPlace->getLong();
+
+      if (($lati !== null) && ($long !== null)) {
+        $trace = $loc->getTrace();
+        $trace->add('map coordinates via Shared Places module (gedcom MAP tag)');
+        return new MapCoordinates($lati, $long, $trace);
+      }
+    }
+    
+    return null;
+  }
+  
+  public function factPlaceAdditions(PlaceStructure $place): ?FactPlaceAdditions {
+    //would be cleaner to use plac2loc here - in practice same result
+    $html = $this->getHtmlForSharedPlaceData($place);
+    return new FactPlaceAdditions(GenericViewElement::createEmpty(), GenericViewElement::create($html));
   }
 
 }

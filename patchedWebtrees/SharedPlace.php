@@ -111,8 +111,9 @@ class SharedPlace extends GedcomRecord {
     return null;
   }
 
-  //TODO
-  //public function getGov()
+  public function getGov() {
+    return $this->getAttribute('_GOV');
+  }
 
   public function getAttribute($tag) {
     if (preg_match('/1 (?:' . $tag . ') ?(.*(?:(?:\n2 CONT ?.*)*)*)/', $this->gedcom, $match)) {
