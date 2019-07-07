@@ -12,7 +12,7 @@ if (defined("WT_MODULES_DIR")) {
   $modulesPath = Webtrees::MODULES_PATH;
 }
 
-//add our own, and other (vesta_common_lib, ...), dependencies
+//add our own, and other (vesta_common, ...), dependencies
 //note: in the current module system, this would happen anyway because all module.php's are executed
 //whenever a single module is loaded (assuming these autoload.php's are called by the respective module.php's)
 //so we aren't loading 'too much' here.
