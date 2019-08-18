@@ -950,7 +950,8 @@ class FunctionsEdit
             }
         }
         // Do something (anything!) with unrecognized custom tags
-        if (substr($level1tag, 0, 1) === '_' && $level1tag !== '_UID' && $level1tag !== '_PRIM' && $level1tag !== '_TODO') {
+        //[RC] excluding _GOV
+        if (substr($level1tag, 0, 1) === '_' && $level1tag !== '_UID' && $level1tag !== '_PRIM' && $level1tag !== '_TODO' && $level1tag !== '_GOV') {
             foreach (['DATE', 'PLAC', 'ADDR', 'AGNC', 'TYPE', 'AGE'] as $tag) {
                 if (!in_array($tag, self::$tags)) {
                     echo self::addSimpleTag($tree, '2 ' . $tag);

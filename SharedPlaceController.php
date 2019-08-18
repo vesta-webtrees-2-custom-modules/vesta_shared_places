@@ -28,6 +28,7 @@ class SharedPlaceController extends AbstractBaseController {
   private const FACT_ORDER = [
       1 => 'NAME',
       2 => 'MAP',
+      3 => '_GOV',
       'ABBR',
       'AUTH',
       'DATA',

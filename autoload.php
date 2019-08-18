@@ -40,6 +40,12 @@ if ($extend) {
   if ($extend4) {
     require_once __DIR__ . '/replacedWebtrees/Functions/FunctionsEdit.php';
   }
+  
+  //label for _GOV
+  $extend5 = !class_exists("Fisharebest\Webtrees\GedcomTag", false);
+  if ($extend5) {
+    require_once __DIR__ . '/replacedWebtrees/app/GedcomTag.php';
+  }
 } else {
   //must use original files because they are already loaded
   //(e.g. when routing via IndividualController)

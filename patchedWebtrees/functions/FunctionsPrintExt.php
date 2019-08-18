@@ -17,10 +17,10 @@ class FunctionsPrintExt {
     //$addfacts    = preg_split("/[, ;:]+/", $tree->getPreference('_LOC_FACTS_ADD'), -1, PREG_SPLIT_NO_EMPTY);
     //$uniquefacts = preg_split("/[, ;:]+/", $tree->getPreference('_LOC_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
     //$quickfacts  = preg_split("/[, ;:]+/", $tree->getPreference('_LOC_FACTS_QUICK'), -1, PREG_SPLIT_NO_EMPTY);
-    //addfacts = all (without unique) 
-    $addfacts = array("NOTE" => "NOTE", "SHARED_NOTE" => "SHARED_NOTE", "SOUR" => "SOUR"); //,"_GOV"			
-    $uniquefacts = array("MAP" => "MAP", "NAME" => "NAME"); //"_GOV"; TODO: NAME: spec says 1:M! handle this.
-    $quickfacts = array("MAP" => "MAP", "NOTE" => "NOTE", "SHARED_NOTE" => "SHARED_NOTE");
+    //addfacts = non-unique only! 
+    $addfacts = array("NOTE" => "NOTE", "SHARED_NOTE" => "SHARED_NOTE", "SOUR" => "SOUR");
+    $uniquefacts = array("MAP" => "MAP", "NAME" => "NAME", "_GOV" => "_GOV"); //"_GOV"; TODO: NAME: spec says 1:M! handle this.
+    $quickfacts = array("MAP" => "MAP", "NOTE" => "NOTE", "SHARED_NOTE" => "SHARED_NOTE", "_GOV" => "_GOV");
 
     //from here on same as in FunctionsPrint::printAddNewFact
 
