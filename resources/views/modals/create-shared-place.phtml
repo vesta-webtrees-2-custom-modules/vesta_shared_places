@@ -14,14 +14,21 @@ e(route('module', [
     <?= view('modals/header', ['title' => I18N::translate('Create a shared place')]) ?>
 
     <div class="modal-body">
-        <?= view($moduleName . '::modals/shared-place-fields', ['sharedPlaceName' => $sharedPlaceName]) ?>
+        <?= view($moduleName . '::modals/shared-place-fields', ['sharedPlaceName' => $sharedPlaceName, 'additionalControls' => $additionalControls]) ?>
     </div>
 
     <?= view('modals/footer-save-cancel') ?>
 </form>
 
 <script>
+  <?php
+  foreach ($additionalControls as $gve) {
+    echo $gve->getScript();
+  }
+  ?>
+  
   // Submit the modal form using AJAX
+  //[RC] different from other modals
   document.getElementById('wt-modal-form').addEventListener('submit', function (event) {
       event.preventDefault();
       let form = event.target;
@@ -48,7 +55,14 @@ e(route('module', [
 
                   $('#wt-ajax-modal').modal('hide');
               } else {
-                  modal_content.innerHTML = data.html;
+                  //modal_content.innerHTML = data.html;
+                  //just hide the modal
+                  $('#wt-ajax-modal').modal('hide');
+                  //additionally scroll to top in order to show the flash message
+                  window.onbeforeunload = function () {
+                    window.scrollTo(0, 0);
+                  };
+                  document.location.reload();
               }
           },
           failure: function (data) {

@@ -7,6 +7,11 @@ use Fisharebest\Webtrees\I18N; ?>
         <?= I18N::translate('Shared place name') ?>
     </label>
     <input class="form-control" type="text" id="shared-place-name" name="shared-place-name" value="<?= $sharedPlaceName ?>" required>
+    <?php
+    foreach ($additionalControls as $gve) {
+      echo $gve->getMain();
+    }
+    ?>
 </div>
 
 <?= view('modals/restriction-fields') ?>

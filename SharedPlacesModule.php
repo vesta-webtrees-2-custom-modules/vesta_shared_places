@@ -213,8 +213,6 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   public function hFactsTabGetAdditionalEditControls(
           Fact $fact): GenericViewElement {
     
-    return new GenericViewElement('', '');
-    
     //TODO activate this!
     if (!Auth::isEditor($fact->record()->tree())) {
       //not editable
@@ -351,13 +349,13 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     return $controller->show($request, $tree);
   }
 
-  public function getCreateSharedPlaceAction(ServerRequestInterface $request): ResponseInterface {
-    $controller = new EditSharedPlaceController($this->name());
-    return $controller->createSharedPlace($request);
+  public function getCreateSharedPlaceAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+    $controller = new EditSharedPlaceController($this);
+    return $controller->createSharedPlace($request, $tree);
   }
 
   public function postCreateSharedPlaceAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
-    $controller = new EditSharedPlaceController($this->name());
+    $controller = new EditSharedPlaceController($this);
     return $controller->createSharedPlaceAction($request, $tree);
   }
 
