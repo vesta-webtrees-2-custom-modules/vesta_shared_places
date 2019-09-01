@@ -39,8 +39,8 @@ class EditSharedPlaceController extends AbstractEditController {
     $sharedPlaceName = Requests::getString($request, 'shared-place-name');
     
     $additionalControls = GovIdEditControlsUtils::accessibleModules($this->module, $tree, Auth::user())
-            ->map(function (GovIdEditControlsInterface $module) {
-              return $module->govIdEditControl(null, 'shared-place-govId', true);
+            ->map(function (GovIdEditControlsInterface $module) use ($sharedPlaceName) {
+              return $module->govIdEditControl(null, 'shared-place-govId', $sharedPlaceName, true);
             })
             ->toArray();
             
