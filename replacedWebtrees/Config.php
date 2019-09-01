@@ -194,6 +194,9 @@ class Config {
         'WIFE',
         'WWW',
         '_EMAIL',
+        
+        //[RC] adjusted
+        '_GOV',
     ];
   }
 

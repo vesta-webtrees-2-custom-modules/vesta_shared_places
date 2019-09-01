@@ -113,7 +113,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0-beta.3.1';
+    return '2.0.0-beta.4.1';
   }
 
   public function customModuleLatestVersionUrl(): string {
@@ -266,10 +266,17 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
         }
       }
     }
-
+    
+    $html1 = '';
     $html = '';
     $sharedPlace = $this->match($place);
     if ($sharedPlace !== null) {
+      //add link
+      $html1 .= $this->linkIcon(
+              $this->name() . '::icons/create-shared-place', 
+              I18N::translate('Shared Place'), 
+              $sharedPlace->url());
+      
       //add all (level 1) notes
       if (preg_match('/1 NOTE (.*)/', $sharedPlace->gedcom(), $match)) {
         //note may be restricted - in which case, do not add wrapper
@@ -333,9 +340,16 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
 
       $html = $data;
     } //else no shared place, or shared place without contents
-    return $html;
+    return array($html1, $html);
   }
 
+  public function linkIcon($view, $title, $url) {
+    return '<a href="' . $url . '" rel="nofollow" title="' . $title . '">' .
+            view($view) .
+            '<span class="sr-only">' . $title . '</span>' .
+            '</a>';
+  }
+  
   public function getListAction(Tree $tree): ResponseInterface {
     $controller = new SharedPlacesListController($this->name());
 
@@ -482,8 +496,11 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   
   public function factPlaceAdditions(PlaceStructure $place): ?FactPlaceAdditions {
     //would be cleaner to use plac2loc here - in practice same result
-    $html = $this->getHtmlForSharedPlaceData($place);
-    return new FactPlaceAdditions(GenericViewElement::createEmpty(), GenericViewElement::create($html));
+    $htmls = $this->getHtmlForSharedPlaceData($place);
+    return new FactPlaceAdditions(
+            GenericViewElement::create($htmls[0]), 
+            GenericViewElement::createEmpty(), 
+            GenericViewElement::create($htmls[1]));
   }
 
 }

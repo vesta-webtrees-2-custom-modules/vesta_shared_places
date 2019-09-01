@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Functions;
 
+use Cissee\WebtreesExt\Requests;
+use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Census\Census;
 use Fisharebest\Webtrees\Config;
@@ -44,9 +46,14 @@ use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Services\UserService;
 use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\Tree;
-use Ramsey\Uuid\Uuid;
 use Psr\Http\Message\ServerRequestInterface;
-use Cissee\WebtreesExt\Requests;
+use Ramsey\Uuid\Uuid;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
+use const WT_LOCALE;
+use function app;
+use function route;
+use function view;
 
 /**
  * Class FunctionsEdit - common functions for editing
@@ -302,6 +309,12 @@ class FunctionsEdit
      * @return string
      */
     public static function addSimpleTag(Tree $tree, $tag, $upperlevel = '', $label = ''): string
+    {
+      return self::addSimpleTagWithGedcomRecord(null, $tree, $tag, $upperlevel, $label);
+    }
+    
+    //[RC] extended
+    public static function addSimpleTagWithGedcomRecord(?GedcomRecord $record, Tree $tree, $tag, $upperlevel = '', $label = ''): string
     {
         $request = app(ServerRequestInterface::class);
         $xref    = Requests::getString($request, 'xref');
@@ -571,6 +584,9 @@ class FunctionsEdit
         } elseif ($fact === '_PRIM') {
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => ['' => '', 'Y' => I18N::translate('always'), 'N' => I18N::translate('never')]]);
             $html .= '<p class="small text-muted">' . I18N::translate('Use this image for charts and on the individual’s page.') . '</p>';
+        //[RC] adjusted
+        } elseif ($fact === '_GOV') {
+            $html .= self::htmlForGov($record, $tree, $id, $name, $value);
         } elseif ($fact === 'TYPE' && $level === '0') {
             // Level 0 TYPE fields are only used for NAME records
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => GedcomCodeName::getValues()]);
@@ -630,6 +646,40 @@ class FunctionsEdit
 
         return $html;
     }
+    
+    //[RC] added
+    protected static function htmlForGov(?GedcomRecord $record, Tree $tree, $id, $name, $value) {
+      $placeName = '';
+      if ($record !== null) {
+        if ($record instanceof SharedPlace) {
+          $sharedPlace = $record;
+          foreach ($sharedPlace->namesNN() as $nameNN) {
+            //first name wins
+            if ($placeName === '') {
+              $placeName = $nameNN;
+            }
+          }
+        }
+      }
+      
+      $html = '';
+      //hooked?
+      $additionalControls = GovIdEditControlsUtils::accessibleModules(null, $tree, Auth::user())
+            ->map(function (GovIdEditControlsInterface $module) use ($value, $id, $name, $placeName) {
+              return $module->govIdEditControl(($value === '')?null:$value, $id, $name, $placeName, false, false);
+            })
+            ->toArray();
+            
+      foreach ($additionalControls as $additionalControl) {
+        $html .= $additionalControl->getMain();
+      }
+      
+      if ($html !== '') {
+        return $html;
+      }
+      
+      return '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '">';
+    }
 
     /**
      * Add some empty tags to create a new fact.
@@ -677,6 +727,12 @@ class FunctionsEdit
      */
     public static function createAddForm(Tree $tree, $fact): void
     {
+      self::createAddFormWithGedcomRecord(null, $tree, $fact);
+    }  
+    
+    //[RC] extended
+    public static function createAddFormWithGedcomRecord(?GedcomRecord $record, Tree $tree, $fact): void
+    {
         self::$tags = [];
 
         // handle  MARRiage TYPE
@@ -696,10 +752,11 @@ class FunctionsEdit
             ])) {
                 $fact .= ' @';
             }
+            //[RC] adjusted
             if (in_array($fact, Config::emptyFacts())) {
-                echo self::addSimpleTag($tree, '1 ' . $fact . ' Y');
-            } else {
-                echo self::addSimpleTag($tree, '1 ' . $fact);
+                echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact . ' Y');
+            } else {              
+                echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact);
             }
             self::insertMissingSubtags($tree, self::$tags[0]);
             //-- handle the special SOURce case for level 1 sources [ 1759246 ]
@@ -837,7 +894,8 @@ class FunctionsEdit
             } elseif ($type === 'STAT') {
                 echo self::addSimpleTag($tree, $subrecord, $level1type, GedcomTag::getLabel($label, $record));
             } else {
-                echo self::addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label, $record));
+                //[RC] adjusted
+                echo self::addSimpleTagWithGedcomRecord($record, $tree, $subrecord, $level0type, GedcomTag::getLabel($label, $record));
             }
 
             // Get a list of tags present at the next level
