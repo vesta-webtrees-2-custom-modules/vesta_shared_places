@@ -6,7 +6,6 @@ use Cissee\Webtrees\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\FactPlaceAdditions;
-use Cissee\WebtreesExt\FormatPlaceAdditions;
 use Cissee\WebtreesExt\GedcomRecordExt;
 use Cissee\WebtreesExt\HtmlExt;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
@@ -15,7 +14,6 @@ use Cissee\WebtreesExt\SharedPlaceFactory;
 use Fisharebest\Localization\Locale\LocaleInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
 use Fisharebest\Webtrees\Http\Controllers\EditGedcomRecordController;
@@ -113,7 +111,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0-beta.4.1';
+    return '2.0.0-beta.4.2';
   }
 
   public function customModuleLatestVersionUrl(): string {
