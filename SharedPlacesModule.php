@@ -255,14 +255,14 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     $restricted = $this->getPreference('RESTRICTED', '0');
 
     if ($restricted) {
-      $restricted_indi = Filter::escapeHtml($this->getPreference('RESTRICTED_INDI', 'BIRT,MARR,OCCU,RESI,DEAT'));
+      $restricted_indi = $this->getPreference('RESTRICTED_INDI', 'BIRT,MARR,OCCU,RESI,DEAT');
       $restrictedTo = preg_split("/[, ;:]+/", $restricted_indi, -1, PREG_SPLIT_NO_EMPTY);
       if (!in_array($place->getEventType(), $restrictedTo, true)) {
 
-        $restricted_fam = Filter::escapeHtml($this->getPreference('RESTRICTED_FAM', 'MARR'));
+        $restricted_fam = $this->getPreference('RESTRICTED_FAM', 'MARR');
         $restrictedTo = preg_split("/[, ;:]+/", $restricted_fam, -1, PREG_SPLIT_NO_EMPTY);
         if (!in_array($place->getEventType(), $restrictedTo, true)) {
-          return '';
+          return array('', '');
         }
       }
     }
