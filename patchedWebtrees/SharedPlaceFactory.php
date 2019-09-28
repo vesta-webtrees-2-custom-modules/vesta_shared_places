@@ -3,6 +3,7 @@
 namespace Cissee\WebtreesExt;
 
 use Fisharebest\Webtrees\GedcomRecord;
+use Fisharebest\Webtrees\Tree;
 
 class SharedPlaceFactory implements GedcomRecordFactory {
 
@@ -14,7 +15,7 @@ class SharedPlaceFactory implements GedcomRecordFactory {
     $this->useIndirectLinks = $useIndirectLinks;
   }
 
-  public function createRecord($xref, $gedcom, $pending, $tree): GedcomRecord {
+  public function createRecord(string $xref, string $gedcom, $pending, Tree $tree): GedcomRecord {
     return new SharedPlace($this->moduleName, $this->useIndirectLinks, $xref, $gedcom, $pending, $tree);
   }
 

@@ -48,7 +48,7 @@ class SharedPlace extends GedcomRecord {
    *
    * @return string
    */
-  protected function createPrivateGedcomRecord($access_level): string {
+  protected function createPrivateGedcomRecord(int $access_level): string {
     return '0 @' . $this->xref . "@ _LOC\n1 NAME " . I18N::translate('Private');
   }
 
@@ -164,6 +164,8 @@ class SharedPlace extends GedcomRecord {
   }
 
   public function linkedFamilies(string $link): Collection {
+    //TODO we should merge here!!!!! INDI to!
+    
     if (!$this->useIndirectLinks) {
       return parent::linkedFamilies($link);
     }
