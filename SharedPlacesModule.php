@@ -111,7 +111,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0-beta.4.2';
+    return '2.0.0-beta.4.3';
   }
 
   public function customModuleLatestVersionUrl(): string {
@@ -211,7 +211,6 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   public function hFactsTabGetAdditionalEditControls(
           Fact $fact): GenericViewElement {
     
-    //TODO activate this!
     if (!Auth::isEditor($fact->record()->tree())) {
       //not editable
       return new GenericViewElement('', '');
@@ -232,12 +231,13 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
       return new GenericViewElement('', '');
     }
     
-    //ok to edit - does a shared place with this name already exist?
-    $sharedPlace = $this->matchName($fact->record()->tree(), $fact->place()->gedcomName());
+    //ok to edit - does a shared place with this name already exist? Or does the PLAC have an explicit _LOC link?
+    $ps = PlaceStructure::fromFact($fact);
+    $sharedPlace = $this->match($ps);
+    //$sharedPlace = $this->matchName($fact->record()->tree(), $fact->place()->gedcomName());
     
     if ($sharedPlace !== null) {
-      //already exists - edit
-      //TODO
+      //already exists
       return new GenericViewElement('', '');
     }
     

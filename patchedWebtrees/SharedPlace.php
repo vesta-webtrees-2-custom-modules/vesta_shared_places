@@ -132,8 +132,10 @@ class SharedPlace extends GedcomRecord {
   }
 
   public function linkedIndividuals(string $link): Collection {
+    $main = parent::linkedIndividuals($link);
+    
     if (!$this->useIndirectLinks) {
-      return parent::linkedIndividuals($link);
+      return $main;
     }
 
     if ($link !== '_LOC') {
@@ -160,14 +162,16 @@ class SharedPlace extends GedcomRecord {
         }
       }
     }
-    return Collection::wrap($list);
+    $concatenated = $main->concat($list);
+    
+    return $concatenated;
   }
 
   public function linkedFamilies(string $link): Collection {
-    //TODO we should merge here!!!!! INDI to!
+    $main = parent::linkedFamilies($link);
     
     if (!$this->useIndirectLinks) {
-      return parent::linkedFamilies($link);
+      return $main;
     }
 
     if ($link !== '_LOC') {
@@ -195,7 +199,9 @@ class SharedPlace extends GedcomRecord {
       }
     }
 
-    return Collection::wrap($list);
+    $concatenated = $main->concat($list);
+    
+    return $concatenated;
   }
 
 }
