@@ -962,7 +962,6 @@ class GedcomRecord
      * @param bool     $override Include private records, to allow us to implement $SHOW_PRIVATE_RELATIONSHIPS and $SHOW_LIVING_NAMES.
      *
      * @return Collection
-     * @return Fact[]
      */
     public function facts(array $filter = [], bool $sort = false, int $access_level = null, bool $override = false): Collection
     {
@@ -1249,6 +1248,13 @@ class GedcomRecord
             ->where('gedcom_id', '=', $this->tree()->id())
             ->whereContains('new_gedcom', '@' . $this->xref() . '@')
             ->where('new_gedcom', 'NOT LIKE', '0 @' . $this->xref() . '@%')
+            ->whereIn('change_id', function (Builder $query): void {
+                $query->select(new Expression('MAX(change_id)'))
+                    ->from('change')
+                    ->where('gedcom_id', '=', $this->tree->id())
+                    ->where('status', '=', 'pending')
+                    ->groupBy(['xref']);
+            })
             ->select(['xref']);
 
         $xrefs = DB::table('link')
