@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class FunctionsPrintExt {
 
   public static function printAddNewFact_LOC(string $moduleName, GedcomRecord $record, Collection $usedfacts): void {
-    //$tree = $record->tree();
+    $tree = $record->tree();
     //TODO make configurable via module preferences (and tree?)
     //$addfacts    = preg_split("/[, ;:]+/", $tree->getPreference('_LOC_FACTS_ADD'), -1, PREG_SPLIT_NO_EMPTY);
     //$uniquefacts = preg_split("/[, ;:]+/", $tree->getPreference('_LOC_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
@@ -50,6 +50,7 @@ class FunctionsPrintExt {
         'add_facts' => $translated_addfacts,
         'quick_facts' => $quickfacts,
         'record' => $record,
+        'tree'        => $tree,
     ]);
   }
 

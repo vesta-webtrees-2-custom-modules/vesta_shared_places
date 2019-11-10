@@ -18,7 +18,7 @@
         'module' => $moduleName,
         'action' => 'CreateSharedPlace',
         'shared-place-name' => $fact->place()->gedcomName(),
-        'ged' => $fact->record()->tree()->name()
+        'tree' => $fact->record()->tree()->name()
     ]));
     ?>" 
     data-select-id="<?= $id ?>" 

@@ -111,7 +111,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0-beta.4.3';
+    return '2.0.0-beta.5.1';
   }
 
   public function customModuleLatestVersionUrl(): string {
@@ -140,7 +140,10 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
     
   public function matchName(Tree $tree, $placeGedcomName): ?SharedPlace {
-    $searchService = new SearchServiceExt(app(LocaleInterface::class));
+    $locale = app(ServerRequestInterface::class)->getAttribute('locale');
+    assert($locale instanceof LocaleInterface);
+    
+    $searchService = new SearchServiceExt($locale);
     $sharedPlaces = $searchService->searchSharedPlaces(array($tree), array("1 NAME " . $placeGedcomName));
     foreach ($sharedPlaces as $sharedPlace) {
       foreach ($sharedPlace->namesNN() as $name) {
@@ -348,7 +351,11 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
             '</a>';
   }
   
-  public function getListAction(Tree $tree): ResponseInterface {
+  public function getListAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     $controller = new SharedPlacesListController($this->name());
 
     $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
@@ -356,84 +363,140 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     return $controller->sharedPlacesList($tree, $showLinkCounts);
   }
 
-  public function getSingleAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function getSingleAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     $controller = new SharedPlaceController($this->name());
     return $controller->show($request, $tree);
   }
 
-  public function getCreateSharedPlaceAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function getCreateSharedPlaceAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     $controller = new EditSharedPlaceController($this);
     return $controller->createSharedPlace($request, $tree);
   }
 
-  public function postCreateSharedPlaceAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function postCreateSharedPlaceAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     $controller = new EditSharedPlaceController($this);
     return $controller->createSharedPlaceAction($request, $tree);
   }
 
   //rerouted EditGedcomRecordController
 
-  public function getEditRawRecordAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function getEditRawRecordAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawRecord($request, $tree);
   }
 
-  public function postEditRawRecordAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function postEditRawRecordAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawRecordAction($request, $tree);
   }
 
-  public function getEditRawFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function getEditRawFactAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawFact($request, $tree);
   }
 
-  public function postEditRawFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function postEditRawFactAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editRawFactAction($request, $tree);
   }
 
-  public function postCopyFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function postCopyFactAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->copyFact($request, $tree);
   }
 
-  public function postDeleteRecordAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function postDeleteRecordAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->deleteRecord($request, $tree);
   }
 
-  public function postPasteFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function postPasteFactAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->pasteFact($request, $tree);
   }
 
-  public function postDeleteFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function postDeleteFactAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editFact($request, $tree);
   }
 
-  public function getAddFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function getAddFactAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->addFact($request, $tree);
   }
 
-  public function getEditFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function getEditFactAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->editFact($request, $tree);
   }
 
-  public function postUpdateFactAction(ServerRequestInterface $request, Tree $tree): ResponseInterface {
+  public function postUpdateFactAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
     //no functional changes here - we just reroute through module
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->updateFact($request, $tree);

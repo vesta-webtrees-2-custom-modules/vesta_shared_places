@@ -1,11 +1,9 @@
 <?php
 
-use Fisharebest\Webtrees\GedcomTag; ?>
-<?php
+use Fisharebest\Webtrees\GedcomTag;
+use Fisharebest\Webtrees\Http\RequestHandlers\AddNewFact;
+use Fisharebest\Webtrees\I18N;
 
-use Fisharebest\Webtrees\I18N; ?>
-
-<?php
 //[RC] cf add-fact-row.phtml
 ?>
 
@@ -16,18 +14,15 @@ use Fisharebest\Webtrees\I18N; ?>
         </label>
     </th>
     <td>
-        <form onsubmit="if ($('#add-fact').val() === null) {
-                  event.preventDefault();
-              }">
-                  <?php
-//[RC] adjusted
-                  ?>
-            <input type="hidden" name="route" value="module">
-            <input type="hidden" name="module" value="<?= $moduleName ?>">
-            <input type="hidden" name="action" value="AddFact">
-
-            <input type="hidden" name="xref" value="<?= e($record->xref()) ?>">
-            <input type="hidden" name="ged" value="<?= e($record->tree()->name()) ?>">
+        <form method="post" action="<?= 
+        //[RC] adjusted
+        e(route('module', [
+            'module' => $moduleName, 
+            'action' => 'AddFact', 
+            'tree' => $record->tree()->name(), 
+            'xref' => $record->xref()])) ?>" onsubmit="if ($('#add-fact').val() === null) {event.preventDefault();}">
+            <?= csrf_field() ?>
+            
             <div class="input-group">
                 <select class="custom-select" id="add-fact" name="fact">
                     <option value="" disabled selected>
@@ -55,13 +50,11 @@ use Fisharebest\Webtrees\I18N; ?>
 
         <div class="wt-quick-facts">
             <?php foreach ($quick_facts as $fact) : ?>
-              <a class="btn btn-link btn-sm wt-quick-fact" href="<?=
-                 e(route('add-fact', [
-                     'fact' => $fact,
-                     'xref' => $record->xref(),
-                     'ged' => $tree->name(),
-                 ]))
-                 ?>">
+              <a class="btn btn-link btn-sm wt-quick-fact" href="<?= e(route(AddNewFact::class, [
+                    'fact' => $fact,
+                    'xref' => $record->xref(),
+                    'tree' => $tree->name(),
+                ])) ?>">
                      <?= GedcomTag::getLabel($fact) ?>
               </a>
             <?php endforeach ?>

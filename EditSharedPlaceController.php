@@ -48,6 +48,7 @@ class EditSharedPlaceController extends AbstractEditController {
                 'moduleName' => $this->moduleName,
                 'sharedPlaceName' => $sharedPlaceName,
                 'additionalControls' => $additionalControls,
+                'tree' => $tree,
     ]));
   }
 

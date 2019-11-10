@@ -40,7 +40,7 @@ use Ramsey\Uuid\Uuid;
                 e(route('module', [
                     'module' => $moduleName,
                     'action' => 'CreateSharedPlace',
-                    'ged' => $tree->name()
+                    'tree' => $tree->name()
                 ]));
                 ?>" 
                 data-select-id="<?= $id ?>" 

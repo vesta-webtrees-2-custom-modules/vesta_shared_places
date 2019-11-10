@@ -127,7 +127,7 @@ class SharedPlace extends GedcomRecord {
         'module' => $this->moduleName,
         'action' => 'Single',
         'xref' => $this->xref(),
-        'ged' => $this->tree->name(),
+        'tree' => $this->tree->name(),
     ]);
   }
 

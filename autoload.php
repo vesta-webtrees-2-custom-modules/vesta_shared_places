@@ -11,7 +11,7 @@ $loader->register();
 
 
 $extend = !class_exists("Fisharebest\Webtrees\GedcomRecord", false);
-
+        
 if ($extend) {
   //explicitly load webtrees replacements so that the original files aren't autoloaded
   //(e.g. when routing via ModuleController)
