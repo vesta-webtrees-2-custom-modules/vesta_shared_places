@@ -1,18 +1,4 @@
 <?php
-/**
- * webtrees: online genealogy
- * Copy§right (C) 2017 webtrees development team
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Functions;
@@ -36,6 +22,11 @@ use Fisharebest\Webtrees\GedcomCode\GedcomCodeTemp;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\Html;
+use Fisharebest\Webtrees\Http\RequestHandlers\CreateMediaObjectModal;
+use Fisharebest\Webtrees\Http\RequestHandlers\CreateNoteModal;
+use Fisharebest\Webtrees\Http\RequestHandlers\CreateRepositoryModal;
+use Fisharebest\Webtrees\Http\RequestHandlers\CreateSourceModal;
+use Fisharebest\Webtrees\Http\RequestHandlers\CreateSubmitterModal;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Media;
@@ -495,7 +486,7 @@ class FunctionsEdit
             $html .=
                 '<div class="input-group">' .
                 '<div class="input-group-prepend">' .
-                '<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#wt-ajax-modal" data-href="' . e(route('create-note-object', ['tree' => $tree->name()])) . '" data-select-id="' . $id . '" title="' . I18N::translate('Create a shared note') . '">' .
+                '<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#wt-ajax-modal" data-href="' . e(route(CreateNoteModal::class, ['tree' => $tree->name()])) . '" data-select-id="' . $id . '" title="' . I18N::translate('Create a shared note') . '">' .
                 '' . view('icons/add') . '<' .
                 '/button>' .
                 '</div>' .
@@ -504,7 +495,7 @@ class FunctionsEdit
         } elseif ($fact === 'OBJE') {
             $html .=
                 '<div class="input-group">' .
-                '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-href="' . e(route('create-media-object', ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a media object') . '">' . view('icons/add') . '</button></div>' .
+                '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-href="' . e(route(CreateMediaObjectModal::class, ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a media object') . '">' . view('icons/add') . '</button></div>' .
                 view('components/select-media', ['id' => $id, 'name' => $name, 'media' => Media::getInstance($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'PAGE') {
@@ -549,7 +540,7 @@ class FunctionsEdit
         } elseif ($fact === 'REPO') {
             $html .=
                 '<div class="input-group">' .
-                '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-href="' . e(route('create-repository', ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a repository') . '">' . view('icons/add') . '</button></div>' .
+                '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-href="' . e(route(CreateRepositoryModal::class, ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a repository') . '">' . view('icons/add') . '</button></div>' .
                 view('components/select-repository', ['id' => $id, 'name' => $name, 'repository' => Repository::getInstance($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'RESN') {
@@ -566,7 +557,7 @@ class FunctionsEdit
         } elseif ($fact === 'SOUR') {
             $html .=
                 '<div class="input-group">' .
-                '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-href="' . e(route('create-source', ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a source') . '">' . view('icons/add') . '</button></div>' .
+                '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-href="' . e(route(CreateSourceModal::class, ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a source') . '">' . view('icons/add') . '</button></div>' .
                 view('components/select-source', ['id' => $id, 'name' => $name, 'source' => Source::getInstance($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'STAT') {
@@ -574,7 +565,7 @@ class FunctionsEdit
         } elseif ($fact === 'SUBM') {
             $html .=
                 '<div class="input-group">' .
-                '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-href="' . e(route('create-submitter', ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a submitter') . '">' . view('icons/add') . '</button></div>' .
+                '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-href="' . e(route(CreateSubmitterModal::class, ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a submitter') . '">' . view('icons/add') . '</button></div>' .
                 view('components/select-submitter', ['id' => $id, 'name' => $name, 'submitter' => GedcomRecord::getInstance($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'TEMP') {
