@@ -10,12 +10,13 @@ use Fisharebest\Localization\Locale\LocaleInterface;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Note;
+use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Collection;
-use function mb_stripos;
+use stdClass;
 
 /**
  * Search trees for genealogy records.
@@ -50,9 +51,17 @@ class SearchServiceExt {
 
     $this->whereTrees($query, 'o_file', $trees);
     $this->whereSearch($query, 'o_gedcom', $search);
-
-    return $this->paginateQuery($query, SharedPlace::rowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
+    
+    return $this->paginateQuery($query, $this->sharedPlaceRowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
   }
+  
+  private function sharedPlaceRowMapper(): Closure
+    {
+        return function (stdClass $row): SharedPlace {
+            $tree = app(TreeService::class)->find((int) $row->o_file);
+            return SharedPlace::getInstance($row->o_id, $tree, $row->o_gedcom);
+        };
+    }
 
   /**
    * Paginate a search query.

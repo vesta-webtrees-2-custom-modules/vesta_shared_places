@@ -11,7 +11,6 @@ use Cissee\WebtreesExt\HtmlExt;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlaceFactory;
-use Fisharebest\Localization\Locale\LocaleInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
@@ -27,6 +26,7 @@ use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\View;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
@@ -39,7 +39,6 @@ use Vesta\Model\MapCoordinates;
 use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
 use Vesta\VestaModuleTrait;
-use function app;
 use function view;
 
 //cannot use original AbstractModule because we override setName
@@ -111,7 +110,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0-beta.5.2';
+    return '2.0.0.1';
   }
 
   public function customModuleLatestVersionUrl(): string {
@@ -134,14 +133,13 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   public function resourcesFolder(): string {
     return __DIR__ . '/resources/';
   }
-
+  
   public function matchViaName(PlaceStructure $place): ?SharedPlace {
     return $this->matchName($place->getTree(), $place->getGedcomName());
   }
     
   public function matchName(Tree $tree, $placeGedcomName): ?SharedPlace {
-    $locale = app(ServerRequestInterface::class)->getAttribute('locale');
-    assert($locale instanceof LocaleInterface);
+    $locale = I18N::locale();
     
     $searchService = new SearchServiceExt($locale);
     $sharedPlaces = $searchService->searchSharedPlaces(array($tree), array("1 NAME " . $placeGedcomName));

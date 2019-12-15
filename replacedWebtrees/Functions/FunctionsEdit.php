@@ -13,6 +13,7 @@ use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeAdop;
+use Fisharebest\Webtrees\GedcomCode\GedcomCodeLang;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeName;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodePedi;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeQuay;
@@ -37,12 +38,15 @@ use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Services\UserService;
 use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Localization\Locale\LocaleInterface;
+use Fisharebest\Webtrees\View;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 use function app;
+use function explode;
+use function in_array;
+use function substr;
 use function route;
 use function view;
 
@@ -69,7 +73,7 @@ class FunctionsEdit
             $html .= '<div class="form-check">';
             $html .= '<label title="' . $locale->languageTag() . '">';
             $html .= '<input type="checkbox" name="' . $parameter_name . '[]" value="' . $locale->languageTag() . '"';
-            $html .= in_array($locale->languageTag(), $accepted_languages) ? ' checked>' : '>';
+            $html .= in_array($locale->languageTag(), $accepted_languages, true) ? ' checked>' : '>';
             $html .= $locale->endonym();
             $html .= '</label>';
             $html .= '</div>';
@@ -145,21 +149,6 @@ class FunctionsEdit
             '0' => I18N::translate('no'),
             '1' => I18N::translate('yes'),
         ];
-    }
-
-    /**
-     * A list of installed languages (e.g. for an edit control).
-     *
-     * @return string[]
-     */
-    public static function optionsInstalledLanguages(): array
-    {
-        $languages = [];
-        foreach (I18N::installedLocales() as $locale) {
-            $languages[$locale->languageTag()] = $locale->endonym();
-        }
-
-        return $languages;
     }
 
     /**
@@ -240,8 +229,6 @@ class FunctionsEdit
     /**
      * A list of GEDCOM restrictions for privacy rules.
      *
-     * @param bool $include_empty
-     *
      * @return string[]
      */
     public static function optionsRestrictionsRule(): array
@@ -275,7 +262,7 @@ class FunctionsEdit
     {
         $options = ['' => '-'];
 
-        foreach ((new UserService())->all() as $user) {
+        foreach (app(UserService::class)->all() as $user) {
             $options[$user->userName()] = $user->realName() . ' - ' . $user->userName();
         }
 
@@ -308,7 +295,7 @@ class FunctionsEdit
     public static function addSimpleTagWithGedcomRecord(?GedcomRecord $record, Tree $tree, $tag, $upperlevel = '', $label = ''): string
     {
         $request = app(ServerRequestInterface::class);
-        $xref    = Requests::getString($request, 'xref');
+        $xref    = $request->getAttribute('xref', '');
 
         // Some form fields need access to previous form fields.
         static $previous_ids = [
@@ -316,16 +303,20 @@ class FunctionsEdit
             'PLAC' => '',
         ];
 
-        preg_match('/^(?:(\d+) (' . Gedcom::REGEX_TAG . ') ?(.*))/', $tag, $match);
-        [, $level, $fact, $value] = $match;
+        $parts = explode(' ', $tag, 3);
+        $level = $parts[0] ?? '';
+        $fact  = $parts[1] ?? '';
+        $value = $parts[2] ?? '';
 
         if ($level === '0') {
+            // Adding a new fact.
             if ($upperlevel) {
                 $name = $upperlevel . '_' . $fact;
             } else {
                 $name = $fact;
             }
         } else {
+            // Editing an existing fact.
             $name = 'text[]';
         }
 
@@ -334,13 +325,12 @@ class FunctionsEdit
         $previous_ids[$fact] = $id;
 
         // field value
-        $islink = (substr($value, 0, 1) === '@' && substr($value, 0, 2) !== '@#');
+        $islink = (bool) preg_match('/^@[^#@][^@]*@$/', $value);
         if ($islink) {
             $value = trim($value, '@');
-        } else {
-            $value = (string) substr($tag, strlen($fact) + 3);
         }
-        if ($fact === 'REPO' || $fact === 'SOUR' || $fact === 'OBJE' || $fact === 'FAMC') {
+
+        if ($fact === 'REPO' || $fact === 'SOUR' || $fact === 'OBJE' || $fact === 'FAMC' || $fact === 'SUBM' || $fact === 'ASSO' || $fact === '_ASSO') {
             $islink = true;
         }
 
@@ -385,13 +375,13 @@ class FunctionsEdit
         switch ($fact) {
             case 'NAME':
                 if ($upperlevel !== 'REPO' && $upperlevel !== 'UNKNOWN') {
-                    $html .= FunctionsPrint::helpLink($fact);
+                    $html .= view('help/link', ['topic' => $fact]);
                 }
                 break;
             case 'ROMN':
             case 'SURN':
             case '_HEB':
-                $html .= FunctionsPrint::helpLink($fact);
+                $html .= view('help/link', ['topic' => $fact]);
                 break;
         }
 
@@ -409,9 +399,9 @@ class FunctionsEdit
         // Show names for spouses in MARR/HUSB/AGE and MARR/WIFE/AGE
         if ($fact === 'HUSB' || $fact === 'WIFE') {
             $family = Family::getInstance($xref, $tree);
-            if ($family) {
+            if ($family instanceof Family) {
                 $spouse_link = $family->facts([$fact])->first();
-                if ($spouse_link) {
+                if ($spouse_link instanceof Fact) {
                     $spouse = $spouse_link->target();
                     if ($spouse instanceof Individual) {
                         $html .= $spouse->fullName();
@@ -420,15 +410,12 @@ class FunctionsEdit
             }
         }
 
-        if (in_array($fact, Config::emptyFacts()) && ($value === '' || $value === 'Y' || $value === 'y')) {
+        if (in_array($fact, Config::emptyFacts(), true) && ($value === '' || $value === 'Y' || $value === 'y')) {
             $html .= '<input type="hidden" id="' . $id . '" name="' . $name . '" value="' . $value . '">';
 
             if ($fact === 'CENS' && $value === 'Y') {
-                $locale = app(ServerRequestInterface::class)->getAttribute('locale');
-                assert($locale instanceof LocaleInterface);
-
                 $html .= view('modules/GEDFact_assistant/select-census', [
-                    'census_places' => Census::censusPlaces($locale->languageTag()),
+                    'census_places' => Census::censusPlaces(I18N::languageTag()),
                 ]);
 
                 $census_assistant = app(ModuleService::class)->findByInterface(CensusAssistantModule::class)->first();
@@ -446,10 +433,16 @@ class FunctionsEdit
             $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" data-autocomplete-type="SURN" oninput="updatewholename()">';
         } elseif ($fact === 'ADOP') {
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => GedcomCodeAdop::getValues()]);
+        } elseif ($fact === 'LANG') {
+            $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => GedcomCodeLang::getValues()]);
         } elseif ($fact === 'ALIA') {
+            $html .= '<div class="input-group">';
             $html .= view('components/select-individual', ['id' => $id, 'name' => $name, 'individual' => Individual::getInstance($value, $tree), 'tree' => $tree]);
+            $html .= '</div>';
         } elseif ($fact === 'ASSO' || $fact === '_ASSO') {
+            $html .= '<div class="input-group">';
             $html .= view('components/select-individual', ['id' => $id, 'name' => $name, 'individual' => Individual::getInstance($value, $tree), 'tree' => $tree]);
+            $html .= '</div>';
             if ($level === '1') {
                 $html .= '<p class="small text-muted">' . I18N::translate('An associate is another individual who was involved with this individual, such as a friend or an employer.') . '</p>';
             } else {
@@ -506,10 +499,7 @@ class FunctionsEdit
                     'name'                    => $name,
                     'value'                   => $value,
                     'type'                    => 'text',
-                    'data-autocomplete-url'   => route('autocomplete-page', [
-                        'tree'   => $tree->name(),
-                        'query' => 'QUERY',
-                    ]),
+                    'data-autocomplete-url'   => route('autocomplete-page', ['tree'  => $tree->name(), 'query' => 'QUERY']),
                     'data-autocomplete-extra' => '#' . $previous_ids['SOUR'],
                 ]) . '>';
         } elseif ($fact === 'PEDI') {
@@ -523,18 +513,14 @@ class FunctionsEdit
                     'name'                  => $name,
                     'value'                 => $value,
                     'type'                  => 'text',
-                    'data-autocomplete-url' => route('autocomplete-place', [
-                        'tree'   => $tree->name(),
-                        'query' => 'QUERY',
-                    ]),
+                    'data-autocomplete-url' => route('autocomplete-place', ['tree'  => $tree->name(), 'query' => 'QUERY']),
                 ]) . '>';
 
-            /** @TODO - typeaheadjs.css doesn't work in an input-group */
             $html .= view('edit/input-addon-coordinates', ['id' => $id]);
             $html .= view('edit/input-addon-help', ['fact' => 'PLAC']);
             $html .= '</div>';
         } elseif ($fact === 'QUAY') {
-            $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => GedcomCodeQuay::getValues()]);
+            $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => ['' => ''] + GedcomCodeQuay::getValues()]);
         } elseif ($fact === 'RELA') {
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => self::optionsRelationships($value)]);
         } elseif ($fact === 'REPO') {
@@ -561,7 +547,7 @@ class FunctionsEdit
                 view('components/select-source', ['id' => $id, 'name' => $name, 'source' => Source::getInstance($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'STAT') {
-            $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'values' => GedcomCodeStat::statusNames($upperlevel)]);
+            $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => GedcomCodeStat::statusNames($upperlevel)]);
         } elseif ($fact === 'SUBM') {
             $html .=
                 '<div class="input-group">' .
@@ -599,10 +585,10 @@ class FunctionsEdit
                 $html .= '>' . $typeValue . '</option>';
             }
             $html .= '</select>';
-        } elseif (($fact !== 'NAME' || $upperlevel === 'REPO' || $upperlevel === 'UNKNOWN') && $fact !== '_MARNM') {
+        } elseif (($fact !== 'NAME' || $upperlevel === 'REPO' || $upperlevel === 'SUBM' || $upperlevel === 'UNKNOWN') && $fact !== '_MARNM') {
             if ($fact === 'TEXT' || $fact === 'ADDR' || ($fact === 'NOTE' && !$islink)) {
                 $html .= '<div class="input-group">';
-                $html .= '<textarea class="form-control" id="' . $id . '" name="' . $name . '" dir="auto">' . e($value) . '</textarea>';
+                $html .= '<textarea class="form-control" id="' . $id . '" name="' . $name . '" rows="5" dir="auto">' . e($value) . '</textarea>';
                 $html .= '</div>';
             } else {
                 // If using GEDFact-assistant window
@@ -666,6 +652,10 @@ class FunctionsEdit
             
       foreach ($additionalControls as $additionalControl) {
         $html .= $additionalControl->getMain();
+        //apparently handled properly
+        View::push('javascript');
+        echo $additionalControl->getScript();
+        View::endpush();
       }
       
       if ($html !== '') {
@@ -692,12 +682,11 @@ class FunctionsEdit
             echo self::addSimpleTag($tree, '0 ' . $fact);
         }
 
-        if (!in_array($fact, Config::nonDateFacts())) {
+        if (!in_array($fact, Config::nonDateFacts(), true)) {
             echo self::addSimpleTag($tree, '0 DATE', $fact, GedcomTag::getLabel($fact . ':DATE'));
-            echo self::addSimpleTag($tree, '0 RELI', $fact, GedcomTag::getLabel($fact . ':RELI'));
         }
 
-        if (!in_array($fact, Config::nonPlaceFacts())) {
+        if (!in_array($fact, Config::nonPlaceFacts(), true)) {
             echo self::addSimpleTag($tree, '0 PLAC', $fact, GedcomTag::getLabel($fact . ':PLAC'));
 
             if (preg_match_all('/(' . Gedcom::REGEX_TAG . ')/', $tree->getPreference('ADVANCED_PLAC_FACTS'), $match)) {
@@ -740,14 +729,11 @@ class FunctionsEdit
                 $fact .= ' ' . GedcomTag::createUid();
             }
             // These new level 1 tags need to be turned into links
-            if (in_array($fact, [
-                'ALIA',
-                'ASSO',
-            ])) {
+            if (in_array($fact, ['ALIA', 'ASSO'], true)) {
                 $fact .= ' @';
             }
             //[RC] adjusted
-            if (in_array($fact, Config::emptyFacts())) {
+            if (in_array($fact, Config::emptyFacts(), true)) {
                 echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact . ' Y');
             } else {              
                 echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact);
@@ -831,7 +817,7 @@ class FunctionsEdit
             $expected_subtags['STAT'] = ['DATE'];
         }
 
-        if (in_array($level1type, Config::dateAndTime())) {
+        if (in_array($level1type, Config::dateAndTime(), true)) {
             // TIME is NOT a valid 5.5.1 tag
             $expected_subtags['DATE'] = ['TIME'];
         }
@@ -901,18 +887,14 @@ class FunctionsEdit
             }
 
             // Insert missing tags
-            if (!empty($expected_subtags[$type])) {
-                foreach ($expected_subtags[$type] as $subtag) {
-                    if (!in_array($subtag, $subtags)) {
+            foreach ($expected_subtags[$type] ?? [] as $subtag) {
+                if (!in_array($subtag, $subtags, true)) {
                         echo self::addSimpleTag($tree, ($level + 1) . ' ' . $subtag, '', GedcomTag::getLabel($label . ':' . $subtag));
-                        if (!empty($expected_subtags[$subtag])) {
-                            foreach ($expected_subtags[$subtag] as $subsubtag) {
+                    foreach ($expected_subtags[$subtag] ?? [] as $subsubtag) {
                                 echo self::addSimpleTag($tree, ($level + 2) . ' ' . $subsubtag, '', GedcomTag::getLabel($label . ':' . $subtag . ':' . $subsubtag));
                             }
                         }
                     }
-                }
-            }
 
             $i++;
         }
@@ -945,10 +927,10 @@ class FunctionsEdit
         }
 
         foreach (Config::levelTwoTags() as $key => $value) {
-            if ($key === 'DATE' && in_array($level1tag, Config::nonDateFacts()) || $key === 'PLAC' && in_array($level1tag, Config::nonPlaceFacts())) {
+            if ($key === 'DATE' && in_array($level1tag, Config::nonDateFacts(), true) || $key === 'PLAC' && in_array($level1tag, Config::nonPlaceFacts(), true)) {
                 continue;
             }
-            if (in_array($level1tag, $value) && !in_array($key, self::$tags)) {
+            if (in_array($level1tag, $value, true) && !in_array($key, self::$tags, true)) {
                 if ($key === 'TYPE') {
                     echo self::addSimpleTag($tree, '2 TYPE ' . $type_val, $level1tag);
                 } elseif ($level1tag === '_TODO' && $key === 'DATE') {
@@ -983,7 +965,7 @@ class FunctionsEdit
                         break;
                     case 'DATE':
                         // TIME is NOT a valid 5.5.1 tag
-                        if (in_array($level1tag, Config::dateAndTime())) {
+                        if (in_array($level1tag, Config::dateAndTime(), true)) {
                             echo self::addSimpleTag($tree, '3 TIME');
                         }
                         break;
@@ -1005,7 +987,7 @@ class FunctionsEdit
         //[RC] excluding _GOV
         if (substr($level1tag, 0, 1) === '_' && $level1tag !== '_UID' && $level1tag !== '_PRIM' && $level1tag !== '_TODO' && $level1tag !== '_GOV') {
             foreach (['DATE', 'PLAC', 'ADDR', 'AGNC', 'TYPE', 'AGE'] as $tag) {
-                if (!in_array($tag, self::$tags)) {
+                if (!in_array($tag, self::$tags, true)) {
                     echo self::addSimpleTag($tree, '2 ' . $tag);
                     if ($tag === 'PLAC') {
                         if (preg_match_all('/(' . Gedcom::REGEX_TAG . ')/', $tree->getPreference('ADVANCED_PLAC_FACTS'), $match)) {

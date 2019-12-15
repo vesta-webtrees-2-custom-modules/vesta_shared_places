@@ -5,8 +5,6 @@ namespace Cissee\WebtreesExt;
 class HtmlExt {
 
   public static function url($path, array $data): string {
-    $path = strtr($path, ' ', '%20');
-
     if (array_key_exists('route', $data)) {
       $route = $data['route'];
 
@@ -15,8 +13,16 @@ class HtmlExt {
         $data = array_merge($data, $parameters);
       }
     }
+    
+    //continuing as in non-replaced Html.php
+    
+    $path = str_replace(' ', '%20', $path);
+    
+    if ($data !== []) {
+        $path .= '?' . http_build_query($data, '', '&', PHP_QUERY_RFC3986);
+    }
 
-    return $path . '?' . http_build_query($data, '', '&', PHP_QUERY_RFC3986);
+    return $path;
   }
 
   protected static $routeViaModule = [];

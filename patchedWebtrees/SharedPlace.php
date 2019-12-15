@@ -35,9 +35,9 @@ class SharedPlace extends GedcomRecord {
    *
    * @return Closure
    */
-  public static function rowMapper(): Closure {
-    return function (stdClass $row): SharedPlace {
-      return GedcomRecordExt::getInstance($row->o_id, Tree::findById((int) $row->o_file), $row->o_gedcom);
+  public static function rowMapper(Tree $tree): Closure {
+    return function (stdClass $row) use ($tree): SharedPlace {
+      return GedcomRecordExt::getInstance($row->o_id, $tree, $row->o_gedcom);
     };
   }
 

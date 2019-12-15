@@ -1,5 +1,7 @@
 <?php
+
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\View;
 ?>
 
 <form action="<?=
@@ -20,13 +22,14 @@ e(route('module', [
     <?= view('modals/footer-save-cancel') ?>
 </form>
 
-<script>
-  <?php
+<?php /*View::push('javascript') no need - this is a modal!*/ ?>
+<?php
   foreach ($additionalControls as $gve) {
     echo $gve->getScript();
   }
-  ?>
-  
+?>
+
+<script>
   // Submit the modal form using AJAX
   //[RC] different from other modals
   document.getElementById('wt-modal-form').addEventListener('submit', function (event) {

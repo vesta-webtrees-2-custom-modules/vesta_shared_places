@@ -21,7 +21,6 @@ namespace Fisharebest\Webtrees;
 
 use Closure;
 use Exception;
-use Fisharebest\Localization\Locale\LocaleInterface;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Http\RequestHandlers\GedcomRecordPage;
 use Fisharebest\Webtrees\Services\PendingChangesService;
@@ -30,10 +29,9 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
-use Psr\Http\Message\ServerRequestInterface;
 use stdClass;
+
 use function app;
-use function assert;
 
 //[RC] added
 use Cissee\WebtreesExt\GedcomRecordExt;
@@ -92,12 +90,14 @@ class GedcomRecord
     /**
      * A closure which will create a record from a database row.
      *
+     * @param Tree $tree
+     *
      * @return Closure
      */
-    public static function rowMapper(): Closure
+    public static function rowMapper(Tree $tree): Closure
     {
-        return static function (stdClass $row): GedcomRecord {
-            return GedcomRecord::getInstance($row->o_id, Tree::findById((int) $row->o_file), $row->o_gedcom);
+        return static function (stdClass $row) use ($tree): GedcomRecord {
+            return GedcomRecord::getInstance($row->o_id, $tree, $row->o_gedcom);
         };
     }
 
@@ -304,9 +304,9 @@ class GedcomRecord
             return true;
         }
 
-        $cache_key = 'canShow' . $this->xref . ':' . $this->tree->id() . ':' . $access_level;
+        $cache_key = 'show-' . $this->xref . '-' . $this->tree->id() . '-' . $access_level;
 
-        return app('cache.array')->rememberForever($cache_key, function () use ($access_level) {
+        return app('cache.array')->remember($cache_key, function () use ($access_level) {
             return $this->canShowRecord($access_level);
         });
     }
@@ -429,10 +429,7 @@ class GedcomRecord
         static $language_script;
 
         if ($language_script === null) {
-            $locale = app(ServerRequestInterface::class)->getAttribute('locale');
-            assert($locale instanceof LocaleInterface);
-
-            $language_script = $locale->script()->code();
+            $language_script = $language_script ?? I18N::locale()->script()->code();
         }
 
         if ($this->getPrimaryName === null) {
@@ -621,7 +618,7 @@ class GedcomRecord
             ->where('l_to', '=', $this->xref)
             ->select(['individuals.*'])
             ->get()
-            ->map(Individual::rowMapper())
+            ->map(Individual::rowMapper($this->tree))
             ->filter(self::accessFilter());
     }
 
@@ -645,7 +642,7 @@ class GedcomRecord
             ->where('l_to', '=', $this->xref)
             ->select(['families.*'])
             ->get()
-            ->map(Family::rowMapper())
+            ->map(Family::rowMapper($this->tree))
             ->filter(self::accessFilter());
     }
 
@@ -669,7 +666,7 @@ class GedcomRecord
             ->where('l_to', '=', $this->xref)
             ->select(['sources.*'])
             ->get()
-            ->map(Source::rowMapper())
+            ->map(Source::rowMapper($this->tree))
             ->filter(self::accessFilter());
     }
 
@@ -693,7 +690,7 @@ class GedcomRecord
             ->where('l_to', '=', $this->xref)
             ->select(['media.*'])
             ->get()
-            ->map(Media::rowMapper())
+            ->map(Media::rowMapper($this->tree))
             ->filter(self::accessFilter());
     }
 
@@ -718,7 +715,7 @@ class GedcomRecord
             ->where('l_to', '=', $this->xref)
             ->select(['other.*'])
             ->get()
-            ->map(Note::rowMapper())
+            ->map(Note::rowMapper($this->tree))
             ->filter(self::accessFilter());
     }
 
@@ -743,7 +740,7 @@ class GedcomRecord
             ->where('l_to', '=', $this->xref)
             ->select(['other.*'])
             ->get()
-            ->map(Individual::rowMapper())
+            ->map(Repository::rowMapper($this->tree))
             ->filter(self::accessFilter());
     }
 
@@ -803,9 +800,7 @@ class GedcomRecord
      */
     public function facts(array $filter = [], bool $sort = false, int $access_level = null, bool $override = false): Collection
     {
-        if ($access_level === null) {
-            $access_level = Auth::accessLevel($this->tree);
-        }
+        $access_level = $access_level ?? Auth::accessLevel($this->tree);
 
         $facts = new Collection();
         if ($this->canShow($access_level) || $override) {

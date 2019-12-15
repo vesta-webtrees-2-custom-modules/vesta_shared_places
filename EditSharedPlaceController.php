@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
-use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
-use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 use Cissee\WebtreesExt\Requests;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\Http\Controllers\AbstractEditController;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\View;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 use function response;
 use function view;
 
@@ -43,7 +44,7 @@ class EditSharedPlaceController extends AbstractEditController {
               return $module->govIdEditControl(null, 'shared-place-govId', 'shared-place-govId', $sharedPlaceName, true, true);
             })
             ->toArray();
-            
+    
     return response(view($this->moduleName . '::modals/create-shared-place', [
                 'moduleName' => $this->moduleName,
                 'sharedPlaceName' => $sharedPlaceName,

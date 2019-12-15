@@ -45,7 +45,7 @@ class SharedPlacesListController extends AbstractBaseController {
                     ->where('o_file', '=', $tree->id())
                     ->where('o_type', '=', '_LOC')
                     ->get()
-                    ->map(SharedPlace::rowMapper())
+                    ->map(SharedPlace::rowMapper($tree))
                     ->filter(GedcomRecord::accessFilter());
   }
 
