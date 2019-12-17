@@ -24,7 +24,14 @@ class SharedPlace extends GedcomRecord {
   protected $moduleName;
   protected $useIndirectLinks;
 
-  public function __construct(string $moduleName, bool $useIndirectLinks, string $xref, string $gedcom, $pending, Tree $tree) {
+  public function __construct(
+          string $moduleName, 
+          bool $useIndirectLinks, 
+          string $xref, 
+          string $gedcom, 
+          $pending, 
+          Tree $tree) {
+    
     parent::__construct($xref, $gedcom, $pending, $tree);
     $this->moduleName = $moduleName;
     $this->useIndirectLinks = $useIndirectLinks;
@@ -144,6 +151,8 @@ class SharedPlace extends GedcomRecord {
 
     $list = [];
 
+    //note: includes all individuals with child places (that's how placelinks work)
+    //regardless of INDIRECT_LINKS_PARENT_LEVELS
     foreach ($this->namesAsPlaces() as $place) {
       $place_id = $place->id();
 

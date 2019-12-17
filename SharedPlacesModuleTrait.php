@@ -8,6 +8,7 @@ use Vesta\ControlPanel\Model\ControlPanelFactRestriction;
 use Vesta\ControlPanel\Model\ControlPanelPreferences;
 use Vesta\ControlPanel\Model\ControlPanelRadioButton;
 use Vesta\ControlPanel\Model\ControlPanelRadioButtons;
+use Vesta\ControlPanel\Model\ControlPanelRange;
 use Vesta\ControlPanel\Model\ControlPanelSection;
 use Vesta\ControlPanel\Model\ControlPanelSubsection;
 
@@ -24,7 +25,7 @@ trait SharedPlacesModuleTrait {
 
   protected function getFullDescription() {
     $description = array();
-    $description[] = I18N::translate('A module supporting shared places as level 0 GEDCOM objects, on the basis of the Gedcom-L agreements. Shared places may contain coordinates, notes and media objects. Displays this data for all matching places via the extended \'Facts and events\' tab.');
+    $description[] = I18N::translate('A module supporting shared places as level 0 GEDCOM objects, on the basis of the Gedcom-L agreements. Shared places may contain coordinates, notes and media objects. Displays this data for all matching places via the extended \'Facts and events\' tab. May also be used to manage GOV ids, in combination with the Gov4Webtrees module.');
     $description[] = I18N::translate('Requires the \'%1$s Vesta Common\' module, and the \'%1$s Vesta Facts and events\' module.', $this->getVestaSymbol());
     $description[] = I18N::translate('Provides location data to other custom modules.');
     return $description;
@@ -44,16 +45,28 @@ trait SharedPlacesModuleTrait {
                 null,
                 'VESTA_LIST',
                 '1')));
-
-    $factsAndEventsSub = array();
-    $factsAndEventsSub[] = new ControlPanelSubsection(
+    
+    $generalSub[] = new ControlPanelSubsection(
             /* I18N: Configuration option */I18N::translate('Linking of shared places to places'),
-            array(new ControlPanelCheckbox(
+            array(
+        new ControlPanelCheckbox(
                 /* I18N: Configuration option */I18N::translate('Additionally link shared places via name'),
                 I18N::translate('According to the Gedcom-L agreements, shared places are referenced via xrefs, just like shared notes etc. There is no edit support for this yet, so you have to add a level 3 _LOC @L123@ (with the proper shared place xref) under level 2 PLAC in the raw GEDCOM of a fact or event. ') .
                 I18N::translate('This is rather inconvenient, and all places have names anyway, so you can check this option and link shared places via the place name itself. Links are established internally by searching for a shared place with any name matching case-insensitively.'),
                 'INDIRECT_LINKS',
                 '1'),
+        new ControlPanelRange(
+                /* I18N: Configuration option */I18N::translate('... and fall back to n parent levels'),
+                'When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place "A, B, C" would also match the shared places "B, C" and "C")',
+                0,
+                5,
+                'INDIRECT_LINKS_PARENT_LEVELS',
+                0)));
+    
+    $factsAndEventsSub = array();
+    $factsAndEventsSub[] = new ControlPanelSubsection(
+            /* I18N: Configuration option */I18N::translate('Displayed data'),
+            array(     
         new ControlPanelCheckbox(
                 /* I18N: Configuration option */I18N::translate('Restrict to specific facts and events'),
                 /* I18N: Configuration option */ I18N::translate('If this option is checked, shared place data is only displayed for the following facts and events. ') .

@@ -17,6 +17,7 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. For its web
 ### Features<a name="features"/>
 
 * Shared places are handled as level 0 _LOC records, containing coordinates, notes, and media objects.
+* In combination with the Gov4Webtrees module, this module may also be used to manage GOV ids within GEDCOM data.
 * Shared places may be edited and viewed via an additional entry in the list menu.
 
 ![Screenshot](place.png)
@@ -80,7 +81,7 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.0.1
+* Current version: 2.0.0.2
 * Based on and tested with webtrees 2.0.0. Cannot be used with webtrees 1.x, or earlier 2.x versions!
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 

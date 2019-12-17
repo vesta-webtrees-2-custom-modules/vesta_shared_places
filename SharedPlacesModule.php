@@ -11,7 +11,6 @@ use Cissee\WebtreesExt\HtmlExt;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlaceFactory;
-use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
@@ -26,7 +25,6 @@ use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\View;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
@@ -110,7 +108,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0.1';
+    return '2.0.0.2';
   }
 
   public function customModuleLatestVersionUrl(): string {
@@ -134,8 +132,21 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     return __DIR__ . '/resources/';
   }
   
-  public function matchViaName(PlaceStructure $place): ?SharedPlace {
-    return $this->matchName($place->getTree(), $place->getGedcomName());
+  //cf Place.php;
+	const GEDCOM_SEPARATOR = ', ';
+
+  public function matchViaName(string $placeName, Tree $tree, int $parentLevels): ?SharedPlace {
+    if ($placeName === '') {
+      return null;
+    }
+    $match = $this->matchName($tree, $placeName);
+    
+    if (($match === null) && ($parentLevels > 0)) {
+      $placeName = implode(self::GEDCOM_SEPARATOR, array_slice(explode(self::GEDCOM_SEPARATOR, $placeName), 1));
+      return $this->matchViaName($placeName, $tree, $parentLevels-1);
+    }
+    
+    return $match;
   }
     
   public function matchName(Tree $tree, $placeGedcomName): ?SharedPlace {
@@ -175,7 +186,8 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   public function match(PlaceStructure $place) {
     $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
     if ($indirect) {
-      $sharedPlace = $this->matchViaName($place);
+      $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
+      $sharedPlace = $this->matchViaName($place->getGedcomName(), $place->getTree(), $parentLevels);
       if ($sharedPlace !== null) {
         return $sharedPlace;
       }
@@ -212,7 +224,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   public function hFactsTabGetAdditionalEditControls(
           Fact $fact): GenericViewElement {
     
-    if (!Auth::isEditor($fact->record()->tree())) {
+    if (!$fact->canEdit()) {
       //not editable
       return new GenericViewElement('', '');
     }
@@ -505,7 +517,8 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   public function plac2Loc(PlaceStructure $ps): ?LocReference {
     $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
     if ($indirect) {
-      $sharedPlace = $this->matchViaName($ps);
+      $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
+      $sharedPlace = $this->matchViaName($ps->getGedcomName(), $ps->getTree(), $parentLevels);
       if ($sharedPlace !== null) {
         $trace = new Trace('shared place via Shared Places module (mapping via place name)');
         return new LocReference($sharedPlace->xref(), $sharedPlace->tree(), $trace);
