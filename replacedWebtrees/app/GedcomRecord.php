@@ -35,6 +35,7 @@ use function app;
 
 //[RC] added
 use Cissee\WebtreesExt\GedcomRecordExt;
+use Cissee\WebtreesExt\SharedPlace;
 
 //[RC] keep aligned with original GedcomRecord!
 //[RC] functionally of $gedcom_record_cache/$pending_record_cache moved but variables kept for compatibility in case anyone accesses the cache directly
@@ -743,7 +744,33 @@ class GedcomRecord
             ->map(Repository::rowMapper($this->tree))
             ->filter(self::accessFilter());
     }
-
+    
+    //[RC] extended
+    /**
+     * Find shared places linked to this record.
+     *
+     * @param string $link
+     *
+     * @return Collection
+     */
+    public function linkedSharedPlaces(string $link): Collection
+    {
+        return DB::table('other')
+            ->join('link', static function (JoinClause $join): void {
+                $join
+                    ->on('l_file', '=', 'o_file')
+                    ->on('l_from', '=', 'o_id');
+            })
+            ->where('o_file', '=', $this->tree->id())
+            ->where('o_type', '=', '_LOC')
+            ->where('l_type', '=', $link)
+            ->where('l_to', '=', $this->xref)
+            ->select(['other.*'])
+            ->get()
+            ->map(SharedPlace::rowMapper($this->tree))
+            ->filter(self::accessFilter());
+    }
+    
     /**
      * Get all attributes (e.g. DATE or PLAC) from an event (e.g. BIRT or MARR).
      * This is used to display multiple events on the individual/family lists.

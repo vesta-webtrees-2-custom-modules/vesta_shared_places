@@ -25,6 +25,7 @@ use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\View;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
@@ -64,7 +65,31 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
 
   //public function setName(string $name): void {
   //	parent::setName($name);
+  
+  /**
+   * Bootstrap the module
+   */
+  public function boot(): void {
+      // Register a namespace for our views.
+      View::registerNamespace($this->name(), $this->resourcesFolder() . 'views/');
 
+      // Replace an existing view with our own version.
+      // (media management via list module)
+      View::registerCustomView('::modules/media-list/page', $this->name() . '::modules/media-list/page');
+      
+      // Register a view under the main namespace (referred to from modules/media-list/page)
+      View::registerCustomView('::icons/shared-place', $this->name() . '::icons/shared-place');
+      
+      // Replace an existing view with our own version.
+      // (media management via admin)
+      View::registerCustomView('::media-page', $this->name() . '::media-page');
+      
+      // Register a view under the main namespace (referred to from media-page)
+      View::registerCustomView('::lists/shared-places-table', $this->name() . '::lists/shared-places-table');
+
+  }
+      
+  //do this onBoot instead?
   public function setEnabled(bool $enabled): ModuleInterface {
     parent::setEnabled($enabled);
 
@@ -108,7 +133,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0.2';
+    return '2.0.0.3';
   }
 
   public function customModuleLatestVersionUrl(): string {
@@ -202,7 +227,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
         'css/minimal.css' => 'css/minimal'];
   }
   
-  //css for icon-fact-create-shared-place
+  //css for icons/shared-place
   public function hFactsTabGetOutputBeforeTab(Individual $person) {
     //align with current theme (supporting - for now - the default webtrees themes)
     $themeName = Session::get('theme');
@@ -284,7 +309,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     if ($sharedPlace !== null) {
       //add link
       $html1 .= $this->linkIcon(
-              $this->name() . '::icons/create-shared-place', 
+              $this->name() . '::icons/shared-place', 
               I18N::translate('Shared Place'), 
               $sharedPlace->url());
       

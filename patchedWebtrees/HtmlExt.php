@@ -8,9 +8,15 @@ class HtmlExt {
     if (array_key_exists('route', $data)) {
       $route = $data['route'];
 
-      if (array_key_exists($route, self::$routeViaModule)) {
-        $parameters = self::$routeViaModule[$route];
-        $data = array_merge($data, $parameters);
+      if (!is_string($route)) {
+        //e.g. false via parse_url in functions.php
+        //unexpected, observed in webtrees 2.0.0, anyway not our problem
+        //error_log("unexpected type: ".gettype($route)." ".print_r($route,true));
+      } else {
+        if (array_key_exists($route, self::$routeViaModule)) {
+          $parameters = self::$routeViaModule[$route];
+          $data = array_merge($data, $parameters);
+        }
       }
     }
     

@@ -80,7 +80,7 @@ use Ramsey\Uuid\Uuid;
                 continue;
               }
               ?>
-              <tr class="<?= $sharedPlace->isPendingDeletion() ? 'old' : ($sharedPlace->isPendingAddition() ? 'new' : '') ?>">
+              <tr class="<?= $sharedPlace->isPendingDeletion() ? 'wt-old' : ($sharedPlace->isPendingAddition() ? 'wt-new' : '') ?>">
                   <!-- Title -->
                   <td data-sort="<?= e($sharedPlace->fullName()) ?>">
                       <?php foreach ($sharedPlace->namesNN() as $name) : ?>

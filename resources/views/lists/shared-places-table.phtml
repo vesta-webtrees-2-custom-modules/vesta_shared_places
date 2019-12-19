@@ -1,0 +1,39 @@
+<?php
+
+use Fisharebest\Webtrees\I18N;
+
+?>
+
+<table
+    class="table table-bordered table-sm wt-table-shared-place datatables d-none"
+    <?= view('lists/datatables-attributes') ?>
+    data-columns="<?= e(json_encode([
+        null,
+    ])) ?>"
+>
+    <caption class="sr-only">
+        <?= $caption ?? I18N::translate('Shared Places') ?>
+    </caption>
+
+    <thead>
+        <tr>
+            <th><?= I18N::translate('Location') ?></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <?php foreach ($sharedPlaces as $sharedPlace) : ?>
+            <tr class="<?= $sharedPlace->isPendingDeletion() ? 'wt-old' : ($sharedPlace->isPendingAddition() ? 'wt-new' : '') ?>">
+                <!-- Title -->
+                <td data-sort="<?= e($sharedPlace->fullName()) ?>">
+                    <?php foreach ($sharedPlace->namesNN() as $name) : ?>
+                      <a title="<?= $name ?>" href="<?= e($sharedPlace->url()) ?>" class="<?= $name == $sharedPlace->fullName() ? 'name2' : '' ?>">
+                          <?= $name ?>
+                      </a>
+                      <br>
+                    <?php endforeach ?>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>

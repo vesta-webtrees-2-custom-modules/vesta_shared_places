@@ -46,6 +46,12 @@ if ($extend) {
   if ($extend5) {
     require_once __DIR__ . '/replacedWebtrees/app/GedcomTag.php';
   }
+  
+  //media links adjustments
+  $extend5 = !class_exists("Fisharebest\Webtrees\Http\Controllers\Admin\MediaController", false);
+  if ($extend5) {
+    require_once __DIR__ . '/replacedWebtrees/app/Http/Controllers/Admin/MediaController.php';
+  }
 } else {
   //must use original files because they are already loaded
   //(e.g. when routing via IndividualController)
