@@ -1,0 +1,221 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the vesta package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: vesta 1.0\n"
+"Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
+"POT-Creation-Date: 2020-01-03 11:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: EditSharedPlaceController.php:93
+#, php-format
+msgid "The shared place %s has been created."
+msgstr ""
+
+#: SharedPlacesListController.php:31 SharedPlacesModule.php:60
+#: resources/views/lists/shared-places-table.phtml:15
+#: resources/views/shared-places-list-page.phtml:66
+msgid "Shared places"
+msgstr "Lieux partagés"
+
+#: SharedPlacesModule.php:326
+#: resources/views/lists/shared-places-table.phtml:20
+#: resources/views/shared-places-list-page.phtml:71
+msgid "Shared place"
+msgstr "Lieu partagé"
+
+#: SharedPlacesModule.php:378
+msgid "Shared place data"
+msgstr ""
+
+#: SharedPlacesModuleTrait.php:18
+msgid "Vesta Shared Places"
+msgstr ""
+
+#: SharedPlacesModuleTrait.php:23
+msgid "A module providing support for shared places."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:28
+msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain coordinates, notes and media objects. Displays this data for all matching places via the extended 'Facts and events' tab. May also be used to manage GOV ids, in combination with the Gov4Webtrees module."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:29
+#, php-format
+msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:30
+msgid "Provides location data to other custom modules."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:37
+msgid "Displayed title"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:39
+#, php-format
+msgid "Include the %1$s symbol in the module title"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:44
+#, php-format
+msgid "Include the %1$s symbol in the list title"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:50
+msgid "Linking of shared places to places"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:53
+msgid "Additionally link shared places via name"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:54
+msgid "According to the GEDCOM-L Addendum, shared places are referenced via xrefs, just like shared notes etc. There is no edit support for this yet, so you have to add a level 3 _LOC @L123@ (with the proper shared place xref) under level 2 PLAC in the raw GEDCOM of a fact or event. "
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:55
+msgid "This is rather inconvenient, and all places have names anyway, so you can check this option and link shared places via the place name itself. Links are established internally by searching for a shared place with any name matching case-insensitively."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:59
+msgid "... and fall back to n parent levels"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:60
+msgid "When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would also match the shared places \"B, C\" and \"C\")"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:68 SharedPlacesModuleTrait.php:110
+msgid "Displayed data"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:71
+msgid "Restrict to specific facts and events"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:72
+msgid "If this option is checked, shared place data is only displayed for the following facts and events. "
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:73
+msgid "In particular if both lists are empty, no additional facts and events of this kind will be shown."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:78
+msgid "Restrict to this list of GEDCOM individual facts and events. You can modify this list by removing or adding fact and event names, even custom ones, as necessary."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:83
+msgid "Restrict to this list of GEDCOM family facts and events. You can modify this list by removing or adding fact and event names, even custom ones, as necessary."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:88
+msgid "Automatically expand shared place data"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:93
+msgid "no"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:97
+msgid "yes, but only the first occurrence of the shared place"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:98
+msgid "Note that the first occurrence may be within a toggleable, currently hidden fact or event (such as an event of a close relative). This will probably be improved in future versions of the module."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:101
+msgid "yes"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:112
+msgid "Show link counts for shared places list"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:113
+msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via xref."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:119
+msgid "General"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:123
+msgid "Facts and Events Tab Settings"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:127
+msgid "Shared places list"
+msgstr ""
+
+#: resources/views/edit/icon-fact-create-shared-place.phtml:25
+#: resources/views/edit/icon-fact-create-shared-place.phtml:27
+#: resources/views/modals/create-shared-place.phtml:16
+#: resources/views/shared-places-list-page.phtml:48
+msgid "Create a shared place"
+msgstr "Créer un lieu partagé"
+
+#: resources/views/modals/shared-place-fields.phtml:7
+msgid "Shared place name"
+msgstr "Nom du Lieu partagé"
+
+#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
+#: resources/views/shared-place-page.phtml:22
+#, php-format
+msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
+msgstr ""
+
+#: resources/views/shared-place-page.phtml:25
+msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
+msgstr ""
+
+#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
+#: resources/views/shared-place-page.phtml:31
+#, php-format
+msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
+msgstr ""
+
+#: resources/views/shared-place-page.phtml:34
+msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
+msgstr ""

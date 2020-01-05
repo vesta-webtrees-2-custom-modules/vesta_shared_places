@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Functions;
 
-use Cissee\WebtreesExt\Requests;
 use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Census\Census;

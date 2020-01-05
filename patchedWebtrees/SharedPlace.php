@@ -2,17 +2,17 @@
 
 namespace Cissee\WebtreesExt;
 
-use Exception;
 use Closure;
-use Illuminate\Database\Capsule\Manager as DB;
+use Exception;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\GedcomRecord;
-use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Tree;
+use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Collection;
 use stdClass;
+use function route;
 
 /**
  * A GEDCOM level 0 shared place aka location (_LOC) object (complete structure)
@@ -56,7 +56,7 @@ class SharedPlace extends GedcomRecord {
    * @return string
    */
   protected function createPrivateGedcomRecord(int $access_level): string {
-    return '0 @' . $this->xref . "@ _LOC\n1 NAME " . I18N::translate('Private');
+    return '0 @' . $this->xref . "@ _LOC\n1 NAME " . MoreI18N::xlate('Private');
   }
 
   /**

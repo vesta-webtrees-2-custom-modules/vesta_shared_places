@@ -19,6 +19,7 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
+use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
@@ -41,7 +42,7 @@ use Vesta\VestaModuleTrait;
 use function view;
 
 //cannot use original AbstractModule because we override setName
-class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface, ModuleListInterface, ModuleConfigInterface, IndividualFactsTabExtenderInterface, FunctionsPlaceInterface {
+class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface, ModuleListInterface, ModuleConfigInterface, ModuleGlobalInterface, IndividualFactsTabExtenderInterface, FunctionsPlaceInterface {
 
   use VestaModuleTrait;
   use SharedPlacesModuleTrait;
@@ -133,7 +134,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.0.3';
+    return '2.0.1.1';
   }
 
   public function customModuleLatestVersionUrl(): string {
@@ -227,8 +228,15 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
         'css/minimal.css' => 'css/minimal'];
   }
   
+  public function bodyContent(): string {
+    return '';
+  }
+  
   //css for icons/shared-place
-  public function hFactsTabGetOutputBeforeTab(Individual $person) {
+  public function headContent(): string {
+    //we need the css in modified webtrees views, e.g. for media management
+    //therefore globally via ModuleGlobalInterface, not via hFactsTabGetOutputBeforeTab
+    
     //align with current theme (supporting - for now - the default webtrees themes)
     $themeName = Session::get('theme');
     if ('minimal' !== $themeName) {
@@ -243,7 +251,12 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     
     //note: content actually served via <theme>.phtml!
     $pre = '<link href="' . $this->assetUrl('css/'.$themeName.'.css') . '" type="text/css" rel="stylesheet" />';
-		return new GenericViewElement($pre, '');
+		return $pre;
+  } 
+  
+  //css for icons/shared-place
+  public function hFactsTabGetOutputBeforeTab(Individual $person) {
+		return new GenericViewElement('', '');
 	}
   
   public function hFactsTabGetAdditionalEditControls(
@@ -310,7 +323,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
       //add link
       $html1 .= $this->linkIcon(
               $this->name() . '::icons/shared-place', 
-              I18N::translate('Shared Place'), 
+              I18N::translate('Shared place'), 
               $sharedPlace->url());
       
       //add all (level 1) notes
@@ -320,7 +333,8 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
         $note = FunctionsPrint::printFactNotes($place->getTree(), $sharedPlace->gedcom(), 1);
         if ($note !== '') {
           $html .= '<div class="indent">';
-          $html .= '<br>' . $note;
+          //$html .= '<br>';
+          $html .= $note;
           $html .= '</div>';
         }
       }

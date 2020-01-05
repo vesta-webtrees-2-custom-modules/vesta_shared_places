@@ -1,7 +1,7 @@
 
 # ⚶ Vesta Shared Places (Webtrees 2 Custom Module)
 
-This [webtrees](https://www.webtrees.net/) custom module supports shared places as level 0 GEDCOM objects, on the basis of the Gedcom-L agreements. It displays data via the extended 'Facts and Events' tab, enhancing places with data obtained from the respective shared place.
+This [webtrees](https://www.webtrees.net/) custom module supports shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. It displays data via the extended 'Facts and Events' tab, enhancing places with data obtained from the respective shared place.
 The project’s website is [cissee.de](https://cissee.de).
 
 This is a webtrees 2.x module - It cannot be used with webtrees 1.x. For its webtrees 1.x counterpart, see [here](https://github.com/ric2016/shared_places).
@@ -9,7 +9,7 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. For its web
 ## Contents
 
 * [Features](#features)
-* [Gedcom-L agreements](#gedcom)
+* [Gedcom-L Addendum](#gedcom)
 * [Download](#download)
 * [Installation](#installation)
 * [License](#license)
@@ -26,54 +26,52 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. For its web
 
 ![Screenshot](event.png)
 
-* All shared place data is fully included in the gedcom exported by webtrees (and may also be imported from other sources supporting _LOC records), on the basis of the Gedcom-L agreements.
+* All shared place data is fully included in the gedcom exported by webtrees (and may also be imported from other sources supporting _LOC records), on the basis of the GEDCOM-L Addendum.
 * Location data is provided to other modules (e.g. for use in maps).
 
-### Gedcom-L agreements<a name="gedcom"/>
+### Gedcom-L Addendum<a name="gedcom"/>
 
-The Gedcom-L agreements regarding PLAC are described [here](http://wiki-en.genealogy.net/GEDCOM/PLAC-Tag#Agreements_for_PLAC). They specify the following structure:
+The Gedcom-L Addendum to the GEDCOM 5.5.1 specification is available [here](https://genealogy.net/GEDCOM/). It defines the following structure for top-level place records:
 
 ~~~~
-0 @<XREF:_LOC>@ _LOC
-1 NAME <PLACE_NAME> {1:M}
-2 DATE <DATE_VALUE> {0:1}
-2 _NAMC <PLACE_NAME_ADDITION> {0:1}
-2 ABBR <ABBREVIATION_OF_NAME> {0:M}
-3 TYPE <TYPE_OF_ABBREVIATION> {0:1}
-2 LANG <LANGUAGE_ID> {0:1}
-2 <<SOURCE_CITATION>> {0:M}
-1 TYPE <TYPE_OF_LOCATION> {0:M}
-2 DATE <DATE_VALUE> {0:1}
-2 <<SOURCE_CITATION>> {0:M}
-1 _FPOST <FOKO_POSTCODE> {0:M}
-2 DATE <DATE_VALUE> {0:1}
-1 _POST <POSTAL_CODE> {0:M}
-2 DATE <DATE_VALUE> {0:1}
-2 <<SOURCE_CITATION>> {0:M}
-1 _GOV <GOV_IDENTIFIER> {0:1}
-1 _FSTAE <FOKO_TERRITORY_IDENTIFIER> {0:1}
-1 _FCTRY <FOKO_STATE_IDENTIFIER> {0:1}
-1 MAP {0:1}
-2 LATI <PLACE_LATITUDE> {1:1}
-2 LONG <PLACE_LONGITUDE> {1:1}
-1 _MAIDENHEAD <MAIDENHEAD_LOCATOR> {0:1}
-1 EVEN [<EVENT_DESCRIPTOR>|<NULL>] {0:M}
-2 <<EVENT_DETAIL>> {0:1}
-1 _LOC @<XREF:_LOC>@ 0:M
-2 TYPE <HIERARCHICAL_RELATIONSHIP> {1:1}
-2 DATE <DATE_VALUE> {0:1}
-2 <<SOURCE_CITATION>> {0:M}
-1 _DMGD <DEMOGRAPHICAL_DATA> {0:M}
-2 DATE <DATE_VALUE> {0:1}
-2 <<SOURCE_CITATION>> {0:M}
-2 TYPE <TYPE_OF_DEMOGRAPICAL_DATA> 1:1
-1 _AIDN <ADMINISTRATIVE_IDENTIFIER> {0:M}
-2 DATE <DATE_VALUE> {0:1}
-2 <<SOURCE_CITATION>> {0:M}
-2 TYPE <TYPE_OF_ADMINISTRATIVE_IDENTIFIER> {1:1}
-1 <<MULTIMEDIA_LINK>> {0:M}
-1 <<NOTE_STRUCTURE>> {0:M}
-1 <<SOURCE_CITATION>> {0:M}
+LOCATION_RECORD:= 
+0 @<XREF:_LOC>@ _LOC {1:1} 
+1 NAME <PLACE_NAME> {1:M} 
+2 DATE <DATE_VALUE> {0:1} 
+2 ABBR <ABBREVIATION_OF_NAME> {0:M} 
+3 TYPE <TYPE_OF_ABBREVIATION> {0:1} 
+2 LANG <LANGUAGE_ID> {0:1} 
+2 <<SOURCE_CITATION>> {0:M} 
+1 TYPE <TYPE_OF_LOCATION> {0:M} 
+2 _GOVTYPE <GOVID_OF_TYPE> {0:1} 
+2 DATE <DATE_VALUE> {0:1} 
+2 <<SOURCE_CITATION>> {0:M} 
+1 _POST <POSTAL_CODE> {0:M} 
+2 DATE <DATE_VALUE> {0:1} 
+2 <<SOURCE_CITATION>> {0:M} 
+1 _GOV <GOV_IDENTIFIER> {0:1} 
+1 MAP {0:1} 
+2 LATI <PLACE_LATITUDE> {1:1} 
+2 LONG <PLACE_LONGITUDE> {1:1} 
+1 _MAIDENHEAD <MAIDENHEAD_LOCATOR> {0:1} 
+1 RELI <DENOMINATION> {0:1} 
+1 EVEN [<EVENT_DESCRIPTOR>|<NULL>] {0:M} 
+2 <<EVENT_DETAIL>> {0:1} 
+1 _LOC @<XREF:_LOC>@ {0:M} 
+2 TYPE <HIERARCHICAL_RELATIONSHIP> {1:1} 
+2 DATE <DATE_VALUE> {0:1} 
+2 <<SOURCE_CITATION>> {0:M} 
+1 _DMGD <DEMOGRAPHICAL_DATA> {0:M} 
+2 DATE <DATE_VALUE> {0:1} 
+2 <<SOURCE_CITATION>> {0:M} 
+2 TYPE <TYPE_OF_DEMOGRAPICAL_DATA> {1:1} 
+1 _AIDN <ADMINISTRATIVE_IDENTIFIER> {0:M} 
+2 DATE <DATE_VALUE> {0:1} 
+2 <<SOURCE_CITATION>> {0:M} 
+2 TYPE <TYPE_OF_ADMINISTRATIVE_IDENTIFIER> {1:1} 
+1 <<MULTIMEDIA_LINK>> {0:M} 
+1 <<NOTE_STRUCTURE>> {0:M} 
+1 <<SOURCE_CITATION>> {0:M} 
 1 <<CHANGE_DATE>> {0:1}
 ~~~~
 
@@ -81,8 +79,8 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.0.3
-* Based on and tested with webtrees 2.0.0. Cannot be used with webtrees 1.x, or earlier 2.x versions!
+* Current version: 2.0.1.1
+* Based on and tested with webtrees 2.0.1. Cannot be used with webtrees 1.x. May not work with earlier 2.x versions!
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
 * Provides location data to other custom modules.
@@ -100,7 +98,7 @@ Note that currently only selected parts of this structure are displayed and supp
 ### License<a name="license"/>
 
 * **vesta_shared_places: a webtrees custom module**
-* Copyright (C) 2019 Richard Cissée
+* Copyright (C) 2019 - 2020 Richard Cissée
 * Derived from **webtrees** - Copyright (C) 2010 to 2019 webtrees development team.
 * French translations provided by Pierre Dousselin.
 
