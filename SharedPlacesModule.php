@@ -70,10 +70,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   /**
    * Bootstrap the module
    */
-  public function boot(): void {
-      // Register a namespace for our views.
-      View::registerNamespace($this->name(), $this->resourcesFolder() . 'views/');
-
+  public function onBoot(): void {
       // Replace an existing view with our own version.
       // (media management via list module)
       View::registerCustomView('::modules/media-list/page', $this->name() . '::modules/media-list/page');

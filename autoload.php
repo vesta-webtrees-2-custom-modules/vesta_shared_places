@@ -54,7 +54,7 @@ if ($extend) {
   }
 } else {
   //must use original files because they are already loaded
-  //(e.g. when routing via IndividualController)
+  //(this apparently doesn't occur currently (webtrees 2.0.x))
   //thus cannot use GedcomRecord::getInstance etc here
 }
 
