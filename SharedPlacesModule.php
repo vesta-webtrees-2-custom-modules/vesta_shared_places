@@ -131,7 +131,7 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   }
 
   public function customModuleVersion(): string {
-    return '2.0.1.1';
+    return '2.0.2.1';
   }
 
   public function customModuleLatestVersionUrl(): string {
