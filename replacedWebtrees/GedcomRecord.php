@@ -69,6 +69,9 @@ class GedcomRecord
     /** @var int|null Cached result */
     protected $getSecondaryName;
 
+    //marker that may be checked in order to determine whether the replacement works
+    public function replacedClassMarker() {}
+    
     /**
      * Create a GedcomRecord object from raw GEDCOM data.
      *

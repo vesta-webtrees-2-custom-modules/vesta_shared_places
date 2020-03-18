@@ -2,7 +2,9 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
+use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Webtrees;
+use function app;
 
 //webtrees major version switch
 if (defined("WT_MODULES_DIR")) {
@@ -21,4 +23,6 @@ foreach (glob(Webtrees::ROOT_DIR . $modulesPath . '*/autoload.php') as $autoload
   require_once $autoloadFile;
 }
 
-return app(SharedPlacesModule::class);
+$hotfixRequired = !(method_exists('Fisharebest\Webtrees\GedcomRecord', 'replacedClassMarker'));
+
+return new SharedPlacesModule(app(ModuleService::class), $hotfixRequired);

@@ -12,6 +12,7 @@ use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlaceFactory;
 use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
 use Fisharebest\Webtrees\Http\Controllers\EditGedcomRecordController;
@@ -51,9 +52,34 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
   use ModuleListTrait;
 
   protected $module_service;
+  protected $hotfixRequired;
 
-  public function __construct(ModuleService $module_service) {
+  public function __construct(
+          ModuleService $module_service,
+          bool $hotfixRequired) {
+    
     $this->module_service = $module_service;
+    $this->hotfixRequired = $hotfixRequired;
+  }
+
+  public function customModuleAuthorName(): string {
+    return 'Richard Cissée';
+  }
+
+  public function customModuleSupportUrl(): string {
+    return 'https://cissee.de';
+  }
+
+  public function description(): string {
+    return $this->getShortDescription();
+  }
+  
+  public function customModuleVersion(): string {
+    return file_get_contents(__DIR__ . '/latest-version.txt');
+  }
+
+  public function customModuleLatestVersionUrl(): string {
+    return 'https://raw.githubusercontent.com/vesta-webtrees-2-custom-modules/vesta_shared_places/master/latest-version.txt';
   }
 
   public function listTitle(): string {
@@ -84,7 +110,13 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
       
       // Register a view under the main namespace (referred to from media-page)
       View::registerCustomView('::lists/shared-places-table', $this->name() . '::lists/shared-places-table');
-
+      
+      if ($this->hotfixRequired) {
+        $messages = Session::get('flash_messages', []);
+        if (empty($messages)) {
+          FlashMessages::addMessage(I18N::translate("Due to ongoing changes in the webtrees core code, the custom module 'Shared Places' is broken currently. You'll either have to disable it temporarily, or patch the webtrees core code by replacing a single file, as described in 'Hotfix.txt' in this module's folder. This will hopefully be fixed in the next webtrees release."), "warning");
+        }              
+      }
   }
       
   //do this onBoot instead?
@@ -124,26 +156,6 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
     }
 
     return $this;
-  }
-
-  public function customModuleAuthorName(): string {
-    return 'Richard Cissée';
-  }
-
-  public function customModuleVersion(): string {
-    return '2.0.2.1';
-  }
-
-  public function customModuleLatestVersionUrl(): string {
-    return 'https://cissee.de';
-  }
-
-  public function customModuleSupportUrl(): string {
-    return 'https://cissee.de';
-  }
-
-  public function description(): string {
-    return $this->getShortDescription();
   }
 
   /**
