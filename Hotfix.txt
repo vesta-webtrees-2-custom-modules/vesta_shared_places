@@ -1,0 +1,20 @@
+Due to ongoing changes in the webtrees core code, the custom module 'Shared Places' is broken currently. 
+You'll either have to disable it temporarily, or patch the webtrees core code by replacing a single file:
+
+webtrees\app\Services\ModuleService.php
+
+with the file:
+
+webtrees\modules_v4\vesta_shared_places\hotfix\ModuleService.php
+
+(this changes two lines of code, swapping the module initialization order. 
+This allows custom module to affect the webtrees core code to a greater degree,
+which is required for this module)
+
+
+
+We're working on a permanent solution for this problem in the webtrees branch 'develop'. 
+See also here: 
+<https://github.com/fisharebest/webtrees/issues/3073>,
+<https://github.com/fisharebest/webtrees/issues/3085>,
+<https://github.com/fisharebest/webtrees/issues/3111>
