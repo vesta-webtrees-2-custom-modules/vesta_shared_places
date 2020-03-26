@@ -68,9 +68,22 @@ use Fisharebest\Webtrees\I18N;
     <div class="tab-content">
         <div class="tab-pane active fade show" role="tabpanel" id="details">
             <table class="table wt-facts-table">
-                <?php foreach ($facts->toArray() as $fact) : ?>
-                  <?php FunctionsPrintFacts::printFact($fact, $sharedPlace) ?>
-                <?php endforeach ?>
+                <?php 
+                foreach ($facts->toArray() as $fact) {
+                  switch ($fact->getTag()) {
+                    case '_GOV':
+                      //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
+                      ob_start();
+                      FunctionsPrintFacts::printFact($fact, $sharedPlace);
+                      $html = ob_get_clean();
+                      echo str_replace($fact->value(), '<a href="http://gov.genealogy.net/item/show/' . $fact->value() . '" target="_blank">' . $fact->value() . '</a>', $html);
+                      break;
+                    default:  
+                      FunctionsPrintFacts::printFact($fact, $sharedPlace);
+                      break;
+                  }                  
+                }
+                ?>
 
                 <?php
                 //cf source-page.phtml

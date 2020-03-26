@@ -7,7 +7,6 @@ namespace Cissee\WebtreesExt\Services;
 use Cissee\WebtreesExt\SharedPlace;
 use Closure;
 use Fisharebest\Localization\Locale\LocaleInterface;
-use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Note;
 use Fisharebest\Webtrees\Services\TreeService;
@@ -112,27 +111,8 @@ class SearchServiceExt {
       $field = $field->getValue();
     }
 
-    $field = DB::raw($field . ' /*! COLLATE ' . 'utf8_' . $this->locale->collation() . ' */');
-
     foreach ($search_terms as $search_term) {
       $query->whereContains($field, $search_term);
-    }
-  }
-
-  /**
-   * Apply soundex search filters to a SQL query column.
-   *
-   * @param Builder           $query
-   * @param Expression|string $field
-   * @param string            $soundex
-   */
-  private function wherePhonetic(Builder $query, $field, string $soundex): void {
-    if ($soundex !== '') {
-      $query->where(function (Builder $query) use ($soundex, $field): void {
-        foreach (explode(':', $soundex) as $sdx) {
-          $query->orWhere($field, 'LIKE', '%' . $sdx . '%');
-        }
-      });
     }
   }
 
@@ -148,31 +128,4 @@ class SearchServiceExt {
 
     $query->whereIn($tree_id_field, $tree_ids);
   }
-
-  /**
-   * A closure to filter records by privacy-filtered GEDCOM data.
-   *
-   * @param array $search_terms
-   *
-   * @return Closure
-   */
-  private function rawGedcomFilter(array $search_terms): Closure {
-    return function (GedcomRecord $record) use ($search_terms): bool {
-      // Ignore non-genealogy fields
-      $gedcom = preg_replace('/\n\d (?:_UID) .*/', '', $record->gedcom());
-
-      // Ignore matches in links
-      $gedcom = preg_replace('/\n\d ' . Gedcom::REGEX_TAG . '( @' . Gedcom::REGEX_XREF . '@)?/', '', $gedcom);
-
-      // Re-apply the filtering
-      foreach ($search_terms as $search_term) {
-        if (mb_stripos($gedcom, $search_term) === false) {
-          return false;
-        }
-      }
-
-      return true;
-    };
-  }
-
 }

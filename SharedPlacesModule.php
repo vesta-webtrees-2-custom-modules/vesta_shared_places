@@ -19,8 +19,11 @@ use Fisharebest\Webtrees\Http\Controllers\EditGedcomRecordController;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
+use Fisharebest\Webtrees\Module\ModuleConfigTrait;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
+use Fisharebest\Webtrees\Module\ModuleCustomTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
+use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
@@ -43,13 +46,26 @@ use Vesta\VestaModuleTrait;
 use function view;
 
 //cannot use original AbstractModule because we override setName
-class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface, ModuleListInterface, ModuleConfigInterface, ModuleGlobalInterface, IndividualFactsTabExtenderInterface, FunctionsPlaceInterface {
+class SharedPlacesModule extends AbstractModule implements 
+  ModuleCustomInterface, 
+  ModuleListInterface, 
+  ModuleConfigInterface, 
+  ModuleGlobalInterface, 
+  IndividualFactsTabExtenderInterface, 
+  FunctionsPlaceInterface {
 
-  use VestaModuleTrait;
+  use ModuleCustomTrait, ModuleListTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait {
+    VestaModuleTrait::customTranslations insteadof ModuleCustomTrait;
+    VestaModuleTrait::customModuleLatestVersion insteadof ModuleCustomTrait;
+    VestaModuleTrait::getAssetAction insteadof ModuleCustomTrait;
+    VestaModuleTrait::assetUrl insteadof ModuleCustomTrait;
+    
+    VestaModuleTrait::getConfigLink insteadof ModuleConfigTrait;
+  }
+
   use SharedPlacesModuleTrait;
   use EmptyIndividualFactsTabExtender;
   use EmptyFunctionsPlace;
-  use ModuleListTrait;
 
   protected $module_service;
   protected $hotfixRequired;
@@ -107,6 +123,10 @@ class SharedPlacesModule extends AbstractModule implements ModuleCustomInterface
       // Replace an existing view with our own version.
       // (media management via admin)
       View::registerCustomView('::media-page', $this->name() . '::media-page');
+      
+      // Replace an existing view with our own version.
+      // (add fact with record, so that we can create proper links for new gov ids)
+      View::registerCustomView('::edit/add-fact', $this->name() . '::edit/add-fact');
       
       // Register a view under the main namespace (referred to from media-page)
       View::registerCustomView('::lists/shared-places-table', $this->name() . '::lists/shared-places-table');

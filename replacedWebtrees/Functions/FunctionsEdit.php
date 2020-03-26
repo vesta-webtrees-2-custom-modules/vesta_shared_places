@@ -640,7 +640,7 @@ class FunctionsEdit
           }
         }
       }
-      
+
       $html = '';
       //hooked?
       $additionalControls = GovIdEditControlsUtils::accessibleModules(null, $tree, Auth::user())
@@ -710,7 +710,7 @@ class FunctionsEdit
     public static function createAddForm(Tree $tree, $fact): void
     {
       self::createAddFormWithGedcomRecord(null, $tree, $fact);
-    }  
+    }
     
     //[RC] extended
     public static function createAddFormWithGedcomRecord(?GedcomRecord $record, Tree $tree, $fact): void
