@@ -18,10 +18,12 @@ use Cissee\WebtreesExt\Requests;
 //cf GedcomRecordController, SourceController
 class SharedPlaceController extends AbstractBaseController {
 
+  protected $module;
   protected $moduleName;
 
-  public function __construct(string $moduleName) {
-    $this->moduleName = $moduleName;
+  public function __construct($module) {
+    $this->module = $module;
+    $this->moduleName = $module->name();
   }
   
   // Show the shared place's facts in this order:
@@ -52,6 +54,7 @@ class SharedPlaceController extends AbstractBaseController {
     Auth::checkRecordAccess($record, false);
 
     return $this->viewResponse($this->moduleName . '::shared-place-page', [
+                'module' => $this->module,
                 'moduleName' => $this->moduleName,
                 'facts' => $this->facts($record),
                 'families' => $record->linkedFamilies('_LOC'),

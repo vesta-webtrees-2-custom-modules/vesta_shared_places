@@ -8,6 +8,9 @@ use Fisharebest\Webtrees\Http\RequestHandlers\AddNewFact;
 use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesAcceptRecord;
 use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesRejectRecord;
 use Fisharebest\Webtrees\I18N;
+use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
+use Vesta\Model\GovReference;
+use Vesta\Model\Trace;
 
 ?>
 
@@ -75,8 +78,10 @@ use Fisharebest\Webtrees\I18N;
                       //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
                       ob_start();
                       FunctionsPrintFacts::printFact($fact, $sharedPlace);
+                      $replacement = '<a href="http://gov.genealogy.net/item/show/' . $fact->value() . '" target="_blank">' . $fact->value() . '</a>';
+                      $replacement .= FunctionsPlaceUtils::gov2html($module, $tree, new GovReference($fact->value(), new Trace("")));
                       $html = ob_get_clean();
-                      echo str_replace($fact->value(), '<a href="http://gov.genealogy.net/item/show/' . $fact->value() . '" target="_blank">' . $fact->value() . '</a>', $html);
+                      echo str_replace($fact->value(), $replacement, $html);
                       break;
                     default:  
                       FunctionsPrintFacts::printFact($fact, $sharedPlace);

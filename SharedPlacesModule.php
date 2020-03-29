@@ -446,7 +446,7 @@ class SharedPlacesModule extends AbstractModule implements
     $tree = $request->getAttribute('tree');
     assert($tree instanceof Tree);
     
-    $controller = new SharedPlaceController($this->name());
+    $controller = new SharedPlaceController($this);
     return $controller->show($request, $tree);
   }
 
