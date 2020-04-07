@@ -30,8 +30,32 @@ use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use stdClass;
+use Throwable;
+use Transliterator;
 
 use function app;
+use function array_shift;
+use function assert;
+use function count;
+use function date;
+use function e;
+use function explode;
+use function in_array;
+use function md5;
+use function preg_match;
+use function preg_match_all;
+use function preg_replace;
+use function preg_replace_callback;
+use function preg_split;
+use function route;
+use function str_pad;
+use function strip_tags;
+use function strpos;
+use function strtoupper;
+use function trim;
+
+use const PREG_SET_ORDER;
+use const STR_PAD_LEFT;
 
 //[RC] added
 use Cissee\WebtreesExt\GedcomRecordExt;
@@ -101,7 +125,10 @@ class GedcomRecord
     public static function rowMapper(Tree $tree): Closure
     {
         return static function (stdClass $row) use ($tree): GedcomRecord {
-            return GedcomRecord::getInstance($row->o_id, $tree, $row->o_gedcom);
+            $record = GedcomRecord::getInstance($row->o_id, $tree, $row->o_gedcom);
+            assert($record instanceof GedcomRecord);
+
+            return $record;
         };
     }
 
@@ -164,7 +191,7 @@ class GedcomRecord
      * @param Tree        $tree
      * @param string|null $gedcom
      *
-     * @return GedcomRecord|Individual|Family|Source|Repository|Media|Note|null
+     * @return GedcomRecord|Individual|Family|Source|Repository|Media|Note|Submitter|null
      * @throws Exception
      */
     public static function getInstance(string $xref, Tree $tree, string $gedcom = null) 
@@ -184,33 +211,17 @@ class GedcomRecord
     protected static function fetchGedcomRecord(string $xref, int $tree_id): ?string
     {
         // We don't know what type of object this is. Try each one in turn.
-        $data = Individual::fetchGedcomRecord($xref, $tree_id);
-        if ($data !== null) {
-            return $data;
-        }
-        $data = Family::fetchGedcomRecord($xref, $tree_id);
-        if ($data !== null) {
-            return $data;
-        }
-        $data = Source::fetchGedcomRecord($xref, $tree_id);
-        if ($data !== null) {
-            return $data;
-        }
-        $data = Repository::fetchGedcomRecord($xref, $tree_id);
-        if ($data !== null) {
-            return $data;
-        }
-        $data = Media::fetchGedcomRecord($xref, $tree_id);
-        if ($data !== null) {
-            return $data;
-        }
-        $data = Note::fetchGedcomRecord($xref, $tree_id);
-        if ($data !== null) {
-            return $data;
-        }
-
-        // Some other type of record...
-        return DB::table('other')
+        return
+            Individual::fetchGedcomRecord($xref, $tree_id) ??
+            Family::fetchGedcomRecord($xref, $tree_id) ??
+            Source::fetchGedcomRecord($xref, $tree_id) ??
+            Repository::fetchGedcomRecord($xref, $tree_id) ??
+            Media::fetchGedcomRecord($xref, $tree_id) ??
+            Note::fetchGedcomRecord($xref, $tree_id) ??
+            Submitter::fetchGedcomRecord($xref, $tree_id) ??
+            Submission::fetchGedcomRecord($xref, $tree_id) ??
+            Header::fetchGedcomRecord($xref, $tree_id) ??
+            DB::table('other')
             ->where('o_file', '=', $tree_id)
             ->where('o_id', '=', $xref)
             ->value('o_gedcom');
@@ -274,7 +285,19 @@ class GedcomRecord
      */
     public function slug(): string
     {
-        return strip_tags($this->fullName());
+        $slug = strip_tags($this->fullName());
+
+        try {
+            $transliterator = Transliterator::create('Any-Latin;Latin-ASCII');
+            $slug           = $transliterator->transliterate($slug);
+        } catch (Throwable $ex) {
+            // ext-intl not installed?
+            // Transliteration algorithms not present in lib-icu?
+        }
+
+        $slug = preg_replace('/[^A-Za-z0-9]+/', '-', $slug);
+
+        return trim($slug, '-') ?: '-';
     }
 
     /**
@@ -607,7 +630,7 @@ class GedcomRecord
      *
      * @param string $link
      *
-     * @return Collection
+     * @return Collection<Individual>
      */
     public function linkedIndividuals(string $link): Collection
     {
@@ -631,7 +654,7 @@ class GedcomRecord
      *
      * @param string $link
      *
-     * @return Collection
+     * @return Collection<Family>
      */
     public function linkedFamilies(string $link): Collection
     {
@@ -655,7 +678,7 @@ class GedcomRecord
      *
      * @param string $link
      *
-     * @return Collection
+     * @return Collection<Source>
      */
     public function linkedSources(string $link): Collection
     {
@@ -679,7 +702,7 @@ class GedcomRecord
      *
      * @param string $link
      *
-     * @return Collection
+     * @return Collection<Media>
      */
     public function linkedMedia(string $link): Collection
     {
@@ -703,7 +726,7 @@ class GedcomRecord
      *
      * @param string $link
      *
-     * @return Collection
+     * @return Collection<Note>
      */
     public function linkedNotes(string $link): Collection
     {
@@ -728,7 +751,7 @@ class GedcomRecord
      *
      * @param string $link
      *
-     * @return Collection
+     * @return Collection<Repository>
      */
     public function linkedRepositories(string $link): Collection
     {
@@ -824,16 +847,20 @@ class GedcomRecord
      * @param string[] $filter
      * @param bool     $sort
      * @param int|null $access_level
-     * @param bool     $override Include private records, to allow us to implement $SHOW_PRIVATE_RELATIONSHIPS and $SHOW_LIVING_NAMES.
+     * @param bool     $ignore_deleted
      *
-     * @return Collection
+     * @return Collection<Fact>
      */
-    public function facts(array $filter = [], bool $sort = false, int $access_level = null, bool $override = false): Collection
-    {
+    public function facts(
+        array $filter = [],
+        bool $sort = false,
+        int $access_level = null,
+        bool $ignore_deleted = false
+    ): Collection {
         $access_level = $access_level ?? Auth::accessLevel($this->tree);
 
         $facts = new Collection();
-        if ($this->canShow($access_level) || $override) {
+        if ($this->canShow($access_level)) {
             foreach ($this->facts as $fact) {
                 if (($filter === [] || in_array($fact->getTag(), $filter, true)) && $fact->canShow($access_level)) {
                     $facts->push($fact);
@@ -843,6 +870,12 @@ class GedcomRecord
 
         if ($sort) {
             $facts = Fact::sortFacts($facts);
+        }
+
+        if ($ignore_deleted) {
+            $facts = $facts->filter(static function (Fact $fact): bool {
+                return !$fact->isPendingDeletion();
+            });
         }
 
         return new Collection($facts);
@@ -936,6 +969,9 @@ class GedcomRecord
      */
     public function updateFact(string $fact_id, string $gedcom, bool $update_chan): void
     {
+        // Not all record types allow a CHAN event.
+        $update_chan = $update_chan && in_array(static::RECORD_TYPE, Gedcom::RECORDS_WITH_CHAN, true);
+
         // MSDOS line endings will break things in horrible ways
         $gedcom = preg_replace('/[\r\n]+/', "\n", $gedcom);
         $gedcom = trim($gedcom);
@@ -1009,6 +1045,9 @@ class GedcomRecord
      */
     public function updateRecord(string $gedcom, bool $update_chan): void
     {
+        // Not all record types allow a CHAN event.
+        $update_chan = $update_chan && in_array(static::RECORD_TYPE, Gedcom::RECORDS_WITH_CHAN, true);
+
         // MSDOS line endings will break things in horrible ways
         $gedcom = preg_replace('/[\r\n]+/', "\n", $gedcom);
         $gedcom = trim($gedcom);
@@ -1128,7 +1167,10 @@ class GedcomRecord
             ->pluck('l_from');
 
         return $xrefs->map(function (string $xref): GedcomRecord {
-            return GedcomRecord::getInstance($xref, $this->tree);
+            $record = GedcomRecord::getInstance($xref, $this->tree);
+            assert($record instanceof GedcomRecord);
+
+            return $record;
         })->all();
     }
 
