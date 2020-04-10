@@ -4,6 +4,7 @@ namespace Cissee\WebtreesExt;
 
 use Closure;
 use Exception;
+use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Individual;
@@ -12,28 +13,26 @@ use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Collection;
 use stdClass;
-use function route;
 
 /**
  * A GEDCOM level 0 shared place aka location (_LOC) object (complete structure)
  */
 class SharedPlace extends GedcomRecord {
 
-  const RECORD_TYPE = '_LOC';
+  public const RECORD_TYPE = '_LOC';
 
-  protected $moduleName;
+  protected const ROUTE_NAME  = SharedPlacePage::class;
+
   protected $useIndirectLinks;
 
   public function __construct(
-          string $moduleName, 
           bool $useIndirectLinks, 
           string $xref, 
           string $gedcom, 
           $pending, 
           Tree $tree) {
-    
+
     parent::__construct($xref, $gedcom, $pending, $tree);
-    $this->moduleName = $moduleName;
     $this->useIndirectLinks = $useIndirectLinks;
   }
 
@@ -127,15 +126,6 @@ class SharedPlace extends GedcomRecord {
       return preg_replace("/\n2 CONT ?/", "\n", $match[1]);
     }
     return null;
-  }
-
-  public function url(): string {
-    return route('module', [
-        'module' => $this->moduleName,
-        'action' => 'Single',
-        'xref' => $this->xref(),
-        'tree' => $this->tree->name(),
-    ]);
   }
 
   public function linkedIndividuals(string $link): Collection {

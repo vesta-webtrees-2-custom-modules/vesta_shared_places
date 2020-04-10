@@ -6,6 +6,7 @@ namespace Fisharebest\Webtrees;
 
 use Cissee\WebtreesExt\HtmlExt;
 
+//deprecated - remove
 /**
  * Class Html - Add HTML markup to elements consistently.
  */

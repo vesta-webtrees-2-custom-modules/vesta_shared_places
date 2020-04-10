@@ -7,6 +7,7 @@ $loader->addPsr4('Cissee\\Webtrees\\Module\\SharedPlaces\\', __DIR__);
 $loader->addPsr4('Cissee\\WebtreesExt\\', __DIR__ . "/patchedWebtrees");
 $loader->addPsr4('Cissee\\WebtreesExt\\Services\\', __DIR__ . "/patchedWebtrees/Services");
 $loader->addPsr4('Cissee\\WebtreesExt\\Functions\\', __DIR__ . "/patchedWebtrees/Functions");
+$loader->addPsr4('Cissee\\WebtreesExt\\Http\\RequestHandlers\\', __DIR__ . "/patchedWebtrees/Http/RequestHandlers");
 $loader->register();
 
 $classMap = array();
@@ -16,14 +17,11 @@ if ($extend) {
   //explicitly load webtrees replacements so that the original files aren't autoloaded
   $classMap["Fisharebest\Webtrees\GedcomRecord"] = __DIR__ . '/replacedWebtrees/GedcomRecord.php';
 
-  //these adjustments allow use to re-use existing code (webtrees controllers using GedcomRecord::getInstance)
-  //where we only have to adjust routes (e.g. for editing shared places, 
-  //where the editing itself is straightforward, but we want to return to our specific view of the shared place)
-
-  $extend2 = !class_exists("Fisharebest\Webtrees\Html", false);
-  if ($extend2) {
-    $classMap["Fisharebest\Webtrees\Html"] = __DIR__ . '/replacedWebtrees/Html.php';
-  }
+  //no longer required
+  //$extend2 = !class_exists("Fisharebest\Webtrees\Html", false);
+  //if ($extend2) {
+  //  $classMap["Fisharebest\Webtrees\Html"] = __DIR__ . '/replacedWebtrees/Html.php';
+  //}
 
   //
   //other adjustments

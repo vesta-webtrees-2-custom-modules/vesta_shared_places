@@ -2,6 +2,7 @@
 
 namespace Cissee\WebtreesExt;
 
+//deprecated - remove
 class HtmlExt {
 
   public static function url($path, array $data): string {

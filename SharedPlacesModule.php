@@ -2,12 +2,13 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
+use Aura\Router\RouterContainer;
 use Cissee\Webtrees\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\FactPlaceAdditions;
 use Cissee\WebtreesExt\GedcomRecordExt;
-use Cissee\WebtreesExt\HtmlExt;
+use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlaceFactory;
@@ -15,7 +16,6 @@ use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
-use Fisharebest\Webtrees\Http\Controllers\EditGedcomRecordController;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
@@ -43,6 +43,7 @@ use Vesta\Model\MapCoordinates;
 use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
 use Vesta\VestaModuleTrait;
+use function app;
 use function view;
 
 //cannot use original AbstractModule because we override setName
@@ -110,6 +111,20 @@ class SharedPlacesModule extends AbstractModule implements
    * Bootstrap the module
    */
   public function onBoot(): void {
+      //define our 'pretty' routes
+      //note: potentially problematic in case of name clashes; 
+      //webtrees isn't interested in solving this properly, see
+      //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
+      
+    
+      $router_container = app(RouterContainer::class);
+      assert($router_container instanceof RouterContainer);
+      
+      //(cf WebRoutes.php "Visitor routes with a tree")
+      //note: this has the side effect of handling pricacy properly (Issue #9)
+      $router_container->getMap()
+        ->get(SharedPlacePage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
+    
       // Replace an existing view with our own version.
       // (media management via list module)
       View::registerCustomView('::modules/media-list/page', $this->name() . '::modules/media-list/page');
@@ -147,8 +162,11 @@ class SharedPlacesModule extends AbstractModule implements
       //enabled not set yet either!
       //extend GedcomRecord via GedcomRecordExt
       $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
-      GedcomRecordExt::addFactory('_LOC', new SharedPlaceFactory($this->name(), $useIndirectLinks));
-
+      GedcomRecordExt::addFactory('_LOC', new SharedPlaceFactory($useIndirectLinks));
+    
+    //this may never have been necessary: we're extending GedcomRecord in any case during module initialization,
+    //never mind the routing!
+    /*
       //extend Html via HtmlExt
       //(route through module in order to extend GedcomRecord via GedcomRecordExt,
       //in order to get proper routes for SharedPlace records pfff)
@@ -170,6 +188,7 @@ class SharedPlacesModule extends AbstractModule implements
       HtmlExt::routeViaModule('add-fact', $this->name(), 'AddFact');
       HtmlExt::routeViaModule('edit-fact', $this->name(), 'EditFact');
       HtmlExt::routeViaModule('update-fact', $this->name(), 'UpdateFact');
+    */  
     }
 
     return $this;
@@ -254,10 +273,6 @@ class SharedPlacesModule extends AbstractModule implements
   //      'css/webtrees.css' => 'css/webtrees',
   //      'css/minimal.css' => 'css/minimal'];
   //}
-  
-  public function bodyContent(): string {
-    return '';
-  }
   
   //css for icons/shared-place
   public function headContent(): string {
@@ -438,15 +453,6 @@ class SharedPlacesModule extends AbstractModule implements
     return $controller->sharedPlacesList($tree, $showLinkCounts);
   }
 
-  public function getSingleAction(ServerRequestInterface $request): ResponseInterface {
-    //'tree' is handled specifically in Router.php
-    $tree = $request->getAttribute('tree');
-    assert($tree instanceof Tree);
-    
-    $controller = new SharedPlaceController($this);
-    return $controller->show($request, $tree);
-  }
-
   public function getCreateSharedPlaceAction(ServerRequestInterface $request): ResponseInterface {
     //'tree' is handled specifically in Router.php
     $tree = $request->getAttribute('tree');
@@ -466,7 +472,7 @@ class SharedPlacesModule extends AbstractModule implements
   }
 
   //rerouted EditGedcomRecordController
-
+  /*
   public function getEditRawRecordAction(ServerRequestInterface $request): ResponseInterface {
     //'tree' is handled specifically in Router.php
     $tree = $request->getAttribute('tree');
@@ -576,6 +582,7 @@ class SharedPlacesModule extends AbstractModule implements
     $controller = new EditGedcomRecordController($this->module_service);
     return $controller->updateFact($request, $tree);
   }
+  */
   
   ////////////////////////////////////////////////////////////////////////////////
   
