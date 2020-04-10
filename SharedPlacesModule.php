@@ -105,9 +105,6 @@ class SharedPlacesModule extends AbstractModule implements
   public function listMenuClass(): string {
     return 'menu-list-plac';
   }
-
-  //public function setName(string $name): void {
-  //	parent::setName($name);
   
   /**
    * Bootstrap the module
@@ -251,11 +248,12 @@ class SharedPlacesModule extends AbstractModule implements
     return $this->matchViaLoc($place);
   }
   
-  public function assetsViaViews(): array {
-    return [
-        'css/webtrees.css' => 'css/webtrees',
-        'css/minimal.css' => 'css/minimal'];
-  }
+  //no longer required - css is static now
+  //public function assetsViaViews(): array {
+  //  return [
+  //      'css/webtrees.css' => 'css/webtrees',
+  //      'css/minimal.css' => 'css/minimal'];
+  //}
   
   public function bodyContent(): string {
     return '';
@@ -263,8 +261,8 @@ class SharedPlacesModule extends AbstractModule implements
   
   //css for icons/shared-place
   public function headContent(): string {
-    //we need the css in modified webtrees views, e.g. for media management
-    //therefore globally via ModuleGlobalInterface, not via hFactsTabGetOutputBeforeTab
+    //easier to serve this globally, even if not strictly required on each page
+    //(we need the css in modified webtrees views, e.g. for media management)
     
     //align with current theme (supporting - for now - the default webtrees themes)
     $themeName = Session::get('theme');
@@ -278,7 +276,6 @@ class SharedPlacesModule extends AbstractModule implements
       }      
     }
     
-    //note: content actually served via <theme>.phtml!
     $pre = '<link href="' . $this->assetUrl('css/'.$themeName.'.css') . '" type="text/css" rel="stylesheet" />';
 		return $pre;
   } 
