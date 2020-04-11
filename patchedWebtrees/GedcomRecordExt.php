@@ -106,48 +106,41 @@ class GedcomRecordExt extends GedcomRecord {
       $type = static::RECORD_TYPE;
     }
 
-    //[RC] added start
-    $factory = self::$factories[$type] ?? null;
-    if ($factory !== null) {
-      $record = $factory->createRecord($xref, $gedcom, $pending, $tree);
-
-      // Store it in the cache
-      self::$gedcom_record_cache[$xref][$tree_id] = $record;
-
-      return $record;
-    }
-    //[RC] added end
-
-    switch ($type) {
-      case 'INDI':
-        $record = new Individual($xref, $gedcom, $pending, $tree);
-        break;
-      case 'FAM':
-        $record = new Family($xref, $gedcom, $pending, $tree);
-        break;
-      case 'SOUR':
-        $record = new Source($xref, $gedcom, $pending, $tree);
-        break;
-      case 'OBJE':
-        $record = new Media($xref, $gedcom, $pending, $tree);
-        break;
-      case 'REPO':
-        $record = new Repository($xref, $gedcom, $pending, $tree);
-        break;
-      case 'NOTE':
-        $record = new Note($xref, $gedcom, $pending, $tree);
-        break;
-      default:
-        $record = new self($xref, $gedcom, $pending, $tree);
-        break;
-    }
+    //[RC] adjusted
+    $record = GedcomRecordExt::createRecordDirectly($type, $xref, $gedcom, $pending, $tree);
 
     // Store it in the cache
     self::$gedcom_record_cache[$xref][$tree_id] = $record;
 
     return $record;
   }
+  
+  public static function createRecordDirectly(string $type, string $xref, string $gedcom, $pending, Tree $tree): GedcomRecord {
+    
+    $factory = self::$factories[$type] ?? null;
+    if ($factory !== null) {
+      $record = $factory->createRecord($xref, $gedcom, $pending, $tree);
+      return $record;
+    }
 
+    switch ($type) {
+      case 'INDI':
+        return new Individual($xref, $gedcom, $pending, $tree);
+      case 'FAM':
+        return new Family($xref, $gedcom, $pending, $tree);
+      case 'SOUR':
+        return new Source($xref, $gedcom, $pending, $tree);
+      case 'OBJE':
+        return new Media($xref, $gedcom, $pending, $tree);
+      case 'REPO':
+        return new Repository($xref, $gedcom, $pending, $tree);
+      case 'NOTE':
+        return new Note($xref, $gedcom, $pending, $tree);
+      default:
+        return new self($xref, $gedcom, $pending, $tree);
+    }
+  }
+  
   public static function clearCache() {
     // Clear the cache
     self::$gedcom_record_cache = [];

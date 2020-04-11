@@ -49,6 +49,12 @@ if ($extend) {
   if ($extend5) {
     $classMap["Fisharebest\Webtrees\Http\Controllers\Admin\MediaController"] = __DIR__ . '/replacedWebtrees/Http/Controllers/Admin/MediaController.php';
   }
+  
+  //pending changes (required as long as we don't have the factories approach)
+  $extend6 = !class_exists("Fisharebest\Webtrees\Http\RequestHandlers\PendingChanges", false);
+  if ($extend6) {
+    $classMap["Fisharebest\Webtrees\Http\RequestHandlers\PendingChanges"] = __DIR__ . '/replacedWebtrees/Http/RequestHandlers/PendingChanges.php';
+  }
 } else {
   //must use original files because they are already loaded
   //(this occurs currently (webtrees 2.0.3))
