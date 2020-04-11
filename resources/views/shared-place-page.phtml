@@ -95,7 +95,8 @@ use Vesta\Model\Trace;
                 ?>
 
                 <?php if ($sharedPlace->canEdit()) : ?>
-                  <?php FunctionsPrintExt::printAddNewFact_LOC($moduleName, $sharedPlace, $facts) ?>
+                  <?= view('edit/paste-fact-row', ['record' => $sharedPlace, 'facts' => $clipboard_facts]) ?>
+                  <?php FunctionsPrintExt::printAddNewFact_LOC($sharedPlace, $facts) ?>
                   <?php if ($sharedPlace->tree()->getPreference('MEDIA_UPLOAD') >= Auth::accessLevel($sharedPlace->tree())) : ?>
                     <tr>
                         <th scope="row">

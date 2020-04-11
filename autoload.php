@@ -32,7 +32,7 @@ if ($extend) {
     $classMap["Fisharebest\Webtrees\Config"] = __DIR__ . '/replacedWebtrees/Config.php';
   }
 
-  //adjustments for MAP
+  //adjustments for MAP, and _LOC.NAME
   $extend4 = !class_exists("Fisharebest\Webtrees\Functions\FunctionsEdit", false);
   if ($extend4) {
     $classMap["Fisharebest\Webtrees\Functions\FunctionsEdit"] = __DIR__ . '/replacedWebtrees/Functions/FunctionsEdit.php';

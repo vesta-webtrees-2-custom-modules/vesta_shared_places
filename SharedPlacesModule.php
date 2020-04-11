@@ -116,7 +116,6 @@ class SharedPlacesModule extends AbstractModule implements
       //webtrees isn't interested in solving this properly, see
       //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
       
-    
       $router_container = app(RouterContainer::class);
       assert($router_container instanceof RouterContainer);
       

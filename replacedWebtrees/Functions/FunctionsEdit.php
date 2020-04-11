@@ -33,9 +33,11 @@ use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Module\CensusAssistantModule;
 use Fisharebest\Webtrees\Note;
 use Fisharebest\Webtrees\Repository;
+use Fisharebest\Webtrees\Services\LocalizationService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Services\UserService;
 use Fisharebest\Webtrees\Source;
+use Fisharebest\Webtrees\Submitter;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
 use Psr\Http\Message\ServerRequestInterface;
@@ -43,10 +45,24 @@ use Ramsey\Uuid\Uuid;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 use function app;
+use function array_key_exists;
+use function array_merge;
+use function array_slice;
+use function count;
+use function date;
+use function e;
 use function explode;
+use function implode;
 use function in_array;
-use function substr;
+use function preg_match;
+use function preg_match_all;
 use function route;
+use function strpos;
+use function strstr;
+use function strtolower;
+use function strtoupper;
+use function substr;
+use function trim;
 use function view;
 
 /**
@@ -232,14 +248,12 @@ class FunctionsEdit
      */
     public static function optionsRestrictionsRule(): array
     {
-        $options = [
+        return [
             'none'         => I18N::translate('Show to visitors'),
             'privacy'      => I18N::translate('Show to members'),
             'confidential' => I18N::translate('Show to managers'),
             'hidden'       => I18N::translate('Hide from everyone'),
         ];
-
-        return $options;
     }
 
     /**
@@ -293,9 +307,11 @@ class FunctionsEdit
     //[RC] extended
     public static function addSimpleTagWithGedcomRecord(?GedcomRecord $record, Tree $tree, $tag, $upperlevel = '', $label = ''): string
     {
+        $localization_service = new LocalizationService();
+      
         $request = app(ServerRequestInterface::class);
         $xref    = $request->getAttribute('xref', '');
-
+        
         // Some form fields need access to previous form fields.
         static $previous_ids = [
             'SOUR' => '',
@@ -412,6 +428,10 @@ class FunctionsEdit
         if (in_array($fact, Config::emptyFacts(), true) && ($value === '' || $value === 'Y' || $value === 'y')) {
             $html .= '<input type="hidden" id="' . $id . '" name="' . $name . '" value="' . $value . '">';
 
+            $checked = $value === '' ? '' : 'checked';
+            $onchange = 'this.previousSibling.value=this.checked ? this.value : &quot;&quot;';
+            $html .= '<input type="checkbox" value="Y" ' . $checked . ' onchange="' . $onchange . '">';
+
             if ($fact === 'CENS' && $value === 'Y') {
                 $html .= view('modules/GEDFact_assistant/select-census', [
                     'census_places' => Census::censusPlaces(I18N::languageTag()),
@@ -449,13 +469,7 @@ class FunctionsEdit
             }
         } elseif ($fact === 'DATE') {
             // Need to know if the user prefers DMY/MDY/YMD so we can validate dates properly.
-            $dmy = '"' . preg_replace('/[^DMY]/', '', str_replace([
-                    'j',
-                    'F',
-                ], [
-                    'D',
-                    'M',
-                ], I18N::dateFormat())) . '"';
+            $dmy = '"' . $localization_service->dateFormatToOrder(I18N::dateFormat()) . '"';
 
             $html .= '<div class="input-group">';
             $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" onchange="valid_date(this, ' . e($dmy) . ')" dir="ltr">';
@@ -551,7 +565,7 @@ class FunctionsEdit
             $html .=
                 '<div class="input-group">' .
                 '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-href="' . e(route(CreateSubmitterModal::class, ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a submitter') . '">' . view('icons/add') . '</button></div>' .
-                view('components/select-submitter', ['id' => $id, 'name' => $name, 'submitter' => GedcomRecord::getInstance($value, $tree), 'tree' => $tree]) .
+                view('components/select-submitter', ['id' => $id, 'name' => $name, 'submitter' => Submitter::getInstance($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'TEMP') {
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => self::optionsTemples()]);
@@ -584,7 +598,11 @@ class FunctionsEdit
                 $html .= '>' . $typeValue . '</option>';
             }
             $html .= '</select>';
-        } elseif (($fact !== 'NAME' || $upperlevel === 'REPO' || $upperlevel === 'SUBM' || $upperlevel === 'UNKNOWN') && $fact !== '_MARNM') {
+        
+        //[RC] extended
+        //cannot use ($upperlevel === '_LOC'), $upperlevel not set when adding new facts (would only work for editing)
+        //$record ... is for add-name            
+        } elseif (($fact !== 'NAME' || $upperlevel === 'REPO' || $upperlevel === 'SUBM' || ($record instanceof SharedPlace) || $upperlevel === 'UNKNOWN') && $fact !== '_MARNM') {
             if ($fact === 'TEXT' || $fact === 'ADDR' || ($fact === 'NOTE' && !$islink)) {
                 $html .= '<div class="input-group">';
                 $html .= '<textarea class="form-control" id="' . $id . '" name="' . $name . '" rows="5" dir="auto">' . e($value) . '</textarea>';
