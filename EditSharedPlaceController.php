@@ -10,7 +10,6 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\Http\Controllers\AbstractEditController;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\View;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
@@ -38,7 +37,8 @@ class EditSharedPlaceController extends AbstractEditController {
    */
   public function createSharedPlace(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     $sharedPlaceName = Requests::getString($request, 'shared-place-name');
-    
+        
+    //requires modal placeholder in SharedPlacesListController.sharedPlacesList(), uargh
     $additionalControls = GovIdEditControlsUtils::accessibleModules($this->module, $tree, Auth::user())
             ->map(function (GovIdEditControlsInterface $module) use ($sharedPlaceName) {
               return $module->govIdEditControl(null, 'shared-place-govId', 'shared-place-govId', $sharedPlaceName, true, true);

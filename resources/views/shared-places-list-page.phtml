@@ -3,6 +3,7 @@
 use Cissee\WebtreesExt\MoreI18N;
 use Fisharebest\Webtrees\I18N;
 use Ramsey\Uuid\Uuid;
+use Vesta\VestaAdminController;
 ?>
 
 <h2 class="wt-page-title">
@@ -36,7 +37,7 @@ use Ramsey\Uuid\Uuid;
                 class="btn btn-secondary" 
                 type="button" 
                 data-toggle="modal" 
-                data-target="#wt-ajax-modal" 
+                data-target="#wt-ajax-modal-vesta" 
                 data-href="<?=
                 e(route('module', [
                     'module' => $moduleName,
@@ -107,4 +108,12 @@ use Ramsey\Uuid\Uuid;
     </table>
 </div>
 
-<?= view('modals/ajax') ?>
+<?php
+  //do not use standard modal placeholder (ajax.phtml): we may have to support specific select2 edit controls!
+  //cf data-target="#wt-ajax-modal-vesta" above!
+
+  echo view(VestaAdminController::vestaViewsNamespace() . '::modals/ajax-modal-vesta', [
+                'ajax' => false,
+                'select2Initializers' => $select2Initializers
+    ]);
+?>

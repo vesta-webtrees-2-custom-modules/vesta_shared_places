@@ -445,7 +445,7 @@ class SharedPlacesModule extends AbstractModule implements
     $tree = $request->getAttribute('tree');
     assert($tree instanceof Tree);
     
-    $controller = new SharedPlacesListController($this->name());
+    $controller = new SharedPlacesListController($this);
 
     $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
 
