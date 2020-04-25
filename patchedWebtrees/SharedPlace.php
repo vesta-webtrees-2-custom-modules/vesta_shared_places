@@ -163,8 +163,6 @@ class SharedPlace extends GedcomRecord {
     }
     $concatenated = $main->concat($list)->unique();
     
-    error_log(print_r($concatenated, true));
-    
     return $concatenated;
   }
 
