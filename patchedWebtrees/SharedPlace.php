@@ -161,7 +161,9 @@ class SharedPlace extends GedcomRecord {
         }
       }
     }
-    $concatenated = $main->concat($list);
+    $concatenated = $main->concat($list)->unique();
+    
+    error_log(print_r($concatenated, true));
     
     return $concatenated;
   }
@@ -198,7 +200,7 @@ class SharedPlace extends GedcomRecord {
       }
     }
 
-    $concatenated = $main->concat($list);
+    $concatenated = $main->concat($list)->unique();
     
     return $concatenated;
   }
