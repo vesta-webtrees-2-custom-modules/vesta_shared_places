@@ -10,6 +10,8 @@ use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesRejectRecord;
 use Fisharebest\Webtrees\I18N;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Model\GovReference;
+use Vesta\Model\MapCoordinates;
+use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
 
 ?>
@@ -72,6 +74,7 @@ use Vesta\Model\Trace;
         <div class="tab-pane active fade show" role="tabpanel" id="details">
             <table class="table wt-facts-table">
                 <?php 
+                echo $summaryHtml;
                 foreach ($facts->toArray() as $fact) {
                   switch ($fact->getTag()) {
                     case '_GOV':
@@ -79,9 +82,21 @@ use Vesta\Model\Trace;
                       ob_start();
                       FunctionsPrintFacts::printFact($fact, $sharedPlace);
                       $replacement = '<a href="http://gov.genealogy.net/item/show/' . $fact->value() . '" target="_blank">' . $fact->value() . '</a>';
-                      $replacement .= FunctionsPlaceUtils::gov2html($module, $tree, new GovReference($fact->value(), new Trace("")));
+                      $replacement .= FunctionsPlaceUtils::gov2html($module, $tree, new GovReference($fact->value(), new Trace("")))->getMain();
+                      //TODO: handle getScript()!
                       $html = ob_get_clean();
                       echo str_replace($fact->value(), $replacement, $html);
+                      break;
+                    case 'MAP':
+                      //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
+                      ob_start();
+                      FunctionsPrintFacts::printFact($fact, $sharedPlace);
+                      $lati = $fact->attribute('LATI');
+                      $long = $fact->attribute('LONG');
+                      $replacement = FunctionsPlaceUtils::map2html($module, $tree, new MapCoordinates($lati, $long, new Trace("")))->getMain();
+                      //TODO: handle getScript()!
+                      $html = ob_get_clean();
+                      echo str_replace('<div class="place"></div><br>', $replacement, $html);
                       break;
                     default:  
                       FunctionsPrintFacts::printFact($fact, $sharedPlace);

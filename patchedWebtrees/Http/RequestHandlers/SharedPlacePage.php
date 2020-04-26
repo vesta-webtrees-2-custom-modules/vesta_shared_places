@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
-use Fig\Http\Message\StatusCodeInterface;
 use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
 use Cissee\WebtreesExt\SharedPlace;
+use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ClipboardService;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -17,7 +18,9 @@ use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use function assert;
+use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
+use Vesta\Model\PlaceStructure;
+use function redirect;
 
 //cf SourcePage
 /**
@@ -83,10 +86,24 @@ class SharedPlacePage implements RequestHandlerInterface {
             return redirect($sharedPlace->url(), StatusCodeInterface::STATUS_MOVED_PERMANENTLY);
         }
         
-        return $this->viewResponse($this->module->name() . '::shared-place-page', [
+      //summary (with any additional data such as GOV data, map links etc),
+      //if there is a module that provides this summary
+      $summaryHtml = '';  
+      if (!empty($sharedPlace->namesNN())) {
+        $ps = PlaceStructure::create("2 PLAC " . $sharedPlace->namesNN()[0] . "\n3 _LOC @" . $sharedPlace->xref() . "@", $sharedPlace->tree());
+        $summaryGve = FunctionsPlaceUtils::plac2html($this->module, $ps);
+        
+        //if ($summaryHtml !== '') {
+          $summaryHtml = '<tr class=""><th scope="row">' . I18n::translate('Summary') . '</th><td class="">' . $summaryGve->getMain() . '</td></tr>';
+          //TODO: handle getScript()!
+        //}
+      }
+      
+      return $this->viewResponse($this->module->name() . '::shared-place-page', [
                     'module' => $this->module,
                     'moduleName' => $this->module->name(),
                     'clipboard_facts'  => $this->clipboard_service->pastableFacts($sharedPlace, new Collection()),
+                    'summaryHtml' => $summaryHtml,
                     'facts' => $this->facts($sharedPlace),
                     'families' => $sharedPlace->linkedFamilies('_LOC'),
                     'individuals' => $sharedPlace->linkedIndividuals('_LOC'),
@@ -114,7 +131,7 @@ class SharedPlacePage implements RequestHandlerInterface {
         //fallback to original order within gedcom (e.g. for multiple names)
         return array_search($x, $factsArray) <=> array_search($y, $factsArray);
       });
-
+      
       return $facts;
     }
 }
