@@ -33,7 +33,7 @@ e(route('module', [
   document.getElementById('wt-modal-form').addEventListener('submit', function (event) {
       event.preventDefault();
       let form = event.target;
-      let modal_content = document.querySelector('#wt-ajax-modal .modal-content');
+      let modal_content = document.querySelector('#wt-ajax-modal-vesta .modal-content');
       let select = document.getElementById(modal_content.dataset.selectId);
 
       $.ajax({

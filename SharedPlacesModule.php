@@ -507,7 +507,7 @@ class SharedPlacesModule extends AbstractModule implements
   public function loc2Gov(LocReference $loc): ?GovReference {
     $sharedPlace = GedcomRecordExt::getInstance($loc->getXref(), $loc->getTree());
     
-    if ($sharedPlace !== null) {
+    if (($sharedPlace !== null) && ($sharedPlace instanceof SharedPlace)) {
       $gov = $sharedPlace->getGov();
       if ($gov !== null) {
         $trace = $loc->getTrace();
