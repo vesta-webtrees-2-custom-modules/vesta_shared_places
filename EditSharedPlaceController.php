@@ -39,6 +39,8 @@ class EditSharedPlaceController extends AbstractEditController {
     $sharedPlaceName = Requests::getString($request, 'shared-place-name');
         
     //requires modal placeholder in SharedPlacesListController.sharedPlacesList(), uargh
+    //also requires modal placeholder in SharedPlacesModule.hFactsTabGetAdditionalEditControls(),
+    //handled via hFactsTabRequiresModalVesta!
     $additionalControls = GovIdEditControlsUtils::accessibleModules($this->module, $tree, Auth::user())
             ->map(function (GovIdEditControlsInterface $module) use ($sharedPlaceName) {
               return $module->govIdEditControl(null, 'shared-place-govId', 'shared-place-govId', $sharedPlaceName, true, true);

@@ -78,7 +78,9 @@ class SharedPlacePage implements RequestHandlerInterface {
         $xref = $request->getAttribute('xref');
         $sharedPlace = SharedPlace::getInstance($xref, $tree);
 
-        //we don't need a specific method here
+        //we don't need a specific method here, 
+        //if we ever refactor this:
+        //use SharedPlaceNotFoundException! 
         Auth::checkRecordAccess($sharedPlace, false);
 
         // Redirect to correct xref/slug
@@ -90,13 +92,15 @@ class SharedPlacePage implements RequestHandlerInterface {
       //if there is a module that provides this summary
       $summaryHtml = '';  
       if (!empty($sharedPlace->namesNN())) {
-        $ps = PlaceStructure::create("2 PLAC " . $sharedPlace->namesNN()[0] . "\n3 _LOC @" . $sharedPlace->xref() . "@", $sharedPlace->tree());
-        $summaryGve = FunctionsPlaceUtils::plac2html($this->module, $ps);
-        
-        //if ($summaryHtml !== '') {
-          $summaryHtml = '<tr class=""><th scope="row">' . I18n::translate('Summary') . '</th><td class="">' . $summaryGve->getMain() . '</td></tr>';
-          //TODO: handle getScript()!
-        //}
+        $ps = PlaceStructure::fromNameAndLoc($sharedPlace->namesNN()[0], $sharedPlace->xref(), $sharedPlace->tree());
+        if ($ps !== null) {
+          $summaryGve = FunctionsPlaceUtils::plac2html($this->module, $ps);
+
+          //if ($summaryHtml !== '') {
+            $summaryHtml = '<tr class=""><th scope="row">' . I18n::translate('Summary') . '</th><td class="">' . $summaryGve->getMain() . '</td></tr>';
+            //TODO: handle getScript()!
+          //}          
+        }
       }
       
       return $this->viewResponse($this->module->name() . '::shared-place-page', [

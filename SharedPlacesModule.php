@@ -2,22 +2,26 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
+use Aura\Router\Route;
 use Aura\Router\RouterContainer;
 use Cissee\Webtrees\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Cissee\WebtreesExt\AbstractModule;
+use Cissee\WebtreesExt\Exceptions\SharedPlaceNotFoundException;
 use Cissee\WebtreesExt\FactPlaceAdditions;
 use Cissee\WebtreesExt\GedcomRecordExt;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
+use Cissee\WebtreesExt\Module\ClippingsCartModule;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlaceFactory;
+use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
+use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
@@ -31,11 +35,15 @@ use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
+use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
 use Vesta\Hook\HookInterfaces\EmptyFunctionsPlace;
+use Vesta\Hook\HookInterfaces\FunctionsClippingsCartInterface;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceInterface;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 use Vesta\Model\GenericViewElement;
 use Vesta\Model\GovReference;
 use Vesta\Model\LocReference;
@@ -44,6 +52,8 @@ use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
 use Vesta\VestaModuleTrait;
 use function app;
+use function redirect;
+use function route;
 use function view;
 
 //cannot use original AbstractModule because we override setName
@@ -53,7 +63,8 @@ class SharedPlacesModule extends AbstractModule implements
   ModuleConfigInterface, 
   ModuleGlobalInterface, 
   IndividualFactsTabExtenderInterface, 
-  FunctionsPlaceInterface {
+  FunctionsPlaceInterface,
+  FunctionsClippingsCartInterface {
 
   use ModuleCustomTrait, ModuleListTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait {
     VestaModuleTrait::customTranslations insteadof ModuleCustomTrait;
@@ -132,6 +143,10 @@ class SharedPlacesModule extends AbstractModule implements
       View::registerCustomView('::icons/shared-place', $this->name() . '::icons/shared-place');
       
       // Replace an existing view with our own version.
+      // (record icons e.g. for clippings cart)
+      View::registerCustomView('::icons/record', $this->name() . '::icons/record');
+      
+      // Replace an existing view with our own version.
       // (media management via admin)
       View::registerCustomView('::media-page', $this->name() . '::media-page');
       
@@ -161,33 +176,7 @@ class SharedPlacesModule extends AbstractModule implements
       //enabled not set yet either!
       //extend GedcomRecord via GedcomRecordExt
       $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
-      GedcomRecordExt::addFactory('_LOC', new SharedPlaceFactory($useIndirectLinks));
-    
-    //this may never have been necessary: we're extending GedcomRecord in any case during module initialization,
-    //never mind the routing!
-    /*
-      //extend Html via HtmlExt
-      //(route through module in order to extend GedcomRecord via GedcomRecordExt,
-      //in order to get proper routes for SharedPlace records pfff)
-      //
-      //cf web.php
-      //but do this in particular only if the module is actually enabled (otherwise: urls won't resolve)!
-      //GET and POST!
-      HtmlExt::routeViaModule('edit-raw-record', $this->name(), 'EditRawRecord');
-
-      //GET and POST!
-      HtmlExt::routeViaModule('edit-raw-fact', $this->name(), 'EditRawFact');
-
-      HtmlExt::routeViaModule('copy-fact', $this->name(), 'CopyFact');
-      HtmlExt::routeViaModule('delete-fact', $this->name(), 'DeleteFact');
-      HtmlExt::routeViaModule('paste-fact', $this->name(), 'PasteFact');
-
-      HtmlExt::routeViaModule('delete-record', $this->name(), 'DeleteRecord');
-
-      HtmlExt::routeViaModule('add-fact', $this->name(), 'AddFact');
-      HtmlExt::routeViaModule('edit-fact', $this->name(), 'EditFact');
-      HtmlExt::routeViaModule('update-fact', $this->name(), 'UpdateFact');
-    */  
+      GedcomRecordExt::addFactory('_LOC', new SharedPlaceFactory($useIndirectLinks)); 
     }
 
     return $this;
@@ -200,70 +189,6 @@ class SharedPlacesModule extends AbstractModule implements
    */
   public function resourcesFolder(): string {
     return __DIR__ . '/resources/';
-  }
-  
-  //cf Place.php;
-	const GEDCOM_SEPARATOR = ', ';
-
-  public function matchViaName(string $placeName, Tree $tree, int $parentLevels): ?SharedPlace {
-    if ($placeName === '') {
-      return null;
-    }
-    $match = $this->matchName($tree, $placeName);
-    
-    if (($match === null) && ($parentLevels > 0)) {
-      $placeName = implode(self::GEDCOM_SEPARATOR, array_slice(explode(self::GEDCOM_SEPARATOR, $placeName), 1));
-      return $this->matchViaName($placeName, $tree, $parentLevels-1);
-    }
-    
-    return $match;
-  }
-    
-  public function matchName(Tree $tree, $placeGedcomName): ?SharedPlace {
-    $locale = I18N::locale();
-    
-    $searchService = new SearchServiceExt($locale);
-    $sharedPlaces = $searchService->searchSharedPlaces(array($tree), array("1 NAME " . $placeGedcomName));
-    foreach ($sharedPlaces as $sharedPlace) {
-      foreach ($sharedPlace->namesNN() as $name) {
-        if (strtolower($placeGedcomName) === strtolower($name)) {
-          //first match wins, we don't expect multiple _LOC with same name
-          //(for now) TODO resolve via date?
-          return $sharedPlace;
-        }
-      }
-    }
-    return null;
-  }
-
-  /**
-   *
-   * return SharedPlace|null	 
-   */
-  public function matchViaLoc(PlaceStructure $place) {
-    $loc = $place->getLoc();
-    if ($loc === null) {
-      return null;
-    }
-
-    return GedcomRecordExt::getInstance($loc, $place->getTree());
-  }
-
-  /**
-   *
-   * return SharedPlace|null	 
-   */
-  public function match(PlaceStructure $place) {
-    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
-    if ($indirect) {
-      $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
-      $sharedPlace = $this->matchViaName($place->getGedcomName(), $place->getTree(), $parentLevels);
-      if ($sharedPlace !== null) {
-        return $sharedPlace;
-      }
-    }
-
-    return $this->matchViaLoc($place);
   }
   
   //no longer required - css is static now
@@ -294,10 +219,16 @@ class SharedPlacesModule extends AbstractModule implements
 		return $pre;
   } 
   
-  //css for icons/shared-place
-  public function hFactsTabGetOutputBeforeTab(Individual $person) {
-		return new GenericViewElement('', '');
-	}
+  public function hFactsTabRequiresModalVesta(Tree $tree): ?string {
+    //required via createSharedPlaceAction
+    $additionalControls = GovIdEditControlsUtils::accessibleModules($this, $tree, Auth::user())
+            ->map(function (GovIdEditControlsInterface $module) {
+              return $module->govIdEditControlSelect2ScriptSnippet();
+            })
+            ->toArray();
+            
+    return implode($additionalControls);        
+  }
   
   public function hFactsTabGetAdditionalEditControls(
           Fact $fact): GenericViewElement {
@@ -324,14 +255,23 @@ class SharedPlacesModule extends AbstractModule implements
     
     //ok to edit - does a shared place with this name already exist? Or does the PLAC have an explicit _LOC link?
     $ps = PlaceStructure::fromFact($fact);
-    $sharedPlace = $this->match($ps);
-    //$sharedPlace = $this->matchName($fact->record()->tree(), $fact->place()->gedcomName());
+    if ($ps !== null) {
+      $sharedPlace = $this->plac2sharedPlace($ps);    
+    }
     
     if ($sharedPlace !== null) {
       //already exists
       return new GenericViewElement('', '');
     }
     
+    //HERE - the gve needs a special select2 gaaaaa
+    
+    //we're using ajax-modal-vesta here 
+    //because there may be modules with additional edit controls requiring this container
+    //
+    //this is somewhat hacky because we assume at the same time that these modules
+    //have initialized the container properly via hFactsTabGetOutputBeforeTab,
+    //which is strictly not enforced (in particular the mdules aren't aware of the context of the edit control)
     $html = view($this->name() . '::edit/icon-fact-create-shared-place', ['fact' => $fact, 'moduleName' => $this->name()]);
     
     return new GenericViewElement($html, '');
@@ -358,7 +298,7 @@ class SharedPlacesModule extends AbstractModule implements
     
     $html1 = '';
     $html = '';
-    $sharedPlace = $this->match($place);
+    $sharedPlace = $this->plac2sharedPlace($place);
     if ($sharedPlace !== null) {
       //add link
       $html1 .= $this->linkIcon(
@@ -483,28 +423,76 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   ////////////////////////////////////////////////////////////////////////////////
+    
+  //cf Place.php;
+	const GEDCOM_SEPARATOR = ', ';
+    
+  protected function placename2sharedPlaceImpl(string $placeGedcomName, Tree $tree): ?SharedPlace {
+    $locale = I18N::locale();    
+    $searchService = new SearchServiceExt($locale);
+    $sharedPlaces = $searchService->searchSharedPlaces(array($tree), array("1 NAME " . $placeGedcomName));
+    foreach ($sharedPlaces as $sharedPlace) {
+      foreach ($sharedPlace->namesNN() as $name) {
+        if (strtolower($placeGedcomName) === strtolower($name)) {
+          //first match wins, we don't expect multiple _LOC with same name
+          //(for now) TODO resolve via date?
+          return $sharedPlace;
+        }
+      }
+    }
+    return null;
+  }
   
-  public function plac2Loc(PlaceStructure $ps): ?LocReference {
+  protected function placename2sharedPlace(string $placeGedcomName, Tree $tree, int $parentLevels): ?SharedPlace {
+    if ($placeGedcomName === '') {
+      return null;
+    }
+    $match = $this->placename2sharedPlaceImpl($placeGedcomName, $tree);
+    
+    if (($match === null) && ($parentLevels > 0)) {
+      $placeGedcomName = implode(self::GEDCOM_SEPARATOR, array_slice(explode(self::GEDCOM_SEPARATOR, $placeGedcomName), 1));
+      return $this->placename2sharedPlaceImpl($placeGedcomName, $tree, $parentLevels-1);
+    }
+    
+    return $match;
+  }
+  
+  protected function plac2sharedPlace(PlaceStructure $ps): ?SharedPlace {
     $loc = $ps->getLoc();
     if ($loc !== null) {
-      $trace = new Trace('shared place via Shared Places module (gedcom _LOC tag)');
-      return new LocReference($loc, $ps->getTree(), $trace);
+      return GedcomRecordExt::getInstance($loc, $ps->getTree());
     }
     
     $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
     if ($indirect) {
       $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
-      $sharedPlace = $this->matchViaName($ps->getGedcomName(), $ps->getTree(), $parentLevels);
+      return $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree(), $parentLevels);
+    }
+
+    return null;
+  }
+ 
+  public function plac2loc(PlaceStructure $ps): ?LocReference {
+    $loc = $ps->getLoc();
+    if ($loc !== null) {
+      $trace = new Trace('shared place via Shared Places module (gedcom _LOC tag)');
+      return new LocReference($loc, $ps->getTree(), $trace, $ps->getLevel());
+    }
+    
+    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    if ($indirect) {
+      $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
+      $sharedPlace = $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree(), $parentLevels);
       if ($sharedPlace !== null) {
         $trace = new Trace('shared place via Shared Places module (mapping via place name)');
-        return new LocReference($sharedPlace->xref(), $sharedPlace->tree(), $trace);
+        return new LocReference($sharedPlace->xref(), $sharedPlace->tree(), $trace, $ps->getLevel());
       }
     }
 
     return null;
   }
   
-  public function loc2Gov(LocReference $loc): ?GovReference {
+  public function loc2gov(LocReference $loc): ?GovReference {
     $sharedPlace = GedcomRecordExt::getInstance($loc->getXref(), $loc->getTree());
     
     if (($sharedPlace !== null) && ($sharedPlace instanceof SharedPlace)) {
@@ -512,14 +500,28 @@ class SharedPlacesModule extends AbstractModule implements
       if ($gov !== null) {
         $trace = $loc->getTrace();
         $trace->add('GOV-Id via Shared Places module (gedcom _GOV tag)');
-        return new GovReference($gov, $trace);
+        return new GovReference($gov, $trace, $loc->getLevel());
       }
     }
     
     return null;
   }
   
-  public function loc2Map(LocReference $loc): ?MapCoordinates {
+  public function gov2loc(GovReference $gov, Tree $tree): ?LocReference {
+    $locale = I18N::locale();    
+    $searchService = new SearchServiceExt($locale);
+    $sharedPlaces = $searchService->searchSharedPlaces(array($tree), array("1 _GOV " . $gov->getId()));
+    foreach ($sharedPlaces as $sharedPlace) {
+      //first match wins
+      $trace = $gov->getTrace();
+      $trace->add('Location via Shared Places module');
+      return new LocReference($sharedPlace->xref(), $tree, $trace, $gov->getLevel());
+    }
+    
+    return null;
+  }
+  
+  public function loc2map(LocReference $loc): ?MapCoordinates {
     $sharedPlace = GedcomRecordExt::getInstance($loc->getXref(), $loc->getTree());
     
     if ($sharedPlace !== null) {
@@ -536,6 +538,21 @@ class SharedPlacesModule extends AbstractModule implements
     return null;
   }
   
+  public function loc2plac(LocReference $loc): ?PlaceStructure {
+    $sharedPlace = GedcomRecordExt::getInstance($loc->getXref(), $loc->getTree());
+    
+    if ($sharedPlace !== null) {
+      if (!empty($sharedPlace->namesNN())) {
+        $ps = PlaceStructure::fromNameAndLoc($sharedPlace->namesNN()[0], $sharedPlace->xref(), $sharedPlace->tree(), $loc->getLevel());
+        if ($ps !== null) {
+          return $ps;
+        }
+      }  
+    }
+    
+    return null;
+  }
+  
   public function factPlaceAdditions(PlaceStructure $place): ?FactPlaceAdditions {
     //would be cleaner to use plac2loc here - in practice same result
     $htmls = $this->getHtmlForSharedPlaceData($place);
@@ -544,5 +561,121 @@ class SharedPlacesModule extends AbstractModule implements
             GenericViewElement::createEmpty(), 
             GenericViewElement::create($htmls[1]));
   }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  //FunctionsClippingsCartInterface
+    
+  public function getDirectLinkTypes(): Collection {
+    return new Collection(["_LOC"]);
+  }
+  
+  public function getIndirectLinks(GedcomRecord $record): Collection {
+    $ret = new Collection();
+    
+    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    if ($indirect) {
+      $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
 
+      $places = $record->getAllEventPlaces([]);
+      foreach ($places as $place) {
+        $sharedPlace = $this->placename2sharedPlace($place->gedcomName(), $record->tree(), $parentLevels);
+        if ($sharedPlace != null) {
+          $ret->push($sharedPlace->xref());
+        }
+      }
+    }    
+    
+    return $ret;
+  }
+  
+  public function getAddToClippingsCartRoute(Route $route, Tree $tree): ?string {
+    if ($route->name === SharedPlacePage::class) {
+      $xref = $route->attributes['xref'];
+      assert(is_string($xref));
+
+      $add_route = route('module', [
+          'module' => $this->name(),
+          'action' => 'AddToClippingsCart',
+          'xref'   => $xref,
+          'tree'    => $tree->name(),
+      ]);
+
+      return $add_route;
+    }
+    
+    return null;
+  }
+  
+  public function getAddToClippingsCartAction(ServerRequestInterface $request): ResponseInterface
+    {
+        $tree = $request->getAttribute('tree');
+        assert($tree instanceof Tree);
+
+        $xref = $request->getQueryParams()['xref'];
+
+        $sharedPlace = SharedPlace::getInstance($xref, $tree);
+
+        if ($sharedPlace === null) {
+            throw new SharedPlaceNotFoundException();
+        }
+
+        $options = $this->clippingsCartOptions($sharedPlace);
+
+        $title = I18N::translate('Add %s to the clippings cart', $sharedPlace->fullName());
+
+        return $this->viewResponse('modules/clippings/add-options', [
+            'options' => $options,
+            'default' => key($options),
+            'record'  => $sharedPlace,
+            'title'   => $title,
+            'tree'    => $tree,
+        ]);
+    }
+
+    protected function clippingsCartOptions(SharedPlace $sharedPlace): array
+    {
+        $name = strip_tags($sharedPlace->fullName());
+        
+        return [
+            'only'   => strip_tags($sharedPlace->fullName()),
+            'linked' => I18N::translate('%s and the individuals that reference it.', $name),
+        ];
+    }
+
+    public function postAddToClippingsCartAction(ServerRequestInterface $request): ResponseInterface
+    {
+        $tree = $request->getAttribute('tree');
+        assert($tree instanceof Tree);
+
+        $params = (array) $request->getParsedBody();
+
+        $xref   = $params['xref'];
+        $option = $params['option'];
+ 
+        $sharedPlace = SharedPlace::getInstance($xref, $tree);
+
+        if ($sharedPlace === null) {
+            throw new SharedPlaceNotFoundException();
+        }
+
+        $target = app()
+            ->make(ModuleService::class)
+            ->findByComponent(ClippingsCartModule::class, $tree, Auth::user())
+            ->first();
+        
+        if ($target !== null) {
+          $target->addRecordToCart($sharedPlace);
+          
+          if ($option === 'linked') {
+              foreach ($sharedPlace->linkedIndividuals('_LOC') as $individual) {
+                  $target->addRecordToCart($individual);
+              }
+              foreach ($sharedPlace->linkedFamilies('_LOC') as $family) {
+                  $target->addRecordToCart($family);
+              }
+          }
+        }
+
+        return redirect($sharedPlace->url());
+    }
 }

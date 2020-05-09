@@ -20,11 +20,11 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. For its web
 * In combination with the Gov4Webtrees module, this module may also be used to manage GOV ids within GEDCOM data.
 * Shared places may be edited and viewed via an additional entry in the list menu.
 
-![Screenshot](place.png)
+<p align="center"><img src="place.png" alt="Screenshot" align="center" width="67%"></p>
 
 * On the (extended) facts and events tab, shared place data is displayed in addition to regular place data.
 
-![Screenshot](event.png)
+<p align="center"><img src="event.png" alt="Screenshot" align="center" width="67%"></p>
 
 * All shared place data is fully included in the gedcom exported by webtrees (and may also be imported from other sources supporting _LOC records), on the basis of the GEDCOM-L Addendum.
 * Location data is provided to other modules (e.g. for use in maps).
@@ -79,7 +79,7 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.3.9
+* Current version: 2.0.3.10
 * Based on and tested with webtrees 2.0.3. Cannot be used with webtrees 1.x. May not work with earlier 2.x versions!
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
