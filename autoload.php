@@ -12,54 +12,29 @@ $loader->addPsr4('Cissee\\WebtreesExt\\Http\\RequestHandlers\\', __DIR__ . "/pat
 $loader->register();
 
 $classMap = array();
-$extend = !class_exists("Fisharebest\Webtrees\GedcomRecord", false);
-        
-if ($extend) {
-  //explicitly load webtrees replacements so that the original files aren't autoloaded
-  $classMap["Fisharebest\Webtrees\GedcomRecord"] = __DIR__ . '/replacedWebtrees/GedcomRecord.php';
 
-  //no longer required
-  //$extend2 = !class_exists("Fisharebest\Webtrees\Html", false);
-  //if ($extend2) {
-  //  $classMap["Fisharebest\Webtrees\Html"] = __DIR__ . '/replacedWebtrees/Html.php';
-  //}
+//adjustments for MAP
+$extend3 = !class_exists("Fisharebest\Webtrees\Config", false);
+if ($extend3) {
+  $classMap["Fisharebest\Webtrees\Config"] = __DIR__ . '/replacedWebtrees/Config.php';
+}
 
-  //
-  //other adjustments
-  //
-  //adjustments for MAP
-  $extend3 = !class_exists("Fisharebest\Webtrees\Config", false);
-  if ($extend3) {
-    $classMap["Fisharebest\Webtrees\Config"] = __DIR__ . '/replacedWebtrees/Config.php';
-  }
+//label for _GOV
+$extend5 = !class_exists("Fisharebest\Webtrees\GedcomTag", false);
+if ($extend5) {
+  $classMap["Fisharebest\Webtrees\GedcomTag"] = __DIR__ . '/replacedWebtrees/GedcomTag.php';
+}
 
-  //adjustments for MAP, and _LOC.NAME
-  $extend4 = !class_exists("Fisharebest\Webtrees\Functions\FunctionsEdit", false);
-  if ($extend4) {
-    $classMap["Fisharebest\Webtrees\Functions\FunctionsEdit"] = __DIR__ . '/replacedWebtrees/Functions/FunctionsEdit.php';
-  }
-  
-  //label for _GOV
-  $extend5 = !class_exists("Fisharebest\Webtrees\GedcomTag", false);
-  if ($extend5) {
-    $classMap["Fisharebest\Webtrees\GedcomTag"] = __DIR__ . '/replacedWebtrees/GedcomTag.php';
-  }
-  
-  //media links adjustments
-  $extend5 = !class_exists("Fisharebest\Webtrees\Http\Controllers\Admin\MediaController", false);
-  if ($extend5) {
-    $classMap["Fisharebest\Webtrees\Http\Controllers\Admin\MediaController"] = __DIR__ . '/replacedWebtrees/Http/Controllers/Admin/MediaController.php';
-  }
-  
-  //pending changes (required as long as we don't have the factories approach)
-  $extend6 = !class_exists("Fisharebest\Webtrees\Http\RequestHandlers\PendingChanges", false);
-  if ($extend6) {
-    $classMap["Fisharebest\Webtrees\Http\RequestHandlers\PendingChanges"] = __DIR__ . '/replacedWebtrees/Http/RequestHandlers/PendingChanges.php';
-  }
-} else {
-  //must use original files because they are already loaded
-  //(this occurs currently (webtrees 2.0.3))
-  //thus cannot use GedcomRecord::getInstance etc here  
+//media links adjustments
+$extend5 = !class_exists("Fisharebest\Webtrees\Http\Controllers\Admin\MediaController", false);
+if ($extend5) {
+  $classMap["Fisharebest\Webtrees\Http\Controllers\Admin\MediaController"] = __DIR__ . '/replacedWebtrees/Http/Controllers/Admin/MediaController.php';
+}
+
+//pending changes (required as long as we don't have the factories approach)
+$extend6 = !class_exists("Fisharebest\Webtrees\Http\RequestHandlers\PendingChanges", false);
+if ($extend6) {
+  $classMap["Fisharebest\Webtrees\Http\RequestHandlers\PendingChanges"] = __DIR__ . '/replacedWebtrees/Http/RequestHandlers/PendingChanges.php';
 }
 
 $loader->addClassMap($classMap);        

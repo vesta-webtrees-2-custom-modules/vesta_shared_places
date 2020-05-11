@@ -1,5 +1,6 @@
 <?php
 
+use Cissee\WebtreesExt\Functions\FunctionsEditLoc;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Config;
 use Fisharebest\Webtrees\Functions\FunctionsEdit;
@@ -14,7 +15,31 @@ use Ramsey\Uuid\Uuid;
 <form method="post" action="<?= e(route('update-fact', ['tree' => $tree->name(), 'xref' => $record->xref()])) ?>" class="wt-page-content">
     <?= csrf_field() ?>
 
-    <?php FunctionsEdit::createAddFormWithGedcomRecord($record, $tree, $fact) ?>
+    <?php 
+      switch ($record::RECORD_TYPE) {
+        case '_LOC':
+          switch ($fact) {
+            case 'NAME':
+              FunctionsEditLoc::createAddFormLoc($record, $tree, $fact);
+              break;
+            case 'MAP':
+              FunctionsEditLoc::createAddFormLoc($record, $tree, $fact);
+              break;
+            case '_GOV':
+              FunctionsEditLoc::createAddFormLoc($record, $tree, $fact);
+              break;
+            default:
+              //standard add form
+              FunctionsEdit::createAddForm($tree, $fact);
+              break;
+          }
+          break;
+        default:
+          //standard add form
+          FunctionsEdit::createAddForm($tree, $fact);
+          break;
+      }
+    ?>
 
     <?php if ($record::RECORD_TYPE === 'SOUR' && $fact === 'DATA') : ?>
         <?= view('cards/add-note', ['level' => 2, 'tree' => $tree]) ?>

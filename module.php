@@ -23,6 +23,4 @@ foreach (glob(Webtrees::ROOT_DIR . $modulesPath . '*/autoload.php') as $autoload
   require_once $autoloadFile;
 }
 
-$hotfixRequired = !(method_exists('Fisharebest\Webtrees\GedcomRecord', 'replacedClassMarker'));
-
-return new SharedPlacesModule(app(ModuleService::class), $hotfixRequired);
+return new SharedPlacesModule(app(ModuleService::class));

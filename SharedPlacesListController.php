@@ -19,10 +19,12 @@ class SharedPlacesListController extends AbstractBaseController {
 
   protected $module;
   protected $moduleName;
+  protected $sharedPlaceFactory;
 
-  public function __construct($module) {
+  public function __construct($module, $sharedPlaceFactory) {
     $this->module = $module;
     $this->moduleName = $module->name();
+    $this->sharedPlaceFactory = $sharedPlaceFactory;
   }
   
   public function sharedPlacesList(Tree $tree, $showLinkCounts): ResponseInterface {
@@ -58,7 +60,7 @@ class SharedPlacesListController extends AbstractBaseController {
                     ->where('o_file', '=', $tree->id())
                     ->where('o_type', '=', '_LOC')
                     ->get()
-                    ->map(SharedPlace::rowMapper($tree))
+                    ->map($this->sharedPlaceFactory->mapper($tree))
                     ->filter(GedcomRecord::accessFilter());
   }
 

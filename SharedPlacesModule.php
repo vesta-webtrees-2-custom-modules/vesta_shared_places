@@ -8,16 +8,16 @@ use Cissee\Webtrees\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Exceptions\SharedPlaceNotFoundException;
+use Cissee\WebtreesExt\Factories\CustomGedcomRecordFactory;
+use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
 use Cissee\WebtreesExt\FactPlaceAdditions;
-use Cissee\WebtreesExt\GedcomRecordExt;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Module\ClippingsCartModule;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
-use Cissee\WebtreesExt\SharedPlaceFactory;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\FlashMessages;
+use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
 use Fisharebest\Webtrees\GedcomRecord;
@@ -28,7 +28,6 @@ use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
-use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -80,14 +79,11 @@ class SharedPlacesModule extends AbstractModule implements
   use EmptyFunctionsPlace;
 
   protected $module_service;
-  protected $hotfixRequired;
 
   public function __construct(
-          ModuleService $module_service,
-          bool $hotfixRequired) {
+          ModuleService $module_service) {
     
     $this->module_service = $module_service;
-    $this->hotfixRequired = $hotfixRequired;
   }
 
   public function customModuleAuthorName(): string {
@@ -127,6 +123,11 @@ class SharedPlacesModule extends AbstractModule implements
       //webtrees isn't interested in solving this properly, see
       //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
       
+      $cache = app('cache.array');
+      $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+      $sharedPlaceFactory = new SharedPlaceFactory($cache, $useIndirectLinks);
+      Factory::gedcomRecord(new CustomGedcomRecordFactory($cache, $sharedPlaceFactory));
+
       $router_container = app(RouterContainer::class);
       assert($router_container instanceof RouterContainer);
       
@@ -149,37 +150,14 @@ class SharedPlacesModule extends AbstractModule implements
       // Replace an existing view with our own version.
       // (media management via admin)
       View::registerCustomView('::media-page', $this->name() . '::media-page');
-      
+
       // Replace an existing view with our own version.
-      // (add fact with record, so that we can create proper links for new gov ids)
+      // (adjustments for _LOC.NAME, _LOC.MAP, and _LOC._GOV)
       View::registerCustomView('::edit/add-fact', $this->name() . '::edit/add-fact');
+      View::registerCustomView('::edit/edit-fact', $this->name() . '::edit/edit-fact');
       
       // Register a view under the main namespace (referred to from media-page)
       View::registerCustomView('::lists/shared-places-table', $this->name() . '::lists/shared-places-table');
-      
-      if ($this->hotfixRequired) {
-        $messages = Session::get('flash_messages', []);
-        if (empty($messages)) {
-          FlashMessages::addMessage(I18N::translate("Due to ongoing changes in the webtrees core code, the custom module 'Shared Places' is broken currently. You'll either have to disable it temporarily, or patch the webtrees core code by replacing a single file, as described in 'Hotfix.txt' in this module's folder. This will hopefully be fixed in the next webtrees release."), "warning");
-        }              
-      }
-  }
-      
-  //do this onBoot instead?
-  public function setEnabled(bool $enabled): ModuleInterface {
-    parent::setEnabled($enabled);
-
-    if ($enabled) {
-
-      //cannot do the following in __construct: 
-      //name not set yet!
-      //enabled not set yet either!
-      //extend GedcomRecord via GedcomRecordExt
-      $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
-      GedcomRecordExt::addFactory('_LOC', new SharedPlaceFactory($useIndirectLinks)); 
-    }
-
-    return $this;
   }
 
   /**
@@ -197,6 +175,50 @@ class SharedPlacesModule extends AbstractModule implements
   //      'css/webtrees.css' => 'css/webtrees',
   //      'css/minimal.css' => 'css/minimal'];
   //}
+  
+  //TODO: doesn't belong here, but used via FunctionsEdit
+  public function bodyContent(): string {
+    $script = "<script>";
+    $script .= "$(document).ready(function() { ";
+    $script .= "$('select.select2ordered').select2({ ";
+    // Needed for elements that are initially hidden.    
+    $script .= "  width: '100%'";  
+    $script .= "}); ";
+    
+    $script .= "$('select.select2ordered').on('select2:select', function (evt) { ";
+    
+    //preserve insertion order, see https://github.com/select2/select2/issues/3106
+    //unfortunately this also affects dropdown order - ugly!
+    $script .= "  var id = evt.params.data.id; ";
+    $script .= "  var option = $(evt.target).children('[value='+id+']'); ";
+    $script .= "  option.detach(); ";
+    $script .= "  $(evt.target).append(option).change(); ";
+    
+    //update actual value
+    $script .= "  var idRefSelector = '#' + $(evt.target).attr('id') + '_REF'; ";
+    $script .= "  console.log('append: ' + id); ";
+    $script .= "  updated = $(idRefSelector).val().split(',').filter(function(item){return item}); ";
+    $script .= "  updated.push(id); ";
+    $script .= "  $(idRefSelector).val(updated.join()); ";
+    $script .= "}); ";
+    
+    $script .= "$('select.select2ordered').on('select2:unselect', function (evt) { ";
+    $script .= "  var id = evt.params.data.id; ";
+    
+    //we should re-order back to original position here (in dropdown)!
+    
+    //update actual value
+    $script .= "  var idRefSelector = '#' + $(evt.target).attr('id') + '_REF'; ";
+    $script .= "  console.log('remove: ' + id); ";
+    $script .= "  updated = $(idRefSelector).val().split(','); ";
+    $script .= "  updated = updated.filter(function(item){return item !== id}); ";
+    $script .= "  $(idRefSelector).val(updated.join()); ";
+    $script .= "}); ";
+    
+    $script .= "}); ";
+    $script .= "</script>";
+    return $script;
+  }  
   
   //css for icons/shared-place
   public function headContent(): string {
@@ -397,7 +419,11 @@ class SharedPlacesModule extends AbstractModule implements
     $tree = $request->getAttribute('tree');
     assert($tree instanceof Tree);
     
-    $controller = new SharedPlacesListController($this);
+    $cache = app('cache.array');
+    $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    $sharedPlaceFactory = new SharedPlaceFactory($cache, $useIndirectLinks);
+      
+    $controller = new SharedPlacesListController($this, $sharedPlaceFactory);
 
     $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
 
@@ -460,7 +486,7 @@ class SharedPlacesModule extends AbstractModule implements
   protected function plac2sharedPlace(PlaceStructure $ps): ?SharedPlace {
     $loc = $ps->getLoc();
     if ($loc !== null) {
-      return GedcomRecordExt::getInstance($loc, $ps->getTree());
+      return Factory::gedcomRecord()->make($loc, $ps->getTree());
     }
     
     $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
@@ -493,7 +519,7 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   public function loc2gov(LocReference $loc): ?GovReference {
-    $sharedPlace = GedcomRecordExt::getInstance($loc->getXref(), $loc->getTree());
+    $sharedPlace = Factory::gedcomRecord()->make($loc->getXref(), $loc->getTree());
     
     if (($sharedPlace !== null) && ($sharedPlace instanceof SharedPlace)) {
       $gov = $sharedPlace->getGov();
@@ -522,7 +548,7 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   public function loc2map(LocReference $loc): ?MapCoordinates {
-    $sharedPlace = GedcomRecordExt::getInstance($loc->getXref(), $loc->getTree());
+    $sharedPlace = Factory::gedcomRecord()->make($loc->getXref(), $loc->getTree());
     
     if ($sharedPlace !== null) {
       $lati = $sharedPlace->getLati();
@@ -539,7 +565,7 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   public function loc2plac(LocReference $loc): ?PlaceStructure {
-    $sharedPlace = GedcomRecordExt::getInstance($loc->getXref(), $loc->getTree());
+    $sharedPlace = Factory::gedcomRecord()->make($loc->getXref(), $loc->getTree());
     
     if ($sharedPlace !== null) {
       if (!empty($sharedPlace->namesNN())) {

@@ -112,7 +112,7 @@ class SearchServiceExt {
     }
 
     foreach ($search_terms as $search_term) {
-      $query->whereContains($field, $search_term);
+      $query->where(new Expression($field), 'LIKE', '%' . addcslashes($search_term, '\\%_') . '%');
     }
   }
 

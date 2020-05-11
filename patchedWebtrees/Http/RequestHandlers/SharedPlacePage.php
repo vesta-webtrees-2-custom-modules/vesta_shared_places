@@ -97,7 +97,7 @@ class SharedPlacePage implements RequestHandlerInterface {
           $summaryGve = FunctionsPlaceUtils::plac2html($this->module, $ps);
 
           //if ($summaryHtml !== '') {
-            $summaryHtml = '<tr class=""><th scope="row">' . I18n::translate('Summary') . '</th><td class="">' . $summaryGve->getMain() . '</td></tr>';
+            $summaryHtml = '<tr class=""><th scope="row">' . I18N::translate('Summary') . '</th><td class="">' . $summaryGve->getMain() . '</td></tr>';
             //TODO: handle getScript()!
           //}          
         }

@@ -2,9 +2,8 @@
 
 namespace Cissee\WebtreesExt;
 
-use Closure;
-use Exception;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
+use Exception;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Individual;
@@ -12,7 +11,6 @@ use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Collection;
-use stdClass;
 
 /**
  * A GEDCOM level 0 shared place aka location (_LOC) object (complete structure)
@@ -34,17 +32,6 @@ class SharedPlace extends GedcomRecord {
 
     parent::__construct($xref, $gedcom, $pending, $tree);
     $this->useIndirectLinks = $useIndirectLinks;
-  }
-
-  /**
-   * A closure which will create a record from a database row.
-   *
-   * @return Closure
-   */
-  public static function rowMapper(Tree $tree): Closure {
-    return function (stdClass $row) use ($tree): SharedPlace {
-      return GedcomRecordExt::getInstance($row->o_id, $tree, $row->o_gedcom);
-    };
   }
 
   /**

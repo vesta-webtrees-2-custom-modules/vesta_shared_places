@@ -317,12 +317,12 @@ class FunctionsEdit
             'SOUR' => '',
             'PLAC' => '',
         ];
-
+        
         $parts = explode(' ', $tag, 3);
         $level = $parts[0] ?? '';
         $fact  = $parts[1] ?? '';
         $value = $parts[2] ?? '';
-
+        
         if ($level === '0') {
             // Adding a new fact.
             if ($upperlevel) {
@@ -399,7 +399,7 @@ class FunctionsEdit
                 $html .= view('help/link', ['topic' => $fact]);
                 break;
         }
-
+        
         // tag level
         if ($level !== '0') {
             $html .= '<input type="hidden" name="glevels[]" value="' . $level . '">';
@@ -577,7 +577,7 @@ class FunctionsEdit
         } elseif ($fact === '_PRIM') {
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => ['' => '', 'Y' => I18N::translate('always'), 'N' => I18N::translate('never')]]);
             $html .= '<p class="small text-muted">' . I18N::translate('Use this image for charts and on the individual’s page.') . '</p>';
-        //[RC] adjusted
+        //[RC] adjusted [--ok--]
         } elseif ($fact === '_GOV') {
             $html .= self::htmlForGov($record, $tree, $id, $name, $value);
         } elseif ($fact === 'TYPE' && $level === '0') {
@@ -598,15 +598,34 @@ class FunctionsEdit
                 $html .= '>' . $typeValue . '</option>';
             }
             $html .= '</select>';
-        
+            
+        //[RC] extended for SOUR.DATA.EVEN ($upperlevel is SOUR when editing the DATA fact, and DATA when creating a DATA fact - seems weird)
+        //we need the upperlevel to distinguish from individual custom events (same tag name unfortunately)
+        } elseif (($fact === 'EVEN') && (($upperlevel == 'DATA') || ($upperlevel == 'SOUR'))) {
+            $sour_data_even = FunctionsEdit::getPicklistSourDataEven();
+            $selected = explode(',', $value);
+
+            //preserve order
+            foreach ($selected as $s) {
+              if (array_key_exists($s, $sour_data_even)) {
+                $val = $sour_data_even[$s];
+                unset($sour_data_even[$s]);
+                $sour_data_even[$s] = $val;
+              }
+            }
+            
+            //adjust name when creating?
+            $html .= view('components/select', ['name' => $id . '[]', 'id' => $id, 'selected' => $selected, 'options' => $sour_data_even, 'class' => 'select2ordered']);
+            $html .= '<input id= ' . $id . '_REF type="hidden" name="text[]" value="' . $value . '">';
+            
         //[RC] extended
-        //cannot use ($upperlevel === '_LOC'), $upperlevel not set when adding new facts (would only work for editing)
+        //cannot use ($upperlevel === '_LOC'), $upperlevel not set when adding new level 0 facts (would only work for editing)
         //$record ... is for add-name            
         } elseif (($fact !== 'NAME' || $upperlevel === 'REPO' || $upperlevel === 'SUBM' || ($record instanceof SharedPlace) || $upperlevel === 'UNKNOWN') && $fact !== '_MARNM') {
             if ($fact === 'TEXT' || $fact === 'ADDR' || ($fact === 'NOTE' && !$islink)) {
                 $html .= '<div class="input-group">';
                 $html .= '<textarea class="form-control" id="' . $id . '" name="' . $name . '" rows="5" dir="auto">' . e($value) . '</textarea>';
-                $html .= '</div>';
+                $html .= '</div>';                     
             } else {
                 // If using GEDFact-assistant window
                 $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '">';
@@ -642,6 +661,34 @@ class FunctionsEdit
         $html .= '</div></div>';
 
         return $html;
+    }
+    
+    //cf GedcomTag::getPicklistFacts, contents are restricted to subset 
+    //(facts that are expected to actually appear in sources most often, could be extended or made configurable)
+    public static function getPicklistSourDataEven(): array {
+        $tags = [
+            // Facts, attributes for individuals and families
+            'BIRT',
+            'CHR',
+            'DEAT',
+            'BURI',
+            'BAPM',
+            'CONF',
+            'NATU',
+            'EMIG',
+            'IMMI',
+            'CENS',
+            'DIV',
+            'MARR',
+        ];
+
+        $facts = [];
+        foreach ($tags as $tag) {
+            $facts[$tag] = GedcomTag::getLabel($tag, null);
+        }
+        uasort($facts, '\Fisharebest\Webtrees\I18N::strcasecmp');
+
+        return $facts;
     }
     
     //[RC] added
@@ -734,7 +781,7 @@ class FunctionsEdit
     public static function createAddFormWithGedcomRecord(?GedcomRecord $record, Tree $tree, $fact): void
     {
         self::$tags = [];
-
+        
         // handle  MARRiage TYPE
         if (substr($fact, 0, 5) === 'MARR_') {
             self::$tags[0] = 'MARR';
@@ -767,7 +814,7 @@ class FunctionsEdit
                 }
             }
             
-            //[RC][added]
+            //[RC][added][--ok--]
             //-- handle the special MAP case for level 1 maps (under _LOC)
             if ($fact === 'MAP') {
                 //initialize with N0/E0 to prevent collapse (hacky)
@@ -1001,7 +1048,7 @@ class FunctionsEdit
             }
         }
         // Do something (anything!) with unrecognized custom tags
-        //[RC] excluding _GOV
+        //[RC] excluding _GOV (intended for _LOC._GOV)[--noneed--]
         if (substr($level1tag, 0, 1) === '_' && $level1tag !== '_UID' && $level1tag !== '_PRIM' && $level1tag !== '_TODO' && $level1tag !== '_GOV') {
             foreach (['DATE', 'PLAC', 'ADDR', 'AGNC', 'TYPE', 'AGE'] as $tag) {
                 if (!in_array($tag, self::$tags, true)) {
