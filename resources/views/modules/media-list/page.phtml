@@ -168,7 +168,7 @@ use Fisharebest\Webtrees\I18N;
                                 
                             <?php 
                             //[RC] extended
-                            foreach ($media_object->linkedSharedPlaces('OBJE') as $record) : ?>
+                            foreach ($media_object->linkedLocations('OBJE') as $record) : ?>
                                 <?= view('icons/shared-place') ?>
                                 <a href="<?= e($record->url()) ?>"><?= $record->fullName() ?></a>
                                 <br>

@@ -2,19 +2,20 @@
 
 namespace Cissee\WebtreesExt\Factories;
 
-use Cissee\WebtreesExt\Contracts\SharedPlaceFactoryInterface;
 use Cissee\WebtreesExt\SharedPlace;
 use Closure;
 use Fisharebest\Webtrees\Cache;
+use Fisharebest\Webtrees\Contracts\LocationFactoryInterface;
 use Fisharebest\Webtrees\Factories\AbstractGedcomRecordFactory;
-use Fisharebest\Webtrees\GedcomRecord;
+use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Tree;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Capsule\Manager as DB;
 use stdClass;
 
-class SharedPlaceFactory extends AbstractGedcomRecordFactory implements SharedPlaceFactoryInterface {
+class SharedPlaceFactory extends AbstractGedcomRecordFactory implements LocationFactoryInterface {
 
+  private const TYPE_CHECK_REGEX = '/^0 @[^@]+@ ' . SharedPlace::RECORD_TYPE . '/';
+  
   protected $useIndirectLinks;
 
   public function __construct(Cache $cache, bool $useIndirectLinks) {
@@ -29,15 +30,15 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements SharedPl
    * @param Tree        $tree
    * @param string|null $gedcom
    *
-   * @return SharedPlace|null
+   * @return Location|null
    */
-  public function make(string $xref, Tree $tree, string $gedcom = null): ?SharedPlace
+  public function make(string $xref, Tree $tree, string $gedcom = null): ?Location
   {
       return $this->cache->remember(__CLASS__ . $xref . '@' . $tree->id(), function () use ($xref, $tree, $gedcom) {
           $gedcom  = $gedcom ?? $this->gedcom($xref, $tree);
           $pending = $this->pendingChanges($tree)->get($xref);
 
-          if ($gedcom === null && $pending === null) {
+          if ($gedcom === null && ($pending === null || !preg_match(self::TYPE_CHECK_REGEX, $pending))) {
               return null;
           }
 
@@ -74,7 +75,7 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements SharedPl
    *
    * @return SharedPlace
    */
-  public function new(string $xref, string $gedcom, ?string $pending, Tree $tree): SharedPlace {
+  public function new(string $xref, string $gedcom, ?string $pending, Tree $tree): Location {
     return new SharedPlace($this->useIndirectLinks, $xref, $gedcom, $pending, $tree);
   }
   
@@ -95,22 +96,5 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements SharedPl
               SharedPlace::RECORD_TYPE
           ])
           ->value('o_gedcom');
-  }
-      
-  public function linkedSharedPlaces(GedcomRecord $record, string $link): Collection {      
-    return DB::table('other')
-          ->join('link', static function (JoinClause $join): void {
-              $join
-                  ->on('l_file', '=', 'o_file')
-                  ->on('l_from', '=', 'o_id');
-          })
-          ->where('o_file', '=', $record->tree()->id())
-          ->where('o_type', '=', '_LOC')
-          ->where('l_type', '=', $link)
-          ->where('l_to', '=', $record->xref())
-          ->select(['other.*'])
-          ->get()
-          ->map(SharedPlaceFactory::mapper($record->tree()))
-          ->filter(GedcomRecord::accessFilter());
   }
 }

@@ -80,11 +80,13 @@ use Vesta\Model\Trace;
                       //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
                       ob_start();
                       FunctionsPrintFacts::printFact($fact, $sharedPlace);
-                      $replacement = '<a href="http://gov.genealogy.net/item/show/' . $fact->value() . '" target="_blank">' . $fact->value() . '</a>';
+                      //fact is now (2.0.4) handled in webtrees itself, must replace this:
+                      $printed = '<a href="https://gov.genealogy.net/item/show/' . e($fact->value()) . '">' . e($fact->value()) . '</a>';
+                      $replacement = '<a href="http://gov.genealogy.net/item/show/' . e($fact->value()) . '" target="_blank">' . e($fact->value()) . '</a>';
                       $replacement .= FunctionsPlaceUtils::gov2html($module, $tree, new GovReference($fact->value(), new Trace("")))->getMain();
                       //TODO: handle getScript()!
                       $html = ob_get_clean();
-                      echo str_replace($fact->value(), $replacement, $html);
+                      echo str_replace($printed, $replacement, $html);
                       break;
                     case 'MAP':
                       //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.

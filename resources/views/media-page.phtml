@@ -79,7 +79,7 @@ use Illuminate\Support\Collection;
         </li>
         <?php 
           //[RC] added
-          $sharedPlaces = $media->linkedSharedPlaces('OBJE');
+          $sharedPlaces = $media->linkedLocations('OBJE');
         ?>
         <li class="nav-item">
             <a class="nav-link<?= $sharedPlaces->isEmpty() ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#sharedPlaces">

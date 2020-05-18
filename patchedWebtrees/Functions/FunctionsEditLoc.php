@@ -29,10 +29,21 @@ class FunctionsEditLoc {
       //[RC][added]
       //-- handle the special MAP case for level 1 maps (under _LOC)
       if ($fact === 'MAP') {
+          //note: if we'd use standard FunctionsEdit::createAddForm, we'd have to adjust
+          //Config::emptyFacts() and remove MAP there:
+          //
+          //old comment was:
+          //yes, it's empty, but it has a substructure, so it's different from those other empty facts
+          //(adjusted because we don't want to show 'yes' here via FunctionsPrint::formatFactDate, when adding a fact)
+        
           //initialize with N0/E0 to prevent collapse (hacky)
           echo FunctionsEdit::addSimpleTag($tree, '2 LATI N0');
           echo FunctionsEdit::addSimpleTag($tree, '2 LONG E0');
       }
+      
+      //_GOV:
+      //note: if we'd use standard FunctionsEdit::createAddForm, we'd have to adjust
+      //Config::nonDateFacts() and add _GOV there
   }
     
   public static function createEditFormLoc(Fact $fact): void

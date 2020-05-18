@@ -8,7 +8,6 @@ use Cissee\Webtrees\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Exceptions\SharedPlaceNotFoundException;
-use Cissee\WebtreesExt\Factories\CustomGedcomRecordFactory;
 use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
 use Cissee\WebtreesExt\FactPlaceAdditions;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
@@ -126,7 +125,7 @@ class SharedPlacesModule extends AbstractModule implements
       $cache = app('cache.array');
       $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
       $sharedPlaceFactory = new SharedPlaceFactory($cache, $useIndirectLinks);
-      Factory::gedcomRecord(new CustomGedcomRecordFactory($cache, $sharedPlaceFactory));
+      Factory::location($sharedPlaceFactory);
 
       $router_container = app(RouterContainer::class);
       assert($router_container instanceof RouterContainer);
@@ -175,50 +174,6 @@ class SharedPlacesModule extends AbstractModule implements
   //      'css/webtrees.css' => 'css/webtrees',
   //      'css/minimal.css' => 'css/minimal'];
   //}
-  
-  //TODO: doesn't belong here, but used via FunctionsEdit
-  public function bodyContent(): string {
-    $script = "<script>";
-    $script .= "$(document).ready(function() { ";
-    $script .= "$('select.select2ordered').select2({ ";
-    // Needed for elements that are initially hidden.    
-    $script .= "  width: '100%'";  
-    $script .= "}); ";
-    
-    $script .= "$('select.select2ordered').on('select2:select', function (evt) { ";
-    
-    //preserve insertion order, see https://github.com/select2/select2/issues/3106
-    //unfortunately this also affects dropdown order - ugly!
-    $script .= "  var id = evt.params.data.id; ";
-    $script .= "  var option = $(evt.target).children('[value='+id+']'); ";
-    $script .= "  option.detach(); ";
-    $script .= "  $(evt.target).append(option).change(); ";
-    
-    //update actual value
-    $script .= "  var idRefSelector = '#' + $(evt.target).attr('id') + '_REF'; ";
-    $script .= "  console.log('append: ' + id); ";
-    $script .= "  updated = $(idRefSelector).val().split(',').filter(function(item){return item}); ";
-    $script .= "  updated.push(id); ";
-    $script .= "  $(idRefSelector).val(updated.join()); ";
-    $script .= "}); ";
-    
-    $script .= "$('select.select2ordered').on('select2:unselect', function (evt) { ";
-    $script .= "  var id = evt.params.data.id; ";
-    
-    //we should re-order back to original position here (in dropdown)!
-    
-    //update actual value
-    $script .= "  var idRefSelector = '#' + $(evt.target).attr('id') + '_REF'; ";
-    $script .= "  console.log('remove: ' + id); ";
-    $script .= "  updated = $(idRefSelector).val().split(','); ";
-    $script .= "  updated = updated.filter(function(item){return item !== id}); ";
-    $script .= "  $(idRefSelector).val(updated.join()); ";
-    $script .= "}); ";
-    
-    $script .= "}); ";
-    $script .= "</script>";
-    return $script;
-  }  
   
   //css for icons/shared-place
   public function headContent(): string {
@@ -639,7 +594,7 @@ class SharedPlacesModule extends AbstractModule implements
 
         $xref = $request->getQueryParams()['xref'];
 
-        $sharedPlace = SharedPlace::getInstance($xref, $tree);
+        $sharedPlace = Factory::location()->make($xref, $tree);
 
         if ($sharedPlace === null) {
             throw new SharedPlaceNotFoundException();
@@ -678,7 +633,7 @@ class SharedPlacesModule extends AbstractModule implements
         $xref   = $params['xref'];
         $option = $params['option'];
  
-        $sharedPlace = SharedPlace::getInstance($xref, $tree);
+        $sharedPlace = Factory::location()->make($xref, $tree);
 
         if ($sharedPlace === null) {
             throw new SharedPlaceNotFoundException();

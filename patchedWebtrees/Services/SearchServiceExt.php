@@ -15,7 +15,9 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Collection;
+use Fisharebest\Webtrees\Factory;
 use stdClass;
+use function app;
 
 /**
  * Search trees for genealogy records.
@@ -58,7 +60,7 @@ class SearchServiceExt {
     {
         return function (stdClass $row): SharedPlace {
             $tree = app(TreeService::class)->find((int) $row->o_file);
-            return SharedPlace::getInstance($row->o_id, $tree, $row->o_gedcom);
+            return Factory::location()->mapper($tree)($row);
         };
     }
 

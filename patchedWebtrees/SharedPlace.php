@@ -4,9 +4,10 @@ namespace Cissee\WebtreesExt;
 
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Exception;
+use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Family;
-use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -14,8 +15,9 @@ use Illuminate\Support\Collection;
 
 /**
  * A GEDCOM level 0 shared place aka location (_LOC) object (complete structure)
+ * note: webtrees now (2.0.4) has basic support for _LOC via Location.php
  */
-class SharedPlace extends GedcomRecord {
+class SharedPlace extends Location {
 
   public const RECORD_TYPE = '_LOC';
 
@@ -140,7 +142,7 @@ class SharedPlace extends GedcomRecord {
               ->get();
 
       foreach ($positions as $position) {
-        $record = GedcomRecord::getInstance($position->id, $this->tree);
+        $record = Factory::gedcomRecord()->make($position->id, $this->tree);
         if ($record && $record->canShow()) {
           if ($record instanceof Individual) {
             $list[] = $record;
@@ -176,7 +178,7 @@ class SharedPlace extends GedcomRecord {
               ->get();
 
       foreach ($positions as $position) {
-        $record = GedcomRecord::getInstance($position->id, $this->tree);
+        $record = Factory::gedcomRecord()->make($position->id, $this->tree);
         if ($record && $record->canShow()) {
           if ($record instanceof Family) {
             $list[] = $record;
