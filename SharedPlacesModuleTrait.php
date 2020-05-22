@@ -3,14 +3,14 @@
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
 use Fisharebest\Webtrees\I18N;
-use Vesta\ControlPanel\Model\ControlPanelCheckbox;
-use Vesta\ControlPanel\Model\ControlPanelFactRestriction;
-use Vesta\ControlPanel\Model\ControlPanelPreferences;
-use Vesta\ControlPanel\Model\ControlPanelRadioButton;
-use Vesta\ControlPanel\Model\ControlPanelRadioButtons;
-use Vesta\ControlPanel\Model\ControlPanelRange;
-use Vesta\ControlPanel\Model\ControlPanelSection;
-use Vesta\ControlPanel\Model\ControlPanelSubsection;
+use Vesta\ControlPanelUtils\Model\ControlPanelCheckbox;
+use Vesta\ControlPanelUtils\Model\ControlPanelFactRestriction;
+use Vesta\ControlPanelUtils\Model\ControlPanelPreferences;
+use Vesta\ControlPanelUtils\Model\ControlPanelRadioButton;
+use Vesta\ControlPanelUtils\Model\ControlPanelRadioButtons;
+use Vesta\ControlPanelUtils\Model\ControlPanelRange;
+use Vesta\ControlPanelUtils\Model\ControlPanelSection;
+use Vesta\ControlPanelUtils\Model\ControlPanelSubsection;
 
 trait SharedPlacesModuleTrait {
 
@@ -35,11 +35,12 @@ trait SharedPlacesModuleTrait {
     $generalSub = array();
     $generalSub[] = new ControlPanelSubsection(
             /* I18N: Module Configuration */I18N::translate('Displayed title'),
-            array(new ControlPanelCheckbox(
-                /* I18N: Module Configuration */I18N::translate('Include the %1$s symbol in the module title', $this->getVestaSymbol()),
+            array(
+                /*new ControlPanelCheckbox(
+                I18N::translate('Include the %1$s symbol in the module title', $this->getVestaSymbol()),
                 null,
                 'VESTA',
-                '1'),
+                '1'),*/
         new ControlPanelCheckbox(
                 /* I18N: Module Configuration */I18N::translate('Include the %1$s symbol in the list title', $this->getVestaSymbol()),
                 null,
@@ -73,13 +74,11 @@ trait SharedPlacesModuleTrait {
                 /* I18N: Module Configuration */I18N::translate('In particular if both lists are empty, no additional facts and events of this kind will be shown.'),
                 'RESTRICTED',
                 '0'),
-        new ControlPanelFactRestriction(
-                false,
+        ControlPanelFactRestriction::createWithIndividualFacts(
                 /* I18N: Module Configuration */I18N::translate('Restrict to this list of GEDCOM individual facts and events. You can modify this list by removing or adding fact and event names, even custom ones, as necessary.'),
                 'RESTRICTED_INDI',
                 'BIRT,OCCU,RESI,DEAT'),
-        new ControlPanelFactRestriction(
-                true,
+        ControlPanelFactRestriction::createWithFamilyFacts(
                 /* I18N: Module Configuration */I18N::translate('Restrict to this list of GEDCOM family facts and events. You can modify this list by removing or adding fact and event names, even custom ones, as necessary.'),
                 'RESTRICTED_FAM',
                 'MARR')));
