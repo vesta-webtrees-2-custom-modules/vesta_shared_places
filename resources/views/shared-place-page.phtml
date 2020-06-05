@@ -75,7 +75,7 @@ use Vesta\Model\Trace;
                 <?php 
                 echo $summaryHtml;
                 foreach ($facts->toArray() as $fact) {
-                  switch ($fact->getTag()) {
+                  switch ($fact->tag()) {
                     case '_GOV':
                       //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
                       ob_start();

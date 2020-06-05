@@ -125,8 +125,8 @@ class SharedPlacePage implements RequestHandlerInterface {
       
       $facts = $record->facts()
               ->sort(function (Fact $x, Fact $y) use ($factsArray): int {
-        $sort_x = array_search($x->getTag(), self::FACT_ORDER) ?: PHP_INT_MAX;
-        $sort_y = array_search($y->getTag(), self::FACT_ORDER) ?: PHP_INT_MAX;
+        $sort_x = array_search($x->tag(), self::FACT_ORDER) ?: PHP_INT_MAX;
+        $sort_y = array_search($y->tag(), self::FACT_ORDER) ?: PHP_INT_MAX;
 
         $cmp = $sort_x <=> $sort_y;
         if ($cmp !== 0) {

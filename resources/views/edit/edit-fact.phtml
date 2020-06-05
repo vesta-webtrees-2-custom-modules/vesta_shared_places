@@ -18,7 +18,7 @@ use Ramsey\Uuid\Uuid;
     <input type="hidden" name="fact_id" value="<?= e($edit_fact->id()) ?>">
 
     <?php 
-      $level1type = $edit_fact->getTag();
+      $level1type = $edit_fact->tag();
       switch ($record::RECORD_TYPE) {
         case '_LOC':
           switch ($level1type) {
@@ -45,7 +45,7 @@ use Ramsey\Uuid\Uuid;
     ?>
 
     <?php
-    $level1type = $edit_fact->getTag();
+    $level1type = $edit_fact->tag();
     switch ($record::RECORD_TYPE) {
         case 'SOUR':
             if ($level1type === 'DATA') {
