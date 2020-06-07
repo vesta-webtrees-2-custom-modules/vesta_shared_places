@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-01-03 11:46+0100\n"
-"PO-Revision-Date: 2020-06-04 19:36+0200\n"
+"PO-Revision-Date: 2020-06-07 19:37+0200\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,7 +55,7 @@ msgstr "Een module die gedeelde plaatsen ondersteunt als niveau 0 GEDCOM-objecte
 #: SharedPlacesModuleTrait.php:29
 #, php-format
 msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
-msgstr "Vereist de '%1$s Vesta Common' module, en de '%1$s Vesta Feiten en gebeurtenissen' module."
+msgstr "Vereist de modules '%1$s Vesta Algemeen' en '%1$s Vesta Feiten en gebeurtenissen'."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:30
@@ -71,13 +71,13 @@ msgstr "Weergegeven titel"
 #: SharedPlacesModuleTrait.php:39
 #, php-format
 msgid "Include the %1$s symbol in the module title"
-msgstr "Het symbool %1$s opnemen in de moduletitel"
+msgstr "Het %1$s-symbool opnemen in de moduletitel"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:44
 #, php-format
 msgid "Include the %1$s symbol in the list title"
-msgstr "Het symbool %1$s opnemen in de lijsttitel"
+msgstr "Het %1$s-symbool opnemen in de lijsttitel"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:50
@@ -132,7 +132,7 @@ msgstr "Als beide lijsten leeg zijn, zullen geen aanvullende feiten en gebeurten
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:78
 msgid "Restrict to this list of GEDCOM individual facts and events. You can modify this list by removing or adding fact and event names, even custom ones, as necessary."
-msgstr "Beperken tot deze lijst van GEDCOM individuele feiten en gebeurtenissen. Indien nodig kunt u deze lijst wijzigen door namen van feiten en gebeurtenissen, zelfs aangepaste namen, te verwijderen of toe te voegen."
+msgstr "Beperken tot deze lijst van GEDCOM persoonsfeiten en -gebeurtenissen. Indien nodig kunt u deze lijst wijzigen door namen van feiten en gebeurtenissen, zelfs aangepaste namen, te verwijderen of toe te voegen."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:83
@@ -172,7 +172,7 @@ msgstr "Koppelingstellingen weergeven voor de lijst met gedeelde plaatsen"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:113
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via xref."
-msgstr "Het bepalen van het aantal koppelingen (gekoppelde individuen/gezinnen) is duur bij het toewijzen van gedeelde plaatsen via naam, en veroorzaakt daarom vertragingen wanneer de lijst met gedeelde plaatsen wordt weergegeven. Het wordt aanbevolen om deze optie alleen te selecteren als plaatsen via xref worden toegewezen."
+msgstr "Het bepalen van het aantal koppelingen (gekoppelde personen/gezinnen) bij het toewijzen van gedeelde plaatsen via naam kost veel rekenwerk, en veroorzaakt daarom vertragingen wanneer de lijst met gedeelde plaatsen wordt weergegeven. Het wordt aanbevolen om deze optie alleen te selecteren als plaatsen via XREF worden toegewezen."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:119

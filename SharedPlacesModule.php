@@ -92,10 +92,6 @@ class SharedPlacesModule extends AbstractModule implements
   public function customModuleSupportUrl(): string {
     return 'https://cissee.de';
   }
-
-  public function description(): string {
-    return $this->getShortDescription();
-  }
   
   public function customModuleVersion(): string {
     return file_get_contents(__DIR__ . '/latest-version.txt');
@@ -105,6 +101,10 @@ class SharedPlacesModule extends AbstractModule implements
     return 'https://raw.githubusercontent.com/vesta-webtrees-2-custom-modules/vesta_shared_places/master/latest-version.txt';
   }
 
+  public function resourcesFolder(): string {
+    return __DIR__ . '/resources/';
+  }  
+  
   public function listTitle(): string {
     return $this->getListTitle(I18N::translate("Shared places"));
   }
@@ -158,15 +158,6 @@ class SharedPlacesModule extends AbstractModule implements
       // Register a view under the main namespace (referred to from media-page)
       View::registerCustomView('::lists/shared-places-table', $this->name() . '::lists/shared-places-table');
   }
-
-  /**
-   * Where does this module store its resources
-   *
-   * @return string
-   */
-  public function resourcesFolder(): string {
-    return __DIR__ . '/resources/';
-  }
   
   //no longer required - css is static now
   //public function assetsViaViews(): array {
@@ -180,11 +171,14 @@ class SharedPlacesModule extends AbstractModule implements
     //easier to serve this globally, even if not strictly required on each page
     //(we need the css in modified webtrees views, e.g. for media management)
     
-    //align with current theme (supporting - for now - the default webtrees themes)
+    //align with current theme (supporting the default webtrees themes, and specific custom themes)
     $themeName = Session::get('theme');
     if ('minimal' !== $themeName) {
       if ('fab' === $themeName) {
         //fab also uses font awesome icons
+        $themeName = 'minimal';
+      } else if ('_myartjaub_ruraltheme_' === $themeName) {
+        //and the custom 'rural' theme
         $themeName = 'minimal';
       } else {
         //default
@@ -241,8 +235,6 @@ class SharedPlacesModule extends AbstractModule implements
       return new GenericViewElement('', '');
     }
     
-    //HERE - the gve needs a special select2 gaaaaa
-    
     //we're using ajax-modal-vesta here 
     //because there may be modules with additional edit controls requiring this container
     //
@@ -256,7 +248,21 @@ class SharedPlacesModule extends AbstractModule implements
   
   protected static $seenSharedPlaces = [];
 
+  protected function getLinkForSharedPlace(SharedPlace $sharedPlace): string {
+    return $this->linkIcon(
+            $this->name() . '::icons/shared-place', 
+            I18N::translate('Shared place'), 
+            $sharedPlace->url());
+  }
+  
   protected function getHtmlForSharedPlaceData(PlaceStructure $place) {
+    $html1 = '';
+    $html = '';
+    $sharedPlace = $this->plac2sharedPlace($place);
+    if ($sharedPlace === null) {
+      return array($html1, $html);
+    }
+    
     //restrict to specific events?
     $restricted = $this->getPreference('RESTRICTED', '0');
 
@@ -268,58 +274,53 @@ class SharedPlacesModule extends AbstractModule implements
         $restricted_fam = $this->getPreference('RESTRICTED_FAM', 'MARR');
         $restrictedTo = preg_split("/[, ;:]+/", $restricted_fam, -1, PREG_SPLIT_NO_EMPTY);
         if (!in_array($place->getEventType(), $restrictedTo, true)) {
-          return array('', '');
+          return array($this->getLinkForSharedPlace($sharedPlace), '');
         }
       }
     }
     
-    $html1 = '';
-    $html = '';
-    $sharedPlace = $this->plac2sharedPlace($place);
-    if ($sharedPlace !== null) {
-      //add link
-      $html1 .= $this->linkIcon(
-              $this->name() . '::icons/shared-place', 
-              I18N::translate('Shared place'), 
-              $sharedPlace->url());
-      
-      //add all (level 1) notes
-      if (preg_match('/1 NOTE (.*)/', $sharedPlace->gedcom(), $match)) {
-        //note may be restricted - in which case, do not add wrapper
-        //(and ultimately perhaps do not add entire 'shared place data', in case there is nothing else to display)
-        $note = FunctionsPrint::printFactNotes($place->getTree(), $sharedPlace->gedcom(), 1);
-        if ($note !== '') {
-          $html .= '<div class="indent">';
-          $html .= $note;
-          //$html .= '<br>';
-          $html .= '</div>';
-        }
+    //add link
+    $html1 .= $this->linkIcon(
+            $this->name() . '::icons/shared-place', 
+            I18N::translate('Shared place'), 
+            $sharedPlace->url());
+
+    //add all (level 1) notes
+    if (preg_match('/1 NOTE (.*)/', $sharedPlace->gedcom(), $match)) {
+      //note may be restricted - in which case, do not add wrapper
+      //(and ultimately perhaps do not add entire 'shared place data', in case there is nothing else to display)
+      $note = FunctionsPrint::printFactNotes($place->getTree(), $sharedPlace->gedcom(), 1);
+      if ($note !== '') {
+        $html .= '<div class="indent">';
+        $html .= $note;
+        //$html .= '<br>';
+        $html .= '</div>';
       }
-      //add all (level 1) media
-      if (preg_match_all("/1 OBJE @(.*)@/", $sharedPlace->gedcom(), $match)) {
-        ob_start();
-        FunctionsPrintFacts::printMediaLinks($place->getTree(), $sharedPlace->gedcom(), 1);
-        $media = ob_get_clean();
-        if ($media !== '') {
-          $html .= '<div class="indent">';
-          $html .= $media;
-          $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
-          $html .= '</div>';
-        }
-      }
-      
-      //add all (level 1) sources
-      if (preg_match_all("/1 SOUR @(.*)@/", $sharedPlace->gedcom(), $match)) {
-        $sources = FunctionsPrintFacts::printFactSources($place->getTree(), $sharedPlace->gedcom(), 1);
-        if ($sources !== '') {
-          $html .= '<div class="indent">';
-          $html .= $sources;
-          $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
-          $html .= '</div>';
-        }
-      }
-      
     }
+    //add all (level 1) media
+    if (preg_match_all("/1 OBJE @(.*)@/", $sharedPlace->gedcom(), $match)) {
+      ob_start();
+      FunctionsPrintFacts::printMediaLinks($place->getTree(), $sharedPlace->gedcom(), 1);
+      $media = ob_get_clean();
+      if ($media !== '') {
+        $html .= '<div class="indent">';
+        $html .= $media;
+        $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
+        $html .= '</div>';
+      }
+    }
+
+    //add all (level 1) sources
+    if (preg_match_all("/1 SOUR @(.*)@/", $sharedPlace->gedcom(), $match)) {
+      $sources = FunctionsPrintFacts::printFactSources($place->getTree(), $sharedPlace->gedcom(), 1);
+      if ($sources !== '') {
+        $html .= '<div class="indent">';
+        $html .= $sources;
+        $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
+        $html .= '</div>';
+      }
+    }
+      
     if ($html !== '') {
       //wrap in order to make expandable/collapsible
       $data = '<br/>';
@@ -524,11 +525,21 @@ class SharedPlacesModule extends AbstractModule implements
     
     if ($sharedPlace !== null) {
       if (!empty($sharedPlace->namesNN())) {
-        $ps = PlaceStructure::fromNameAndLoc($sharedPlace->namesNN()[0], $sharedPlace->xref(), $sharedPlace->tree(), $loc->getLevel());
+        $ps = PlaceStructure::fromNameAndLoc($sharedPlace->namesNN()[0], $sharedPlace->xref(), $sharedPlace->tree(), $loc->getLevel(), $sharedPlace);
         if ($ps !== null) {
           return $ps;
         }
       }  
+    }
+    
+    return null;
+  }
+  
+  public function loc2linkIcon(LocReference $loc): ?string {
+    $sharedPlace = Factory::gedcomRecord()->make($loc->getXref(), $loc->getTree());
+    
+    if ($sharedPlace !== null) {
+      return $this->getLinkForSharedPlace($sharedPlace);
     }
     
     return null;
