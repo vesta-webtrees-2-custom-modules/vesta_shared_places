@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-01-03 11:46+0100\n"
-"PO-Revision-Date: 2020-06-07 19:37+0200\n"
+"PO-Revision-Date: 2020-06-07 21:33+0200\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -167,7 +167,7 @@ msgstr "ja"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:112
 msgid "Show link counts for shared places list"
-msgstr "Koppelingstellingen weergeven voor de lijst met gedeelde plaatsen"
+msgstr "Toon aantal koppelingen voor de lijst met gedeelde plaatsen"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:113
