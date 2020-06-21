@@ -34,8 +34,9 @@ class SharedPlacePage implements RequestHandlerInterface {
     // Show the shared place's facts in this order:
     private const FACT_ORDER = [
         1 => 'NAME',
-        2 => 'MAP',
-        3 => '_GOV',
+        2 => '_LOC',
+        3 => 'MAP',
+        4 => '_GOV',
         'ABBR',
         'AUTH',
         'DATA',

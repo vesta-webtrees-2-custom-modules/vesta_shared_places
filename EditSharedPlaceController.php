@@ -7,7 +7,7 @@ namespace Cissee\Webtrees\Module\SharedPlaces;
 use Cissee\WebtreesExt\Requests;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\FlashMessages;
-use Fisharebest\Webtrees\Http\Controllers\AbstractEditController;
+use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
 use Psr\Http\Message\ResponseInterface;
@@ -18,10 +18,12 @@ use function response;
 use function view;
 
 
-//note: for most edit actions, we simply use EditGedcomRecordController!
-//cf EditRepositoryController
-class EditSharedPlaceController extends AbstractEditController {
+//cf EditMediaController
+//TODO refactor to RequestHandlers
+class EditSharedPlaceController {
 
+  use ViewResponseTrait;
+  
   protected $module;
   protected $moduleName;
 
@@ -33,7 +35,7 @@ class EditSharedPlaceController extends AbstractEditController {
   /**
    * Show a form to create a new shared place object.
    *
-   * @return Response
+   * @return ResponseInterface
    */
   public function createSharedPlace(ServerRequestInterface $request, Tree $tree): ResponseInterface {
     $sharedPlaceName = Requests::getString($request, 'shared-place-name');
@@ -58,8 +60,8 @@ class EditSharedPlaceController extends AbstractEditController {
   /**
    * Process a form to create a new shared place object.
    *
-   * @param Request $request
-   * @param Tree    $tree
+   * @param ServerRequestInterface $request
+   * @param Tree $tree
    *
    * @return JsonResponse
    */
