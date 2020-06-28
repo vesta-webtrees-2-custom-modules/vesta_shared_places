@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Cissee\WebtreesExt\Services;
 
-use Cissee\WebtreesExt\SharedPlace;
 use Closure;
-use Fisharebest\Localization\Locale\LocaleInterface;
+use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\GedcomRecord;
-use Fisharebest\Webtrees\Note;
+use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Collection;
-use Fisharebest\Webtrees\Factory;
 use stdClass;
 use function app;
 
@@ -24,16 +22,16 @@ use function app;
  */
 class SearchServiceExt {
 
-  /** @var LocaleInterface */
-  private $locale;
+  /** @var TreeService */
+  private $tree_service;
 
   /**
    * SearchService constructor.
    *
-   * @param LocaleInterface $locale
+   * @param TreeService $tree_service
    */
-  public function __construct(LocaleInterface $locale) {
-    $this->locale = $locale;
+  public function __construct(TreeService $tree_service) {
+    $this->tree_service = $tree_service;
   }
 
   /**
@@ -44,22 +42,22 @@ class SearchServiceExt {
    * @param int      $offset
    * @param int      $limit
    *
-   * @return Collection|Note[]
+   * @return Collection|Location[]
    */
-  public function searchSharedPlaces(array $trees, array $search, int $offset = 0, int $limit = PHP_INT_MAX): Collection {
+  public function searchLocations(array $trees, array $search, int $offset = 0, int $limit = PHP_INT_MAX): Collection {
     $query = DB::table('other')
             ->where('o_type', '=', '_LOC');
 
     $this->whereTrees($query, 'o_file', $trees);
     $this->whereSearch($query, 'o_gedcom', $search);
     
-    return $this->paginateQuery($query, $this->sharedPlaceRowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
+    return $this->paginateQuery($query, $this->locationRowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
   }
   
-  private function sharedPlaceRowMapper(): Closure
+  private function locationRowMapper(): Closure
     {
-        return function (stdClass $row): SharedPlace {
-            $tree = app(TreeService::class)->find((int) $row->o_file);
+        return function (stdClass $row): Location {
+            $tree = $this->tree_service->find((int) $row->o_file);
             return Factory::location()->mapper($tree)($row);
         };
     }

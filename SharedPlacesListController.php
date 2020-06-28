@@ -31,8 +31,8 @@ class SharedPlacesListController extends AbstractBaseController {
     //TODO: filter places we can't show here, not in view?
     $sharedPlaces = SharedPlacesListController::allSharedPlaces($tree);
 
-    //select2 initializers for modal placeholder ajax-modal-vesta.phtml used via EditSharedPlaceController.createSharedPlace(), urgh
-    $select2Initializers = GovIdEditControlsUtils::accessibleModules($this->module, $tree, Auth::user())
+    //select2 initializers for modal placeholder ajax-modal-vesta.phtml used via CreateSharedPlaceModal, urgh
+    $select2Initializers = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
             ->map(function (GovIdEditControlsInterface $module) {
               return $module->govIdEditControlSelect2ScriptSnippet();
             })

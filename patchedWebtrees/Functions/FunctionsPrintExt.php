@@ -17,6 +17,8 @@ class FunctionsPrintExt {
     //$uniquefacts = preg_split("/[, ;:]+/", $tree->getPreference('_LOC_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
     //$quickfacts  = preg_split("/[, ;:]+/", $tree->getPreference('_LOC_FACTS_QUICK'), -1, PREG_SPLIT_NO_EMPTY);
     //addfacts = non-unique only! 
+    
+    //TODO add after next webtrees release (otherwise confusion with MAP): "_LOC" => "_LOC", 
     $addfacts = array("NAME" => "NAME", "NOTE" => "NOTE", "SHARED_NOTE" => "SHARED_NOTE", "SOUR" => "SOUR");
     $uniquefacts = array("MAP" => "MAP", "_GOV" => "_GOV");
     $quickfacts = array("MAP" => "MAP", "NOTE" => "NOTE", "SHARED_NOTE" => "SHARED_NOTE", "_GOV" => "_GOV");

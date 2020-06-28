@@ -8,44 +8,44 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-01-03 11:46+0100\n"
-"PO-Revision-Date: 2020-06-24 10:14+0200\n"
+"PO-Revision-Date: 2020-06-23 17:52+0200\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3.1\n"
-"Last-Translator: Ladislav Rosival <lacoros@gmail.com>\n"
+"Last-Translator: Josef Prause <josef.prause@gmail.com>\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
-"Language: sk_SK\n"
+"Language: cs\n"
 
 #: EditSharedPlaceController.php:93
 #, php-format
 msgid "The shared place %s has been created."
-msgstr "Zdieľané miesto %s bolo vytvorené."
+msgstr "Toto sdílené místo %s je vytvořené."
 
 #: SharedPlacesListController.php:31 SharedPlacesModule.php:60
 #: resources/views/lists/shared-places-table.phtml:15
 #: resources/views/shared-places-list-page.phtml:66
 msgid "Shared places"
-msgstr "Zdieľané miesta"
+msgstr "Sdílená místa"
 
 #: SharedPlacesModule.php:326
 #: resources/views/lists/shared-places-table.phtml:20
 #: resources/views/shared-places-list-page.phtml:71
 msgid "Shared place"
-msgstr "Zdieľané miesto"
+msgstr "Sdílené místo"
 
 #: SharedPlacesModule.php:378
 msgid "Shared place data"
-msgstr "Údaje zdieľaného miesta"
+msgstr "Údaje sdíleného místa"
 
 #: SharedPlacesModuleTrait.php:18
 msgid "Vesta Shared Places"
-msgstr "Vesta zdieľané miesta"
+msgstr "Vesta Shared Places"
 
 #: SharedPlacesModuleTrait.php:23
 msgid "A module providing support for shared places."
-msgstr "Modul poskytujúci podporu pre zdieľané miesta."
+msgstr "Modul poskytující podporu pro sdílená místa."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:28
@@ -56,11 +56,6 @@ msgid ""
 "matching places via the extended 'Facts and events' tab. May also be used to "
 "manage GOV ids, in combination with the Gov4Webtrees module."
 msgstr ""
-"Modul podporujúci zdieľané miesta ako GEDCOM objekty úrovne 0, na základe "
-"dodatku GEDCOM-L ku špecifikácii GEDCOM 5.5.1. Zdieľané miesta môžu "
-"obsahovať koordináty, poznámky a objekty médií. Údaje sa zobrazujú pre "
-"všetky zodpovedajúce miesta cez rozšírenú záložku \"Fakty a udalosti\". V "
-"kombinácii s modulom Gov4Webtrees môže byť použitý aj na správu GOV-id."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:29
@@ -68,39 +63,40 @@ msgstr ""
 msgid ""
 "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and "
 "events' module."
-msgstr "Vyžaduje moduly '%1$s Vesta Common' a '%1$s Vesta Facts and events'."
+msgstr ""
+"Vyžaduje modul '%1$s Vesta Common' a modul '%1$s Vesta Facts and events'."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:30
 msgid "Provides location data to other custom modules."
-msgstr "Poskytuje údaje o polohe iným užívateľským modulom."
+msgstr "Poskytuje údaje o poloze jiným modulům."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:37
 msgid "Displayed title"
-msgstr "Zobrazený názov"
+msgstr "Zobrazený název"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:39
 #, php-format
 msgid "Include the %1$s symbol in the module title"
-msgstr "Vloží symbol %1$s do názvu modulu"
+msgstr "Přidat symbol %1$s k názvu modulu"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:44
 #, php-format
 msgid "Include the %1$s symbol in the list title"
-msgstr "Vloží symbol %1$s do názvu schémy"
+msgstr "Přidat symbol %1$s k názvu seznamu"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:50
 msgid "Linking of shared places to places"
-msgstr "Prepojenie zdieľaných miest ku miestam"
+msgstr "Propojení sdílených míst s místy"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:53
 msgid "Additionally link shared places via name"
-msgstr "Doplnkovo prepojiť zdieľané miesta cez názov"
+msgstr "Doplňkově propojit sdílená místa skrze název"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:54
@@ -110,10 +106,10 @@ msgid ""
 "have to add a level 3 _LOC @L123@ (with the proper shared place xref) under "
 "level 2 PLAC in the raw GEDCOM of a fact or event. "
 msgstr ""
-"Podľa dodatku GEDCOM-L, zdieľané miesta sa odkazujú pomocou XREF, tak ako "
-"zdieľané poznámky a pod. Zatiaľ nie je podpora pri editovaní, takže musíte "
-"priadť tag 3 _LOC @X123@ (so správnym xref zdieľaného miesta) pod tag 2 PLAC "
-"priamo editovaním GEDCOM-u faktu alebo udalosti. "
+"Podle dodatku GEDCOM-L se sdílená místa odkazují pomocí XREF, stejně jako "
+"sdílené poznámky atd. Pro editaci zatím není podpora, takže pod úroveň 2 "
+"PLAC v záznamu GEDCOM fakta nebo události musíte přidat na úrovni 3 tag _LOC "
+"@L123@ (s příslušným xref sdíleného místa). "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:55
@@ -123,15 +119,15 @@ msgid ""
 "are established internally by searching for a shared place with any name "
 "matching case-insensitively."
 msgstr ""
-"Toto je dosť nepohodlné, a miesta majú tak či tak názvy, takže môžete zvoliť "
-"túto voľbu a prepojiť zdieľané miesta cez názov miesta. Prepojenia sa "
-"vytvárajú interne vyhľadávaním zdieľaných miest pomocou názvov miest (bez "
-"ohľadu na veľké/malé písmená)."
+"To není moc pohodlné a všechna místa mají tak či onak názvy, takže můžete "
+"zaškrtnout tuto možnost a propojovat sdílená místa skrze název místa "
+"samotného. Propojení se vytvářejí interně vyhledáváním sdíleného místa  s "
+"jakýmkoliv názvem odpovídajícím  bez ohledu na velikost písmen."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:59
 msgid "... and fall back to n parent levels"
-msgstr "... \"fal back\" k n vyšším úrovniam"
+msgstr "... a propadnout zpět na n nadřazených úrovní"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:60
@@ -140,19 +136,19 @@ msgid ""
 "fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would "
 "also match the shared places \"B, C\" and \"C\")"
 msgstr ""
-"Keď je zvolené predchádzajúca voľba a nenájde sa zodpovedajúce zdieľané "
-"miesto, pouzžije sa n vyšších úrovní (takže napr. pre n=2 miesto \"A, B, C\" "
-"zodpovedá aj zdieľanému miestu \"B, C\" a \"C\")"
+"Je-li zvolena předchozí možnost a není nalezeno žádné odpovídající sdílené "
+"místo, propadnout zpět na n nadřazených míst (takže např. pro n=2 a místo "
+"\"A, B, C\" by se také shodlo se sdílenými místy \"B, C\" a \"C\")."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:68 SharedPlacesModuleTrait.php:110
 msgid "Displayed data"
-msgstr "Zobrazované údaje"
+msgstr "Zobrazené údaje"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:71
 msgid "Restrict to specific facts and events"
-msgstr "Obmedziť na špecifické fakty a udalosti"
+msgstr "Omezit na určitá fakta a události"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:72
@@ -160,8 +156,8 @@ msgid ""
 "If this option is checked, shared place data is only displayed for the "
 "following facts and events. "
 msgstr ""
-"Keď je zvolená táto možnosť, zdieľané miesta sa budú zobrazovať len pri "
-"nasledujúcich faktoch a udalostiach. "
+"Je-li zvolena tato možnost, pak sdílená místa se zobrazí jen pro následující "
+"fakta a události. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:73
@@ -169,8 +165,8 @@ msgid ""
 "In particular if both lists are empty, no additional facts and events of "
 "this kind will be shown."
 msgstr ""
-"Ak sú oba zoznamy prázdne, nebudú zobrazené žiadne takéto dodatočné fakty a "
-"údaje."
+"Zejména když jsou oba seznamy prázdné, žádná dodatečná fakta ani události "
+"tohoto druhu se nezobrazí."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:78
@@ -179,9 +175,8 @@ msgid ""
 "this list by removing or adding fact and event names, even custom ones, as "
 "necessary."
 msgstr ""
-"Obmedziť na tento zoznam osobných GEDCOM faktov a udalostí. Tento zoznam "
-"môžete upraviť odstránením, alebo pridaním potrebných faktov a udalostí, "
-"pričom môžete použiť aj užívateľské fakty a udalosti."
+"Omezit na tento seznam osobních faktů a událostí. Tento seznam je podle "
+"potřeby možno modifikovat odebráním nebo přidáním názvů faktů a událostí."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:83
@@ -190,24 +185,23 @@ msgid ""
 "list by removing or adding fact and event names, even custom ones, as "
 "necessary."
 msgstr ""
-"Obmedziť na tento zoznam rodinných GEDCOM faktov a udalostí. Tento zoznam "
-"môžete upraviť odstránením, alebo pridaním potrebných faktov a udalostí, "
-"pričom môžete použiť aj užívateľské fakty a udalosti."
+"Omezit na tento seznam rodinných faktů a událostí. Tento seznam je podle "
+"potřeby možno modifikovat odebráním nebo přidáním názvů faktů a událostí."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:88
 msgid "Automatically expand shared place data"
-msgstr "Automaticky rozbaliť údaje zdieľaných miest"
+msgstr "Automaticky rozbalit údaje sdíleného místa"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:93
 msgid "no"
-msgstr "nie"
+msgstr "ne"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:97
 msgid "yes, but only the first occurrence of the shared place"
-msgstr "áno, ale len prvý výskyt zdieľaného miesta"
+msgstr "ano, ale jen první výskyt sdíleného místa"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:98
@@ -216,19 +210,19 @@ msgid ""
 "fact or event (such as an event of a close relative). This will probably be "
 "improved in future versions of the module."
 msgstr ""
-"Je potrebné si uvedomiť, že prvý výskyt môže byť na aktuálne schovanom "
-"fakte, alebo udalosti (ako napr. udalosť blízkeho príbuzného). Toto bude "
-"pravdepodobne v jednej z budúcich verzií modulu vylepšené."
+"Poznamenejme, že ten první výskyt může patřit k přepínatelnému, současně "
+"skrytému faktu nebo události (jako třeba událost blízkého příbuzného). Toto "
+"bude pravděpodobně v budoucích versích modulu vylepšeno."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:101
 msgid "yes"
-msgstr "áno"
+msgstr "ano"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:112
 msgid "Show link counts for shared places list"
-msgstr "Zobraziť počet odkazov pre zoznam zdieľaných miest"
+msgstr "Zobrazit počty propojení v seznamu sdílených míst"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:113
@@ -238,10 +232,10 @@ msgid ""
 "shared places list is displayed. It's recommended to only select this option "
 "if places are assigned via xref."
 msgstr ""
-"Ak sú prepojené zdieľané miesta cez názov, tak je zisťovanie počtu odkazov "
-"(počet pripojených osôb/rodín) náročné, a môže spôsobiť prerušovanie počas "
-"zobrazovania zoznamu. Táto voľba sa odporúča, len ak je zvolená voľba "
-"prepojenia cez XREF."
+"Zjištění počtu propojení (propojené osoby/rodiny) je náročné, když se "
+"přiřazují sdílená místa skrze název, proto při zobrazování sdílených míst "
+"působí zpoždění. Volit tuto možnost se doporučuje jen pokud se místa "
+"přiřazují skrze xref."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:119
@@ -251,23 +245,23 @@ msgstr "Všeobecné"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:123
 msgid "Facts and Events Tab Settings"
-msgstr "Nastavenie záložky Fakty a udalosti"
+msgstr "Nastavení záložky Fakta a události"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:127
 msgid "Shared places list"
-msgstr "Zoznam zdieľaných miest"
+msgstr "Seznam sdílených míst"
 
 #: resources/views/edit/icon-fact-create-shared-place.phtml:25
 #: resources/views/edit/icon-fact-create-shared-place.phtml:27
 #: resources/views/modals/create-shared-place.phtml:16
 #: resources/views/shared-places-list-page.phtml:48
 msgid "Create a shared place"
-msgstr "Vytvoriť zdieľané miesto"
+msgstr "Vytvořit sdílené místo"
 
 #: resources/views/modals/shared-place-fields.phtml:7
 msgid "Shared place name"
-msgstr "Názov zdieľaného miesta"
+msgstr "Název sdíleného místa"
 
 #. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
 #: resources/views/shared-place-page.phtml:22
@@ -276,15 +270,14 @@ msgid ""
 "This shared place has been deleted. You should review the deletion and then "
 "%1$s or %2$s it."
 msgstr ""
-"Toto zdieľané miesto bolo zmazané. Mali by ste skontrolovať jeho zmazanie a "
-"následne ho %1$s alebo %2$s."
+"Toto sdílené místo je smazané. Doporučuje se výmaz revidovat a pak jej %1$s "
+"nebo %2$s."
 
 #: resources/views/shared-place-page.phtml:25
 msgid ""
 "This shared place has been deleted. The deletion will need to be reviewed by "
 "a moderator."
-msgstr ""
-"Toto zdieľané miesto bolo zmazané. Jeho zmazanie musí potvrdiť moderátor."
+msgstr "Toto sdílené místo je smazané. Výmaz musí revidovat moderátor."
 
 #. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
 #: resources/views/shared-place-page.phtml:31
@@ -293,11 +286,11 @@ msgid ""
 "This shared place has been edited. You should review the changes and then "
 "%1$s or %2$s them."
 msgstr ""
-"Toto zdieľané miesto bolo zmenené. Mali by ste skontrolovať zmeny a následne "
-"ich %1$s alebo %2$s."
+"Toto sdílené místo je změněné. Doporučuje se změnu revidovat a pak jej %1$s "
+"nebo %2$s."
 
 #: resources/views/shared-place-page.phtml:34
 msgid ""
 "This shared place has been edited. The changes need to be reviewed by a "
 "moderator."
-msgstr "Toto zdieľané miesto bolo zmenené. Zmenu musí potvrdiť moderátor."
+msgstr "Toto sdílené místo je změněné. Změnu musí revidovat moderátor."

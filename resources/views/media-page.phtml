@@ -131,7 +131,7 @@ use Illuminate\Support\Collection;
                                 <?php endif ?>
 
                                 <?= GedcomTag::getLabelValue('TITL', e($media_file->title())) ?>
-                                <?= GedcomTag::getLabelValue('TYPE', e($media_file->type())) ?>
+                                <?= GedcomTag::getLabelValue('TYPE', GedcomTag::getFileFormTypeValue(e($media_file->type()))) ?>
                                 <?= GedcomTag::getLabelValue('FORM', e($media_file->format())) ?>
                             </div>
 
@@ -218,7 +218,7 @@ use Illuminate\Support\Collection;
             <?= view('lists/notes-table', ['notes' => $notes, 'tree' => $tree]) ?>
         </div>
         
-          <?php 
+        <?php 
           //[RC] added
         ?>
         <div class="tab-pane fade" role="tabpanel" id="sharedPlaces">

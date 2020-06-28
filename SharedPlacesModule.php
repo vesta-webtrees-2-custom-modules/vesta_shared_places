@@ -10,6 +10,9 @@ use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Exceptions\SharedPlaceNotFoundException;
 use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
 use Cissee\WebtreesExt\FactPlaceAdditions;
+use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
+use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
+use Cissee\WebtreesExt\Http\RequestHandlers\Select2Location;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Module\ClippingsCartModule;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
@@ -20,6 +23,7 @@ use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
 use Fisharebest\Webtrees\GedcomRecord;
+use Fisharebest\Webtrees\Http\Middleware\AuthEditor;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
@@ -129,11 +133,11 @@ class SharedPlacesModule extends AbstractModule implements
 
       $router_container = app(RouterContainer::class);
       assert($router_container instanceof RouterContainer);
+      $router = $router_container->getMap();
       
       //(cf WebRoutes.php "Visitor routes with a tree")
       //note: this has the side effect of handling pricacy properly (Issue #9)
-      $router_container->getMap()
-        ->get(SharedPlacePage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
+      $router->get(SharedPlacePage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
     
       // Replace an existing view with our own version.
       // (media management via list module)
@@ -157,6 +161,28 @@ class SharedPlacesModule extends AbstractModule implements
       
       // Register a view under the main namespace (referred to from media-page)
       View::registerCustomView('::lists/shared-places-table', $this->name() . '::lists/shared-places-table');
+      
+      $createSharedPlaceModal = new CreateSharedPlaceModal($this);
+      
+      $router->get(CreateSharedPlaceModal::class, '/tree/{tree}/create-location', $createSharedPlaceModal)
+              ->extras(['middleware' => [AuthEditor::class]]);
+      
+      $router->post(CreateSharedPlaceAction::class, '/tree/{tree}/create-location', CreateSharedPlaceAction::class)
+              ->extras(['middleware' => [AuthEditor::class]]);
+      
+      ////////////////////////////////////////////////////////////////////////////
+      // Location support, some of this could be in webtrees itself
+      
+      View::registerCustomView('::components/select-location', $this->name() . '::components/select-location');
+      View::registerCustomView('::selects/location', $this->name() . '::selects/location');
+      
+      $router->post(Select2Location::class, '/tree/{tree}/select2-location', Select2Location::class);
+      
+      ////////////////////////////////////////////////////////////////////////////
+      /* I18N: translate just like 'Shared Place' for consistency */I18N::translate('Location');
+      
+      //added via GedcomTag.php
+      I18N::translate('Parent Shared Place');
   }
   
   //no longer required - css is static now
@@ -191,8 +217,8 @@ class SharedPlacesModule extends AbstractModule implements
   } 
   
   public function hFactsTabRequiresModalVesta(Tree $tree): ?string {
-    //required via createSharedPlaceAction
-    $additionalControls = GovIdEditControlsUtils::accessibleModules($this, $tree, Auth::user())
+    //required via CreateSharedPlaceAction
+    $additionalControls = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
             ->map(function (GovIdEditControlsInterface $module) {
               return $module->govIdEditControlSelect2ScriptSnippet();
             })
@@ -385,24 +411,6 @@ class SharedPlacesModule extends AbstractModule implements
 
     return $controller->sharedPlacesList($tree, $showLinkCounts);
   }
-
-  public function getCreateSharedPlaceAction(ServerRequestInterface $request): ResponseInterface {
-    //'tree' is handled specifically in Router.php
-    $tree = $request->getAttribute('tree');
-    assert($tree instanceof Tree);
-    
-    $controller = new EditSharedPlaceController($this);
-    return $controller->createSharedPlace($request, $tree);
-  }
-
-  public function postCreateSharedPlaceAction(ServerRequestInterface $request): ResponseInterface {
-    //'tree' is handled specifically in Router.php
-    $tree = $request->getAttribute('tree');
-    assert($tree instanceof Tree);
-    
-    $controller = new EditSharedPlaceController($this);
-    return $controller->createSharedPlaceAction($request, $tree);
-  }
   
   ////////////////////////////////////////////////////////////////////////////////
     
@@ -410,9 +418,8 @@ class SharedPlacesModule extends AbstractModule implements
 	const GEDCOM_SEPARATOR = ', ';
     
   protected function placename2sharedPlaceImpl(string $placeGedcomName, Tree $tree): ?SharedPlace {
-    $locale = I18N::locale();    
-    $searchService = new SearchServiceExt($locale);
-    $sharedPlaces = $searchService->searchSharedPlaces(array($tree), array("1 NAME " . $placeGedcomName));
+    $searchService = app(SearchServiceExt::class);
+    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $placeGedcomName));
     foreach ($sharedPlaces as $sharedPlace) {
       foreach ($sharedPlace->namesNN() as $name) {
         if (strtolower($placeGedcomName) === strtolower($name)) {
@@ -490,9 +497,8 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   public function gov2loc(GovReference $gov, Tree $tree): ?LocReference {
-    $locale = I18N::locale();    
-    $searchService = new SearchServiceExt($locale);
-    $sharedPlaces = $searchService->searchSharedPlaces(array($tree), array("1 _GOV " . $gov->getId()));
+    $searchService = app(SearchServiceExt::class);
+    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 _GOV " . $gov->getId()));
     foreach ($sharedPlaces as $sharedPlace) {
       //first match wins
       $trace = $gov->getTrace();

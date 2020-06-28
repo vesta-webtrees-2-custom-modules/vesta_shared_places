@@ -2,14 +2,17 @@
 
 namespace Cissee\WebtreesExt\Functions;
 
+use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
 use Cissee\WebtreesExt\SharedPlace;
 use Exception;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Functions\FunctionsEdit;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\Html;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
 use Ramsey\Uuid\Uuid;
@@ -89,7 +92,7 @@ class FunctionsEditLoc {
     $level = $parts[0] ?? '';
     $fact  = $parts[1] ?? '';
     $value = $parts[2] ?? '';
-
+    
     if ($level === '0') {
         // Adding a new fact.
         if ($upperlevel) {
@@ -103,7 +106,11 @@ class FunctionsEditLoc {
     }
 
     $id = $fact . Uuid::uuid4()->toString();
-    $islink = false;
+    // field value
+    $islink = (bool) preg_match('/^@[^#@][^@]*@$/', $value);
+    if ($islink) {
+        $value = trim($value, '@');
+    }
 
     $row_class = 'form-group row';
 
@@ -119,7 +126,11 @@ class FunctionsEditLoc {
     } else {
         $html .= GedcomTag::getLabel($fact);
     }
-
+    
+    if ($fact === '_LOC') {
+      $islink = true;
+    }
+        
     // tag level
     if ($level !== '0') {
         $html .= '<input type="hidden" name="glevels[]" value="' . $level . '">';
@@ -159,6 +170,18 @@ class FunctionsEditLoc {
         //special
         $html .= self::htmlForGov($record, $tree, $id, $name, $value);
         break;
+      case '_LOC':
+        //cf SHARED_NOTE, but use special vesta modal!
+        $html .=
+                '<div class="input-group">' .
+                '<div class="input-group-prepend">' .
+                '<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#wt-ajax-modal-vesta" data-href="' . e(route(CreateSharedPlaceModal::class, ['tree' => $tree->name()])) . '" data-select-id="' . $id . '" title="' . I18N::translate('Create a shared place') . '">' .
+                '' . view('icons/add') . '<' .
+                '/button>' .
+                '</div>' .
+                view('components/select-location', ['id' => $id, 'name' => $name, 'location' => Factory::location()->make($value, $tree), 'tree' => $tree]) .
+                '</div>';
+        break;
       case 'LATI':
         //same as original FunctionsEdit
         $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" oninput="valid_lati_long(this, \'N\', \'S\')">';
@@ -194,7 +217,7 @@ class FunctionsEditLoc {
 
     $html = '';
     //hooked?
-    $additionalControls = GovIdEditControlsUtils::accessibleModules(null, $tree, Auth::user())
+    $additionalControls = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
           ->map(function (GovIdEditControlsInterface $module) use ($value, $id, $name, $placeName) {
             return $module->govIdEditControl(($value === '')?null:$value, $id, $name, $placeName, false, false);
           })

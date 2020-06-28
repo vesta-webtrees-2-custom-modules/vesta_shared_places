@@ -46,14 +46,7 @@ class SharedPlace extends Location {
   protected function createPrivateGedcomRecord(int $access_level): string {
     return '0 @' . $this->xref . "@ _LOC\n1 NAME " . MoreI18N::xlate('Private');
   }
-
-  /**
-   * Extract names from the GEDCOM record.
-   */
-  public function extractNames(): void {
-    parent::extractNamesFromFacts(1, 'NAME', $this->facts(['NAME']));
-  }
-
+    
   public function names() {
     $names = array();
     foreach ($this->getAllNames() as $nameStructure) {

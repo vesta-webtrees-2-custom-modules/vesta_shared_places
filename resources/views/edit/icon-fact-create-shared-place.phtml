@@ -1,6 +1,8 @@
-<?php 
-  use Fisharebest\Webtrees\I18N; 
-  use Ramsey\Uuid\Uuid;
+<?php
+
+use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
+use Fisharebest\Webtrees\I18N;
+use Ramsey\Uuid\Uuid;
 ?>
 
 <?php
@@ -13,14 +15,7 @@
     type="button" 
     data-toggle="modal" 
     data-target="#wt-ajax-modal-vesta" 
-    data-href="<?=
-    e(route('module', [
-        'module' => $moduleName,
-        'action' => 'CreateSharedPlace',
-        'shared-place-name' => $fact->place()->gedcomName(),
-        'tree' => $fact->record()->tree()->name()
-    ]));
-    ?>" 
+    data-href="<?= e(route(CreateSharedPlaceAction::class, ['shared-place-name' => $fact->place()->gedcomName(), 'tree' => $fact->record()->tree()->name()])) ?>" 
     data-select-id="<?= $id ?>" 
     title="<?= I18N::translate('Create a shared place'); ?>">
         <?= view($moduleName . '::icons/shared-place') ?>
