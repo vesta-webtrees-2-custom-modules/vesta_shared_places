@@ -21,13 +21,25 @@ use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 use function route;
 use function view;
 
-//simplified from FunctionsEdit for _LOC.NAME, _LOC.MAP, and _LOC._GOV
+//simplified from FunctionsEdit for _LOC.NAME, _LOC.MAP, ,_LOC._GOV, and _LOC._LOC.TYPE
 //FunctionsEdit is too messy, should be refactored! 
 class FunctionsEditLoc {
   
+    /** @var string[] Possible values for the location hierarchical relationship types */
+    private const LOC_TYPE = [
+        'POLI',
+        'RELI',
+        'GEOG',
+        'CULT',
+    ];
+    
   public static function createAddFormLoc(GedcomRecord $record, Tree $tree, $fact): void
   {
-      echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact);
+      if ($fact === '_LOC') {
+        echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact, '_LOC');
+      } else {
+        echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact);
+      }
 
       //[RC][added]
       //-- handle the special MAP case for level 1 maps (under _LOC)
@@ -42,6 +54,8 @@ class FunctionsEditLoc {
           //initialize with N0/E0 to prevent collapse (hacky)
           echo FunctionsEdit::addSimpleTag($tree, '2 LATI N0');
           echo FunctionsEdit::addSimpleTag($tree, '2 LONG E0');
+      } else if ($fact === '_LOC') {
+          echo self::addSimpleTagWithGedcomRecord($record, $tree, '2 TYPE POLI', '_LOC');
       }
       
       //_GOV:
@@ -81,6 +95,10 @@ class FunctionsEditLoc {
 
           $subrecord = $level . ' ' . $type . ' ' . $text;
 
+          //[RC] adjusted, hacky
+          if ($label === '_LOC') {
+            $label = '_LOC:_LOC';
+          }
           echo self::addSimpleTagWithGedcomRecord($record, $tree, $subrecord, $level0type, GedcomTag::getLabel($label, $record));
           $i++;
       }
@@ -190,7 +208,23 @@ class FunctionsEditLoc {
         //same as original FunctionsEdit
         $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" oninput="valid_lati_long(this, \'E\', \'W\')">';
         break;
-
+      //_LOC.TYPE
+      case 'TYPE':
+        //-- Build the selector for the Location 'TYPE' Fact
+        $html .= '<select name="text[]">';
+        $selectedValue = strtoupper($value);
+        if (!array_key_exists($selectedValue, self::getLocationRelationshipTypes())) {
+            $html .= '<option selected value="' . e($value) . '" >' . e($value) . '</option>';
+        }
+        foreach (self::getLocationRelationshipTypes() + [] as $typeName => $typeValue) {
+            $html .= '<option value="' . $typeName . '" ';
+            if ($selectedValue === $typeName) {
+                $html .= 'selected';
+            }
+            $html .= '>' . $typeValue . '</option>';
+        }
+        $html .= '</select>';
+        break;
       default:
         throw new Exception("unexpected tag: " . $fact);
     }
@@ -237,4 +271,48 @@ class FunctionsEditLoc {
 
     return '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '">';
   }
+  
+  /**
+   * A list of all possible values for 0 _LOC/1 _LOC/2 TYPE
+   *
+   * @return string[]
+   */
+  public static function getLocationRelationshipTypes(): array
+  {
+     $values = array_map(static function (string $keyword): string {
+         return self::getLocationRelationshipTypeValue($keyword);
+     }, array_combine(self::LOC_TYPE, self::LOC_TYPE));
+
+     uasort($values, '\Fisharebest\Webtrees\I18N::strcasecmp');
+
+     return $values;
+  }
+
+    /**
+     * Translate the value for 0 _LOC/1 _LOC/2 TYPE
+     *
+     * @param string $type
+     *
+     * @return string
+     */
+    public static function getLocationRelationshipTypeValue(string $type): string
+    {
+        switch ($type) {
+            case 'POLI':
+                /* I18N: Type of hierarchical relationship between locations */
+                return I18N::translate('administrative');
+            case 'RELI':
+                /* I18N: Type of hierarchical relationship between locations */
+                return I18N::translate('religious');
+            case 'GEOG':
+                /* I18N: Type of hierarchical relationship between locations */
+                return I18N::translate('geographical');
+            case 'CULT':
+                /* I18N: Type of hierarchical relationship between locations */
+                return I18N::translate('cultural');
+            default:
+                /* I18N: Type of hierarchical relationship between locations */
+                return I18N::translate('other');
+        }
+    }
 }

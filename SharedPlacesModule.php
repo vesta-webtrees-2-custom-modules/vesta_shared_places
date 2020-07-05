@@ -10,6 +10,7 @@ use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Exceptions\SharedPlaceNotFoundException;
 use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
 use Cissee\WebtreesExt\FactPlaceAdditions;
+use Cissee\WebtreesExt\Http\Controllers\GenericPlaceHierarchyController;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
 use Cissee\WebtreesExt\Http\RequestHandlers\Select2Location;
@@ -22,25 +23,35 @@ use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
+use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Middleware\AuthEditor;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
+use Fisharebest\Webtrees\Module\ModuleDataFixInterface;
+use Fisharebest\Webtrees\Module\ModuleDataFixTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
+use Fisharebest\Webtrees\Services\DataFixService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\User;
 use Fisharebest\Webtrees\View;
+use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
+use stdClass;
+use Throwable;
 use Vesta\Hook\HookInterfaces\EmptyFunctionsPlace;
 use Vesta\Hook\HookInterfaces\FunctionsClippingsCartInterface;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceInterface;
@@ -64,11 +75,12 @@ class SharedPlacesModule extends AbstractModule implements
   ModuleListInterface, 
   ModuleConfigInterface, 
   ModuleGlobalInterface, 
+  ModuleDataFixInterface,
   IndividualFactsTabExtenderInterface, 
   FunctionsPlaceInterface,
   FunctionsClippingsCartInterface {
 
-  use ModuleCustomTrait, ModuleListTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait {
+  use ModuleCustomTrait, ModuleListTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait, ModuleDataFixTrait {
     VestaModuleTrait::customTranslations insteadof ModuleCustomTrait;
     VestaModuleTrait::customModuleLatestVersion insteadof ModuleCustomTrait;
     VestaModuleTrait::getAssetAction insteadof ModuleCustomTrait;
@@ -110,11 +122,52 @@ class SharedPlacesModule extends AbstractModule implements
   }  
   
   public function listTitle(): string {
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    if ($useHierarchy) {
+      return $this->getListTitle(I18N::translate('Shared place hierarchy'));
+    }
+    
+    //old-style list
     return $this->getListTitle(I18N::translate("Shared places"));
   }
 
   public function listMenuClass(): string {
     return 'menu-list-plac';
+  }
+    
+  public function getListAction(ServerRequestInterface $request): ResponseInterface {
+    //'tree' is handled specifically in Router.php
+    $tree = $request->getAttribute('tree');
+    assert($tree instanceof Tree);
+    
+    $user = $request->getAttribute('user');
+    Auth::checkComponentAccess($this, ModuleListInterface::class, $tree, $user);
+    
+    $locationsToFix = $this->locationsToFix($tree, []);
+    $hasLocationsToFix = false;
+    if ($locationsToFix) {
+      $hasLocationsToFix = true;
+    }
+    
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    if ($useHierarchy) {
+      //TODO
+      //$hasLocationsToFix;
+      
+      //$this->listUrl($tree)
+      
+      $searchService = app(SearchServiceExt::class);
+      $controller = new GenericPlaceHierarchyController(
+              new SharedPlaceHierarchyUtils($this, $searchService));
+
+      return $controller->show($request);
+    }
+
+    //old-style list    
+    $controller = new SharedPlacesListController($this, $hasLocationsToFix);
+
+    $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
+    return $controller->sharedPlacesList($tree, $showLinkCounts);
   }
   
   /**
@@ -127,8 +180,9 @@ class SharedPlacesModule extends AbstractModule implements
       //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
       
       $cache = app('cache.array');
+      $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
       $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
-      $sharedPlaceFactory = new SharedPlaceFactory($cache, $useIndirectLinks);
+      $sharedPlaceFactory = new SharedPlaceFactory($cache, $useHierarchy, $useIndirectLinks);
       Factory::location($sharedPlaceFactory);
 
       $router_container = app(RouterContainer::class);
@@ -169,6 +223,10 @@ class SharedPlacesModule extends AbstractModule implements
       
       $router->post(CreateSharedPlaceAction::class, '/tree/{tree}/create-location', CreateSharedPlaceAction::class)
               ->extras(['middleware' => [AuthEditor::class]]);
+      
+      //for SharedPlaceHierarchyController
+      View::registerCustomView('::modules/generic-place-hierarchy-shared-places/page', $this->name() . '::modules/generic-place-hierarchy-shared-places/page');
+      View::registerCustomView('::modules/generic-place-hierarchy-shared-places/sidebar', $this->name() . '::modules/generic-place-hierarchy-shared-places/sidebar');
       
       ////////////////////////////////////////////////////////////////////////////
       // Location support, some of this could be in webtrees itself
@@ -274,7 +332,7 @@ class SharedPlacesModule extends AbstractModule implements
   
   protected static $seenSharedPlaces = [];
 
-  protected function getLinkForSharedPlace(SharedPlace $sharedPlace): string {
+  public function getLinkForSharedPlace(SharedPlace $sharedPlace): string {
     return $this->linkIcon(
             $this->name() . '::icons/shared-place', 
             I18N::translate('Shared place'), 
@@ -396,54 +454,68 @@ class SharedPlacesModule extends AbstractModule implements
             '</a>';
   }
   
-  public function getListAction(ServerRequestInterface $request): ResponseInterface {
-    //'tree' is handled specifically in Router.php
-    $tree = $request->getAttribute('tree');
-    assert($tree instanceof Tree);
-    
-    $cache = app('cache.array');
-    $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
-    $sharedPlaceFactory = new SharedPlaceFactory($cache, $useIndirectLinks);
-      
-    $controller = new SharedPlacesListController($this, $sharedPlaceFactory);
-
-    $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
-
-    return $controller->sharedPlacesList($tree, $showLinkCounts);
-  }
-  
   ////////////////////////////////////////////////////////////////////////////////
+  
+  public function placename2sharedPlaceImpl(
+          string $placeGedcomName, 
+          Tree $tree,
+          bool $useHierarchy): ?SharedPlace {
     
-  //cf Place.php;
-	const GEDCOM_SEPARATOR = ', ';
+    if ($placeGedcomName === '') {
+      return null;
+    }
     
-  protected function placename2sharedPlaceImpl(string $placeGedcomName, Tree $tree): ?SharedPlace {
     $searchService = app(SearchServiceExt::class);
-    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $placeGedcomName));
-    foreach ($sharedPlaces as $sharedPlace) {
-      foreach ($sharedPlace->namesNN() as $name) {
-        if (strtolower($placeGedcomName) === strtolower($name)) {
-          //first match wins, we don't expect multiple _LOC with same name
-          //(for now) TODO resolve via date?
+    
+    if ($useHierarchy) {
+      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
+      $head = reset($parts);
+      $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $head . "\n"));
+      foreach ($sharedPlaces as $sharedPlace) {
+        if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
           return $sharedPlace;
         }
+      }
+      return null;
+    }
+    
+    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $placeGedcomName . "\n"));
+    foreach ($sharedPlaces as $sharedPlace) {
+      if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
+        //first match wins, we don't expect multiple _LOC with same name
+        //(for now) TODO resolve via date?
+        return $sharedPlace;
       }
     }
     return null;
   }
   
-  protected function placename2sharedPlace(string $placeGedcomName, Tree $tree, int $parentLevels): ?SharedPlace {
+  protected function placename2sharedPlace(
+          string $placeGedcomName, 
+          Tree $tree): ?SharedPlace {
+    
     if ($placeGedcomName === '') {
       return null;
     }
-    $match = $this->placename2sharedPlaceImpl($placeGedcomName, $tree);
+    
+    $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
+    return $this->placename2sharedPlacePL($placeGedcomName, $tree, $parentLevels);
+  }
+  
+  protected function placename2sharedPlacePL(
+          string $placeGedcomName, 
+          Tree $tree,
+          int $parentLevels): ?SharedPlace {
+    
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    $match = $this->placename2sharedPlaceImpl($placeGedcomName, $tree, $useHierarchy);
     
     if (($match === null) && ($parentLevels > 0)) {
-      $placeGedcomName = implode(self::GEDCOM_SEPARATOR, array_slice(explode(self::GEDCOM_SEPARATOR, $placeGedcomName), 1));
-      return $this->placename2sharedPlaceImpl($placeGedcomName, $tree, $parentLevels-1);
+      $placeGedcomName = implode(Gedcom::PLACE_SEPARATOR, array_slice(explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName), 1));
+      return $this->placename2sharedPlacePL($placeGedcomName, $tree, $parentLevels-1);
     }
     
-    return $match;
+    return $match;    
   }
   
   protected function plac2sharedPlace(PlaceStructure $ps): ?SharedPlace {
@@ -454,8 +526,7 @@ class SharedPlacesModule extends AbstractModule implements
     
     $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
     if ($indirect) {
-      $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
-      return $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree(), $parentLevels);
+      return $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree());
     }
 
     return null;
@@ -470,8 +541,7 @@ class SharedPlacesModule extends AbstractModule implements
     
     $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
     if ($indirect) {
-      $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
-      $sharedPlace = $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree(), $parentLevels);
+      $sharedPlace = $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree());
       if ($sharedPlace !== null) {
         $trace = new Trace('shared place via Shared Places module (mapping via place name)');
         return new LocReference($sharedPlace->xref(), $sharedPlace->tree(), $trace, $ps->getLevel());
@@ -498,7 +568,7 @@ class SharedPlacesModule extends AbstractModule implements
   
   public function gov2loc(GovReference $gov, Tree $tree): ?LocReference {
     $searchService = app(SearchServiceExt::class);
-    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 _GOV " . $gov->getId()));
+    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 _GOV " . $gov->getId() . "\n"));
     foreach ($sharedPlaces as $sharedPlace) {
       //first match wins
       $trace = $gov->getTrace();
@@ -572,11 +642,9 @@ class SharedPlacesModule extends AbstractModule implements
     
     $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
     if ($indirect) {
-      $parentLevels = intval($this->getPreference('INDIRECT_LINKS_PARENT_LEVELS', 0));
-
       $places = $record->getAllEventPlaces([]);
       foreach ($places as $place) {
-        $sharedPlace = $this->placename2sharedPlace($place->gedcomName(), $record->tree(), $parentLevels);
+        $sharedPlace = $this->placename2sharedPlace($place->gedcomName(), $record->tree());
         if ($sharedPlace != null) {
           $ret->push($sharedPlace->xref());
         }
@@ -676,4 +744,216 @@ class SharedPlacesModule extends AbstractModule implements
 
         return redirect($sharedPlace->url());
     }
+    
+  ////////////////////////////////////////////////////////////////////////////////
+  //data fix
+  //impl follows FixSearchAndReplace for regexing
+    
+  public function fixOptions(Tree $tree): string {
+      
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    
+    //we need immediate accepts in order to avoid potential duplicates when creating new shared places!
+    $autoAcceptEdits = (Auth::user()->getPreference(User::PREF_AUTO_ACCEPT_EDITS) === '1');
+            
+    return view($this->name() . '::data-fix-options', [
+        'useHierarchy' => $useHierarchy,
+        'autoAcceptEdits' => $autoAcceptEdits]);
+  }
+    
+  public function recordsToFix(Tree $tree, array $params): Collection {
+    
+    $locations = $this->locationsToFix($tree, $params);
+    
+    $records = new Collection();
+    
+    if ($locations !== null) {
+        $records = $records->concat($this->mergePendingRecords($locations, $tree, Location::RECORD_TYPE));
+    }
+        
+    return $records
+        ->unique()
+        ->sort(static function (stdClass $x, stdClass $y) {
+            return $x->xref <=> $y->xref;
+        });
+  }
+
+  public function doesRecordNeedUpdate(GedcomRecord $record, array $params): bool {
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    
+    if (!$useHierarchy) {
+      return false;
+    }
+    
+    //we need immediate accepts in order to avoid potential duplicates when creating new shared places!
+    if (Auth::user()->getPreference(User::PREF_AUTO_ACCEPT_EDITS) !== '1') {
+      return false;
+    }
+
+    return preg_match($this->createRegex('1 NAME.*,.*\n'), $record->gedcom()) === 1;
+  }
+
+  public function previewUpdate(GedcomRecord $record, array $params): string {
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    
+    if (!$useHierarchy) {
+      return '';
+    }
+
+    //we need immediate accepts in order to avoid potential duplicates when creating new shared places!
+    if (Auth::user()->getPreference(User::PREF_AUTO_ACCEPT_EDITS) !== '1') {
+      return '';
+    }
+    
+    if (!($record instanceof SharedPlace)) {
+      return '';
+    }
+    
+    $old = $record->gedcom();
+    $new = $this->updateGedcom($record);
+    
+    //parent shared places for all names
+    $creator = app(CreateSharedPlaceAction::class);
+    $newlyCreated = '';
+    foreach ($record->namesNN() as $placeGedcomName) {
+      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
+      $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
+      
+      if ($tail !== '') {
+        //shared place with hierarchical name is also ok here, we assume it will be handled later by data fix
+        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), false);
+        
+        if ($parentRecord != null) {
+          $new .= "\n1 _LOC @" . $parentRecord->xref() . "@";
+          $new .= "\n2 TYPE POLI";
+        } else {
+          
+          $ref = $creator->createIfRequired($tail, '', $record->tree(), true);
+        
+          if ($ref != null) {
+            $new .= "\n1 _LOC @" . $ref->record()->xref() . "@";
+            $new .= "\n2 TYPE POLI";
+          }
+
+          while (($ref !== null) && (!$ref->existed())) {
+            $newlyCreated .= "\n";
+            $newlyCreated .= str_replace("@@", "@" .$ref->record()->xref() . "@", $ref->record()->gedcom());
+            $ref = $ref->parent();
+          }
+        }  
+      }      
+    }
+    $new .= $newlyCreated;
+    
+    $data_fix_service = app(DataFixService::class);
+    return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
+  }
+
+  public function updateRecord(GedcomRecord $record, array $params): void {
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    
+    if (!$useHierarchy) {
+      return;
+    }
+
+    //we need immediate accepts in order to avoid potential duplicates when creating new shared places!
+    if (Auth::user()->getPreference(User::PREF_AUTO_ACCEPT_EDITS) !== '1') {
+      return;
+    }
+    
+    $new = $this->updateGedcom($record);
+    
+    //parent shared places for all names
+    $creator = app(CreateSharedPlaceAction::class);
+    foreach ($record->namesNN() as $placeGedcomName) {
+      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
+      $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
+      
+      if ($tail !== '') {
+        //shared place with hierarchical name is also ok here, we assume it will be handled later by data fix
+        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), false);
+        
+        if ($parentRecord != null) {
+          $new .= "\n1 _LOC @" . $parentRecord->xref() . "@";
+          $new .= "\n2 TYPE POLI";
+        } else {
+          $ref = $creator->createIfRequired($tail, '', $record->tree());
+
+          if ($ref != null) {
+            $new .= "\n1 _LOC @" . $ref->record()->xref() . "@";
+            $new .= "\n2 TYPE POLI";
+          }
+        }  
+      }      
+    }
+    
+    $record->updateRecord($new, false);
+  }
+  
+  /**
+   * XREFs of location records that might need fixing.
+   *
+   * @param Tree                 $tree
+   * @param array<string,string> $params
+   *
+   * @return Collection<string>|null
+   */
+  public function locationsToFix(Tree $tree, array $params): ?Collection {
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    
+    if (!$useHierarchy) {
+      return null;
+    }
+    
+    $query = DB::table('other')
+        ->where('o_file', '=', $tree->id())
+        ->where('o_type', '=', Location::RECORD_TYPE);
+
+    $this->recordQuery($query, 'o_gedcom', '1 NAME.*,.*\n');
+
+    return $query->pluck('o_id');
+  }
+
+  private function recordQuery(Builder $query, string $column, string $search): void
+  {
+
+    // Substituting newlines seems to be necessary on *some* versions
+    //.of MySQL (e.g. 5.7), and harmless on others (e.g. 8.0).
+    $search = strtr($search, ['\n' => "\n"]);
+
+    switch (DB::connection()->getDriverName()) {
+        case 'sqlite':
+        case 'mysql':
+            $query->where($column, 'REGEXP', $search);
+            break;
+
+        case 'pgsql':
+            $query->where($column, '~', $search);
+            break;
+
+        case 'sqlsvr':
+            // Not available
+            break;
+    }
+  }
+  
+  private function createRegex(string $search): string {
+
+    $regex = '/' . addcslashes($search, '/') . '/';
+
+    try {
+        // A valid regex on an empty string returns zero.
+        // An invalid regex on an empty string returns false and throws a warning.
+        preg_match($regex, '');
+    } catch (Throwable $ex) {
+        $regex = self::INVALID_REGEX;
+    }
+
+    return $regex;
+  } 
+  
+  private function updateGedcom(GedcomRecord $record): string {
+    $regex = $this->createRegex('(1 NAME[^,]*),[^\n]*');
+    return preg_replace($regex, '$1$2', $record->gedcom());
+  }
 }

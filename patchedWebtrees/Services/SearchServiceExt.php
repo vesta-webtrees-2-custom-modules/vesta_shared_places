@@ -13,9 +13,9 @@ use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use stdClass;
-use function app;
 
 /**
  * Search trees for genealogy records.
@@ -50,6 +50,22 @@ class SearchServiceExt {
 
     $this->whereTrees($query, 'o_file', $trees);
     $this->whereSearch($query, 'o_gedcom', $search);
+    
+    return $this->paginateQuery($query, $this->locationRowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
+  }
+  
+  public function searchTopLevelLocations(array $trees, int $offset = 0, int $limit = PHP_INT_MAX): Collection {
+    $query = DB::table('other')
+            ->leftJoin('link', static function (JoinClause $join): void {
+                $join
+                    ->on('l_file', '=', 'o_file')                    
+                    ->on('l_from', '=', 'o_id')
+                    ->where('l_type', '=', '_LOC');
+            })
+            ->whereNull('l_from')
+            ->where('o_type', '=', '_LOC');
+
+    $this->whereTrees($query, 'o_file', $trees);
     
     return $this->paginateQuery($query, $this->locationRowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
   }

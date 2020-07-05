@@ -2,12 +2,11 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
-use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Controllers\AbstractBaseController;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Collection;
@@ -19,12 +18,15 @@ class SharedPlacesListController extends AbstractBaseController {
 
   protected $module;
   protected $moduleName;
-  protected $sharedPlaceFactory;
+  protected $hasLocationsToFix;
 
-  public function __construct($module, $sharedPlaceFactory) {
+  public function __construct(
+          $module, 
+          bool $hasLocationsToFix) {
+    
     $this->module = $module;
     $this->moduleName = $module->name();
-    $this->sharedPlaceFactory = $sharedPlaceFactory;
+    $this->hasLocationsToFix = $hasLocationsToFix;
   }
   
   public function sharedPlacesList(Tree $tree, $showLinkCounts): ResponseInterface {
@@ -37,7 +39,7 @@ class SharedPlacesListController extends AbstractBaseController {
               return $module->govIdEditControlSelect2ScriptSnippet();
             })
             ->toArray();
-    
+        
     return $this->viewResponse($this->moduleName . '::shared-places-list-page', [
                 'tree' => $tree,
                 'sharedPlaces' => $sharedPlaces,
@@ -45,6 +47,7 @@ class SharedPlacesListController extends AbstractBaseController {
                 'title' => I18N::translate('Shared places'),
                 'moduleName' => $this->moduleName,
                 'select2Initializers' => $select2Initializers,
+                'hasLocationsToFix' => $this->hasLocationsToFix,
     ]);
   }
 
@@ -53,14 +56,14 @@ class SharedPlacesListController extends AbstractBaseController {
    *
    * @param Tree $tree
    *
-   * @return Collection|Source[]
+   * @return Collection
    */
   private function allSharedPlaces(Tree $tree): Collection {
     return DB::table('other')
                     ->where('o_file', '=', $tree->id())
                     ->where('o_type', '=', '_LOC')
                     ->get()
-                    ->map($this->sharedPlaceFactory->mapper($tree))
+                    ->map(Factory::location()->mapper($tree))
                     ->filter(GedcomRecord::accessFilter());
   }
 

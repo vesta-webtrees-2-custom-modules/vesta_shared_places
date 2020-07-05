@@ -24,7 +24,8 @@ trait SharedPlacesModuleTrait {
   }
 
   protected function getFullDescription() {
-    $description = array();
+    $description = array();    
+    //TODO add link to https://genealogy.net/GEDCOM/
     $description[] = /* I18N: Module Configuration */I18N::translate('A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain coordinates, notes and media objects. Displays this data for all matching places via the extended \'Facts and events\' tab. May also be used to manage GOV ids, in combination with the Gov4Webtrees module.');
     $description[] = /* I18N: Module Configuration */I18N::translate('Requires the \'%1$s Vesta Common\' module, and the \'%1$s Vesta Facts and events\' module.', $this->getVestaSymbol());
     $description[] = /* I18N: Module Configuration */I18N::translate('Provides location data to other custom modules.');
@@ -48,17 +49,30 @@ trait SharedPlacesModuleTrait {
                 '1')));
     
     $generalSub[] = new ControlPanelSubsection(
+            /* I18N: Module Configuration */I18N::translate('Shared place structure'),
+            array(new ControlPanelCheckbox(
+                /* I18N: Module Configuration */I18N::translate('Use hierarchical shared places'),
+                /* I18N: Module Configuration */I18N::translate('If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to parent shared places, as described in the specification.') . ' ' .
+                /* I18N: Module Configuration */I18N::translate('Note that this also affects the way shared places are created, and the way they are mapped to places.') . ' ' .
+                /* I18N: Module Configuration */I18N::translate('In particular, hierarchical shared places do not have names with comma-separated parent places. There is a data fix available which may be used to convert existing shared places.') . ' ' .
+                /* I18N: Module Configuration */I18N::translate('When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated parent places.') . ' ' .
+                /* I18N: Module Configuration */I18N::translate('It is strongly recommended to switch to hierarchical shared places.'),
+                'USE_HIERARCHY',
+                '1')));
+    
+    $generalSub[] = new ControlPanelSubsection(
             /* I18N: Module Configuration */I18N::translate('Linking of shared places to places'),
             array(
         new ControlPanelCheckbox(
                 /* I18N: Module Configuration */I18N::translate('Additionally link shared places via name'),
-                /* I18N: Module Configuration */I18N::translate('According to the GEDCOM-L Addendum, shared places are referenced via xrefs, just like shared notes etc. There is no edit support for this yet, so you have to add a level 3 _LOC @L123@ (with the proper shared place xref) under level 2 PLAC in the raw GEDCOM of a fact or event. ') .
-                /* I18N: Module Configuration */I18N::translate('This is rather inconvenient, and all places have names anyway, so you can check this option and link shared places via the place name itself. Links are established internally by searching for a shared place with any name matching case-insensitively.'),
+                /* I18N: Module Configuration */I18N::translate('According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. There is no edit support for this yet, so you have to add a level 3 _LOC @L123@ (with the proper shared place xref) under level 2 PLAC in the raw GEDCOM of a fact or event. ') .
+                /* I18N: Module Configuration */I18N::translate('This is rather inconvenient, and all places have names anyway, so you can check this option and link shared places via the place name itself. Links are established internally by searching for a shared place with any name matching case-insensitively.') . ' ' .
+                /* I18N: Module Configuration */I18N::translate('If you are using hierarchical shared places, a place with the name "A, B, C" is mapped to a shared place "A" with a parent shared place that maps to "B, C".'),
                 'INDIRECT_LINKS',
                 '1'),
         new ControlPanelRange(
                 /* I18N: Module Configuration */I18N::translate('... and fall back to n parent levels'),
-                /* I18N: Module Configuration */I18N::translate('When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place "A, B, C" would also match the shared places "B, C" and "C")'),
+                /* I18N: Module Configuration */I18N::translate('When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place "A, B, C" would also match shared places that match "B, C" and "C")'),
                 0,
                 5,
                 'INDIRECT_LINKS_PARENT_LEVELS',

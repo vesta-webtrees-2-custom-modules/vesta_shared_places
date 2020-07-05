@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-06-26 21:08+0200\n"
-"PO-Revision-Date: 2020-06-07 21:33+0200\n"
+"PO-Revision-Date: 2020-06-28 14:56+0200\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -20,12 +20,12 @@ msgstr ""
 #: SharedPlacesModule.php:639
 #, php-format
 msgid "%s and the individuals that reference it."
-msgstr ""
+msgstr "%s en de personen die ernaar verwijzen."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:60
 msgid "... and fall back to n parent levels"
-msgstr "... en terugvallen naar n ouderniveaus"
+msgstr "... en terugvallen naar n bovenliggende niveaus"
 
 #: SharedPlacesModuleTrait.php:23
 msgid "A module providing support for shared places."
@@ -44,7 +44,7 @@ msgstr "Volgens het GEDCOM-L Addendum, worden gedeelde plaatsen via xrefs genoem
 #: SharedPlacesModule.php:622
 #, php-format
 msgid "Add %s to the clippings cart"
-msgstr ""
+msgstr "%s toevoegen aan de stamboomknipsels"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:54
@@ -81,7 +81,7 @@ msgstr "Weergegeven titel"
 
 #: resources/views/edit/edit-fact.phtml:155
 msgid "Edit the raw GEDCOM"
-msgstr ""
+msgstr "Wijzig onbewerkte GEDCOM-record"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:122
@@ -112,12 +112,12 @@ msgstr "Het %1$s-symbool opnemen in de lijsttitel"
 #: resources/views/edit/add-fact.phtml:106
 #: resources/views/edit/edit-fact.phtml:133
 msgid "Keep the existing “last change” information"
-msgstr ""
+msgstr "Behoud de bestaande “laatste wijziging” informatie"
 
 #: resources/views/edit/add-fact.phtml:103
 #: resources/views/edit/edit-fact.phtml:130
 msgid "Last change"
-msgstr ""
+msgstr "Laatste wijziging"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:51
@@ -127,7 +127,7 @@ msgstr "Koppeling van gedeelde plaatsen naar plaatsen"
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:182
 msgid "Location"
-msgstr ""
+msgstr "Locatie"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:97
@@ -136,7 +136,7 @@ msgstr "Houd er rekening mee dat de eerste gebeurtenis zich kan hebben binnen ee
 
 #: SharedPlacesModule.php:185
 msgid "Parent Shared Place"
-msgstr ""
+msgstr "Bovenliggende gedeelde plaats"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:30
@@ -196,7 +196,7 @@ msgstr "Toon aantal koppelingen voor de lijst met gedeelde plaatsen"
 
 #: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:102
 msgid "Summary"
-msgstr ""
+msgstr "Samenvatting"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:56
@@ -205,7 +205,7 @@ msgstr "Dit is nogal lastig, en alle plaatsen hebben toch al namen, dus je kunt 
 
 #: patchedWebtrees/Exceptions/SharedPlaceNotFoundException.php:13
 msgid "This shared place does not exist or you do not have permission to view it."
-msgstr ""
+msgstr "Deze gedeelde plaats bestaat niet of je hebt geen toestemming om deze te bekijken."
 
 #: resources/views/shared-place-page.phtml:29
 msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
@@ -240,7 +240,7 @@ msgstr "Wanneer de voorgaande optie is ingeschakeld en er geen overeenkomende ge
 #: resources/views/edit/add-fact.phtml:124
 #: resources/views/edit/edit-fact.phtml:151
 msgid "cancel"
-msgstr ""
+msgstr "annuleren"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:92
@@ -251,7 +251,7 @@ msgstr "nee"
 #: resources/views/edit/add-fact.phtml:119
 #: resources/views/edit/edit-fact.phtml:146
 msgid "save"
-msgstr ""
+msgstr "opslaan"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:100

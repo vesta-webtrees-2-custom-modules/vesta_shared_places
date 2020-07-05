@@ -10,7 +10,10 @@ use Fisharebest\Webtrees\I18N;
     <?= view('modals/header', ['title' => I18N::translate('Create a shared place')]) ?>
 
     <div class="modal-body">
-        <?= view($moduleName . '::modals/shared-place-fields', ['sharedPlaceName' => $sharedPlaceName, 'additionalControls' => $additionalControls]) ?>
+        <?= view($moduleName . '::modals/shared-place-fields', [
+            'useHierarchy' => $useHierarchy,
+            'sharedPlaceName' => $sharedPlaceName, 
+            'additionalControls' => $additionalControls]) ?>
     </div>
 
     <?= view('modals/footer-save-cancel') ?>

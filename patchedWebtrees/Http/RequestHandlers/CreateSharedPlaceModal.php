@@ -54,8 +54,11 @@ class CreateSharedPlaceModal implements RequestHandlerInterface
                 })
                 ->toArray();
 
+        $useHierarchy = boolval($this->module->getPreference('USE_HIERARCHY', '1'));
+        
         return response(view($this->moduleName . '::modals/create-shared-place', [
                     'moduleName' => $this->moduleName,
+                    'useHierarchy' => $useHierarchy,
                     'sharedPlaceName' => $sharedPlaceName,
                     'additionalControls' => $additionalControls,
                     'tree' => $tree,

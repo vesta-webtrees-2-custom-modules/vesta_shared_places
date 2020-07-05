@@ -1179,7 +1179,11 @@ class GedcomTag
             //[RC] added
             case '_LOC:_LOC':
                 return I18N::translate('Parent Shared Place');
-              
+            
+            //[RC] added
+            case '_LOC:TYPE':
+                return I18N::translate('Type of hierarchical relationship');
+             
             case '_MARI':
                 /* I18N: gedcom tag _MARI */
                 return I18N::translate('Marriage intention');

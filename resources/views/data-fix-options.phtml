@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+use Fisharebest\Webtrees\I18N;
+
+?>
+
+<div class="col-sm-9">
+    <p>
+        <?= I18N::translate('This data fix turns shared places with comma-separated names into hierarchical shared places (linked to parent shared places via XREFs).') ?>
+        <?= I18N::translate('It usually will have to be carried out once only, as a migration when changing to hierarchical shared places.') ?>
+    </p>
+    <p>
+        <?= I18N::translate('It is strongly recommended to backup your tree first.') ?>
+    </p>
+    <?php if (!$useHierarchy) : ?>
+      <h3>
+          <?= I18N::translate('Note:') ?>
+      </h3>
+      <p>
+          <?= I18N::translate('The search currently does not match any records, because the configuration option to \'Use hierarchical shared places \' isn\'t set.') ?>
+      </p>
+    <?php else : ?>
+      <?php if (!$autoAcceptEdits) : ?>
+        <h3>
+            <?= I18N::translate('Attention!') ?>
+        </h3>
+        <p>
+            <?= I18N::translate('Missing parent shared places are created if required. For this to work without potentially creating duplicates, you have to check \'Automatically accept changes made by this user\' in the user administration, at least for the duration of this data fix.') ?>
+            <?= I18N::translate('The data fix currently won\'t update anything, because this preference isn\'t set.') ?>
+        </p>
+      <?php endif ?>
+    <?php endif ?>
+    
+</div>
+

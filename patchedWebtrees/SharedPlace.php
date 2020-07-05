@@ -6,6 +6,7 @@ use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Exception;
 use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Family;
+use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
@@ -18,14 +19,16 @@ use Illuminate\Support\Collection;
  * note: webtrees now (2.0.4) has basic support for _LOC via Location.php
  */
 class SharedPlace extends Location {
-
+  
   public const RECORD_TYPE = '_LOC';
 
   protected const ROUTE_NAME  = SharedPlacePage::class;
 
+  protected $useHierarchy;
   protected $useIndirectLinks;
 
   public function __construct(
+          bool $useHierarchy, 
           bool $useIndirectLinks, 
           string $xref, 
           string $gedcom, 
@@ -33,6 +36,7 @@ class SharedPlace extends Location {
           Tree $tree) {
 
     parent::__construct($xref, $gedcom, $pending, $tree);
+    $this->useHierarchy = $useHierarchy;
     $this->useIndirectLinks = $useIndirectLinks;
   }
 
@@ -61,14 +65,6 @@ class SharedPlace extends Location {
       $names[] = $nameStructure['fullNN'];
     }
     return $names;
-  }
-
-  public function namesAsPlaces() {
-    $places = array();
-    foreach ($this->getAllNames() as $nameStructure) {
-      $places[] = new Place($nameStructure['fullNN'], $this->tree);
-    }
-    return $places;
   }
 
   public function getLati() {
@@ -147,7 +143,7 @@ class SharedPlace extends Location {
     
     return $concatenated;
   }
-
+  
   public function linkedFamilies(string $link): Collection {
     $main = parent::linkedFamilies($link);
     
@@ -183,6 +179,91 @@ class SharedPlace extends Location {
     $concatenated = $main->concat($list)->unique();
     
     return $concatenated;
+  }
+  
+  public function getParents(): array {
+    //note: could also use _link table!
+    $sharedPlaces = [];
+    preg_match_all('/\n1 _LOC @(' . Gedcom::REGEX_XREF . ')@/', $this->gedcom(), $matches);
+    foreach ($matches[1] as $match) {
+        $loc = Factory::location()->make($match, $this->tree());
+        if ($loc && $loc->canShow()) {
+            $sharedPlaces[] = $loc;
+        }
+    }
+
+    return $sharedPlaces;
+  }
+    
+  //if shared places hierarchy is used, build returned place names via hierarchy!
+  public function namesAsPlaces(): array {
+    $places = array();
+    foreach ($this->getAllNames() as $nameStructure) {
+      $head = $nameStructure['fullNN'];
+      if ($this->useHierarchy) {
+        $parents = $this->getParents();
+        if (empty($parents)) {
+          $places[] = new Place($head, $this->tree);
+        } else {
+          foreach ($this->getParents() as $parent) {
+            foreach ($parent->namesAsPlaces() as $parentPlace) {
+              $full = $head . Gedcom::PLACE_SEPARATOR . $parentPlace->gedcomName();
+              $places[] = new Place($full, $this->tree);
+            }
+          }      
+        }
+      } else {
+        $places[] = new Place($head, $this->tree);
+      }      
+    }
+    return $places;
+  }
+  
+  public function matchesWithHierarchyAsArg(
+          string $placeGedcomName,
+          bool $useHierarchy): bool {
+    
+    if ($useHierarchy) {
+      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
+      $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
+      $head = reset($parts);
+      
+      foreach ($this->namesNN() as $name) {
+        if (strtolower($head) === strtolower($name)) {
+          //name matches - check parent hierarchy!
+          $parents = $this->getParents();
+          
+          if ($head === $placeGedcomName) {
+            //top-level: any parentless shared place matches!
+            if (empty($parents)) {
+              return true;
+            }
+          } else {
+            foreach ($this->getParents() as $parent) {
+              if ($parent->matches($tail)) {
+                return true;
+              }
+            }              
+          }          
+        }
+      }
+      
+      return false;
+    }
+    
+    foreach ($this->namesNN() as $name) {
+      if (strtolower($placeGedcomName) === strtolower($name)) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  public function matches(
+          string $placeGedcomName): bool {
+    
+    return $this->matchesWithHierarchyAsArg($placeGedcomName, $this->useHierarchy);
   }
 
 }

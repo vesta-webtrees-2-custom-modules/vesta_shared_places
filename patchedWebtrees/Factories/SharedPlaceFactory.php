@@ -16,10 +16,16 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
 
   private const TYPE_CHECK_REGEX = '/^0 @[^@]+@ ' . SharedPlace::RECORD_TYPE . '/';
   
+  protected $useHierarchy;
   protected $useIndirectLinks;
 
-  public function __construct(Cache $cache, bool $useIndirectLinks) {
-    parent::__construct($cache);    
+  public function __construct(
+          Cache $cache, 
+          bool $useHierarchy,
+          bool $useIndirectLinks) {
+    
+    parent::__construct($cache); 
+    $this->useHierarchy = $useHierarchy;
     $this->useIndirectLinks = $useIndirectLinks;
   }
 
@@ -44,7 +50,7 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
 
           $xref = $this->extractXref($gedcom ?? $pending, $xref);
           
-          return new SharedPlace($this->useIndirectLinks, $xref, $gedcom ?? '', $pending, $tree);
+          return new SharedPlace($this->useHierarchy, $this->useIndirectLinks, $xref, $gedcom ?? '', $pending, $tree);
       });
   }
     
@@ -76,7 +82,7 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
    * @return SharedPlace
    */
   public function new(string $xref, string $gedcom, ?string $pending, Tree $tree): Location {
-    return new SharedPlace($this->useIndirectLinks, $xref, $gedcom, $pending, $tree);
+    return new SharedPlace($this->useHierarchy, $this->useIndirectLinks, $xref, $gedcom, $pending, $tree);
   }
   
   /**

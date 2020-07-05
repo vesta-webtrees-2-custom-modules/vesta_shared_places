@@ -4,9 +4,13 @@ use Fisharebest\Webtrees\I18N; ?>
 
 <div class="form-group">
     <label class="col-form-label" for="shared-place-name">
-        <?= I18N::translate('Shared place name') ?>
+        <?= I18N::translate('Shared place name') ?>        
     </label>
+    <?php if ($useHierarchy) : ?>
+      <div><?= I18N::translate('A comma-separated hierarchical place name will be resolved to separate shared places, which will be created as required.') ?></div>
+    <?php endif ?>
     <input class="form-control" type="text" id="shared-place-name" name="shared-place-name" value="<?= $sharedPlaceName ?>" required>
+    <input type="hidden" name="useHierarchy" value="<?=  $useHierarchy ?>">
     <?php
     foreach ($additionalControls as $gve) {
       echo $gve->getMain();
@@ -14,4 +18,11 @@ use Fisharebest\Webtrees\I18N; ?>
     ?>
 </div>
 
-<?= view('modals/restriction-fields') ?>
+<?php if (!$useHierarchy) : ?>
+  <?php
+    //these may be confusing if shared places hierarchy is created,
+    //not really sure if we should show them at all
+  ?>
+  <?= view('modals/restriction-fields') ?>
+<?php endif ?>
+

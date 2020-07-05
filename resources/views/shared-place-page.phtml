@@ -1,9 +1,11 @@
 <?php
 
+use Cissee\WebtreesExt\Functions\FunctionsEditLoc;
 use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
 use Cissee\WebtreesExt\MoreI18N;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
+use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\Http\RequestHandlers\AddNewFact;
 use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesAcceptRecord;
 use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesRejectRecord;
@@ -98,6 +100,39 @@ use Vesta\Model\Trace;
                       //TODO: handle getScript()!
                       $html = ob_get_clean();
                       echo str_replace('<div class="place"></div><br>', $replacement, $html);
+                      break;
+                    case '_LOC':
+                      //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
+                      ob_start();
+                      FunctionsPrintFacts::printFact($fact, $sharedPlace);
+                      $type = $fact->attribute('TYPE');
+                      $value = FunctionsEditLoc::getLocationRelationshipTypeValue($type);
+                      $html = ob_get_clean();
+                      
+                      $html = str_replace(
+                                '<span class="label">'.MoreI18n::xlate(GedcomTag::getLabel('TYPE')).':</span>', 
+                                '<span class="label">'.MoreI18n::xlate(GedcomTag::getLabel('_LOC:TYPE')).':</span>', 
+                                $html);
+                      
+                      //uargh ugly
+                      $html = str_replace(
+                                '<span class="field" dir="auto">POLI</span>', 
+                                '<span class="field" dir="auto">'.$value.'</span>', 
+                                $html);
+                      $html = str_replace(
+                                '<span class="field" dir="auto">RELI</span>', 
+                                '<span class="field" dir="auto">'.$value.'</span>', 
+                                $html);
+                      $html = str_replace(
+                                '<span class="field" dir="auto">GEOR</span>', 
+                                '<span class="field" dir="auto">'.$value.'</span>', 
+                                $html);
+                      $html = str_replace(
+                                '<span class="field" dir="auto">CULT</span>', 
+                                '<span class="field" dir="auto">'.$value.'</span>', 
+                                $html);
+                      
+                      echo $html;
                       break;
                     default:  
                       FunctionsPrintFacts::printFact($fact, $sharedPlace);
