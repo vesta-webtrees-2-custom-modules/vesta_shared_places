@@ -90,9 +90,9 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
           } else {
             $html = '';
             if ($ref->created() === 2) {
-              $html = ' ' . I18N::translate('Note: A parent shared place has also been created.');
+              $html = ' ' . I18N::translate(' (Note: A parent shared place has also been created)');
             } else if ($ref->created() > 2) {
-               $html = ' ' . I18N::translate('Note: %s parent shared places have also been created.', $ref->created());
+               $html = ' ' . I18N::translate(' (Note: %s parent shared places have also been created)', $ref->created());
             }
           
             // id and text are for select2 / autocomplete

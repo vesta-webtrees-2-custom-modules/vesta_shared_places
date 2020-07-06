@@ -83,10 +83,6 @@ class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
     
   public function hasLocationsToFix(Tree $tree): bool {
     $locationsToFix = $this->module->locationsToFix($tree, []);
-    if ($locationsToFix) {
-      return true;
-    }
-    
-    return false;
+    return ($locationsToFix->count() > 0);
   }
 }

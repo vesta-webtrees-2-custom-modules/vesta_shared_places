@@ -43,10 +43,12 @@ trait SharedPlacesModuleTrait {
                 'VESTA',
                 '1'),*/
         new ControlPanelCheckbox(
-                /* I18N: Module Configuration */I18N::translate('Include the %1$s symbol in the list title', $this->getVestaSymbol()),
+                /* I18N: Module Configuration */I18N::translate('Include the %1$s symbol in the list menu entry', $this->getVestaSymbol()),
                 null,
                 'VESTA_LIST',
                 '1')));
+    
+    $link = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_shared_places">'.I18N::translate('Readme').'</a>';
     
     $generalSub[] = new ControlPanelSubsection(
             /* I18N: Module Configuration */I18N::translate('Shared place structure'),
@@ -54,8 +56,10 @@ trait SharedPlacesModuleTrait {
                 /* I18N: Module Configuration */I18N::translate('Use hierarchical shared places'),
                 /* I18N: Module Configuration */I18N::translate('If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to parent shared places, as described in the specification.') . ' ' .
                 /* I18N: Module Configuration */I18N::translate('Note that this also affects the way shared places are created, and the way they are mapped to places.') . ' ' .
-                /* I18N: Module Configuration */I18N::translate('In particular, hierarchical shared places do not have names with comma-separated parent places. There is a data fix available which may be used to convert existing shared places.') . ' ' .
-                /* I18N: Module Configuration */I18N::translate('When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated parent places.') . ' ' .
+                /* I18N: Module Configuration */I18N::translate('In particular, hierarchical shared places do not have names with comma-separated name parts.') . ' ' .
+                /* I18N: Module Configuration */I18N::translate('See %1$s for details.', $link) . ' ' .
+                /* I18N: Module Configuration */I18N::translate('There is a data fix available which may be used to convert existing shared places.') . ' ' .
+                /* I18N: Module Configuration */I18N::translate('When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated name parts.') . ' ' .
                 /* I18N: Module Configuration */I18N::translate('It is strongly recommended to switch to hierarchical shared places.'),
                 'USE_HIERARCHY',
                 '1')));

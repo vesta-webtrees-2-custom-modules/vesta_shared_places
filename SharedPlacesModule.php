@@ -143,19 +143,8 @@ class SharedPlacesModule extends AbstractModule implements
     $user = $request->getAttribute('user');
     Auth::checkComponentAccess($this, ModuleListInterface::class, $tree, $user);
     
-    $locationsToFix = $this->locationsToFix($tree, []);
-    $hasLocationsToFix = false;
-    if ($locationsToFix) {
-      $hasLocationsToFix = true;
-    }
-    
     $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
     if ($useHierarchy) {
-      //TODO
-      //$hasLocationsToFix;
-      
-      //$this->listUrl($tree)
-      
       $searchService = app(SearchServiceExt::class);
       $controller = new GenericPlaceHierarchyController(
               new SharedPlaceHierarchyUtils($this, $searchService));
@@ -163,7 +152,9 @@ class SharedPlacesModule extends AbstractModule implements
       return $controller->show($request);
     }
 
-    //old-style list    
+    //old-style list        
+    $locationsToFix = $this->locationsToFix($tree, []);
+    $hasLocationsToFix = ($locationsToFix->count() > 0);    
     $controller = new SharedPlacesListController($this, $hasLocationsToFix);
 
     $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
@@ -224,7 +215,7 @@ class SharedPlacesModule extends AbstractModule implements
       $router->post(CreateSharedPlaceAction::class, '/tree/{tree}/create-location', CreateSharedPlaceAction::class)
               ->extras(['middleware' => [AuthEditor::class]]);
       
-      //for SharedPlaceHierarchyController
+      //for GenericPlaceHierarchyController
       View::registerCustomView('::modules/generic-place-hierarchy-shared-places/page', $this->name() . '::modules/generic-place-hierarchy-shared-places/page');
       View::registerCustomView('::modules/generic-place-hierarchy-shared-places/sidebar', $this->name() . '::modules/generic-place-hierarchy-shared-places/sidebar');
       
@@ -241,6 +232,9 @@ class SharedPlacesModule extends AbstractModule implements
       
       //added via GedcomTag.php
       I18N::translate('Parent Shared Place');
+      
+      
+      $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 1);
   }
   
   //no longer required - css is static now
@@ -766,10 +760,7 @@ class SharedPlacesModule extends AbstractModule implements
     $locations = $this->locationsToFix($tree, $params);
     
     $records = new Collection();
-    
-    if ($locations !== null) {
-        $records = $records->concat($this->mergePendingRecords($locations, $tree, Location::RECORD_TYPE));
-    }
+    $records = $records->concat($this->mergePendingRecords($locations, $tree, Location::RECORD_TYPE));
         
     return $records
         ->unique()
@@ -898,11 +889,11 @@ class SharedPlacesModule extends AbstractModule implements
    *
    * @return Collection<string>|null
    */
-  public function locationsToFix(Tree $tree, array $params): ?Collection {
+  public function locationsToFix(Tree $tree, array $params): Collection {
     $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
     
     if (!$useHierarchy) {
-      return null;
+      return new Collection();
     }
     
     $query = DB::table('other')
