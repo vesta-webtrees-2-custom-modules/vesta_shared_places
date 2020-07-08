@@ -3,7 +3,6 @@
 namespace Cissee\WebtreesExt;
 
 use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
-use Cissee\WebtreesExt\Http\Controllers\PlaceBaseWithinHierarchy;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Fisharebest\Webtrees\Gedcom;
@@ -17,16 +16,10 @@ use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Model\MapCoordinates;
 use Vesta\Model\PlaceStructure;
 
-class PlaceViaSharedPlace implements PlaceWithinHierarchy {
+class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
   
-  /** @var Place */
-  protected $actual;
-  
-  /** @var SharedPlace|null */
-  protected $sharedPlace;
-          
-  /** @var SharedPlacesModule|null */
-  protected $module;
+  /** @var Collection */
+  protected $sharedPlaces;
   
   /** @var SearchServiceExt */
   protected $search_service_ext;
@@ -38,13 +31,12 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   
   public function __construct(
           Place $actual,
-          ?SharedPlace $sharedPlace,
+          Collection $sharedPlaces,
           ?SharedPlacesModule $module,
           SearchServiceExt $search_service_ext) {
     
-    $this->actual = $actual;
-    $this->sharedPlace = $sharedPlace;
-    $this->module = $module;
+    parent::__construct($actual, $module);
+    $this->sharedPlaces = $sharedPlaces;
     $this->search_service_ext = $search_service_ext;    
   }
   
@@ -53,16 +45,28 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   
   public function getChildPlaces(): array {
     $self = $this;
-    if ($this->sharedPlace === null) {      
+    if ($this->sharedPlaces->count() === 0) {      
       //top-level
       return $this->search_service_ext
               ->searchTopLevelLocations([$this->tree()])
               ->filter(GedcomRecord::accessFilter())
-              ->map(static function (Location $record) use ($self): PlaceViaSharedPlace {
+              ->map(static function (Location $record): array {
                 $name = $record->namesNN()[$record->getPrimaryName()];
                 $actual = new Place($name, $record->tree());
                 $actual->id(); //make sure place exists in db
-                return new PlaceViaSharedPlace($actual, $record, $self->module, $self->search_service_ext);
+                //return new PlaceViaSharedPlace($actual, $record, $self->module, $self->search_service_ext);
+                return ["actual" => $actual, "record" => $record];
+              })
+              ->mapToGroups(static function ($item): array {
+                $place = $item["actual"];
+                return [$place->id() => $item];
+              })
+              ->map(static function (Collection $groupedItems) use ($self): PlaceViaSharedPlace {
+                $first = $groupedItems->first();
+                $sharedPlaces = $groupedItems->map(static function ($inner): Location {
+                  return $inner["record"];
+                });
+                return new PlaceViaSharedPlace($first["actual"], $sharedPlaces, $self->module, $self->search_service_ext);
               })
               ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
                 return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
@@ -70,51 +74,43 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
               ->toArray();
     }
     
-    return $this->sharedPlace
+    $ret = new Collection();
+    foreach ($this->sharedPlaces as $sharedPlace) {
+      $ret = $ret->merge($sharedPlace
             ->linkedLocations('_LOC')
             ->filter(GedcomRecord::accessFilter())
-            ->map(static function (Location $record) use ($self): PlaceViaSharedPlace {
-                $name = $record->namesNN()[$record->getPrimaryName()];
-                $actual = new Place($name . Gedcom::PLACE_SEPARATOR . $self->gedcomName(), $record->tree());
-                $actual->id(); //make sure place exists in db
-                return new PlaceViaSharedPlace($actual, $record, $self->module, $self->search_service_ext);
-              })
+            ->map(static function (Location $record) use ($self): array {
+              $name = $record->namesNN()[$record->getPrimaryName()];
+              $actual = new Place($name . Gedcom::PLACE_SEPARATOR . $self->gedcomName(), $record->tree());
+              $actual->id(); //make sure place exists in db
+              //return new PlaceViaSharedPlace($actual, $record, $self->module, $self->search_service_ext);
+              return ["actual" => $actual, "record" => $record];
+            })
+            ->mapToGroups(static function ($item): array {
+              //group by place id
+              $place = $item["actual"];
+              return [$place->id() => $item];
+            })
+            ->map(static function (Collection $groupedItems) use ($self): PlaceViaSharedPlace {
+              $first = $groupedItems->first();
+              $sharedPlaces = $groupedItems->map(static function ($inner): Location {
+                return $inner["record"];
+              });
+              return new PlaceViaSharedPlace($first["actual"], $sharedPlaces, $self->module, $self->search_service_ext);
+            })
             ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
               return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
-            })
-            ->toArray();
+            }));
+    }
+    return $ret->unique()->toArray();
   }
   
   public function id(): int {
     return $this->actual->id();
   }
   
-  public function url(): string {
-    if ($this->module !== null) {
-        return $this->module->listUrl($this->tree(), [
-            'place_id' => $this->id(),
-            'tree'     => $this->tree()->name(),
-        ]);
-    }
-
-    // The place-list module is disabled...
-    return '#';
-  }
-  
   public function tree(): Tree {
     return $this->actual->tree();
-  }
-  
-  public function gedcomName(): string {
-    return $this->actual->gedcomName();
-  }
-    
-  public function parent(): Place {
-    return $this->actual->parent();
-  }
-  
-  public function placeName(): string {
-    return $this->actual->placeName();
   }
   
   public function fullName(bool $link = false): string {
@@ -123,18 +119,20 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   
   //SearchService::searchIndividualsInPlace
   public function searchIndividualsInPlace(): Collection {
-    if ($this->sharedPlace !== null) {
-      return $this->sharedPlace->linkedIndividuals('_LOC');
+    $ret = new Collection();
+    foreach ($this->sharedPlaces as $sharedPlace) {
+      $ret = $ret->merge($sharedPlace->linkedIndividuals('_LOC'));
     }
-    return new Collection();    
+    return $ret->unique();    
   }
   
   //SearchService::searchFamiliesInPlace
   public function searchFamiliesInPlace(): Collection {
-    if ($this->sharedPlace !== null) {
-      return $this->sharedPlace->linkedFamilies('_LOC');
+    $ret = new Collection();
+    foreach ($this->sharedPlaces as $sharedPlace) {
+      $ret = $ret->merge($sharedPlace->linkedFamilies('_LOC'));
     }
-    return new Collection();
+    return $ret->unique(); 
   }
   
   protected function getLatLon(): ?MapCoordinates {
@@ -192,7 +190,7 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   public function boundingRectangleWithChildren(array $children): array
   {
       /*
-      if ($this->sharedPlace === null) {
+      if (top-level) {
         //why doesn't original impl calculate bounding rectangle for world? Too expensive?
         return [[-180.0, -90.0], [180.0, 90.0]];
       }
@@ -201,13 +199,11 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
       $latitudes = [];
       $longitudes = [];
       
-      if ($this->sharedPlace !== null) {
-        if ($this->latitude() !== 0.0) {
-          $latitudes[] = $this->latitude();
-        }
-        if ($this->longitude() !== 0.0) {
-          $longitudes[] = $this->longitude();
-        }
+      if ($this->latitude() !== 0.0) {
+        $latitudes[] = $this->latitude();
+      }
+      if ($this->longitude() !== 0.0) {
+        $longitudes[] = $this->longitude();
       }
       
       foreach ($children as $child) { 
@@ -245,13 +241,14 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   //own extensions
 
   public function additionalLinksHtmlBeforeName(): string {
-    if ($this->module !== null) {
-      if ($this->sharedPlace !== null) {
-        return $this->module->getLinkForSharedPlace($this->sharedPlace);
+    $html = '';
+    if ($this->module !== null) {      
+      foreach ($this->sharedPlaces as $sharedPlace) {
+        $html .= $this->module->getLinkForSharedPlace($sharedPlace);
       }
     }
     
-    return '';
+    return $html;
   }
   
 }

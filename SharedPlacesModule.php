@@ -216,6 +216,8 @@ class SharedPlacesModule extends AbstractModule implements
               ->extras(['middleware' => [AuthEditor::class]]);
       
       //for GenericPlaceHierarchyController
+      View::registerCustomView('::modules/generic-place-hierarchy-shared-places/place-hierarchy', $this->name() . '::modules/generic-place-hierarchy-shared-places/place-hierarchy');
+      View::registerCustomView('::modules/generic-place-hierarchy-shared-places/list', $this->name() . '::modules/generic-place-hierarchy-shared-places/list');
       View::registerCustomView('::modules/generic-place-hierarchy-shared-places/page', $this->name() . '::modules/generic-place-hierarchy-shared-places/page');
       View::registerCustomView('::modules/generic-place-hierarchy-shared-places/sidebar', $this->name() . '::modules/generic-place-hierarchy-shared-places/sidebar');
       
@@ -482,6 +484,40 @@ class SharedPlacesModule extends AbstractModule implements
       }
     }
     return null;
+  }
+  
+  public function placename2sharedPlacesImpl(
+          string $placeGedcomName, 
+          Tree $tree,
+          bool $useHierarchy): Collection {
+    
+    if ($placeGedcomName === '') {
+      return new Collection();
+    }
+    
+    $searchService = app(SearchServiceExt::class);
+    
+    if ($useHierarchy) {
+      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
+      $head = reset($parts);
+      $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $head . "\n"));
+      $ret = new Collection();
+      foreach ($sharedPlaces as $sharedPlace) {
+        if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
+          $ret->add($sharedPlace);
+        }
+      }
+      return $ret;
+    }
+    
+    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $placeGedcomName . "\n"));
+    $ret = new Collection();
+    foreach ($sharedPlaces as $sharedPlace) {
+      if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
+        $ret->add($sharedPlace);
+      }
+    }
+    return $ret;
   }
   
   protected function placename2sharedPlace(
@@ -811,8 +847,11 @@ class SharedPlacesModule extends AbstractModule implements
       $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
       
       if ($tail !== '') {
-        //shared place with hierarchical name is also ok here, we assume it will be handled later by data fix
-        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), false);
+        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), true);
+        if ($parentRecord == null) {
+          //shared place with hierarchical name is also ok here, we assume it will be handled later by data fix
+          $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), false);
+        }
         
         if ($parentRecord != null) {
           $new .= "\n1 _LOC @" . $parentRecord->xref() . "@";
@@ -861,8 +900,11 @@ class SharedPlacesModule extends AbstractModule implements
       $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
       
       if ($tail !== '') {
-        //shared place with hierarchical name is also ok here, we assume it will be handled later by data fix
-        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), false);
+        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), true);
+        if ($parentRecord == null) {
+          //shared place with hierarchical name is also ok here, we assume it will be handled later by data fix
+          $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), false);
+        }
         
         if ($parentRecord != null) {
           $new .= "\n1 _LOC @" . $parentRecord->xref() . "@";
@@ -879,6 +921,20 @@ class SharedPlacesModule extends AbstractModule implements
     }
     
     $record->updateRecord($new, false);
+    
+    //important to update the cache (this should be in webtrees)
+    //otherwise this record may be found via search on updated names (via db), but with old parents (via cache)
+    //(within same request, i.e. during updateAll)
+    //leading to unintended duplicates
+    //
+    //test: create (without hierarchy)
+    //A1, B, C, D, E
+    //B, C, D, E
+    //A2, B, C, D, E
+    //switch to hierarchy
+    //and run the data fix:
+    //B is created twice (if unmake isn't called)
+    Factory::location()->unmake($record->xref(), $record->tree());
   }
   
   /**

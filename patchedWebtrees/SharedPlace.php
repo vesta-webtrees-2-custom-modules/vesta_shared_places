@@ -194,7 +194,26 @@ class SharedPlace extends Location {
 
     return $sharedPlaces;
   }
+  
+  public function canonicalPlace(): Place {
+    $head = $this->namesNN()[$this->getPrimaryName()];
+    if (!$this->useHierarchy) {
+      return new Place($head, $this->tree);
+    }
     
+    $parents = $this->getParents();
+    if (empty($parents)) {
+      return new Place($head, $this->tree);
+    }
+
+    //first parent wins
+    foreach ($this->getParents() as $parent) {
+      $parentPlace  = $parent->canonicalPlace();
+      $full = $head . Gedcom::PLACE_SEPARATOR . $parentPlace->gedcomName();
+      return new Place($full, $this->tree);
+    }
+  }
+  
   //if shared places hierarchy is used, build returned place names via hierarchy!
   public function namesAsPlaces(): array {
     $places = array();

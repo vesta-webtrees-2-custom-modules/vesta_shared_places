@@ -29,6 +29,10 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
     $this->useIndirectLinks = $useIndirectLinks;
   }
 
+  public function unmake(string $xref, Tree $tree) {
+    $this->cache->forget(__CLASS__ . $xref . '@' . $tree->id());
+  }
+    
   /**
    * Create a shared place.
    *

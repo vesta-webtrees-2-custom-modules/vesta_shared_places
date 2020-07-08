@@ -32,13 +32,13 @@ class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
   public function findPlace(int $id, Tree $tree): PlaceWithinHierarchy {
     $actual = Place::find($id, $tree);
     
-    //find matching shared place, otherwise reset
-    $sharedPlace = $this->module->placename2sharedPlaceImpl($actual->gedcomName(), $actual->tree(), true);
-    if ($sharedPlace === null) {
+    //find matching shared places, otherwise reset
+    $sharedPlaces = $this->module->placename2sharedPlacesImpl($actual->gedcomName(), $actual->tree(), true);
+    if ($sharedPlaces->count() === 0) {
       $actual = new Place('', $actual->tree());
     }
     
-    return new PlaceViaSharedPlace($actual, $sharedPlace, $this->module, $this->search_service_ext);
+    return new PlaceViaSharedPlace($actual, $sharedPlaces, $this->module, $this->search_service_ext);
   }
   
   //SearchService::searchPlaces
@@ -47,11 +47,22 @@ class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
     return $this->search_service_ext
             ->searchLocations([$tree], [])
             ->filter(GedcomRecord::accessFilter())
-            ->map(static function (Location $record) use ($self): PlaceViaSharedPlace {
-              $name = $record->namesNN()[$record->getPrimaryName()];
-              $actual = new Place($name, $record->tree());
+            ->map(static function (Location $record): array {
+              $actual = $record->canonicalPlace();
               $actual->id(); //make sure place exists in db
-              return new PlaceViaSharedPlace($actual, $record, $self->module, $self->search_service_ext);
+              //return new PlaceViaSharedPlace($actual, $record, $self->module, $self->search_service_ext);
+              return ["actual" => $actual, "record" => $record];
+            })
+            ->mapToGroups(static function ($item): array {
+              $place = $item["actual"];
+              return [$place->id() => $item];
+            })
+            ->map(static function (Collection $groupedItems) use ($self): PlaceViaSharedPlace {
+              $first = $groupedItems->first();
+              $sharedPlaces = $groupedItems->map(static function ($inner): Location {
+                return $inner["record"];
+              });
+              return new PlaceViaSharedPlace($first["actual"], $sharedPlaces, $self->module, $self->search_service_ext);
             })
             ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
               return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
@@ -68,6 +79,14 @@ class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
   
   public function pageLabel(): string {
     return I18N::translate('Shared places');
+  }
+  
+  public function placeHierarchyView(): string {
+    return 'modules/generic-place-hierarchy-shared-places/place-hierarchy';
+  }
+  
+  public function listView(): string {
+    return 'modules/generic-place-hierarchy-shared-places/list';
   }
   
   public function pageView(): string {
