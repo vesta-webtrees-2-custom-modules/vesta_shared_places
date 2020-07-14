@@ -3,16 +3,17 @@
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
 use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyUtils;
+use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
 use Cissee\WebtreesExt\PlaceViaSharedPlace;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
-use Fisharebest\Webtrees\GedcomRecord;
+use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
 
+//obsolete
 class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
   
   /** @var SharedPlacesModule */
@@ -29,7 +30,7 @@ class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
     $this->search_service_ext = $search_service_ext;
   }
   
-  public function findPlace(int $id, Tree $tree): PlaceWithinHierarchy {
+  public function findPlace(int $id, Tree $tree, array $requestParameters_unused): PlaceWithinHierarchy {
     $actual = Place::find($id, $tree);
     
     //find matching shared places, otherwise reset
@@ -38,35 +39,8 @@ class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
       $actual = new Place('', $actual->tree());
     }
     
-    return new PlaceViaSharedPlace($actual, $sharedPlaces, $this->module, $this->search_service_ext);
-  }
-  
-  //SearchService::searchPlaces
-  public function searchPlaces(Tree $tree): Collection {
-    $self = $this;
-    return $this->search_service_ext
-            ->searchLocations([$tree], [])
-            ->filter(GedcomRecord::accessFilter())
-            ->map(static function (Location $record): array {
-              $actual = $record->canonicalPlace();
-              $actual->id(); //make sure place exists in db
-              //return new PlaceViaSharedPlace($actual, $record, $self->module, $self->search_service_ext);
-              return ["actual" => $actual, "record" => $record];
-            })
-            ->mapToGroups(static function ($item): array {
-              $place = $item["actual"];
-              return [$place->id() => $item];
-            })
-            ->map(static function (Collection $groupedItems) use ($self): PlaceViaSharedPlace {
-              $first = $groupedItems->first();
-              $sharedPlaces = $groupedItems->map(static function ($inner): Location {
-                return $inner["record"];
-              });
-              return new PlaceViaSharedPlace($first["actual"], $sharedPlaces, $self->module, $self->search_service_ext);
-            })
-            ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
-              return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
-            });
+    $urls = new PlaceUrls($this->module, [], new Collection());
+    return new PlaceViaSharedPlace($actual, $urls, $sharedPlaces, $this->module, $this->search_service_ext);
   }
     
   public function hierarchyActionLabel(): string {
@@ -102,6 +76,13 @@ class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
     
   public function hasLocationsToFix(Tree $tree): bool {
     $locationsToFix = $this->module->locationsToFix($tree, []);
+    if ($locationsToFix->count() > 0) {
+      error_log("Locations to fix:");
+      foreach ($locationsToFix as $locationToFix) {
+        error_log($locationToFix);
+        error_log(Factory::location()->make($locationToFix, $tree)->gedcom());
+      }
+    }
     return ($locationsToFix->count() > 0);
   }
 }

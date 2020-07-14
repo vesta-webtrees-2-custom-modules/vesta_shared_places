@@ -27,6 +27,10 @@ class SharedPlace extends Location {
   protected $useHierarchy;
   protected $useIndirectLinks;
 
+  public function useHierarchy(): bool {
+    return $this->useHierarchy;
+  }
+  
   public function __construct(
           bool $useHierarchy, 
           bool $useIndirectLinks, 
@@ -38,6 +42,11 @@ class SharedPlace extends Location {
     parent::__construct($xref, $gedcom, $pending, $tree);
     $this->useHierarchy = $useHierarchy;
     $this->useIndirectLinks = $useIndirectLinks;
+    
+    //make sure all places exist
+    foreach ($this->namesAsPlaces() as $place) {
+      $place->id();
+    }  
   }
 
   /**

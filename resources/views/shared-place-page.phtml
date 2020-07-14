@@ -75,6 +75,7 @@ use Vesta\Model\Trace;
         <div class="tab-pane active fade show" role="tabpanel" id="details">
             <table class="table wt-facts-table">
                 <?php 
+                echo $hierarchyHtml;
                 echo $summaryHtml;
                 foreach ($facts->toArray() as $fact) {
                   switch ($fact->getTag()) {

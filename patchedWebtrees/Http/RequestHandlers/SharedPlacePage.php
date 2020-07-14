@@ -90,11 +90,23 @@ class SharedPlacePage implements RequestHandlerInterface {
             return redirect($sharedPlace->url(), StatusCodeInterface::STATUS_MOVED_PERMANENTLY);
         }
         
+      $hierarchyHtml = '';
+      $mainForDisplay = $sharedPlace->fullName();
+      $canonicalForDisplay = $sharedPlace->canonicalPlace()->fullName();
+      $canonical = $sharedPlace->canonicalPlace()->gedcomName();
+      
+      if ($mainForDisplay !== $canonicalForDisplay) {
+        $hierarchyHtml = '<tr class=""><th scope="row">' . I18N::translate('Shared place hierarchy') . '</th><td class="">' . $canonicalForDisplay . '</td></tr>';
+      }
+      
+      
+      //TODO HERE: HIERARCHICAL NAME REQUIRED!!
+      
       //summary (with any additional data such as GOV data, map links etc),
       //if there is a module that provides this summary
-      $summaryHtml = '';  
+      $summaryHtml = '';
       if (!empty($sharedPlace->namesNN())) {
-        $ps = PlaceStructure::fromNameAndLoc($sharedPlace->namesNN()[0], $sharedPlace->xref(), $sharedPlace->tree(), 0, $sharedPlace);
+        $ps = PlaceStructure::fromNameAndLoc($canonical, $sharedPlace->xref(), $sharedPlace->tree(), 0, $sharedPlace);
         if ($ps !== null) {
           $summaryGve = FunctionsPlaceUtils::plac2html($this->module, $ps);
 
@@ -109,6 +121,7 @@ class SharedPlacePage implements RequestHandlerInterface {
                     'module' => $this->module,
                     'moduleName' => $this->module->name(),
                     'clipboard_facts'  => $this->clipboard_service->pastableFacts($sharedPlace, new Collection()),
+                    'hierarchyHtml' => $hierarchyHtml,
                     'summaryHtml' => $summaryHtml,
                     'facts' => $this->facts($sharedPlace),
                     'families' => $sharedPlace->linkedFamilies('_LOC'),

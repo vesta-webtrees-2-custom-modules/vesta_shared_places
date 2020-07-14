@@ -3,7 +3,9 @@
 namespace Cissee\WebtreesExt;
 
 use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
+use Cissee\WebtreesExt\Http\Controllers\DefaultPlaceWithinHierarchyBase;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
+use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\GedcomRecord;
@@ -16,8 +18,13 @@ use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Model\MapCoordinates;
 use Vesta\Model\PlaceStructure;
 
-class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
+class PlaceViaSharedPlace extends DefaultPlaceWithinHierarchyBase implements PlaceWithinHierarchy {
   
+  /** @var PlaceUrls */
+  protected $urls;
+  
+  protected $module;
+          
   /** @var Collection */
   protected $sharedPlaces;
   
@@ -31,21 +38,21 @@ class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
   
   public function __construct(
           Place $actual,
+          PlaceUrls $urls,
           Collection $sharedPlaces,
           ?SharedPlacesModule $module,
           SearchServiceExt $search_service_ext) {
     
-    parent::__construct($actual, $module);
+    parent::__construct($actual, $urls);
+    $this->urls = $urls;
+    $this->module = $module;
     $this->sharedPlaces = $sharedPlaces;
     $this->search_service_ext = $search_service_ext;    
   }
   
-  //only required for breadcrumbs, so no need to override
-  //public function parent(): Place {
-  
   public function getChildPlaces(): array {
     $self = $this;
-    if ($this->sharedPlaces->count() === 0) {      
+    if ($this->actual->id() === 0) {      
       //top-level
       return $this->search_service_ext
               ->searchTopLevelLocations([$this->tree()])
@@ -54,7 +61,6 @@ class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
                 $name = $record->namesNN()[$record->getPrimaryName()];
                 $actual = new Place($name, $record->tree());
                 $actual->id(); //make sure place exists in db
-                //return new PlaceViaSharedPlace($actual, $record, $self->module, $self->search_service_ext);
                 return ["actual" => $actual, "record" => $record];
               })
               ->mapToGroups(static function ($item): array {
@@ -66,24 +72,28 @@ class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
                 $sharedPlaces = $groupedItems->map(static function ($inner): Location {
                   return $inner["record"];
                 });
-                return new PlaceViaSharedPlace($first["actual"], $sharedPlaces, $self->module, $self->search_service_ext);
+                return new PlaceViaSharedPlace($first["actual"], $self->urls, $sharedPlaces, $self->module, $self->search_service_ext);
               })
               ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
                 return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
+              })
+              //
+              ->mapWithKeys(static function (PlaceViaSharedPlace $place): array {
+                return [$place->id() => $place];
               })
               ->toArray();
     }
     
     $ret = new Collection();
     foreach ($this->sharedPlaces as $sharedPlace) {
-      $ret = $ret->merge($sharedPlace
+      $ret = $ret->merge(
+            $sharedPlace
             ->linkedLocations('_LOC')
             ->filter(GedcomRecord::accessFilter())
             ->map(static function (Location $record) use ($self): array {
               $name = $record->namesNN()[$record->getPrimaryName()];
               $actual = new Place($name . Gedcom::PLACE_SEPARATOR . $self->gedcomName(), $record->tree());
               $actual->id(); //make sure place exists in db
-              //return new PlaceViaSharedPlace($actual, $record, $self->module, $self->search_service_ext);
               return ["actual" => $actual, "record" => $record];
             })
             ->mapToGroups(static function ($item): array {
@@ -96,13 +106,19 @@ class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
               $sharedPlaces = $groupedItems->map(static function ($inner): Location {
                 return $inner["record"];
               });
-              return new PlaceViaSharedPlace($first["actual"], $sharedPlaces, $self->module, $self->search_service_ext);
+              return new PlaceViaSharedPlace($first["actual"], $self->urls, $sharedPlaces, $self->module, $self->search_service_ext);
             })
             ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
               return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
             }));
     }
-    return $ret->unique()->toArray();
+    return $ret
+            ->unique()
+            //must do this after merging because we use numeric keys
+            ->mapWithKeys(static function (PlaceViaSharedPlace $place): array {
+              return [$place->id() => $place];
+            })
+            ->toArray();
   }
   
   public function id(): int {
@@ -117,7 +133,6 @@ class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
     return $this->actual->fullName($link);
   }
   
-  //SearchService::searchIndividualsInPlace
   public function searchIndividualsInPlace(): Collection {
     $ret = new Collection();
     foreach ($this->sharedPlaces as $sharedPlace) {
@@ -126,7 +141,10 @@ class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
     return $ret->unique();    
   }
   
-  //SearchService::searchFamiliesInPlace
+  public function countIndividualsInPlace(): int {
+    return $this->searchIndividualsInPlace()->count();
+  }
+  
   public function searchFamiliesInPlace(): Collection {
     $ret = new Collection();
     foreach ($this->sharedPlaces as $sharedPlace) {
@@ -135,8 +153,12 @@ class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
     return $ret->unique(); 
   }
   
+  public function countFamiliesInPlace(): int {
+    return $this->searchFamiliesInPlace()->count();
+  }
+  
   protected function getLatLon(): ?MapCoordinates {
-    $ps = PlaceStructure::fromPlace($this->actual);
+    $ps = $this->placeStructure();
     if ($ps === null) {
       return null;
     }
@@ -236,9 +258,11 @@ class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
       
       return [[$latiMin, $longMin], [$latiMax, $longMax]];
   }
-    
-  ////////////////////////////////////////////////////////////////////////////////  
-  //own extensions
+
+  public function placeStructure(): ?PlaceStructure {
+    //TODO OPTIMIZE with _LOC and coordinates, if available
+    return PlaceStructure::fromPlace($this->actual);
+  }
 
   public function additionalLinksHtmlBeforeName(): string {
     $html = '';
@@ -251,4 +275,7 @@ class PlaceViaSharedPlace extends PlaceBase implements PlaceWithinHierarchy {
     return $html;
   }
   
+  public function links(): Collection {
+    return $this->urls->links($this->actual);
+  }
 }

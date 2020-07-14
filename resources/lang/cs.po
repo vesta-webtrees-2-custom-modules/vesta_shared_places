@@ -7,290 +7,454 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-01-03 11:46+0100\n"
+"POT-Creation-Date: 2020-07-13 22:08+0200\n"
 "PO-Revision-Date: 2020-06-23 17:52+0200\n"
+"Last-Translator: Josef Prause <josef.prause@gmail.com>\n"
 "Language-Team: \n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3.1\n"
-"Last-Translator: Josef Prause <josef.prause@gmail.com>\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
-"Language: cs\n"
 
-#: EditSharedPlaceController.php:93
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:95
 #, php-format
-msgid "The shared place %s has been created."
-msgstr "Toto sdílené místo %s je vytvořené."
+msgid " (Note: %s parent shared places have also been created)"
+msgstr ""
 
-#: SharedPlacesListController.php:31 SharedPlacesModule.php:60
-#: resources/views/lists/shared-places-table.phtml:15
-#: resources/views/shared-places-list-page.phtml:66
-msgid "Shared places"
-msgstr "Sdílená místa"
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:93
+msgid " (Note: A parent shared place has also been created)"
+msgstr ""
 
-#: SharedPlacesModule.php:326
-#: resources/views/lists/shared-places-table.phtml:20
-#: resources/views/shared-places-list-page.phtml:71
-msgid "Shared place"
-msgstr "Sdílené místo"
+#: SharedPlacesModule.php:774
+#, php-format
+msgid "%s and the individuals that reference it."
+msgstr ""
 
-#: SharedPlacesModule.php:378
-msgid "Shared place data"
-msgstr "Údaje sdíleného místa"
-
-#: SharedPlacesModuleTrait.php:18
-msgid "Vesta Shared Places"
-msgstr "Vesta Shared Places"
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:78
+msgid "... and fall back to n parent levels"
+msgstr "... a propadnout zpět na n nadřazených úrovní"
 
 #: SharedPlacesModuleTrait.php:23
 msgid "A module providing support for shared places."
 msgstr "Modul poskytující podporu pro sdílená místa."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:28
-msgid ""
-"A module supporting shared places as level 0 GEDCOM objects, on the basis of "
-"the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may "
-"contain coordinates, notes and media objects. Displays this data for all "
-"matching places via the extended 'Facts and events' tab. May also be used to "
-"manage GOV ids, in combination with the Gov4Webtrees module."
-msgstr ""
-
-#. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:29
-#, php-format
-msgid ""
-"Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and "
-"events' module."
+msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain coordinates, notes and media objects. Displays this data for all matching places via the extended 'Facts and events' tab. May also be used to manage GOV ids, in combination with the Gov4Webtrees module."
 msgstr ""
-"Vyžaduje modul '%1$s Vesta Common' a modul '%1$s Vesta Facts and events'."
+
+#: resources/views/modals/shared-place-fields.phtml:10
+msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing parent shared places will be created as well."
+msgstr ""
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:30
-msgid "Provides location data to other custom modules."
-msgstr "Poskytuje údaje o poloze jiným modulům."
+#: SharedPlacesModuleTrait.php:72
+msgid "According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. There is no edit support for this yet, so you have to add a level 3 _LOC @L123@ (with the proper shared place xref) under level 2 PLAC in the raw GEDCOM of a fact or event. "
+msgstr ""
 
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:37
-msgid "Displayed title"
-msgstr "Zobrazený název"
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:39
+#: SharedPlacesModule.php:757
 #, php-format
-msgid "Include the %1$s symbol in the module title"
-msgstr "Přidat symbol %1$s k názvu modulu"
+msgid "Add %s to the clippings cart"
+msgstr ""
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:44
-#, php-format
-msgid "Include the %1$s symbol in the list title"
-msgstr "Přidat symbol %1$s k názvu seznamu"
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:50
-msgid "Linking of shared places to places"
-msgstr "Propojení sdílených míst s místy"
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:53
+#: SharedPlacesModuleTrait.php:71
 msgid "Additionally link shared places via name"
 msgstr "Doplňkově propojit sdílená místa skrze název"
 
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:54
-msgid ""
-"According to the GEDCOM-L Addendum, shared places are referenced via xrefs, "
-"just like shared notes etc. There is no edit support for this yet, so you "
-"have to add a level 3 _LOC @L123@ (with the proper shared place xref) under "
-"level 2 PLAC in the raw GEDCOM of a fact or event. "
+#: resources/views/data-fix-options.phtml:27
+msgid "Attention!"
 msgstr ""
-"Podle dodatku GEDCOM-L se sdílená místa odkazují pomocí XREF, stejně jako "
-"sdílené poznámky atd. Pro editaci zatím není podpora, takže pod úroveň 2 "
-"PLAC v záznamu GEDCOM fakta nebo události musíte přidat na úrovni 3 tag _LOC "
-"@L123@ (s příslušným xref sdíleného místa). "
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:55
-msgid ""
-"This is rather inconvenient, and all places have names anyway, so you can "
-"check this option and link shared places via the place name itself. Links "
-"are established internally by searching for a shared place with any name "
-"matching case-insensitively."
-msgstr ""
-"To není moc pohodlné a všechna místa mají tak či onak názvy, takže můžete "
-"zaškrtnout tuto možnost a propojovat sdílená místa skrze název místa "
-"samotného. Propojení se vytvářejí interně vyhledáváním sdíleného místa  s "
-"jakýmkoliv názvem odpovídajícím  bez ohledu na velikost písmen."
+#: SharedPlacesModuleTrait.php:105
+msgid "Automatically expand shared place data"
+msgstr "Automaticky rozbalit údaje sdíleného místa"
+
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:196
+#: resources/views/modals/create-shared-place.phtml:10
+#: resources/views/shared-places-list-page.phtml:56
+msgid "Create a shared place"
+msgstr "Vytvořit sdílené místo"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:59
-msgid "... and fall back to n parent levels"
-msgstr "... a propadnout zpět na n nadřazených úrovní"
+#: SharedPlacesModuleTrait.php:130
+msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via xref."
+msgstr "Zjištění počtu propojení (propojené osoby/rodiny) je náročné, když se přiřazují sdílená místa skrze název, proto při zobrazování sdílených míst působí zpoždění. Volit tuto možnost se doporučuje jen pokud se místa přiřazují skrze xref."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:60
-msgid ""
-"When the preceding option is checked, and no matching shared place is found, "
-"fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would "
-"also match the shared places \"B, C\" and \"C\")"
-msgstr ""
-"Je-li zvolena předchozí možnost a není nalezeno žádné odpovídající sdílené "
-"místo, propadnout zpět na n nadřazených míst (takže např. pro n=2 a místo "
-"\"A, B, C\" by se také shodlo se sdílenými místy \"B, C\" a \"C\")."
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:68 SharedPlacesModuleTrait.php:110
+#: SharedPlacesModuleTrait.php:87 SharedPlacesModuleTrait.php:127
 msgid "Displayed data"
 msgstr "Zobrazené údaje"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:71
-msgid "Restrict to specific facts and events"
-msgstr "Omezit na určitá fakta a události"
+#: SharedPlacesModuleTrait.php:38
+msgid "Displayed title"
+msgstr "Zobrazený název"
 
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:72
-msgid ""
-"If this option is checked, shared place data is only displayed for the "
-"following facts and events. "
+#: SharedPlacesModule.php:188
+msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
-"Je-li zvolena tato možnost, pak sdílená místa se zobrazí jen pro následující "
-"fakta a události. "
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:73
-msgid ""
-"In particular if both lists are empty, no additional facts and events of "
-"this kind will be shown."
+#: SharedPlacesModuleTrait.php:140
+msgid "Facts and Events Tab Settings"
+msgstr "Nastavení záložky Fakta a události"
+
+#: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:52
+msgid "Families"
 msgstr ""
-"Zejména když jsou oba seznamy prázdné, žádná dodatečná fakta ani události "
-"tohoto druhu se nezobrazí."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:78
-msgid ""
-"Restrict to this list of GEDCOM individual facts and events. You can modify "
-"this list by removing or adding fact and event names, even custom ones, as "
-"necessary."
-msgstr ""
-"Omezit na tento seznam osobních faktů a událostí. Tento seznam je podle "
-"potřeby možno modifikovat odebráním nebo přidáním názvů faktů a událostí."
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:83
-msgid ""
-"Restrict to this list of GEDCOM family facts and events. You can modify this "
-"list by removing or adding fact and event names, even custom ones, as "
-"necessary."
-msgstr ""
-"Omezit na tento seznam rodinných faktů a událostí. Tento seznam je podle "
-"potřeby možno modifikovat odebráním nebo přidáním názvů faktů a událostí."
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:88
-msgid "Automatically expand shared place data"
-msgstr "Automaticky rozbalit údaje sdíleného místa"
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:93
-msgid "no"
-msgstr "ne"
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:97
-msgid "yes, but only the first occurrence of the shared place"
-msgstr "ano, ale jen první výskyt sdíleného místa"
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:98
-msgid ""
-"Note that the first occurrence may be within a toggleable, currently hidden "
-"fact or event (such as an event of a close relative). This will probably be "
-"improved in future versions of the module."
-msgstr ""
-"Poznamenejme, že ten první výskyt může patřit k přepínatelnému, současně "
-"skrytému faktu nebo události (jako třeba událost blízkého příbuzného). Toto "
-"bude pravděpodobně v budoucích versích modulu vylepšeno."
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:101
-msgid "yes"
-msgstr "ano"
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:112
-msgid "Show link counts for shared places list"
-msgstr "Zobrazit počty propojení v seznamu sdílených míst"
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:113
-msgid ""
-"Determining the link counts (linked individual/families) is expensive when "
-"assigning shared places via name, and therefore causes delays when the "
-"shared places list is displayed. It's recommended to only select this option "
-"if places are assigned via xref."
-msgstr ""
-"Zjištění počtu propojení (propojené osoby/rodiny) je náročné, když se "
-"přiřazují sdílená místa skrze název, proto při zobrazování sdílených míst "
-"působí zpoždění. Volit tuto možnost se doporučuje jen pokud se místa "
-"přiřazují skrze xref."
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:119
+#: SharedPlacesModuleTrait.php:136
 msgid "General"
 msgstr "Všeobecné"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:123
-msgid "Facts and Events Tab Settings"
-msgstr "Nastavení záložky Fakta a události"
+#: SharedPlacesModuleTrait.php:57
+msgid "If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to parent shared places, as described in the specification."
+msgstr ""
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:127
-msgid "Shared places list"
-msgstr "Seznam sdílených míst"
+#: SharedPlacesModuleTrait.php:91
+msgid "If this option is checked, shared place data is only displayed for the following facts and events. "
+msgstr "Je-li zvolena tato možnost, pak sdílená místa se zobrazí jen pro následující fakta a události. "
 
-#: resources/views/edit/icon-fact-create-shared-place.phtml:25
-#: resources/views/edit/icon-fact-create-shared-place.phtml:27
-#: resources/views/modals/create-shared-place.phtml:16
-#: resources/views/shared-places-list-page.phtml:48
-msgid "Create a shared place"
-msgstr "Vytvořit sdílené místo"
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:74
+msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a parent shared place that maps to \"B, C\"."
+msgstr ""
 
-#: resources/views/modals/shared-place-fields.phtml:7
+#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:33
+#: resources/views/shared-places-list-page.phtml:17
+msgid "Important note:"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:92
+msgid "In particular if both lists are empty, no additional facts and events of this kind will be shown."
+msgstr "Zejména když jsou oba seznamy prázdné, žádná dodatečná fakta ani události tohoto druhu se nezobrazí."
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:59
+msgid "In particular, hierarchical shared places do not have names with comma-separated name parts."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:46
+#, php-format
+msgid "Include the %1$s symbol in the list menu entry"
+msgstr ""
+
+#: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:47
+msgid "Individuals"
+msgstr ""
+
+#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:40
+#: resources/views/shared-places-list-page.phtml:24
+msgid "It is recommended to run the data fix for this custom module to resolve this issue."
+msgstr ""
+
+#: resources/views/data-fix-options.phtml:15
+msgid "It is strongly recommended to backup your tree first."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:63
+msgid "It is strongly recommended to switch to hierarchical shared places."
+msgstr ""
+
+#: resources/views/data-fix-options.phtml:12
+msgid "It usually will have to be carried out once only, as a migration when switching to hierarchical shared places."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:68
+msgid "Linking of shared places to places"
+msgstr "Propojení sdílených míst s místy"
+
+#. I18N: translate just like 'Shared Place' for consistency
+#: SharedPlacesModule.php:270
+msgid "Location"
+msgstr ""
+
+#: resources/views/data-fix-options.phtml:30
+msgid "Missing parent shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:115
+msgid "Note that the first occurrence may be within a toggleable, currently hidden fact or event (such as an event of a close relative). This will probably be improved in future versions of the module."
+msgstr "Poznamenejme, že ten první výskyt může patřit k přepínatelnému, současně skrytému faktu nebo události (jako třeba událost blízkého příbuzného). Toto bude pravděpodobně v budoucích versích modulu vylepšeno."
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:58
+msgid "Note that this also affects the way shared places are created, and the way they are mapped to places."
+msgstr ""
+
+#: resources/views/data-fix-options.phtml:19
+msgid "Note:"
+msgstr ""
+
+#: SharedPlacesModule.php:273
+msgid "Parent shared place"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:31
+msgid "Provides location data to other custom modules."
+msgstr "Poskytuje údaje o poloze jiným modulům."
+
+#: SharedPlacesModuleTrait.php:51
+msgid "Readme"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:30
+#, php-format
+msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
+msgstr "Vyžaduje modul '%1$s Vesta Common' a modul '%1$s Vesta Facts and events'."
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:90
+msgid "Restrict to specific facts and events"
+msgstr "Omezit na určitá fakta a události"
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:100
+msgid "Restrict to this list of GEDCOM family facts and events. You can modify this list by removing or adding fact and event names, even custom ones, as necessary."
+msgstr "Omezit na tento seznam rodinných faktů a událostí. Tento seznam je podle potřeby možno modifikovat odebráním nebo přidáním názvů faktů a událostí."
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:96
+msgid "Restrict to this list of GEDCOM individual facts and events. You can modify this list by removing or adding fact and event names, even custom ones, as necessary."
+msgstr "Omezit na tento seznam osobních faktů a událostí. Tento seznam je podle potřeby možno modifikovat odebráním nebo přidáním názvů faktů a událostí."
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:60
+#, php-format
+msgid "See %1$s for details."
+msgstr ""
+
+#: SharedPlacesModule.php:371 SharedPlacesModule.php:402
+#: resources/views/lists/shared-places-table.phtml:20
+#: resources/views/shared-places-list-page.phtml:84
+msgid "Shared place"
+msgstr "Sdílené místo"
+
+#: SharedPlacesModule.php:466
+msgid "Shared place data"
+msgstr "Údaje sdíleného místa"
+
+#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:99
+#: resources/views/modules/generic-place-hierarchy-shared-places/place-hierarchy.phtml:13
+msgid "Shared place hierarchy"
+msgstr ""
+
+#: resources/views/modules/generic-place-hierarchy-shared-places/list.phtml:12
+msgid "Shared place list"
+msgstr ""
+
+#: resources/views/modals/shared-place-fields.phtml:13
 msgid "Shared place name"
 msgstr "Název sdíleného místa"
 
-#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
-#: resources/views/shared-place-page.phtml:22
-#, php-format
-msgid ""
-"This shared place has been deleted. You should review the deletion and then "
-"%1$s or %2$s it."
+#: resources/views/modals/shared-place-fields.phtml:8
+msgid "Shared place name (complete hierarchy)"
 msgstr ""
-"Toto sdílené místo je smazané. Doporučuje se výmaz revidovat a pak jej %1$s "
-"nebo %2$s."
 
-#: resources/views/shared-place-page.phtml:25
-msgid ""
-"This shared place has been deleted. The deletion will need to be reviewed by "
-"a moderator."
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:54
+msgid "Shared place structure"
+msgstr ""
+
+#. I18N::translate('Shared place hierarchy'));
+#. }
+#. 
+#. //old-style list
+#.
+#: SharedPlaceHierarchyUtils.php:55 SharedPlacesListController.php:51
+#: SharedPlacesModule.php:142
+#: resources/views/lists/shared-places-table.phtml:15
+#: resources/views/shared-places-list-page.phtml:79
+msgid "Shared places"
+msgstr "Sdílená místa"
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:144
+msgid "Shared places list"
+msgstr "Seznam sdílených míst"
+
+#: SharedPlaceHierarchyUtils.php:51
+msgid "Show all shared places in a list"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:129
+msgid "Show link counts for shared places list"
+msgstr "Zobrazit počty propojení v seznamu sdílených míst"
+
+#: SharedPlaceHierarchyUtils.php:47
+msgid "Show shared place hierarchy"
+msgstr ""
+
+#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:114
+msgid "Summary"
+msgstr ""
+
+#: resources/views/data-fix-options.phtml:31
+msgid "The data fix currently won't update anything, because this preference isn't set."
+msgstr ""
+
+#: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:41
+msgid "The location of this shared place is not known."
+msgstr ""
+
+#: resources/views/data-fix-options.phtml:22
+msgid "The search currently does not match any records, because the configuration option to 'Use hierarchical shared places ' isn't set."
+msgstr ""
+
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:85
+#, php-format
+msgid "The shared place %s already exists."
+msgstr ""
+
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:106
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:150
+#, php-format
+msgid "The shared place %s has been created."
+msgstr "Toto sdílené místo %s je vytvořené."
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:61
+msgid "There is a data fix available which may be used to convert existing shared places."
+msgstr ""
+
+#: resources/views/data-fix-options.phtml:11
+msgid "This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to parent shared places via XREFs)."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:73
+msgid "This is rather inconvenient, and all places have names anyway, so you can check this option and link shared places via the place name itself. Links are established internally by searching for a shared place with any name matching case-insensitively."
+msgstr "To není moc pohodlné a všechna místa mají tak či onak názvy, takže můžete zaškrtnout tuto možnost a propojovat sdílená místa skrze název místa samotného. Propojení se vytvářejí interně vyhledáváním sdíleného místa  s jakýmkoliv názvem odpovídajícím  bez ohledu na velikost písmen."
+
+#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:37
+#: resources/views/shared-places-list-page.phtml:21
+msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
+msgstr ""
+
+#: patchedWebtrees/Exceptions/SharedPlaceNotFoundException.php:13
+msgid "This shared place does not exist or you do not have permission to view it."
+msgstr ""
+
+#: resources/views/shared-place-page.phtml:31
+msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
 msgstr "Toto sdílené místo je smazané. Výmaz musí revidovat moderátor."
 
 #. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
-#: resources/views/shared-place-page.phtml:31
+#: resources/views/shared-place-page.phtml:28
 #, php-format
-msgid ""
-"This shared place has been edited. You should review the changes and then "
-"%1$s or %2$s them."
-msgstr ""
-"Toto sdílené místo je změněné. Doporučuje se změnu revidovat a pak jej %1$s "
-"nebo %2$s."
+msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
+msgstr "Toto sdílené místo je smazané. Doporučuje se výmaz revidovat a pak jej %1$s nebo %2$s."
 
-#: resources/views/shared-place-page.phtml:34
-msgid ""
-"This shared place has been edited. The changes need to be reviewed by a "
-"moderator."
+#: resources/views/shared-place-page.phtml:40
+msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
 msgstr "Toto sdílené místo je změněné. Změnu musí revidovat moderátor."
+
+#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
+#: resources/views/shared-place-page.phtml:37
+#, php-format
+msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
+msgstr "Toto sdílené místo je změněné. Doporučuje se změnu revidovat a pak jej %1$s nebo %2$s."
+
+#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:36
+#: resources/views/shared-places-list-page.phtml:20
+msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
+msgstr ""
+
+#: SharedPlacesModule.php:274
+msgid "Type of hierarchical relationship"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:56
+msgid "Use hierarchical shared places"
+msgstr ""
+
+#: SharedPlacesModuleTrait.php:18
+msgid "Vesta Shared Places"
+msgstr "Vesta Shared Places"
+
+#: SharedPlacesModule.php:186
+msgid "View Shared places hierarchy"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:79
+msgid "When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would also match shared places that match \"B, C\" and \"C\")"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:62
+msgid "When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated name parts."
+msgstr ""
+
+#. I18N: Type of hierarchical relationship between locations
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:303
+msgid "administrative"
+msgstr ""
+
+#. I18N: Type of hierarchical relationship between locations
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:312
+msgid "cultural"
+msgstr ""
+
+#. I18N: Type of hierarchical relationship between locations
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:309
+msgid "geographical"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:110
+msgid "no"
+msgstr "ne"
+
+#. I18N: Type of hierarchical relationship between locations
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:315
+msgid "other"
+msgstr ""
+
+#. I18N: Type of hierarchical relationship between locations
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:306
+msgid "religious"
+msgstr ""
+
+#: SharedPlacesModule.php:1048
+msgid "shared places"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:118
+msgid "yes"
+msgstr "ano"
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:114
+msgid "yes, but only the first occurrence of the shared place"
+msgstr "ano, ale jen první výskyt sdíleného místa"
+
+#~ msgid "According to the GEDCOM-L Addendum, shared places are referenced via xrefs, just like shared notes etc. There is no edit support for this yet, so you have to add a level 3 _LOC @L123@ (with the proper shared place xref) under level 2 PLAC in the raw GEDCOM of a fact or event. "
+#~ msgstr "Podle dodatku GEDCOM-L se sdílená místa odkazují pomocí XREF, stejně jako sdílené poznámky atd. Pro editaci zatím není podpora, takže pod úroveň 2 PLAC v záznamu GEDCOM fakta nebo události musíte přidat na úrovni 3 tag _LOC @L123@ (s příslušným xref sdíleného místa). "
+
+#~ msgid "Include the %1$s symbol in the list title"
+#~ msgstr "Přidat symbol %1$s k názvu seznamu"
+
+#~ msgid "Include the %1$s symbol in the module title"
+#~ msgstr "Přidat symbol %1$s k názvu modulu"
+
+#~ msgid "When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would also match the shared places \"B, C\" and \"C\")"
+#~ msgstr "Je-li zvolena předchozí možnost a není nalezeno žádné odpovídající sdílené místo, propadnout zpět na n nadřazených míst (takže např. pro n=2 a místo \"A, B, C\" by se také shodlo se sdílenými místy \"B, C\" a \"C\")."

@@ -11,6 +11,7 @@ use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
+use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyLink;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 
@@ -19,14 +20,17 @@ class SharedPlacesListController extends AbstractBaseController {
   protected $module;
   protected $moduleName;
   protected $hasLocationsToFix;
+  protected $link;
 
   public function __construct(
           $module, 
-          bool $hasLocationsToFix) {
+          bool $hasLocationsToFix,
+          ?PlaceHierarchyLink $link) {
     
     $this->module = $module;
     $this->moduleName = $module->name();
     $this->hasLocationsToFix = $hasLocationsToFix;
+    $this->link = $link;
   }
   
   public function sharedPlacesList(Tree $tree, $showLinkCounts): ResponseInterface {
@@ -48,6 +52,7 @@ class SharedPlacesListController extends AbstractBaseController {
                 'moduleName' => $this->moduleName,
                 'select2Initializers' => $select2Initializers,
                 'hasLocationsToFix' => $this->hasLocationsToFix,
+                'link' => $this->link,
     ]);
   }
 

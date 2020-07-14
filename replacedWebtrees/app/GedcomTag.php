@@ -1178,7 +1178,7 @@ class GedcomTag
               
             //[RC] added
             case '_LOC:_LOC':
-                return I18N::translate('Parent Shared Place');
+                return I18N::translate('Parent shared place');
             
             //[RC] added
             case '_LOC:TYPE':

@@ -17,14 +17,13 @@ use Vesta\VestaAdminController;
           <?= I18N::translate('Important note:') ?>
       </h3>
       <p>
-          <?= I18N::translate('You have shared places with comma-separated name parts, while at the same time the option to \'Use hierarchical shared places\' is selected.') ?>
+          <?= I18N::translate('This tree has shared places with comma-separated name parts, while at the same time the option to \'Use hierarchical shared places\' is selected.') ?>
           <?= I18N::translate('This leads to inconsistencies when mapping places to shared places, and in general doesn\'t match the specification for shared places (which earlier versions of this custom module didn\'t follow strictly).') ?>
       </p>
       <p>
           <?= I18N::translate('It is recommended to run the data fix for this custom module to resolve this issue.') ?>
       </p>
-    <?php endif ?>  
-
+    <?php endif ?>          
     <?php
     $count_individuals = [];
     $count_families = [];
@@ -45,7 +44,7 @@ use Vesta\VestaAdminController;
     $id = /* $fact . */ Uuid::uuid4()->toString();
     ?>
 
-    <div class="input-group">
+    <div class="input-group d-flex justify-content-between">
         <span class="input-group-btn">
             <button 
                 class="btn btn-secondary" 
@@ -58,6 +57,11 @@ use Vesta\VestaAdminController;
                     <?= view('icons/add') ?>
             </button>
         </span>
+        <?php if ($link !== null) : ?>
+          <p>
+              <?= $link->format() ?>
+          </p>
+        <?php endif ?>
     </div>
 
     <table

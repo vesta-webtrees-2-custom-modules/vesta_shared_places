@@ -10,12 +10,17 @@ use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Exceptions\SharedPlaceNotFoundException;
 use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
 use Cissee\WebtreesExt\FactPlaceAdditions;
-use Cissee\WebtreesExt\Http\Controllers\GenericPlaceHierarchyController;
+use Cissee\WebtreesExt\Http\Controllers\ModulePlaceHierarchyInterface;
+use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyLink;
+use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyParticipant;
+use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
+use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
 use Cissee\WebtreesExt\Http\RequestHandlers\Select2Location;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Module\ClippingsCartModule;
+use Cissee\WebtreesExt\PlaceViaSharedPlace;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Auth;
@@ -36,8 +41,10 @@ use Fisharebest\Webtrees\Module\ModuleDataFixInterface;
 use Fisharebest\Webtrees\Module\ModuleDataFixTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
+use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
+use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Services\DataFixService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
@@ -78,7 +85,8 @@ class SharedPlacesModule extends AbstractModule implements
   ModuleDataFixInterface,
   IndividualFactsTabExtenderInterface, 
   FunctionsPlaceInterface,
-  FunctionsClippingsCartInterface {
+  FunctionsClippingsCartInterface,
+  PlaceHierarchyParticipant {
 
   use ModuleCustomTrait, ModuleListTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait, ModuleDataFixTrait {
     VestaModuleTrait::customTranslations insteadof ModuleCustomTrait;
@@ -122,12 +130,15 @@ class SharedPlacesModule extends AbstractModule implements
   }  
   
   public function listTitle(): string {
+    /*
     $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
     if ($useHierarchy) {
       return $this->getListTitle(I18N::translate('Shared place hierarchy'));
     }
     
     //old-style list
+    */
+    
     return $this->getListTitle(I18N::translate("Shared places"));
   }
 
@@ -143,6 +154,7 @@ class SharedPlacesModule extends AbstractModule implements
     $user = $request->getAttribute('user');
     Auth::checkComponentAccess($this, ModuleListInterface::class, $tree, $user);
     
+    /*
     $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
     if ($useHierarchy) {
       $searchService = app(SearchServiceExt::class);
@@ -152,10 +164,34 @@ class SharedPlacesModule extends AbstractModule implements
       return $controller->show($request);
     }
 
-    //old-style list        
+    //old-style list
+    */
+    
+    $link = null;
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    if ($useHierarchy) {
+      //link to place hierarchy
+      $module = app(ModuleService::class)
+            ->findByComponent(ModulePlaceHierarchyInterface::class, $tree, Auth::user())
+            ->first(static function (ModuleInterface $module): bool {
+                return $module instanceof ModulePlaceHierarchyInterface;
+            });
+        
+      if ($module instanceof ModulePlaceHierarchyInterface) {
+          $url = $module->listUrl($tree, [
+              'place_id'     => 0,
+              'tree'         => $tree->name(),
+              'sharedPlaces' => 1,
+          ]);
+          $link = new PlaceHierarchyLink(I18N::translate("View Shared places hierarchy"), null, $url);
+      } else {
+          $link = new PlaceHierarchyLink(I18N::translate("Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."), null, null);
+      }
+    }
+    
     $locationsToFix = $this->locationsToFix($tree, []);
-    $hasLocationsToFix = ($locationsToFix->count() > 0);    
-    $controller = new SharedPlacesListController($this, $hasLocationsToFix);
+    $hasLocationsToFix = ($locationsToFix->count() > 0);
+    $controller = new SharedPlacesListController($this, $hasLocationsToFix, $link);
 
     $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
     return $controller->sharedPlacesList($tree, $showLinkCounts);
@@ -215,6 +251,7 @@ class SharedPlacesModule extends AbstractModule implements
       $router->post(CreateSharedPlaceAction::class, '/tree/{tree}/create-location', CreateSharedPlaceAction::class)
               ->extras(['middleware' => [AuthEditor::class]]);
       
+      //TODO: cleanup - remove
       //for GenericPlaceHierarchyController
       View::registerCustomView('::modules/generic-place-hierarchy-shared-places/place-hierarchy', $this->name() . '::modules/generic-place-hierarchy-shared-places/place-hierarchy');
       View::registerCustomView('::modules/generic-place-hierarchy-shared-places/list', $this->name() . '::modules/generic-place-hierarchy-shared-places/list');
@@ -233,8 +270,8 @@ class SharedPlacesModule extends AbstractModule implements
       /* I18N: translate just like 'Shared Place' for consistency */I18N::translate('Location');
       
       //added via GedcomTag.php
-      I18N::translate('Parent Shared Place');
-      
+      I18N::translate('Parent shared place');
+      I18N::translate('Type of hierarchical relationship');
       
       $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 1);
   }
@@ -631,7 +668,7 @@ class SharedPlacesModule extends AbstractModule implements
     
     if ($sharedPlace !== null) {
       if (!empty($sharedPlace->namesNN())) {
-        $ps = PlaceStructure::fromNameAndLoc($sharedPlace->namesNN()[0], $sharedPlace->xref(), $sharedPlace->tree(), $loc->getLevel(), $sharedPlace);
+        $ps = PlaceStructure::fromNameAndLoc($sharedPlace->canonicalPlace()->gedcomName(), $sharedPlace->xref(), $sharedPlace->tree(), $loc->getLevel(), $sharedPlace);
         if ($ps !== null) {
           return $ps;
         }
@@ -956,7 +993,7 @@ class SharedPlacesModule extends AbstractModule implements
         ->where('o_file', '=', $tree->id())
         ->where('o_type', '=', Location::RECORD_TYPE);
 
-    $this->recordQuery($query, 'o_gedcom', '1 NAME.*,.*\n');
+    $this->recordQuery($query, 'o_gedcom', '[\n]1 NAME[^\n]*,');
 
     return $query->pluck('o_id');
   }
@@ -1002,5 +1039,25 @@ class SharedPlacesModule extends AbstractModule implements
   private function updateGedcom(GedcomRecord $record): string {
     $regex = $this->createRegex('(1 NAME[^,]*),[^\n]*');
     return preg_replace($regex, '$1$2', $record->gedcom());
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  //PlaceHierarchyParticipant
+  
+  public function filterLabel(): string {
+    return I18N::translate('shared places');
+  }
+  
+  public function filterParameterName(): string {
+    return 'sharedPlaces';
+  }
+  
+  public function findPlace(int $id, Tree $tree, PlaceUrls $urls): PlaceWithinHierarchy {
+    $actual = Place::find($id, $tree);
+    
+    //find matching shared places
+    $sharedPlaces = $this->placename2sharedPlacesImpl($actual->gedcomName(), $actual->tree(), true);    
+    $searchService = app(SearchServiceExt::class);
+    return new PlaceViaSharedPlace($actual, $urls, $sharedPlaces, $this, $searchService);
   }
 }
