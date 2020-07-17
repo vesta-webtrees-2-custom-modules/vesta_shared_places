@@ -29,6 +29,12 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. For its web
 * All shared place data is fully included in the gedcom exported by webtrees (and may also be imported from other sources supporting _LOC records), on the basis of the GEDCOM-L Addendum.
 * Location data is provided to other modules (e.g. for use in maps).
 
+* Shared places may be hierarchical, similar to regular places. Hierarchical relationships between shared places are modelled via explicit links (XREFs to parent shared places). This allows to model more complex relationships than via the place hierarchy itself, which uses comma-separated place name parts to indicate the hierarchy. When creating a shared place from a given place name, any missing parent shared places are created as well:
+
+<p align="center"><img src="createSharedPlace.png" alt="Screenshot" align="center" width="67%"></p>
+
+* As hierarchical shared places have not been supported by earlier versions of this custom module, you may have to use a data fix in order to convert existing shared places (having comma-separated name parts), as a one-time migration. This will only affect shared place records of the respective GEDCOM file.
+
 ### Gedcom-L Addendum<a name="gedcom"/>
 
 The Gedcom-L Addendum to the GEDCOM 5.5.1 specification is available [here](https://genealogy.net/GEDCOM/). It defines the following structure for top-level place records:
@@ -79,7 +85,7 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.6.1.0
+* Current version: 2.0.6.2.0
 * Based on and tested with webtrees 2.0.6. Cannot be used with webtrees 1.x. May not work with earlier 2.x versions!
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 

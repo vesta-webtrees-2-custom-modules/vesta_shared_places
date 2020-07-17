@@ -226,7 +226,10 @@ class FunctionsEditLoc {
         $html .= '</select>';
         break;
       default:
-        throw new Exception("unexpected tag: " . $fact);
+        //#17
+        ////may be a custom tag, so  just allow editing
+        //throw new Exception("unexpected tag: " . $fact);
+        $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '">';
     }
 
     $html .= '</div></div>';

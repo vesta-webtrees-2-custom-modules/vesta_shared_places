@@ -159,7 +159,7 @@ class SharedPlacesModule extends AbstractModule implements
     if ($useHierarchy) {
       $searchService = app(SearchServiceExt::class);
       $controller = new GenericPlaceHierarchyController(
-              new SharedPlaceHierarchyUtils($this, $searchService));
+              new SharedPlaceHierarchyUtils($this, $searchService), 10000);
 
       return $controller->show($request);
     }
@@ -169,7 +169,10 @@ class SharedPlacesModule extends AbstractModule implements
     
     $link = null;
     $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
-    if ($useHierarchy) {
+    $locationsToFix = $this->locationsToFix($tree, []);
+    $hasLocationsToFix = ($locationsToFix->count() > 0);
+    
+    if ($useHierarchy && !$hasLocationsToFix) {
       //link to place hierarchy
       $module = app(ModuleService::class)
             ->findByComponent(ModulePlaceHierarchyInterface::class, $tree, Auth::user())
@@ -179,9 +182,9 @@ class SharedPlacesModule extends AbstractModule implements
         
       if ($module instanceof ModulePlaceHierarchyInterface) {
           $url = $module->listUrl($tree, [
-              'place_id'     => 0,
-              'tree'         => $tree->name(),
-              'sharedPlaces' => 1,
+                'place_id'     => 0,
+                'tree'         => $tree->name(),
+                'sharedPlaces' => 1,
           ]);
           $link = new PlaceHierarchyLink(I18N::translate("View Shared places hierarchy"), null, $url);
       } else {
@@ -189,8 +192,6 @@ class SharedPlacesModule extends AbstractModule implements
       }
     }
     
-    $locationsToFix = $this->locationsToFix($tree, []);
-    $hasLocationsToFix = ($locationsToFix->count() > 0);
     $controller = new SharedPlacesListController($this, $hasLocationsToFix, $link);
 
     $showLinkCounts = boolval($this->getPreference('LINK_COUNTS', '0'));
@@ -721,6 +722,33 @@ class SharedPlacesModule extends AbstractModule implements
     return $ret;
   }
   
+  public function getTransitiveLinks(GedcomRecord $record): Collection {
+    $ret = new Collection();
+    
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    if ($useHierarchy) {
+      if ($record instanceof SharedPlace) {
+        //safer wrt loops (than to use getTransitiveLinks recursively)
+        $queue = new Collection();        
+        $queue->prepend($record);
+        
+        while ($queue->count() > 0) {
+          $current = $queue->pop();
+          $ret->add($current);
+          foreach ($current->getParents() as $parent) {            
+            if (!$ret->contains($parent)) {
+              $queue->prepend($parent);
+            }              
+          }
+        }        
+      }
+    }    
+    
+    return $ret->map(function (GedcomRecord $record): string {
+              return $record->xref();
+            });
+  }
+  
   public function getAddToClippingsCartRoute(Route $route, Tree $tree): ?string {
     if ($route->name === SharedPlacePage::class) {
       $xref = $route->attributes['xref'];
@@ -1044,6 +1072,16 @@ class SharedPlacesModule extends AbstractModule implements
   ////////////////////////////////////////////////////////////////////////////////
   //PlaceHierarchyParticipant
   
+  public function participates(Tree $tree): bool {
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    if (!$useHierarchy) {
+      return false;
+    }
+    
+    $locationsToFix = $this->locationsToFix($tree, []);
+    return ($locationsToFix->count() === 0);
+  }
+  
   public function filterLabel(): string {
     return I18N::translate('shared places');
   }
@@ -1059,5 +1097,11 @@ class SharedPlacesModule extends AbstractModule implements
     $sharedPlaces = $this->placename2sharedPlacesImpl($actual->gedcomName(), $actual->tree(), true);    
     $searchService = app(SearchServiceExt::class);
     return new PlaceViaSharedPlace($actual, $urls, $sharedPlaces, $this, $searchService);
+  }
+  
+  public function createNonMatchingPlace(Place $actual, PlaceUrls $urls) {
+    //there are no matching shared places!
+    $searchService = app(SearchServiceExt::class);
+    return new PlaceViaSharedPlace($actual, $urls, new Collection(), $this, $searchService);
   }
 }

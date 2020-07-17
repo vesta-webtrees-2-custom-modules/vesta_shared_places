@@ -2,6 +2,7 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
+use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Webtrees;
 use function app;
@@ -21,6 +22,13 @@ if (defined("WT_MODULES_DIR")) {
 //DO NOT USE $file HERE! see Module.loadModule($file) - we must not change that var!
 foreach (glob(Webtrees::ROOT_DIR . $modulesPath . '*/autoload.php') as $autoloadFile) {
   require_once $autoloadFile;
+}
+
+//dependency check
+$ok = class_exists("Cissee\WebtreesExt\AbstractModule", true);
+if (!$ok) {
+  FlashMessages::addMessage("Missing dependency - Make sure to install all Vesta modules!");
+  return;
 }
 
 return new SharedPlacesModule(app(ModuleService::class));

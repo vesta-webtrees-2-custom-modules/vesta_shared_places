@@ -246,14 +246,17 @@ class PlaceViaSharedPlace extends DefaultPlaceWithinHierarchyBase implements Pla
       $latiMax = (new Collection($latitudes))->max();
       $longMax = (new Collection($longitudes))->max();
       
-      if ($latiMin === $latiMax) {
-        $latiMin -= 0.5;
-        $latiMax += 0.5;
+      //never zoom in too far (in particular if there is only one place, but also if the places are close together)
+      $latiSpread = $latiMax - $latiMin;
+      if ($latiSpread < 1) {
+        $latiMin -= (1 - $latiSpread)/2;
+        $latiMax += (1 - $latiSpread)/2;
       }
-      
-      if ($longMin === $longMax) {
-        $longMin -= 0.5;
-        $longMax += 0.5;
+
+      $longSpread = $longMax - $longMin;
+      if ($longSpread < 1) {
+        $longMin -= (1 - $longSpread)/2;
+        $longMax += (1 - $longSpread)/2;
       }
       
       return [[$latiMin, $longMin], [$latiMax, $longMax]];
