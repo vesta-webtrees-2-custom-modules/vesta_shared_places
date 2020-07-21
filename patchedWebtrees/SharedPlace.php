@@ -90,6 +90,15 @@ class SharedPlace extends Location {
     return null;
   }
 
+  public function printLati(): string {
+    //cf FunctionsPrint
+    $cts = preg_match('/\d LATI (.*)/', $this->gedcom(), $match);
+    if ($cts > 0) {
+      return $match[1];
+    }    
+    return '';
+  }
+  
   public function getLong() {
     //cf FunctionsPrint
     $map_long = null;
@@ -104,6 +113,15 @@ class SharedPlace extends Location {
     return null;
   }
 
+  public function printLong(): string {
+    //cf FunctionsPrint
+    $cts = preg_match('/\d LONG (.*)/', $this->gedcom(), $match);
+    if ($cts > 0) {
+      return $match[1];
+    }    
+    return '';
+  }
+  
   public function getGov() {
     return $this->getAttribute('_GOV');
   }
