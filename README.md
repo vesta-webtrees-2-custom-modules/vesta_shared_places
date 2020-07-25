@@ -29,11 +29,13 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. For its web
 * All shared place data is fully included in the gedcom exported by webtrees (and may also be imported from other sources supporting _LOC records), on the basis of the GEDCOM-L Addendum.
 * Location data is provided to other modules (e.g. for use in maps).
 
-* Shared places may be hierarchical, similar to regular places. Hierarchical relationships between shared places are modelled via explicit links (XREFs to parent shared places). This allows to model more complex relationships than via the place hierarchy itself, which uses comma-separated place name parts to indicate the hierarchy. When creating a shared place from a given place name, any missing parent shared places are created as well:
+* Shared places may be hierarchical, similar to regular places. Hierarchical relationships between shared places are modelled via explicit links (XREFs to higher-level shared places). This allows to model more complex relationships than via the place hierarchy itself, which uses comma-separated place name parts to indicate the hierarchy. When creating a shared place from a given place name, any missing higher-level shared places are created as well:
 
 <p align="center"><img src="createSharedPlace.png" alt="Screenshot" align="center" width="67%"></p>
 
 * As hierarchical shared places have not been supported by earlier versions of this custom module, you may have to use a data fix in order to convert existing shared places (having comma-separated name parts), as a one-time migration. This will only affect shared place records of the respective GEDCOM file.
+
+* The Vesta Places and Pedigree Map module provides an extended place hierarchy list, which may be filtered to shared places. This is useful e.g. to show subordinate shared places.
 
 ### Gedcom-L Addendum<a name="gedcom"/>
 
@@ -85,7 +87,7 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.6.2.1
+* Current version: 2.0.6.2.2
 * Based on and tested with webtrees 2.0.6. Cannot be used with webtrees 1.x. May not work with earlier 2.x versions!
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 

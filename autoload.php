@@ -13,7 +13,7 @@ $loader->register();
 
 //GedcomTag:
 //adjustment for MAP is temporary, will be in webtrees 2.0.7
-//adjustment for _LOC:_LOC hopefully possible in webtrees 2.1.x
+//adjustment for _LOC:_LOC etc hopefully possible in webtrees 2.1.x
 $extend = !class_exists("Fisharebest\Webtrees\GedcomTag", false);
 if ($extend) {
   require_once __DIR__ . '/replacedWebtrees/app/GedcomTag.php';

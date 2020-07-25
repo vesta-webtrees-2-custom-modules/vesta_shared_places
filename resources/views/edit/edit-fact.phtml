@@ -35,6 +35,9 @@ use Ramsey\Uuid\Uuid;
             case '_LOC':
               FunctionsEditLoc::createEditFormLoc($edit_fact);
               break;
+            case 'TYPE':
+              FunctionsEditLoc::createEditFormLoc($edit_fact);
+              break;
             default:
               //standard edit form
               FunctionsEdit::createEditForm($edit_fact);

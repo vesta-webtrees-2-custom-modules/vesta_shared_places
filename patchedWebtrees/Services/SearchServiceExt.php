@@ -54,6 +54,26 @@ class SearchServiceExt {
     return $this->paginateQuery($query, $this->locationRowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
   }
   
+  /**
+   * Search for shared places.
+   *
+   * @param Tree[]   $trees
+   * @param string[] $search
+   * @param int      $offset
+   * @param int      $limit
+   *
+   * @return Collection|Location[]
+   */
+  public function searchLocationsEOL(array $trees, array $search, int $offset = 0, int $limit = PHP_INT_MAX): Collection {
+    $query = DB::table('other')
+            ->where('o_type', '=', '_LOC');
+
+    $this->whereTrees($query, 'o_file', $trees);
+    $this->whereSearchEOL($query, 'o_gedcom', $search);
+    
+    return $this->paginateQuery($query, $this->locationRowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
+  }
+  
   public function searchTopLevelLocations(array $trees, int $offset = 0, int $limit = PHP_INT_MAX): Collection {
     $query = DB::table('other')
             ->leftJoin('link', static function (JoinClause $join): void {
@@ -132,6 +152,18 @@ class SearchServiceExt {
     }
   }
 
+  private function whereSearchEOL(Builder $query, $field, array $search_terms): void {
+    if ($field instanceof Expression) {
+      $field = $field->getValue();
+    }
+
+    foreach ($search_terms as $search_term) {
+      $query
+              ->where(new Expression($field), 'LIKE', '%' . addcslashes($search_term . "\n", '\\%_') . '%') //EOL
+              ->orWhere(new Expression($field), 'LIKE', '%' . addcslashes($search_term, '\\%_')); //EOL via end of entire entry
+    }
+  }
+  
   /**
    * @param Builder $query
    * @param string  $tree_id_field

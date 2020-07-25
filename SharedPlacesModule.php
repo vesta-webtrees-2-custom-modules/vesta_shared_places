@@ -6,6 +6,7 @@ use Aura\Router\Route;
 use Aura\Router\RouterContainer;
 use Cissee\Webtrees\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
+use Cissee\Webtrees\Module\SharedPlaces\HelpTexts;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Exceptions\SharedPlaceNotFoundException;
 use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
@@ -21,6 +22,7 @@ use Cissee\WebtreesExt\Http\RequestHandlers\Select2Location;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Module\ClippingsCartModule;
 use Cissee\WebtreesExt\PlaceViaSharedPlace;
+use Cissee\WebtreesExt\Requests;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Auth;
@@ -73,6 +75,7 @@ use Vesta\Model\Trace;
 use Vesta\VestaModuleTrait;
 use function app;
 use function redirect;
+use function response;
 use function route;
 use function view;
 
@@ -237,7 +240,7 @@ class SharedPlacesModule extends AbstractModule implements
       View::registerCustomView('::media-page', $this->name() . '::media-page');
 
       // Replace an existing view with our own version.
-      // (adjustments for _LOC.NAME, _LOC.MAP, and _LOC._GOV)
+      // (adjustments for _LOC.NAME, _LOC.MAP, _LOC._GOV, _LOC.TYPE, , _LOC._LOC)
       View::registerCustomView('::edit/add-fact', $this->name() . '::edit/add-fact');
       View::registerCustomView('::edit/edit-fact', $this->name() . '::edit/edit-fact');
       
@@ -271,10 +274,17 @@ class SharedPlacesModule extends AbstractModule implements
       /* I18N: translate just like 'Shared Place' for consistency */I18N::translate('Location');
       
       //added via GedcomTag.php
-      I18N::translate('Parent shared place');
+      I18N::translate('Higher-level shared place');
       I18N::translate('Type of hierarchical relationship');
+      I18N::translate('Type of location');
+      I18N::translate('GOV-Id for type of location');
       
       $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 1);
+  }
+  
+  public function getHelpAction(ServerRequestInterface $request): ResponseInterface {
+    $topic = Requests::getString($request, 'topic');
+    return response(HelpTexts::helpText($topic));
   }
   
   //no longer required - css is static now
@@ -504,7 +514,7 @@ class SharedPlacesModule extends AbstractModule implements
     if ($useHierarchy) {
       $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
       $head = reset($parts);
-      $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $head . "\n"));
+      $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $head));
       foreach ($sharedPlaces as $sharedPlace) {
         if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
           return $sharedPlace;
@@ -513,7 +523,7 @@ class SharedPlacesModule extends AbstractModule implements
       return null;
     }
     
-    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $placeGedcomName . "\n"));
+    $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $placeGedcomName));
     foreach ($sharedPlaces as $sharedPlace) {
       if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
         //first match wins, we don't expect multiple _LOC with same name
@@ -538,7 +548,7 @@ class SharedPlacesModule extends AbstractModule implements
     if ($useHierarchy) {
       $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
       $head = reset($parts);
-      $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $head . "\n"));
+      $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $head));
       $ret = new Collection();
       foreach ($sharedPlaces as $sharedPlace) {
         if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
@@ -548,7 +558,7 @@ class SharedPlacesModule extends AbstractModule implements
       return $ret;
     }
     
-    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $placeGedcomName . "\n"));
+    $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $placeGedcomName));
     $ret = new Collection();
     foreach ($sharedPlaces as $sharedPlace) {
       if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
@@ -636,7 +646,7 @@ class SharedPlacesModule extends AbstractModule implements
   
   public function gov2loc(GovReference $gov, Tree $tree): ?LocReference {
     $searchService = app(SearchServiceExt::class);
-    $sharedPlaces = $searchService->searchLocations(array($tree), array("1 _GOV " . $gov->getId() . "\n"));
+    $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 _GOV " . $gov->getId()));
     foreach ($sharedPlaces as $sharedPlace) {
       //first match wins
       $trace = $gov->getTrace();
@@ -904,7 +914,7 @@ class SharedPlacesModule extends AbstractModule implements
     $old = $record->gedcom();
     $new = $this->updateGedcom($record);
     
-    //parent shared places for all names
+    //higher-level shared places for all names
     $creator = app(CreateSharedPlaceAction::class);
     $newlyCreated = '';
     foreach ($record->namesNN() as $placeGedcomName) {
@@ -958,7 +968,7 @@ class SharedPlacesModule extends AbstractModule implements
     
     $new = $this->updateGedcom($record);
     
-    //parent shared places for all names
+    //higher-level shared places for all names
     $creator = app(CreateSharedPlaceAction::class);
     foreach ($record->namesNN() as $placeGedcomName) {
       $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);

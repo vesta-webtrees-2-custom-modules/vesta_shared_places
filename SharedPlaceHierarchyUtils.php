@@ -76,6 +76,7 @@ class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
     
   public function hasLocationsToFix(Tree $tree): bool {
     $locationsToFix = $this->module->locationsToFix($tree, []);
+    /*
     if ($locationsToFix->count() > 0) {
       error_log("Locations to fix:");
       foreach ($locationsToFix as $locationToFix) {
@@ -83,6 +84,7 @@ class SharedPlaceHierarchyUtils implements PlaceHierarchyUtils {
         error_log(Factory::location()->make($locationToFix, $tree)->gedcom());
       }
     }
+    */
     return ($locationsToFix->count() > 0);
   }
 }

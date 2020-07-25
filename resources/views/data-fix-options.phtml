@@ -8,7 +8,7 @@ use Fisharebest\Webtrees\I18N;
 
 <div class="col-sm-9">
     <p>
-        <?= I18N::translate('This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to parent shared places via XREFs).') ?>
+        <?= I18N::translate('This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to higher-level shared places via XREFs).') ?>
         <?= I18N::translate('It usually will have to be carried out once only, as a migration when switching to hierarchical shared places.') ?>
     </p>
     <p>
@@ -27,7 +27,7 @@ use Fisharebest\Webtrees\I18N;
             <?= I18N::translate('Attention!') ?>
         </h3>
         <p>
-            <?= I18N::translate('Missing parent shared places are created if required. For this to work without potentially creating duplicates, you have to check \'Automatically accept changes made by this user\' in the user administration, at least for the duration of this data fix.') ?>
+            <?= I18N::translate('Missing higher-level shared places are created if required. For this to work without potentially creating duplicates, you have to check \'Automatically accept changes made by this user\' in the user administration, at least for the duration of this data fix.') ?>
             <?= I18N::translate('The data fix currently won\'t update anything, because this preference isn\'t set.') ?>
         </p>
       <?php endif ?>

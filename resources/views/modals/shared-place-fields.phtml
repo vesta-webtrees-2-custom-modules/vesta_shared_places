@@ -7,7 +7,7 @@ use Fisharebest\Webtrees\I18N; ?>
       <label class="col-form-label" for="shared-place-name">
           <?= I18N::translate('Shared place name (complete hierarchy)') ?>        
       </label>
-      <div><?= I18N::translate('A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing parent shared places will be created as well.') ?></div>
+      <div><?= I18N::translate('A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well.') ?></div>
     <?php else : ?>
       <label class="col-form-label" for="shared-place-name">
           <?= I18N::translate('Shared place name') ?>        

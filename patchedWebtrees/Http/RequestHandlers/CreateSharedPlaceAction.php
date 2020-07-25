@@ -90,9 +90,9 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
           } else {
             $html = '';
             if ($ref->created() === 2) {
-              $html = ' ' . I18N::translate(' (Note: A parent shared place has also been created)');
+              $html = ' ' . I18N::translate(' (Note: A higher-level shared place has also been created)');
             } else if ($ref->created() > 2) {
-               $html = ' ' . I18N::translate(' (Note: %s parent shared places have also been created)', $ref->created());
+               $html = ' ' . I18N::translate(' (Note: %s higher-level shared places have also been created)', $ref->created());
             }
           
             // id and text are for select2 / autocomplete
@@ -167,7 +167,7 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
 
       //if the place exists (with hierarchy), just return
       $searchService = app(SearchServiceExt::class);
-      $sharedPlaces = $searchService->searchLocations(array($tree), array("1 NAME " . $head . "\n"));
+      $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $head));
       foreach ($sharedPlaces as $sharedPlace) {
         if ($sharedPlace->matches($placeGedcomName)) {
           return new SharedPlaceRef($sharedPlace, true, 0, null);

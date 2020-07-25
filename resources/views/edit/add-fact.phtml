@@ -35,6 +35,9 @@ use Vesta\VestaAdminController;
             case '_LOC':
               FunctionsEditLoc::createAddFormLoc($record, $tree, $fact);
               break;
+            case 'TYPE':
+              FunctionsEditLoc::createAddFormLoc($record, $tree, $fact);
+              break;
             default:
               //standard add form
               FunctionsEdit::createAddForm($tree, $fact);

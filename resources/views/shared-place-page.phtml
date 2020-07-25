@@ -1,5 +1,7 @@
 <?php
 
+use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
+use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderUtils;
 use Cissee\WebtreesExt\Functions\FunctionsEditLoc;
 use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
 use Cissee\WebtreesExt\MoreI18N;
@@ -11,6 +13,7 @@ use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesAcceptRecord;
 use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesRejectRecord;
 use Fisharebest\Webtrees\I18N;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
+use Vesta\Model\GenericViewElement;
 use Vesta\Model\GovReference;
 use Vesta\Model\MapCoordinates;
 use Vesta\Model\Trace;
@@ -69,6 +72,12 @@ use Vesta\Model\Trace;
                 <?= view('components/badge', ['count' => count($families)]) ?>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link<?= empty($llSharedPlaces) ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#locations">
+                <?= I18N::translate('Lower-level shared places') ?>
+                <?= view('components/badge', ['count' => count($llSharedPlaces)]) ?>
+            </a>
+        </li>
     </ul>
 
     <div class="tab-content">
@@ -89,7 +98,25 @@ use Vesta\Model\Trace;
                       $replacement .= FunctionsPlaceUtils::gov2html($module, $tree, new GovReference($fact->value(), new Trace("")))->getMain();
                       //TODO: handle getScript()!
                       $html = ob_get_clean();
-                      echo str_replace($printed, $replacement, $html);
+                      
+                      $html = str_replace($printed, $replacement, $html);
+                      
+                      //very hacky , should handle this better!        
+                      $additions = IndividualFactsTabExtenderUtils::accessibleModules($module, $fact->record()->tree(), Auth::user())
+                              ->map(function (IndividualFactsTabExtenderInterface $otherModule) use ($fact) {
+                                return $otherModule->hFactsTabGetAdditionalEditControls($fact);
+                              })
+                              ->toArray();
+
+                      $aec = GenericViewElement::implode($additions);
+                      $aecMain = $aec->getMain();
+                      //$aecScript = $aec->getScript();
+                      
+                      //TODO should be added even when not in edit mode!
+                      //s = DOTALL, U = non-greedy
+                      $html = preg_replace("~<div class=\"editfacts nowrap\">(.*)</div>~sU", "<div class=\"editfacts nowrap\">$1". $aecMain ."</div>", $html);
+                      
+                      echo $html;
                       break;
                     case 'MAP':
                       //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
@@ -112,7 +139,7 @@ use Vesta\Model\Trace;
                       
                       $html = str_replace(
                                 '<span class="label">'.MoreI18n::xlate(GedcomTag::getLabel('TYPE')).':</span>', 
-                                '<span class="label">'.MoreI18n::xlate(GedcomTag::getLabel('_LOC:TYPE')).':</span>', 
+                                '<span class="label">'.MoreI18n::xlate(GedcomTag::getLabel('_LOC:_LOC:TYPE')).':</span>', 
                                 $html);
                       
                       //uargh ugly
@@ -135,6 +162,12 @@ use Vesta\Model\Trace;
                       
                       echo $html;
                       break;
+                    /*
+                    case 'TYPE':
+                      //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
+                      //TODO pretty-print _GOVTYPE
+                      break;                     
+                     */
                     default:  
                       FunctionsPrintFacts::printFact($fact, $sharedPlace);
                       break;
@@ -171,6 +204,13 @@ use Vesta\Model\Trace;
 
         <div class="tab-pane fade" role="tabpanel" id="families">
             <?= view('lists/families-table', ['families' => $families, 'tree' => $tree]) ?>
+        </div>
+        
+        <div class="tab-pane fade" role="tabpanel" id="locations">
+            <?= view('lists/shared-places-table', [
+                'sharedPlaces' => $llSharedPlaces, 
+                'tree' => $tree, 
+                'showLinkCounts' => true]) ?>
         </div>
     </div>
 </div>

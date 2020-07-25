@@ -4,7 +4,6 @@ namespace Cissee\WebtreesExt\Functions;
 
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
 use Cissee\WebtreesExt\SharedPlace;
-use Exception;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Factory;
@@ -38,7 +37,7 @@ class FunctionsEditLoc {
       if ($fact === '_LOC') {
         echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact, '_LOC');
       } else {
-        echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact);
+        echo self::addSimpleTagWithGedcomRecord($record, $tree, '1 ' . $fact, 'TYPE');
       }
 
       //[RC][added]
@@ -56,6 +55,8 @@ class FunctionsEditLoc {
           echo FunctionsEdit::addSimpleTag($tree, '2 LONG E0');
       } else if ($fact === '_LOC') {
           echo self::addSimpleTagWithGedcomRecord($record, $tree, '2 TYPE POLI', '_LOC');
+      } else if ($fact === 'TYPE') {
+          echo self::addSimpleTagWithGedcomRecord($record, $tree, '2 _GOVTYPE', 'TYPE');
       }
       
       //_GOV:
@@ -94,10 +95,14 @@ class FunctionsEditLoc {
           }
 
           $subrecord = $level . ' ' . $type . ' ' . $text;
-
+          
           //[RC] adjusted, hacky
-          if ($label === '_LOC') {
+          if ($label === 'TYPE') {
+            $label = '_LOC:TYPE';
+          } else if ($label === '_LOC') {
             $label = '_LOC:_LOC';
+          } else if ($label === '_LOC:TYPE') {
+            $label = '_LOC:_LOC:TYPE';
           }
           echo self::addSimpleTagWithGedcomRecord($record, $tree, $subrecord, $level0type, GedcomTag::getLabel($label, $record));
           $i++;
@@ -159,7 +164,7 @@ class FunctionsEditLoc {
 
     // value
     $html .= '<div class="col-sm-9">';
-
+    
     switch ($fact) {
       case 'NAME':
         //just like PLAC
@@ -210,20 +215,47 @@ class FunctionsEditLoc {
         break;
       //_LOC.TYPE
       case 'TYPE':
-        //-- Build the selector for the Location 'TYPE' Fact
-        $html .= '<select name="text[]">';
-        $selectedValue = strtoupper($value);
-        if (!array_key_exists($selectedValue, self::getLocationRelationshipTypes())) {
-            $html .= '<option selected value="' . e($value) . '" >' . e($value) . '</option>';
+        if ($level === '2') {
+          //-- Build the selector for the Location 'TYPE' Fact
+          $html .= '<select name="text[]">';
+          $selectedValue = strtoupper($value);
+          if (!array_key_exists($selectedValue, self::getLocationRelationshipTypes())) {
+              $html .= '<option selected value="' . e($value) . '" >' . e($value) . '</option>';
+          }
+          foreach (self::getLocationRelationshipTypes() + [] as $typeName => $typeValue) {
+              $html .= '<option value="' . $typeName . '" ';
+              if ($selectedValue === $typeName) {
+                  $html .= 'selected';
+              }
+              $html .= '>' . $typeValue . '</option>';
+          }
+          $html .= '</select>';
+        } else {
+          //level 1: type of location!
+          $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '">';
         }
-        foreach (self::getLocationRelationshipTypes() + [] as $typeName => $typeValue) {
-            $html .= '<option value="' . $typeName . '" ';
-            if ($selectedValue === $typeName) {
-                $html .= 'selected';
-            }
-            $html .= '>' . $typeValue . '</option>';
+        break;     
+      case '_GOVTYPE':
+        $htmlGovtype = '';
+        //hooked?
+        $additionalControls = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
+              ->map(function (GovIdEditControlsInterface $module) use ($value, $id, $name) {
+                return $module->govTypeIdEditControl(($value === '')?null:$value, $id, $name);
+              })
+              ->toArray();
+
+        foreach ($additionalControls as $additionalControl) {
+          $htmlGovtype = $additionalControl->getMain();
+          //apparently handled properly
+          View::push('javascript');
+          echo $additionalControl->getScript();
+          View::endpush();
         }
-        $html .= '</select>';
+    
+        if ($htmlGovtype === '') {
+          $htmlGovtype = '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '">';          
+        }
+        $html .= $htmlGovtype;
         break;
       default:
         //#17

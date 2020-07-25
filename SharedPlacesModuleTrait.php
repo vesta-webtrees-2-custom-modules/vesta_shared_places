@@ -54,7 +54,7 @@ trait SharedPlacesModuleTrait {
             /* I18N: Module Configuration */I18N::translate('Shared place structure'),
             array(new ControlPanelCheckbox(
                 /* I18N: Module Configuration */I18N::translate('Use hierarchical shared places'),
-                /* I18N: Module Configuration */I18N::translate('If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to parent shared places, as described in the specification.') . ' ' .
+                /* I18N: Module Configuration */I18N::translate('If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to higher-level shared places, as described in the specification.') . ' ' .
                 /* I18N: Module Configuration */I18N::translate('Note that this also affects the way shared places are created, and the way they are mapped to places.') . ' ' .
                 /* I18N: Module Configuration */I18N::translate('In particular, hierarchical shared places do not have names with comma-separated name parts.') . ' ' .
                 /* I18N: Module Configuration */I18N::translate('See %1$s for details.', $link) . ' ' .
@@ -71,7 +71,7 @@ trait SharedPlacesModuleTrait {
                 /* I18N: Module Configuration */I18N::translate('Additionally link shared places via name'),
                 /* I18N: Module Configuration */I18N::translate('According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. There is no edit support for this yet, so you have to add a level 3 _LOC @L123@ (with the proper shared place xref) under level 2 PLAC in the raw GEDCOM of a fact or event. ') .
                 /* I18N: Module Configuration */I18N::translate('This is rather inconvenient, and all places have names anyway, so you can check this option and link shared places via the place name itself. Links are established internally by searching for a shared place with any name matching case-insensitively.') . ' ' .
-                /* I18N: Module Configuration */I18N::translate('If you are using hierarchical shared places, a place with the name "A, B, C" is mapped to a shared place "A" with a parent shared place that maps to "B, C".'),
+                /* I18N: Module Configuration */I18N::translate('If you are using hierarchical shared places, a place with the name "A, B, C" is mapped to a shared place "A" with a higher-level shared place that maps to "B, C".'),
                 'INDIRECT_LINKS',
                 '1'),
         new ControlPanelRange(

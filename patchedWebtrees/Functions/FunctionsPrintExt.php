@@ -18,7 +18,7 @@ class FunctionsPrintExt {
     //$quickfacts  = preg_split("/[, ;:]+/", $tree->getPreference('_LOC_FACTS_QUICK'), -1, PREG_SPLIT_NO_EMPTY);
     //addfacts = non-unique only! 
     
-    $addfacts = array("NAME" => "NAME", "NOTE" => "NOTE", "SHARED_NOTE" => "SHARED_NOTE", "SOUR" => "SOUR", "_LOC:_LOC" => "_LOC");
+    $addfacts = array("NAME" => "NAME", "_LOC:TYPE" => "TYPE", "NOTE" => "NOTE", "SHARED_NOTE" => "SHARED_NOTE", "SOUR" => "SOUR", "_LOC:_LOC" => "_LOC");
     $uniquefacts = array("MAP" => "MAP", "_GOV" => "_GOV");
     $quickfacts = array("MAP" => "MAP", "NOTE" => "NOTE", "SHARED_NOTE" => "SHARED_NOTE", "_GOV" => "_GOV");
 

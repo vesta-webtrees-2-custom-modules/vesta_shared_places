@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
 use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
+use Cissee\WebtreesExt\Functions\FunctionsPrintExtHelpLink;
 use Cissee\WebtreesExt\SharedPlace;
 use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\Auth;
@@ -34,9 +35,10 @@ class SharedPlacePage implements RequestHandlerInterface {
     // Show the shared place's facts in this order:
     private const FACT_ORDER = [
         1 => 'NAME',
-        2 => '_LOC',
-        3 => 'MAP',
-        4 => '_GOV',
+        2 => 'TYPE',
+        3 => '_LOC',
+        4 => 'MAP',
+        5 => '_GOV',
         'ABBR',
         'AUTH',
         'DATA',
@@ -90,17 +92,19 @@ class SharedPlacePage implements RequestHandlerInterface {
             return redirect($sharedPlace->url(), StatusCodeInterface::STATUS_MOVED_PERMANENTLY);
         }
         
+      $canonical = $sharedPlace->canonicalPlace()->gedcomName();
+      
       $hierarchyHtml = '';
+      
+      //what was the point of this? summary shows same data!
+      /*
       $mainForDisplay = $sharedPlace->fullName();
       $canonicalForDisplay = $sharedPlace->canonicalPlace()->fullName();
-      $canonical = $sharedPlace->canonicalPlace()->gedcomName();
       
       if ($mainForDisplay !== $canonicalForDisplay) {
         $hierarchyHtml = '<tr class=""><th scope="row">' . I18N::translate('Shared place hierarchy') . '</th><td class="">' . $canonicalForDisplay . '</td></tr>';
       }
-      
-      
-      //TODO HERE: HIERARCHICAL NAME REQUIRED!!
+      */
       
       //summary (with any additional data such as GOV data, map links etc),
       //if there is a module that provides this summary
@@ -111,7 +115,7 @@ class SharedPlacePage implements RequestHandlerInterface {
           $summaryGve = FunctionsPlaceUtils::plac2html($this->module, $ps);
 
           //if ($summaryHtml !== '') {
-            $summaryHtml = '<tr class=""><th scope="row">' . I18N::translate('Summary') . '</th><td class="">' . $summaryGve->getMain() . '</td></tr>';
+            $summaryHtml = '<tr class=""><th scope="row">' . I18N::translate('Summary') . FunctionsPrintExtHelpLink::helpLink($this->module->name(), 'Summary') . '</th><td class="">' . $summaryGve->getMain() . '</td></tr>';
             //TODO: handle getScript()!
           //}          
         }
@@ -124,8 +128,9 @@ class SharedPlacePage implements RequestHandlerInterface {
                     'hierarchyHtml' => $hierarchyHtml,
                     'summaryHtml' => $summaryHtml,
                     'facts' => $this->facts($sharedPlace),
-                    'families' => $sharedPlace->linkedFamilies('_LOC'),
                     'individuals' => $sharedPlace->linkedIndividuals('_LOC'),
+                    'families' => $sharedPlace->linkedFamilies('_LOC'),
+                    'llSharedPlaces' => $sharedPlace->linkedLocations('_LOC'),
                     'sharedPlace' => $sharedPlace,
                     'meta_robots' => 'index,follow',
                     'title' => $sharedPlace->fullName(),

@@ -63,82 +63,12 @@ use Vesta\VestaAdminController;
           </p>
         <?php endif ?>
     </div>
-
-    <table
-        class="table table-bordered table-sm wt-table-note datatables"
-        <?= view('lists/datatables-attributes') ?>
-        data-columns="<?=
-        e(json_encode([
-            null,
-            ['visible' => true],
-            ['visible' => true],
-            ['visible' => true],
-            ['visible' => $showLinkCounts],
-            ['visible' => $showLinkCounts]
-        ]))
-        ?>"
-        >
-        <caption class="sr-only">
-            <?= $caption ?? I18N::translate('Shared places') ?>
-        </caption>
-
-        <thead>
-            <tr>
-                <th><?= I18N::translate('Shared place') ?></th>
-                <th><?= MoreI18N::xlate('Place') ?></th>
-                <th><?= MoreI18N::xlate('Latitude') ?></th>
-                <th><?= MoreI18N::xlate('Longitude') ?></th>
-                <th><?= MoreI18N::xlate('Individuals') ?></th>
-                <th><?= MoreI18N::xlate('Families') ?></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <?php foreach ($sharedPlaces as $sharedPlace) : ?>
-              <?php
-              if (!$sharedPlace->canShow()) {
-                continue;
-              }
-              ?>
-              <tr class="<?= $sharedPlace->isPendingDeletion() ? 'wt-old' : ($sharedPlace->isPendingAddition() ? 'wt-new' : '') ?>">
-                  <!-- Title -->
-                  <td data-sort="<?= e($sharedPlace->fullName()) ?>">
-                      <?php foreach ($sharedPlace->namesNN() as $name) : ?>
-                        <a title="<?= $name ?>" href="<?= e($sharedPlace->url()) ?>" class="<?= $name == $sharedPlace->fullName() ? 'name2' : '' ?>">
-                            <?= $name ?>
-                        </a>
-                        <br>
-                      <?php endforeach ?>
-                  </td>
-                  
-                  <!-- Place (in hierarchy) --> 
-
-                  <td class="center">
-                      <?= $sharedPlace->canonicalPlace()->shortName(true) ?>
-                  </td>
-                  
-                  <!-- Coordinates --> 
-                  <td class="center">
-                      <?= $sharedPlace->printLati() ?>
-                  </td>
-                  <td class="center">
-                      <?= $sharedPlace->printLong() ?>
-                  </td>
-                  
-                  <!-- Count of linked individuals --> 
-                  <td class="center" data-sort="<?= $count_individuals[$sharedPlace->xref()] ?? 0 ?>">
-                      <?= I18N::number($count_individuals[$sharedPlace->xref()] ?? 0) ?>
-                  </td>
-
-                  <!-- Count of linked families -->
-                  <td class="center" data-sort="<?= $count_families[$sharedPlace->xref()] ?? 0 ?>">
-                      <?= I18N::number($count_families[$sharedPlace->xref()] ?? 0) ?>
-                  </td>
-              </tr>
-            <?php endforeach ?>
-        </tbody>
-    </table>
 </div>
+
+<?= view('lists/shared-places-table', [
+                'sharedPlaces' => $sharedPlaces, 
+                'tree' => $tree, 
+                'showLinkCounts' => $showLinkCounts]) ?>
 
 <?php
   //do not use standard modal placeholder (ajax.phtml): we may have to support specific select2 edit controls!

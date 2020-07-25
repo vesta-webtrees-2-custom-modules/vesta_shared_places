@@ -346,6 +346,9 @@ class GedcomTag
         
         //[RC] added
         '_LOC:_LOC',
+        '_LOC:TYPE',
+        '_GOVTYPE',
+        '_LOC:_LOC:TYPE',
         
         '_MARI',
         '_MARNM',
@@ -1178,12 +1181,20 @@ class GedcomTag
               
             //[RC] added
             case '_LOC:_LOC':
-                return I18N::translate('Parent shared place');
+                return I18N::translate('Higher-level shared place');
             
             //[RC] added
             case '_LOC:TYPE':
+                return I18N::translate('Type of location');
+            
+            //[RC] added
+            case '_LOC:_LOC:TYPE':
                 return I18N::translate('Type of hierarchical relationship');
-             
+            
+            //[RC] added
+            case '_GOVTYPE':
+                return I18N::translate('GOV id for type of location');
+            
             case '_MARI':
                 /* I18N: gedcom tag _MARI */
                 return I18N::translate('Marriage intention');

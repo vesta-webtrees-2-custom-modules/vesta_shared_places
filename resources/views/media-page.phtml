@@ -222,7 +222,10 @@ use Illuminate\Support\Collection;
           //[RC] added
         ?>
         <div class="tab-pane fade" role="tabpanel" id="sharedPlaces">
-            <?= view('lists/shared-places-table', ['sharedPlaces' => $sharedPlaces, 'tree' => $tree]) ?>
+            <?= view('lists/shared-places-table', [
+                'sharedPlaces' => $sharedPlaces, 
+                'tree' => $tree, 
+                'showLinkCounts' => true]) ?>
         </div>
     </div>
 </div>
