@@ -28,6 +28,7 @@ if ($showLinkCounts) {
             ['visible' => true],
             ['visible' => true],
             ['visible' => true],
+            ['visible' => true],
             ['visible' => $showLinkCounts],
             ['visible' => $showLinkCounts]
         ]))
@@ -40,6 +41,7 @@ if ($showLinkCounts) {
         <thead>
             <tr>
                 <th><?= I18N::translate('Shared place') ?></th>
+                <th><?= MoreI18N::xlate('Type') ?></th>
                 <th><?= MoreI18N::xlate('Place') ?></th>
                 <th><?= MoreI18N::xlate('Latitude') ?></th>
                 <th><?= MoreI18N::xlate('Longitude') ?></th>
@@ -62,6 +64,13 @@ if ($showLinkCounts) {
                         <a title="<?= $name ?>" href="<?= e($sharedPlace->url()) ?>" class="<?= $name == $sharedPlace->fullName() ? 'name2' : '' ?>">
                             <?= $name ?>
                         </a>
+                        <br>
+                      <?php endforeach ?>
+                  </td>
+                  
+                  <td data-sort="<?= e($sharedPlace->getAttribute("TYPE")) ?>">
+                      <?php foreach ($sharedPlace->getAttributes("TYPE") as $type) : ?>
+                        <?= $type ?>
                         <br>
                       <?php endforeach ?>
                   </td>

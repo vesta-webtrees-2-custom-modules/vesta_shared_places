@@ -133,6 +133,16 @@ class SharedPlace extends Location {
     return null;
   }
 
+  public function getAttributes($tag): array {
+    preg_match_all('/\n1 (?:' . $tag . ') ?(.*(?:(?:\n2 CONT ?.*)*)*)/', $this->gedcom, $matches);
+    $attributes = array();
+    foreach ($matches[1] as $match) {
+      $attributes[] = preg_replace("/\n2 CONT ?/", "\n", $match);
+    }
+
+    return $attributes;
+  }
+  
   public function linkedIndividuals(string $link): Collection {
     $main = parent::linkedIndividuals($link);
     
