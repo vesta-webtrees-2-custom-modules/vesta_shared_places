@@ -12,6 +12,7 @@ use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
 /**
@@ -143,8 +144,100 @@ class SharedPlace extends Location {
     return $attributes;
   }
   
+  public function linkedIndividualsC(string $link, bool $transitively): Collection {
+    if (!$transitively) {
+      return parent::linkedIndividuals($link);
+    }
+    
+    //for compatibility with indirect links, we consider all child places as well
+    //(that's how placelinks work)
+    
+    //performance unacceptable in mysql without type restriction in the _first_ left join
+    //(others can take it or leave it - "explain" statement doesn't look different = joined size apparently the problem)
+    //may still be problematic for large link tables, there are similar queries on places and placelinks though, with comparable sizes
+    //
+    //performance still too bad for multiple shared places!
+    return DB::table('individuals')
+            ->join('link AS l0', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l0.l_file', '=', 'i_file')
+                    ->on('l0.l_from', '=', 'i_id')
+                    ->where('l0.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l1', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l1.l_file', '=', 'l0.l_file')
+                    ->on('l1.l_from', '=', 'l0.l_to')
+                    ->where('l1.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l2', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l2.l_file', '=', 'l1.l_file')
+                    ->on('l2.l_from', '=', 'l1.l_to')
+                    ->where('l2.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l3', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l3.l_file', '=', 'l2.l_file')
+                    ->on('l3.l_from', '=', 'l2.l_to')
+                    ->where('l3.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l4', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l4.l_file', '=', 'l3.l_file')
+                    ->on('l4.l_from', '=', 'l3.l_to')
+                    ->where('l4.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l5', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l5.l_file', '=', 'l4.l_file')
+                    ->on('l5.l_from', '=', 'l4.l_to')
+                    ->where('l5.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l6', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l6.l_file', '=', 'l5.l_file')
+                    ->on('l6.l_from', '=', 'l5.l_to')
+                    ->where('l6.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l7', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l7.l_file', '=', 'l6.l_file')
+                    ->on('l7.l_from', '=', 'l6.l_to')
+                    ->where('l7.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l8', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l8.l_file', '=', 'l7.l_file')
+                    ->on('l8.l_from', '=', 'l7.l_to')
+                    ->where('l8.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l9', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l9.l_file', '=', 'l8.l_file')
+                    ->on('l9.l_from', '=', 'l8.l_to')
+                    ->where('l9.l_type', '=', $link);
+            })
+            ->where('i_file', '=', $this->tree->id())
+            //->where('l0.l_type', '=', $link)
+            ->where('l0.l_to', '=', $this->xref)
+                    ->orWhere('l1.l_to', '=', $this->xref)
+                    ->orWhere('l2.l_to', '=', $this->xref)
+                    ->orWhere('l3.l_to', '=', $this->xref)
+                    ->orWhere('l4.l_to', '=', $this->xref)
+                    ->orWhere('l5.l_to', '=', $this->xref)
+                    ->orWhere('l6.l_to', '=', $this->xref)
+                    ->orWhere('l7.l_to', '=', $this->xref)
+                    ->orWhere('l8.l_to', '=', $this->xref)
+                    ->orWhere('l9.l_to', '=', $this->xref)
+            ->select(['individuals.*'])
+            ->get()
+            ->map(Factory::individual()->mapper($this->tree))
+            ->filter(self::accessFilter());
+  }
+  
   public function linkedIndividuals(string $link): Collection {
-    $main = parent::linkedIndividuals($link);
+    $main = $this->linkedIndividualsC($link, false); //should use true but performance is too bad
     
     if (!$this->useIndirectLinks) {
       return $main;
@@ -181,8 +274,100 @@ class SharedPlace extends Location {
     return $concatenated;
   }
   
+  public function linkedFamiliesC(string $link, bool $transitively): Collection {
+    if (!$transitively) {
+      return parent::linkedFamilies($link);
+    }
+    
+    //for compatibility with indirect links, we consider all child places as well
+    //(that's how placelinks work)
+    
+    //performance unacceptable in mysql without type restriction in the _first_ left join
+    //(others can take it or leave it - "explain" statement doesn't look different = joined size apparently the problem)
+    //may still be problematic for large link tables, there are similar queries on places and placelinks though, with comparable sizes
+    //
+    //performance still too bad for multiple shared places!
+    return DB::table('families')
+            ->join('link AS l0', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l0.l_file', '=', 'f_file')
+                    ->on('l0.l_from', '=', 'f_id')
+                    ->where('l0.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l1', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l1.l_file', '=', 'l0.l_file')
+                    ->on('l1.l_from', '=', 'l0.l_to')
+                    ->where('l1.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l2', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l2.l_file', '=', 'l1.l_file')
+                    ->on('l2.l_from', '=', 'l1.l_to')
+                    ->where('l2.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l3', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l3.l_file', '=', 'l2.l_file')
+                    ->on('l3.l_from', '=', 'l2.l_to')
+                    ->where('l3.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l4', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l4.l_file', '=', 'l3.l_file')
+                    ->on('l4.l_from', '=', 'l3.l_to')
+                    ->where('l4.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l5', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l5.l_file', '=', 'l4.l_file')
+                    ->on('l5.l_from', '=', 'l4.l_to')
+                    ->where('l5.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l6', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l6.l_file', '=', 'l5.l_file')
+                    ->on('l6.l_from', '=', 'l5.l_to')
+                    ->where('l6.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l7', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l7.l_file', '=', 'l6.l_file')
+                    ->on('l7.l_from', '=', 'l6.l_to')
+                    ->where('l7.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l8', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l8.l_file', '=', 'l7.l_file')
+                    ->on('l8.l_from', '=', 'l7.l_to')
+                    ->where('l8.l_type', '=', $link);
+            })
+            ->leftJoin('link AS l9', static function (JoinClause $join) use ($link): void {
+                $join
+                    ->on('l9.l_file', '=', 'l8.l_file')
+                    ->on('l9.l_from', '=', 'l8.l_to')
+                    ->where('l9.l_type', '=', $link);
+            })
+            ->where('f_file', '=', $this->tree->id())
+            //->where('l0.l_type', '=', $link)
+            ->where('l0.l_to', '=', $this->xref)
+                    ->orWhere('l1.l_to', '=', $this->xref)
+                    ->orWhere('l2.l_to', '=', $this->xref)
+                    ->orWhere('l3.l_to', '=', $this->xref)
+                    ->orWhere('l4.l_to', '=', $this->xref)
+                    ->orWhere('l5.l_to', '=', $this->xref)
+                    ->orWhere('l6.l_to', '=', $this->xref)
+                    ->orWhere('l7.l_to', '=', $this->xref)
+                    ->orWhere('l8.l_to', '=', $this->xref)
+                    ->orWhere('l9.l_to', '=', $this->xref)
+            ->select(['families.*'])
+            ->get()
+            ->map(Factory::family()->mapper($this->tree))
+            ->filter(self::accessFilter());
+  }
+  
   public function linkedFamilies(string $link): Collection {
-    $main = parent::linkedFamilies($link);
+    $main = $this->linkedFamiliesC($link, false); //should use true but performance is too bad
     
     if (!$this->useIndirectLinks) {
       return $main;

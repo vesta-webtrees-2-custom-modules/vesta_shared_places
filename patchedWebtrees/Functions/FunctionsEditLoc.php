@@ -69,7 +69,7 @@ class FunctionsEditLoc {
       $record = $fact->record();
       $tree   = $record->tree();
 
-      $level0type = $record::RECORD_TYPE;
+      $level0type = $record->tag();
 
       $stack       = [];
       $gedlines    = explode("\n", $fact->gedcom());

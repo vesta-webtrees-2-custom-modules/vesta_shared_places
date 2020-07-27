@@ -66,6 +66,7 @@ use Vesta\Hook\HookInterfaces\FunctionsClippingsCartInterface;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
+use Vesta\Model\GedcomDateInterval;
 use Vesta\Model\GenericViewElement;
 use Vesta\Model\GovReference;
 use Vesta\Model\LocReference;
@@ -452,37 +453,32 @@ class SharedPlacesModule extends AbstractModule implements
     if ($html !== '') {
       //wrap in order to make expandable/collapsible
       $data = '<br/>';
-      $elementID = Uuid::uuid4();
 
       $expandSetting = $this->getPreference('EXPAND', '1');
       if ($expandSetting == '0') {
-        $expand = false;
+        $expanded = false;
       } else if ($expandSetting == '1') {
         if (in_array($sharedPlace->xref(), SharedPlacesModule::$seenSharedPlaces)) {
-          $expand = false;
+          $expanded = false;
         } else {
-          $expand = true;
+          $expanded = true;
         }
         SharedPlacesModule::$seenSharedPlaces[] = $sharedPlace->xref();
       } else {
-        $expand = true;
+        $expanded = true;
       }
 
-      if ($expand) {
-        $plusminus = 'icon-minus';
-      } else {
-        $plusminus = 'icon-plus';
-      }
-      $data .= '<a href="#" onclick="return expand_layer(\'' . $elementID . '\');"><i id="' . $elementID . '_img" class="' . $plusminus . '"></i></a> ';
+      $id = 'collapse-' . Uuid::uuid4()->toString();
+            
+      $data .= '<a href="#' . e($id) . '" role="button" data-toggle="collapse" aria-controls="' . e($id) . '" aria-expanded="' . ($expanded ? 'true' : 'false') . '">' .
+            view('icons/expand') .
+            view('icons/collapse') .
+            '</a> ';
+      
       $data .= '<span class="label">' . I18N::translate('Shared place data') . '</span>';
-      $data .= "<div id=\"$elementID\"";
-      if ($expand) {
-        $data .= ' style="display:block"';
-      } else {
-        $data .= ' style="display:none"';
-      }
-      $data .= ' class="shared_place_data">';
-      $data .= $html;
+      $data .= '<div id="' . e($id) . '" class="shared_place_data collapse ' . ($expanded ? 'show' : '') . '">' .
+            $html .
+            '</div>';
       $data .= '</div>';
 
 
@@ -697,6 +693,25 @@ class SharedPlacesModule extends AbstractModule implements
     }
     
     return null;
+  }
+  
+  public function locPloc(LocReference $locReference, GedcomDateInterval $dateInterval, Collection $typesOfLocation, int $maxLevels = PHP_INT_MAX): Collection {
+    $sharedPlace = Factory::gedcomRecord()->make($locReference->getXref(), $locReference->getTree());
+    
+    $currentLevel = 0;
+    $trace = $locReference->getTrace();
+    $trace->add('Shared Place via Shared Places module (hierarchy)');
+    $ret = new Collection();
+    if ($sharedPlace !== null) {      
+      foreach ($sharedPlace->getParents() as $parent) {
+        //TODO check type of location via _GOVTYPE
+        //TODO check dateInterval
+        //TODO use maxLevels for transitive parents
+        $ret->add(new LocReference($parent->xref(), $parent->tree(), $trace, $currentLevel));
+      }
+    }
+    
+    return $ret;
   }
   
   public function factPlaceAdditions(PlaceStructure $place): ?FactPlaceAdditions {
