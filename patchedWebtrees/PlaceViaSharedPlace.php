@@ -134,27 +134,19 @@ class PlaceViaSharedPlace extends DefaultPlaceWithinHierarchyBase implements Pla
   }
   
   public function searchIndividualsInPlace(): Collection {
-    $ret = new Collection();
-    foreach ($this->sharedPlaces as $sharedPlace) {
-      $ret = $ret->merge($sharedPlace->linkedIndividuals('_LOC'));
-    }
-    return $ret->unique();    
+    return SharedPlace::linkedIndividualsRecords($this->sharedPlaces);
   }
   
   public function countIndividualsInPlace(): int {
-    return $this->searchIndividualsInPlace()->count();
+    return SharedPlace::linkedIndividualsCount($this->sharedPlaces);
   }
   
   public function searchFamiliesInPlace(): Collection {
-    $ret = new Collection();
-    foreach ($this->sharedPlaces as $sharedPlace) {
-      $ret = $ret->merge($sharedPlace->linkedFamilies('_LOC'));
-    }
-    return $ret->unique(); 
+    return SharedPlace::linkedFamiliesRecords($this->sharedPlaces);
   }
   
   public function countFamiliesInPlace(): int {
-    return $this->searchFamiliesInPlace()->count();
+    return SharedPlace::linkedFamiliesCount($this->sharedPlaces);
   }
   
   protected function getLatLon(): ?MapCoordinates {

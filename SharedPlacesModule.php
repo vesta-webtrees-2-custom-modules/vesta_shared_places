@@ -62,10 +62,12 @@ use Ramsey\Uuid\Uuid;
 use stdClass;
 use Throwable;
 use Vesta\Hook\HookInterfaces\EmptyFunctionsPlace;
+use Vesta\Hook\HookInterfaces\EmptyPrintFunctionsPlace;
 use Vesta\Hook\HookInterfaces\FunctionsClippingsCartInterface;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
+use Vesta\Hook\HookInterfaces\PrintFunctionsPlaceInterface;
 use Vesta\Model\GedcomDateInterval;
 use Vesta\Model\GenericViewElement;
 use Vesta\Model\GovReference;
@@ -89,6 +91,7 @@ class SharedPlacesModule extends AbstractModule implements
   ModuleDataFixInterface,
   IndividualFactsTabExtenderInterface, 
   FunctionsPlaceInterface,
+  PrintFunctionsPlaceInterface,
   FunctionsClippingsCartInterface,
   PlaceHierarchyParticipant {
 
@@ -104,6 +107,7 @@ class SharedPlacesModule extends AbstractModule implements
   use SharedPlacesModuleTrait;
   use EmptyIndividualFactsTabExtender;
   use EmptyFunctionsPlace;
+  use EmptyPrintFunctionsPlace;
 
   protected $module_service;
 

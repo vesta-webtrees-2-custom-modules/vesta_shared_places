@@ -5,15 +5,14 @@ namespace Cissee\WebtreesExt;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Exception;
 use Fisharebest\Webtrees\Factory;
-use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Gedcom;
-use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
+use stdClass;
 
 /**
  * A GEDCOM level 0 shared place aka location (_LOC) object (complete structure)
@@ -30,6 +29,10 @@ class SharedPlace extends Location {
 
   public function useHierarchy(): bool {
     return $this->useHierarchy;
+  }
+  
+  public function useIndirectLinks(): bool {
+    return $this->useIndirectLinks;
   }
   
   public function __construct(
@@ -144,263 +147,160 @@ class SharedPlace extends Location {
     return $attributes;
   }
   
-  public function linkedIndividualsC(string $link, bool $transitively): Collection {
-    if (!$transitively) {
-      return parent::linkedIndividuals($link);
-    }
-    
-    //for compatibility with indirect links, we consider all child places as well
-    //(that's how placelinks work)
-    
-    //performance unacceptable in mysql without type restriction in the _first_ left join
-    //(others can take it or leave it - "explain" statement doesn't look different = joined size apparently the problem)
-    //may still be problematic for large link tables, there are similar queries on places and placelinks though, with comparable sizes
-    //
-    //performance still too bad for multiple shared places!
-    return DB::table('individuals')
-            ->join('link AS l0', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l0.l_file', '=', 'i_file')
-                    ->on('l0.l_from', '=', 'i_id')
-                    ->where('l0.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l1', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l1.l_file', '=', 'l0.l_file')
-                    ->on('l1.l_from', '=', 'l0.l_to')
-                    ->where('l1.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l2', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l2.l_file', '=', 'l1.l_file')
-                    ->on('l2.l_from', '=', 'l1.l_to')
-                    ->where('l2.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l3', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l3.l_file', '=', 'l2.l_file')
-                    ->on('l3.l_from', '=', 'l2.l_to')
-                    ->where('l3.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l4', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l4.l_file', '=', 'l3.l_file')
-                    ->on('l4.l_from', '=', 'l3.l_to')
-                    ->where('l4.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l5', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l5.l_file', '=', 'l4.l_file')
-                    ->on('l5.l_from', '=', 'l4.l_to')
-                    ->where('l5.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l6', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l6.l_file', '=', 'l5.l_file')
-                    ->on('l6.l_from', '=', 'l5.l_to')
-                    ->where('l6.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l7', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l7.l_file', '=', 'l6.l_file')
-                    ->on('l7.l_from', '=', 'l6.l_to')
-                    ->where('l7.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l8', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l8.l_file', '=', 'l7.l_file')
-                    ->on('l8.l_from', '=', 'l7.l_to')
-                    ->where('l8.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l9', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l9.l_file', '=', 'l8.l_file')
-                    ->on('l9.l_from', '=', 'l8.l_to')
-                    ->where('l9.l_type', '=', $link);
-            })
-            ->where('i_file', '=', $this->tree->id())
-            //->where('l0.l_type', '=', $link)
-            ->where('l0.l_to', '=', $this->xref)
-                    ->orWhere('l1.l_to', '=', $this->xref)
-                    ->orWhere('l2.l_to', '=', $this->xref)
-                    ->orWhere('l3.l_to', '=', $this->xref)
-                    ->orWhere('l4.l_to', '=', $this->xref)
-                    ->orWhere('l5.l_to', '=', $this->xref)
-                    ->orWhere('l6.l_to', '=', $this->xref)
-                    ->orWhere('l7.l_to', '=', $this->xref)
-                    ->orWhere('l8.l_to', '=', $this->xref)
-                    ->orWhere('l9.l_to', '=', $this->xref)
-            ->select(['individuals.*'])
-            ->get()
-            ->map(Factory::individual()->mapper($this->tree))
-            ->filter(self::accessFilter());
-  }
-  
   public function linkedIndividuals(string $link): Collection {
-    $main = $this->linkedIndividualsC($link, false); //should use true but performance is too bad
-    
-    if (!$this->useIndirectLinks) {
-      return $main;
-    }
-
     if ($link !== '_LOC') {
       throw new Exception("unexpected link!");
     }
 
-    $list = [];
-
-    //note: includes all individuals with child places (that's how placelinks work)
-    //regardless of INDIRECT_LINKS_PARENT_LEVELS
-    foreach ($this->namesAsPlaces() as $place) {
-      $place_id = $place->id();
-
-      $positions = DB::table('placelinks')
-              ->where('pl_p_id', '=', $place_id)
-              ->where('pl_file', '=', $this->tree->id())
-              ->select(['pl_gid AS id'])
-              ->get();
-
-      foreach ($positions as $position) {
-        $record = Factory::gedcomRecord()->make($position->id, $this->tree);
-        if ($record && $record->canShow()) {
-          if ($record instanceof Individual) {
-            $list[] = $record;
-          }
-        }
-      }
-    }
-    $concatenated = $main->concat($list)->unique();
-    
-    return $concatenated;
+    return SharedPlace::linkedIndividualsRecords(new Collection([$this]));
   }
   
-  public function linkedFamiliesC(string $link, bool $transitively): Collection {
-    if (!$transitively) {
-      return parent::linkedFamilies($link);
+  public static function linkedIndividualsRecords(Collection $sharedPlaces): Collection {
+    if ($sharedPlaces->count() === 0) {
+      return new Collection();
     }
+    $anySharedPlace = $sharedPlaces->first();
+    return SharedPlace::linkedIndividualsRaw($sharedPlaces)
+            ->map(Factory::individual()->mapper($anySharedPlace->tree()))
+            ->unique()
+            ->filter(self::accessFilter());
+  }
+  
+  // Count the number of linked records. These numbers include private records.
+  // It is not good to bypass privacy, but many servers do not have the resources
+  // to process privacy for every record in the tree
+  public static function linkedIndividualsCount(Collection $sharedPlaces): int {
+    return SharedPlace::linkedIndividualsRaw($sharedPlaces)
+            ->map(function (stdClass $row): string {
+              return $row->i_id;
+            })
+            ->unique()
+            ->count();
+  }
+  
+  //batch mode for multiple inputs could be optimized for count!
+  public static function linkedIndividualsRaw(Collection $sharedPlaces): Collection {
+    if ($sharedPlaces->count() === 0) {
+      return new Collection();
+    }
+    $anySharedPlace = $sharedPlaces->first();
     
     //for compatibility with indirect links, we consider all child places as well
     //(that's how placelinks work)
     
-    //performance unacceptable in mysql without type restriction in the _first_ left join
-    //(others can take it or leave it - "explain" statement doesn't look different = joined size apparently the problem)
-    //may still be problematic for large link tables, there are similar queries on places and placelinks though, with comparable sizes
-    //
-    //performance still too bad for multiple shared places!
-    return DB::table('families')
-            ->join('link AS l0', static function (JoinClause $join) use ($link): void {
+    //in particular for batch operations, loading the entire _LOC-graph seems to be the most efficient solution if we cache it.
+    $main = LocGraph::get($anySharedPlace->tree())
+            ->linkedIndividuals($sharedPlaces->map(function (SharedPlace $sharedPlace): string {
+              return $sharedPlace->xref();
+            }));
+    
+    //consistent across all shared places
+    $useIndirectLinks = $anySharedPlace->useIndirectLinks();    
+            
+    if ($useIndirectLinks) {
+      //note: includes all individuals with child places (that's how placelinks work)
+      //regardless of INDIRECT_LINKS_PARENT_LEVELS
+      $placeIds = [];
+      foreach ($sharedPlaces as $sharedPlace) {
+        foreach ($sharedPlace->namesAsPlaces() as $place) {
+          $place_id = $place->id();
+          $placeIds[] = $place_id;
+        }
+      }  
+
+      $indis = DB::table('placelinks')
+            ->whereIn('pl_p_id', $placeIds)
+            ->where('pl_file', '=', $anySharedPlace->tree()->id())
+            ->join('individuals', function (JoinClause $join): void {
                 $join
-                    ->on('l0.l_file', '=', 'f_file')
-                    ->on('l0.l_from', '=', 'f_id')
-                    ->where('l0.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l1', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l1.l_file', '=', 'l0.l_file')
-                    ->on('l1.l_from', '=', 'l0.l_to')
-                    ->where('l1.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l2', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l2.l_file', '=', 'l1.l_file')
-                    ->on('l2.l_from', '=', 'l1.l_to')
-                    ->where('l2.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l3', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l3.l_file', '=', 'l2.l_file')
-                    ->on('l3.l_from', '=', 'l2.l_to')
-                    ->where('l3.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l4', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l4.l_file', '=', 'l3.l_file')
-                    ->on('l4.l_from', '=', 'l3.l_to')
-                    ->where('l4.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l5', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l5.l_file', '=', 'l4.l_file')
-                    ->on('l5.l_from', '=', 'l4.l_to')
-                    ->where('l5.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l6', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l6.l_file', '=', 'l5.l_file')
-                    ->on('l6.l_from', '=', 'l5.l_to')
-                    ->where('l6.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l7', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l7.l_file', '=', 'l6.l_file')
-                    ->on('l7.l_from', '=', 'l6.l_to')
-                    ->where('l7.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l8', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l8.l_file', '=', 'l7.l_file')
-                    ->on('l8.l_from', '=', 'l7.l_to')
-                    ->where('l8.l_type', '=', $link);
-            })
-            ->leftJoin('link AS l9', static function (JoinClause $join) use ($link): void {
-                $join
-                    ->on('l9.l_file', '=', 'l8.l_file')
-                    ->on('l9.l_from', '=', 'l8.l_to')
-                    ->where('l9.l_type', '=', $link);
-            })
-            ->where('f_file', '=', $this->tree->id())
-            //->where('l0.l_type', '=', $link)
-            ->where('l0.l_to', '=', $this->xref)
-                    ->orWhere('l1.l_to', '=', $this->xref)
-                    ->orWhere('l2.l_to', '=', $this->xref)
-                    ->orWhere('l3.l_to', '=', $this->xref)
-                    ->orWhere('l4.l_to', '=', $this->xref)
-                    ->orWhere('l5.l_to', '=', $this->xref)
-                    ->orWhere('l6.l_to', '=', $this->xref)
-                    ->orWhere('l7.l_to', '=', $this->xref)
-                    ->orWhere('l8.l_to', '=', $this->xref)
-                    ->orWhere('l9.l_to', '=', $this->xref)
-            ->select(['families.*'])
-            ->get()
-            ->map(Factory::family()->mapper($this->tree))
-            ->filter(self::accessFilter());
+                ->on('pl_gid', '=', 'individuals.i_id')
+                ->on('pl_file', '=', 'individuals.i_file');
+              })
+            ->select(['i_id','i_gedcom'])
+            ->get();
+    
+      $main = $main->concat($indis); //not sufficient to use unique() here - structures are different! 
+    }
+    
+    return $main;
   }
   
   public function linkedFamilies(string $link): Collection {
-    $main = $this->linkedFamiliesC($link, false); //should use true but performance is too bad
-    
-    if (!$this->useIndirectLinks) {
-      return $main;
-    }
-
     if ($link !== '_LOC') {
       throw new Exception("unexpected link!");
     }
 
-    $list = [];
-
-    foreach ($this->namesAsPlaces() as $place) {
-      $place_id = $place->id();
-
-      $positions = DB::table('placelinks')
-              ->where('pl_p_id', '=', $place_id)
-              ->where('pl_file', '=', $this->tree->id())
-              ->select(['pl_gid AS id'])
-              ->get();
-
-      foreach ($positions as $position) {
-        $record = Factory::gedcomRecord()->make($position->id, $this->tree);
-        if ($record && $record->canShow()) {
-          if ($record instanceof Family) {
-            $list[] = $record;
-          }
-        }
-      }
+    return SharedPlace::linkedFamiliesRecords(new Collection([$this]));
+  }
+  
+  public static function linkedFamiliesRecords(Collection $sharedPlaces): Collection {
+    if ($sharedPlaces->count() === 0) {
+      return new Collection();
     }
-
-    $concatenated = $main->concat($list)->unique();
+    $anySharedPlace = $sharedPlaces->first();
+    return SharedPlace::linkedFamiliesRaw($sharedPlaces)
+            ->map(Factory::family()->mapper($anySharedPlace->tree()))
+            ->unique()
+            ->filter(self::accessFilter());
+  }
+  
+  // Count the number of linked records. These numbers include private records.
+  // It is not good to bypass privacy, but many servers do not have the resources
+  // to process privacy for every record in the tree
+  public static function linkedFamiliesCount(Collection $sharedPlaces): int {
+    return SharedPlace::linkedFamiliesRaw($sharedPlaces)
+            ->map(function (stdClass $row): string {
+              return $row->f_id;
+            })
+            ->unique()
+            ->count();
+  }
+  
+  //batch mode for multiple inputs could be optimized for count!
+  public static function linkedFamiliesRaw(Collection $sharedPlaces): Collection {
+    if ($sharedPlaces->count() === 0) {
+      return new Collection();
+    }
+    $anySharedPlace = $sharedPlaces->first();
     
-    return $concatenated;
+    //for compatibility with indirect links, we consider all child places as well
+    //(that's how placelinks work)
+    
+    //in particular for batch operations, loading the entire _LOC-graph seems to be the most efficient solution if we cache it.
+    $main = LocGraph::get($anySharedPlace->tree())
+            ->linkedFamilies($sharedPlaces->map(function (SharedPlace $sharedPlace): string {
+              return $sharedPlace->xref();
+            }));
+    
+    //consistent across all shared places
+    $useIndirectLinks = $anySharedPlace->useIndirectLinks();    
+            
+    if ($useIndirectLinks) {
+      //note: includes all individuals with child places (that's how placelinks work)
+      //regardless of INDIRECT_LINKS_PARENT_LEVELS
+      $placeIds = [];
+      foreach ($sharedPlaces as $sharedPlace) {
+        foreach ($sharedPlace->namesAsPlaces() as $place) {
+          $place_id = $place->id();
+          $placeIds[] = $place_id;
+        }
+      }  
+
+      $fams = DB::table('placelinks')
+            ->whereIn('pl_p_id', $placeIds)
+            ->where('pl_file', '=', $anySharedPlace->tree()->id())
+            ->join('families', function (JoinClause $join): void {
+                $join
+                ->on('pl_gid', '=', 'families.f_id')
+                ->on('pl_file', '=', 'families.f_file');
+              })
+            ->select(['f_id','f_gedcom'])
+            ->get();
+    
+      $main = $main->concat($fams); //not sufficient to use unique() here - structures are different! 
+    }
+    
+    return $main;
   }
   
   public function getParents(): array {
