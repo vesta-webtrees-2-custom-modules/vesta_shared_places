@@ -1,6 +1,8 @@
 <?php
 
-use Fisharebest\Webtrees\I18N; ?>
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\View;
+?>
 
 <div class="form-group">
     <?php if ($useHierarchy) : ?>
@@ -29,4 +31,16 @@ use Fisharebest\Webtrees\I18N; ?>
   ?>
   <?= view('modals/restriction-fields') ?>
 <?php endif ?>
+
+<?php
+if ($selector !== '') {
+  //View::push('javascript'); no need - this is within a modal!
+  $script = '<script>' .
+      'var REF = $(\'' . $selector . '\');' .
+      '$(\'#shared-place-name\').val(REF.val());' . 
+      '</script>';
+  echo $script;
+  //View::endpush();
+}
+?>
 

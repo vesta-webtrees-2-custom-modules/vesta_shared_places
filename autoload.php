@@ -18,3 +18,15 @@ $extend = !class_exists("Fisharebest\Webtrees\GedcomTag", false);
 if ($extend) {
   require_once __DIR__ . '/replacedWebtrees/app/GedcomTag.php';
 }
+
+$classMap = array();
+
+//TODO Issue #2
+//adjustments for SOUR.DATA.EVEN
+$extend2 = !class_exists("Fisharebest\Webtrees\Functions\FunctionsEdit", false);
+if ($extend2) {
+  $classMap["Fisharebest\Webtrees\Functions\FunctionsEdit"] = __DIR__ . '/replacedWebtrees/Functions/FunctionsEdit.php';
+}
+
+$loader->addClassMap($classMap);        
+$loader->register(true); //prepend in order to override definitions from default class loader

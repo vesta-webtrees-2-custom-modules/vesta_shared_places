@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-07-13 22:08+0200\n"
-"PO-Revision-Date: 2020-07-10 19:28+0200\n"
+"PO-Revision-Date: 2020-08-09 22:20+0200\n"
 "Last-Translator: Ladislav Rosival <lacoros@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk_SK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:95
@@ -97,7 +97,7 @@ msgstr "Zobrazený názov"
 
 #: SharedPlacesModule.php:188
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
-msgstr ""
+msgstr "Povoľte modul Vesta Places and Pedigree map, aby ste mohli prezerať hierarchiu zdieľaných miest."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:140
@@ -116,7 +116,7 @@ msgstr "Všeobecné"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:57
 msgid "If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to parent shared places, as described in the specification."
-msgstr "Ak je označené, tak sa vzťahy medzi zdieľanými miestami modelujú cez explicitnú hierarchiu, kde zdeiľané miesto obsajhuje XREF nadradeného zdieľaného miesta, tak ako je to popísané v špecifikácii."
+msgstr "Ak je označené, tak sa vzťahy medzi zdieľanými miestami modelujú cez explicitnú hierarchiu, kde zdieľané miesto obsajhuje XREF nadradeného zdieľaného miesta, tak ako je to popísané v špecifikácii."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:91
@@ -126,7 +126,7 @@ msgstr "Keď je zvolená táto možnosť, zdieľané miesta sa budú zobrazovať
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:74
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a parent shared place that maps to \"B, C\"."
-msgstr ""
+msgstr "Keď používate hiererchické zdieľané miesta, tak miesto s názvom \"A, B, C\" je mapované na zdieľané miesto \"A\" s nadradeným zdeiľaným miestom, mapovaným na \"B, C\"."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:33
 #: resources/views/shared-places-list-page.phtml:17
@@ -197,7 +197,7 @@ msgstr "Berte prosím na vedomie, že toto ovplyvní aj spôsob, ako sa vytvára
 
 #: resources/views/data-fix-options.phtml:19
 msgid "Note:"
-msgstr "Dôležitá poznámka:"
+msgstr "Poznámka:"
 
 #: SharedPlacesModule.php:273
 msgid "Parent shared place"
@@ -273,7 +273,7 @@ msgstr "Štruktúra zdieľaného miesta"
 
 #. I18N::translate('Shared place hierarchy'));
 #. }
-#. 
+#.
 #. //old-style list
 #.
 #: SharedPlaceHierarchyUtils.php:55 SharedPlacesListController.php:51
@@ -391,17 +391,17 @@ msgstr "Vesta zdieľané miesta"
 
 #: SharedPlacesModule.php:186
 msgid "View Shared places hierarchy"
-msgstr ""
+msgstr "Zobraziť hierarchiu zdieľaných miest"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:79
 msgid "When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would also match shared places that match \"B, C\" and \"C\")"
-msgstr ""
+msgstr "Keď je zvolená predchádzajúca možnosť, a nenájde sa žiadne zodpovedajúce zdieľané miesto, tak hľadaj n nadradených miest (tak napr. pre n=2 miesto \"A, B, C\" bude zodpovedať zdieľaným miestam, ktoré zodpovedajú \"B, C\" a \"C\")"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:62
 msgid "When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated name parts."
-msgstr ""
+msgstr "Keď nie je zvolené, tak sa použije predchádzajúci spôsob, v ktorom sa hierarchie definujú len cez názvy zdieľaných miest s časťami oddelenými čiarkami."
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:303
@@ -435,7 +435,7 @@ msgstr "náboženský"
 
 #: SharedPlacesModule.php:1048
 msgid "shared places"
-msgstr ""
+msgstr "zdieľané miesta"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:118

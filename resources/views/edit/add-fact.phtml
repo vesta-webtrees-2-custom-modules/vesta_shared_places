@@ -8,9 +8,6 @@ use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\Http\RequestHandlers\EditFactAction;
 use Fisharebest\Webtrees\I18N;
 use Ramsey\Uuid\Uuid;
-use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
-use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
-use Vesta\VestaAdminController;
 
 ?>
 
@@ -137,15 +134,10 @@ use Vesta\VestaAdminController;
 <?php
   //we may also require vesta modal placeholder: we may have to support specific select2 edit controls!
   //currently: _GOV via _LOC
+  //handled via edit/plac, where that placeholder is included anyway
 
-  $select2Initializers = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
-            ->map(function (GovIdEditControlsInterface $module) {
-              return $module->govIdEditControlSelect2ScriptSnippet();
-            })
-            ->toArray();
-
-  echo view(VestaAdminController::vestaViewsNamespace() . '::modals/ajax-modal-vesta', [
-                'ajax' => false,
-                'select2Initializers' => $select2Initializers
-    ]);
+  //TODO: we should also support _GOV under _PLAC directly, but not in this module!
 ?>
+
+<?= view('edit/plac', ['tree' => $tree]) ?>
+

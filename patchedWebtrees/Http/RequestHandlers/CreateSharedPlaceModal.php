@@ -43,14 +43,23 @@ class CreateSharedPlaceModal implements RequestHandlerInterface
         assert($tree instanceof Tree);
 
         $sharedPlaceName = Requests::getString($request, 'shared-place-name');
+        $selector = Requests::getString($request, 'selector');
         
         //requires modal placeholder in SharedPlacesListController.sharedPlacesList(), uargh
         //also requires modal placeholder in edit fact!
         //also requires modal placeholder in SharedPlacesModule.hFactsTabGetAdditionalEditControls(),
         //handled via hFactsTabRequiresModalVesta!
+        
         $additionalControls = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
                 ->map(function (GovIdEditControlsInterface $module) use ($sharedPlaceName) {
-                  return $module->govIdEditControl(null, 'shared-place-govId', 'shared-place-govId', $sharedPlaceName, true, true);
+                  return $module->govIdEditControl(
+                          null, 
+                          'shared-place-govId', 
+                          'shared-place-govId', 
+                          $sharedPlaceName, 
+                          '#shared-place-name', //cf shared-place-fields.phtml
+                          true, 
+                          true);
                 })
                 ->toArray();
 
@@ -60,6 +69,7 @@ class CreateSharedPlaceModal implements RequestHandlerInterface
                     'moduleName' => $this->moduleName,
                     'useHierarchy' => $useHierarchy,
                     'sharedPlaceName' => $sharedPlaceName,
+                    'selector' => $selector,
                     'additionalControls' => $additionalControls,
                     'tree' => $tree,
         ]));

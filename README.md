@@ -6,6 +6,8 @@ The project’s website is [cissee.de](https://cissee.de).
 
 This is a webtrees 2.x module - It cannot be used with webtrees 1.x. For its webtrees 1.x counterpart, see [here](https://github.com/ric2016/shared_places).
 
+See [here](https://github.com/vesta-webtrees-2-custom-modules/vesta_common/blob/master/docs/LocationData.md) for an overview of location data management in webtrees.
+
 ## Contents
 
 * [Features](#features)
@@ -87,7 +89,7 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.7.1.0
+* Current version: 2.0.7.2.0
 * Based on and tested with webtrees 2.0.7. Cannot be used with webtrees 1.x. May not work with earlier 2.x versions!
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 

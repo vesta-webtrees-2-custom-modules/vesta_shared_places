@@ -1,8 +1,9 @@
 <?php
 
 use Cissee\WebtreesExt\Http\RequestHandlers\Select2Location;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Location;
+use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\View;
 
 /**
  * @var string          $at     "@" or "" (or unset).
@@ -40,3 +41,32 @@ $at = $at ?? '';
         <option value="">&nbsp;</option>
     <?php endif ?>
 </select>
+
+<?php View::push('javascript') ?>
+<?php if ($selectorForDate !== ''): ?>
+<script>
+$(document).ready(function() {
+  $('#<?= e($id ?? $name) ?>').select2({
+      ajax: {
+        data: function (params) {
+          var DATE = $('<?= $selectorForDate ?>');
+
+          var query = {
+            term: params.term,
+            q: params.term,
+            type: '_query',
+            dateStr: DATE.val()
+          }
+
+          return query;
+        }
+      },
+      // Do not escape - we do it on the server.
+      escapeMarkup: function (x) {
+        return x;
+      }
+  });
+});
+</script>
+<?php endif ?>
+<?php View::endpush() ?>

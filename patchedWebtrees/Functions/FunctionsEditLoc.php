@@ -2,9 +2,11 @@
 
 namespace Cissee\WebtreesExt\Functions;
 
+use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
 use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Functions\FunctionsEdit;
@@ -12,11 +14,14 @@ use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\Html;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Services\LocalizationService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
+use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
+use function app;
 use function route;
 use function view;
 
@@ -54,9 +59,13 @@ class FunctionsEditLoc {
           echo FunctionsEdit::addSimpleTag($tree, '2 LATI N0');
           echo FunctionsEdit::addSimpleTag($tree, '2 LONG E0');
       } else if ($fact === '_LOC') {
-          echo self::addSimpleTagWithGedcomRecord($record, $tree, '2 TYPE POLI', '_LOC');
+          echo self::addSimpleTagWithGedcomRecord($record, $tree, '2 TYPE POLI', '_LOC');          
+          echo FunctionsEdit::addSimpleTag($tree, '2 DATE');
       } else if ($fact === 'TYPE') {
           echo self::addSimpleTagWithGedcomRecord($record, $tree, '2 _GOVTYPE', 'TYPE');
+          echo FunctionsEdit::addSimpleTag($tree, '2 DATE');
+      } else if ($fact === 'NAME') {
+          echo FunctionsEdit::addSimpleTag($tree, '2 DATE');
       }
       
       //_GOV:
@@ -68,13 +77,17 @@ class FunctionsEditLoc {
   {
       $record = $fact->record();
       $tree   = $record->tree();
-
+      
+      $tags = [];
+        
       $level0type = $record->tag();
+      $level1type = $fact->getTag();
 
       $stack       = [];
       $gedlines    = explode("\n", $fact->gedcom());
       $count       = count($gedlines);
       $i           = 0;
+      $add_date    = true;
 
       // Loop on existing tags :
       while ($i < $count) {
@@ -94,6 +107,7 @@ class FunctionsEditLoc {
               $i++;
           }
 
+          $tags[] = $type;
           $subrecord = $level . ' ' . $type . ' ' . $text;
           
           //[RC] adjusted, hacky
@@ -107,19 +121,43 @@ class FunctionsEditLoc {
           echo self::addSimpleTagWithGedcomRecord($record, $tree, $subrecord, $level0type, GedcomTag::getLabel($label, $record));
           $i++;
       }
+      
+      self::insertMissingSubtags($record, $tree, $level1type, $tags);
   }
 
-  public static function addSimpleTagWithGedcomRecord(?GedcomRecord $record, Tree $tree, $tag, $upperlevel = '', $label = ''): string
+  public static function insertMissingSubtags(?GedcomRecord $record, Tree $tree, $level1tag, $tags): void {
+    
+    if ($level1tag === 'TYPE') {
+      if (!in_array('_GOVTYPE', $tags, true)) {
+        echo self::addSimpleTagWithGedcomRecord($record, $tree, '2 _GOVTYPE', 'TYPE');
+      }
+    } 
+    if (($level1tag === '_LOC') || ($level1tag === 'TYPE') || ($level1tag === 'NAME')) {
+      if (!in_array('DATE', $tags, true)) {
+        echo FunctionsEdit::addSimpleTag($tree, '2 DATE');
+      }
+    }
+  }
+  
+  public static function addSimpleTagWithGedcomRecord(
+          ?GedcomRecord $record, 
+          Tree $tree, 
+          $tag, 
+          $upperlevel = '', 
+          $label = ''): string
   {
     $parts = explode(' ', $tag, 3);
     $level = $parts[0] ?? '';
     $fact  = $parts[1] ?? '';
     $value = $parts[2] ?? '';
     
+    $upperlevelDOM = str_replace(':','_',$upperlevel);
+          
     if ($level === '0') {
         // Adding a new fact.
         if ($upperlevel) {
-            $name = $upperlevel . '_' . $fact;
+            //[RC] adjustment for BIRT:PLAC etc, leading to names like 'BIRT_PLAC__LOC'
+            $name = $upperlevelDOM . '_' . $fact;
         } else {
             $name = $fact;
         }
@@ -128,6 +166,19 @@ class FunctionsEditLoc {
         $name = 'text[]';
     }
 
+    //[RC] added
+    if ($upperlevel) {
+        //[RC] adjustment for BIRT:PLAC etc, leading to names like 'BIRT_PLAC__LOC'
+        $name2 = $upperlevelDOM . '_' . $fact;
+    } else {
+        $name2 = $fact;
+    }
+          
+    //for _LOC under PLAC, upperlevel sometimes (existing tag) given as INDI/FAM, inconsistently, probably not worth investigating
+    if (!Str::endsWith($upperlevel, 'PLAC')) {
+      $upperlevelDOM .= '_PLAC';
+    }
+  
     $id = $fact . Uuid::uuid4()->toString();
     // field value
     $islink = (bool) preg_match('/^@[^#@][^@]*@$/', $value);
@@ -167,7 +218,7 @@ class FunctionsEditLoc {
     
     switch ($fact) {
       case 'NAME':
-        //just like PLAC
+        //just like original PLAC
         $html .= '<div class="input-group">';        
         $html .= '<input ' . Html::attributes([
                 'autocomplete'          => 'off',
@@ -182,7 +233,15 @@ class FunctionsEditLoc {
         //except without coordinates
         //$html .= view('edit/input-addon-coordinates', ['id' => $id]);
         
-        $html .= view('edit/input-addon-help', ['fact' => 'PLAC']);
+        //and with non-standard help text
+        //$html .= view('edit/input-addon-help', ['fact' => 'PLAC']);
+        $module = app(SharedPlacesModule::class);
+        $useHierarchy = boolval($module->getPreference('USE_HIERARCHY', '1'));
+        if ($useHierarchy) {
+          $html .= FunctionsPrintExtHelpLink::inputAddonHelp($module->name(), 'PLAC');
+        } else {
+          $html .= FunctionsPrintExtHelpLink::inputAddonHelp($module->name(), 'PLAC_CSV');
+        }        
         $html .= '</div>';
         break;
       case 'MAP':
@@ -195,15 +254,53 @@ class FunctionsEditLoc {
         break;
       case '_LOC':
         //cf SHARED_NOTE, but use special vesta modal!
+        
+        $location = Factory::location()->make($value, $tree);
+        $locationName = '';
+        if ($location !== null) {
+          $locationName = $location->canonicalPlace()->gedcomName();
+        }        
+        
+        $selector = '';
+        $selectorForDate = '';
+        if (Str::endsWith($upperlevel, 'PLAC') || ($upperlevel === 'INDI') || ($upperlevel === 'FAM')) {
+          //we have to disambiguate here ('[id]'): the input element is duplicated, apparently by the typeahead functionality, bah
+          $selector = '[id][data-vesta-name="'.$upperlevelDOM.'"]';
+          $selectorForDate = '[id][data-vesta-name="'.str_replace('PLAC','DATE',$upperlevelDOM).'"]';
+        }
+
         $html .=
                 '<div class="input-group">' .
                 '<div class="input-group-prepend">' .
-                '<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#wt-ajax-modal-vesta" data-href="' . e(route(CreateSharedPlaceModal::class, ['tree' => $tree->name()])) . '" data-select-id="' . $id . '" title="' . I18N::translate('Create a shared place') . '">' .
+              
+                //TODO we'd like to use dynamic PLAC input as 'shared-place-name' here (requires script to read value, but how to update data-href?)
+                //(for _LOC under PLAC)
+                '<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#wt-ajax-modal-vesta" data-href="' . e(route(CreateSharedPlaceModal::class, ['tree' => $tree->name(), 'selector' => $selector])) . '" data-select-id="' . $id . '" title="' . I18N::translate('Create a shared place') . '">' .
+              
                 '' . view('icons/add') . '<' .
                 '/button>' .
                 '</div>' .
-                view('components/select-location', ['id' => $id, 'name' => $name, 'location' => Factory::location()->make($value, $tree), 'tree' => $tree]) .
+                view('components/select-location', [
+                    'id' => $id, 
+                    'name' => $name, 
+                    'location' => $location, 
+                    'selectorForDate' => $selectorForDate, 
+                    'tree' => $tree]) .
                 '</div>';
+        
+        //for _LOC under PLAC, upperlevel sometimes (existing tag) given as INDI/FAM, inconsistently, probably not worth investigating
+        if (Str::endsWith($upperlevel, 'PLAC') || ($upperlevel === 'INDI') || ($upperlevel === 'FAM')) {
+          View::push('javascript');
+          $script = '<script>' .
+              '$(\'#' . $id . '\').on(\'select2:select\', function (e) {' .
+              '    var data = e.params.data;' .
+              '    updatewholenamePLAC(\'' . $locationName . '\', data.title, \'' . $selector. '\');' .
+              '});' . 
+              '</script>';
+          echo $script;
+          View::endpush();
+        }        
+        
         break;
       case 'LATI':
         //same as original FunctionsEdit
@@ -257,11 +354,70 @@ class FunctionsEditLoc {
         }
         $html .= $htmlGovtype;
         break;
+      
+      //DATE (not under 0 _LOC, but elsewhere)  
+      case 'DATE':
+        //we just add name2
+        //for identication
+        
+        // Need to know if the user prefers DMY/MDY/YMD so we can validate dates properly.
+        $localization_service = app(LocalizationService::class);
+        $dmy = '"' . $localization_service->dateFormatToOrder(I18N::dateFormat()) . '"';
+
+        $html .= '<div class="input-group">';
+        $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" data-vesta-name="' . $name2 . '" value="' . e($value) . '" onchange="webtrees.reformatDate(this, ' . e($dmy) . ')" dir="ltr">';
+        $html .= view('edit/input-addon-calendar', ['id' => $id]);
+        $html .= view('edit/input-addon-help', ['fact' => 'DATE']);
+        $html .= '</div>';
+        $html .= '<div id="caldiv' . $id . '" style="position:absolute;visibility:hidden;background-color:white;z-index:1000"></div>';
+        $html .= '<p class="text-muted">' . (new Date($value))->display() . '</p>';
+        break;
+      //PLAC (not under 0 _LOC, but elsewhere with _LOC subtag)  
+      case 'PLAC':
+        $html .= '<div class="input-group">';
+        $html .= '<input ' . Html::attributes([
+                'autocomplete'          => 'off',
+                'class'                 => 'form-control',
+                'id'                    => $id,
+                'name'                  => $name,
+                'data-vesta-name'       => $name2, //for identication (update via _LOC, $name is unhelpful in case of existing fact)
+                'value'                 => $value,
+                //'type'                  => 'text',
+                'data-autocomplete-url' => route('autocomplete-place', ['tree'  => $tree->name(), 'query' => 'QUERY']),
+
+                'data-vesta-unchanged'  => 'true',
+            
+                'oninput'               => 'updateTextNamePLAC(\'' . $id . '\')',
+            ]) . '>';
+
+        //[RC] twitter-typeahead stuff apparently wraps input, leading to styling issues wrt background-color when using 'readonly'
+        //solution via readonly input would otherwise be preferable to second input element
+        //(this was intended to work similar to toggling of individuals' name editing)
+        //
+        //TODO use proper custom icon here!
+        //$html .= '<div class="input-group-append"><span class="input-group-text"><a href="#edit_name" onclick="convertHiddenPLAC(\'' . $id . '\'); return false" class="icon-edit_indi" title="' . I18N::translate('Toggle direct place name editing') . '"></a></span></div>';
+        //
+        //seems better not to have to toggle explicitly anyway
+        //we still need a second element (or javascript state) to keep track of manual changes
+                
+        //cf 'NAME' in original FunctionsEdit 
+        /*
+        // Populated in javascript from sub-tags
+        $html .= '<input type="hidden" id="' . $id . '" name="' . $name . '" oninput="updateTextName(\'' . $id . '\')" value="' . e($value) . '" class="' . $fact . '">';
+        $html .= '<span id="' . $id . '_display" dir="auto">' . e($value) . '</span>';
+        $html .= ' <a href="#edit_name" onclick="convertHidden(\'' . $id . '\'); return false" class="icon-edit_indi" title="' . I18N::translate('Edit the name') . '"></a>';
+        */
+        
+        $html .= view('edit/input-addon-coordinates', ['id' => $id]);
+        $html .= view('edit/input-addon-help', ['fact' => 'PLAC']);
+        $html .= '</div>';
+        break;
       default:
         //#17
         ////may be a custom tag, so  just allow editing
         //throw new Exception("unexpected tag: " . $fact);
         $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '">';
+        break;
     }
 
     $html .= '</div></div>';
@@ -288,7 +444,8 @@ class FunctionsEditLoc {
     //hooked?
     $additionalControls = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
           ->map(function (GovIdEditControlsInterface $module) use ($value, $id, $name, $placeName) {
-            return $module->govIdEditControl(($value === '')?null:$value, $id, $name, $placeName, false, false);
+            //TODO
+            return $module->govIdEditControl(($value === '')?null:$value, $id, $name, $placeName, null, false, false);
           })
           ->toArray();
 

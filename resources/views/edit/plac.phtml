@@ -1,0 +1,60 @@
+<?php
+
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\View;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
+use Vesta\VestaAdminController;
+
+?>
+
+<?php
+  //select2 initializers for modal placeholder ajax-modal-vesta.phtml used via CreateSharedPlaceModal, urgh
+  $select2Initializers = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
+              ->map(function (GovIdEditControlsInterface $module) {
+                return $module->govIdEditControlSelect2ScriptSnippet();
+              })
+              ->toArray();
+            
+  //we may have to support specific select2 edit controls!
+  echo view(VestaAdminController::vestaViewsNamespace() . '::modals/ajax-modal-vesta', [
+                'ajax' => false,
+                'select2Initializers' => $select2Initializers
+  ]);
+?>
+
+<?php View::push('javascript') ?>
+<script>
+    
+    // Update the PLAC from the _LOC
+    function updatewholenamePLAC(prevText, text, selector) {
+        var NAME = $(selector);
+        
+        //empty name is always updatable
+        if (NAME.val() !== '') {
+          // Don't update the name if the user manually changed it
+          if (NAME.attr("data-vesta-unchanged") === undefined) {
+            return;
+          }
+
+          // Don't update the name if we were already out of sync before,
+          //unless we have deleted the name
+          if ((NAME.val() !== prevText) && (NAME.val() !== '')) {
+            return;
+          }
+        }
+        
+        NAME.val(text);
+    }
+
+    // if the user manually changed the PLAC field, then update the textual
+    // HTML representation of it
+    function updateTextNamePLAC(eid) {
+        var element = document.getElementById(eid);
+        if (element) {
+            $("#" + eid).removeAttr("data-vesta-unchanged");
+        }
+    }
+</script>
+<?php View::endpush() ?>
+

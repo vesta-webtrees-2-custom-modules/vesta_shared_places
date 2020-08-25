@@ -1,6 +1,11 @@
 .wt-icon-shared-place {
-	display: inline-block;
-	vertical-align: middle;
-	background-repeat: no-repeat;
-	background-size: cover;
+  display: inline-block;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* properly align non editable place name (hacky) */
+.input-group-replacement {
+  flex: 100 1 auto;     
 }

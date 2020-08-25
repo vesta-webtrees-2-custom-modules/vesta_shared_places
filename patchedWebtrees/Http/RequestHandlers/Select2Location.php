@@ -6,16 +6,16 @@ namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Fisharebest\Webtrees\Factory;
-use Fisharebest\Webtrees\Http\RequestHandlers\AbstractSelect2Handler;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
+use Vesta\Model\GedcomDateInterval;
 use function view;
 
 /**
  * Autocomplete for locations.
  */
-class Select2Location extends AbstractSelect2Handler
+class Select2Location extends AbstractSelect2WithDateHandler
 {
     /** @var SearchServiceExt */
     protected $search_service;
@@ -42,7 +42,7 @@ class Select2Location extends AbstractSelect2Handler
      *
      * @return Collection<array<string,string>>
      */
-    protected function search(Tree $tree, string $query, int $offset, int $limit, string $at): Collection
+    protected function search(Tree $tree, GedcomDateInterval $date, string $query, int $offset, int $limit, string $at): Collection
     {
         // Search by XREF
         $location = Factory::location()->make($query, $tree);
@@ -53,11 +53,11 @@ class Select2Location extends AbstractSelect2Handler
             $results = $this->search_service->searchLocations([$tree], [$query], $offset, $limit);
         }
 
-        return $results->map(static function (Location $location) use ($at): array {
+        return $results->map(static function (Location $location) use ($at, $date): array {
             return [
                 'id'    => $at . $location->xref() . $at,
                 'text'  => view('selects/location', ['location' => $location]),
-                'title' => ' ',
+                'title' => $location->canonicalPlaceAt($date)->gedcomName(),
             ];
         });
     }

@@ -13,6 +13,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use stdClass;
+use Vesta\Model\GedcomDateInterval;
 
 /**
  * A GEDCOM level 0 shared place aka location (_LOC) object (complete structure)
@@ -50,7 +51,7 @@ class SharedPlace extends Location {
     //make sure all places exist
     foreach ($this->namesAsPlaces() as $place) {
       $place->id();
-    }  
+    }
   }
 
   /**
@@ -304,8 +305,23 @@ class SharedPlace extends Location {
   }
   
   public function getParents(): array {
-    //note: could also use _link table!
+    return $this->getParentsAt(GedcomDateInterval::createNow());
+  }
+  
+  public function getParentsAt(GedcomDateInterval $date): array {
     $sharedPlaces = [];
+    $sharedPlaces2 = [];
+    foreach ($this->facts(['_LOC']) as $parent) {
+      $parentDate = GedcomDateInterval::create($parent->attribute("DATE"));
+      
+      if ($date->intersect($parentDate) !== null) {
+        $sharedPlaces[] = $parent->target();
+      } else if ($parent->attribute("DATE") === '') {
+        $sharedPlaces2[] = $parent->target();
+      }
+    }
+    
+    /*
     preg_match_all('/\n1 _LOC @(' . Gedcom::REGEX_XREF . ')@/', $this->gedcom(), $matches);
     foreach ($matches[1] as $match) {
         $loc = Factory::location()->make($match, $this->tree());
@@ -313,24 +329,53 @@ class SharedPlace extends Location {
             $sharedPlaces[] = $loc;
         }
     }
+    */
 
-    return $sharedPlaces;
+    return array_merge($sharedPlaces, $sharedPlaces2);
   }
   
+  public function getPrimaryName(): int {
+    return $this->getPrimaryNameAt(GedcomDateInterval::createNow());
+  }
+  
+  public function getPrimaryNameAt(GedcomDateInterval $date): int {
+    $fallback = -1;
+    $counter = 0;
+    foreach ($this->facts(['NAME']) as $name) {
+      $nameDate = GedcomDateInterval::create($name->attribute("DATE"));
+      
+      if ($date->intersect($nameDate) !== null) {
+        return $counter;
+      }
+      
+      if (($name->attribute("DATE") === '') && ($fallback === -1)) {
+        $fallback = $counter;
+      }
+      
+      $counter++;
+    }
+    
+    return ($fallback === -1)?0:$fallback;
+  }
+     
   public function canonicalPlace(): Place {
-    $head = $this->namesNN()[$this->getPrimaryName()];
+    return $this->canonicalPlaceAt(GedcomDateInterval::createNow());
+  }
+  
+  public function canonicalPlaceAt(GedcomDateInterval $date): Place {
+    $head = $this->namesNN()[$this->getPrimaryNameAt($date)];
     if (!$this->useHierarchy) {
       return new Place($head, $this->tree);
     }
     
-    $parents = $this->getParents();
+    $parents = $this->getParentsAt($date);
     if (empty($parents)) {
       return new Place($head, $this->tree);
     }
 
-    //first parent wins
-    foreach ($this->getParents() as $parent) {
-      $parentPlace  = $parent->canonicalPlace();
+    //first matching parent wins
+    foreach ($parents as $parent) {
+      $parentPlace  = $parent->canonicalPlaceAt($date);
       $full = $head . Gedcom::PLACE_SEPARATOR . $parentPlace->gedcomName();
       return new Place($full, $this->tree);
     }
@@ -407,4 +452,12 @@ class SharedPlace extends Location {
     return $this->matchesWithHierarchyAsArg($placeGedcomName, $this->useHierarchy);
   }
 
+  public function updateRecord(string $gedcom, bool $update_chan): void {
+    parent::updateRecord($gedcom, $update_chan);
+    
+    //reset cached data (buggy in webtrees)
+    $this->getAllNames = null;
+    $this->getPrimaryName = null;
+    $this->getSecondaryName = null;
+  }
 }

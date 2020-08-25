@@ -7,31 +7,69 @@ use Fisharebest\Webtrees\I18N;
 ?>
 
 <div class="col-sm-9">
+    
     <p>
-        <?= I18N::translate('This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to higher-level shared places via XREFs).') ?>
-        <?= I18N::translate('It usually will have to be carried out once only, as a migration when switching to hierarchical shared places.') ?>
-    </p>
-    <p>
+        <?= I18N::translate('There are various data fixes available.'). ' ' ?>
         <?= I18N::translate('It is strongly recommended to backup your tree first.') ?>
     </p>
-    <?php if (!$useHierarchy) : ?>
-      <h3>
-          <?= I18N::translate('Note:') ?>
-      </h3>
-      <p>
-          <?= I18N::translate('The search currently does not match any records, because the configuration option to \'Use hierarchical shared places \' isn\'t set.') ?>
-      </p>
-    <?php else : ?>
-      <?php if (!$autoAcceptEdits) : ?>
-        <h3>
-            <?= I18N::translate('Attention!') ?>
-        </h3>
-        <p>
-            <?= I18N::translate('Missing higher-level shared places are created if required. For this to work without potentially creating duplicates, you have to check \'Automatically accept changes made by this user\' in the user administration, at least for the duration of this data fix.') ?>
-            <?= I18N::translate('The data fix currently won\'t update anything, because this preference isn\'t set.') ?>
-        </p>
-      <?php endif ?>
-    <?php endif ?>
+    
+    <div class="row form-group">
+        <label class="col-sm-3 col-form-label" for="case">
+            <?= I18N::translate('Data Fix') ?>
+        </label>
+
+        <div class="col-sm-9">
+            <div class="form-check">
+              <input type="radio" class="form-check-input"
+                  name="mode"
+                  id="mode-hierarchicalize"
+                  value="hierarchicalize"
+              >
+              <label class="form-check-label" for="mode-hierarchicalize">
+                  Hierarchize Shared Places
+              </label>
+              <p class="small text-muted">
+                  <?= I18N::translate('This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to higher-level shared places via XREFs).') ?>
+                  <?= I18N::translate('It usually will have to be carried out once only, as a migration when switching to hierarchical shared places via the respective configuration option.') ?>
+              </p>
+              
+              <?php if (!$useHierarchy) : ?>
+                <h4>
+                    <?= I18N::translate('Note:') ?>
+                </h4>
+                <p class="small text-muted">
+                    <?= I18N::translate('The search for this data fix currently does not match any records, because the configuration option to \'Use hierarchical shared places\' isn\'t set.') ?>
+                </p>
+              <?php else : ?>
+                <?php if (!$autoAcceptEdits) : ?>
+                  <h4>
+                      <?= I18N::translate('Attention!') ?>
+                  </h4>
+                  <p class="small text-muted">
+                      <?= I18N::translate('Missing higher-level shared places are created if required. For this to work without potentially creating duplicates, you have to check \'Automatically accept changes made by this user\' in the user administration, at least for the duration of this data fix.') ?>
+                      <?= I18N::translate('This data fix currently won\'t update anything, because this preference isn\'t set.') ?>
+                  </p>
+                <?php endif ?>
+              <?php endif ?>
+            </div>
+
+            <div class="form-check">
+              <input type="radio" class="form-check-input"
+                  name="mode"
+                  id="mode-xrefs"
+                  value="xrefs"
+              >
+              <label class="form-check-label" for="mode-xrefs">
+                  Add missing XREFs
+              </label>
+              <p class="small text-muted">
+                  <?= I18N::translate('This data fix adds XREFs, linking all places within events directly to the respective shared places.') . ' ' ?>
+                  <?= I18N::translate('Matching shared places are determined as via the configuration option \'Additionally link shared places via name\', including parent levels if set.') . ' ' ?>
+                  <?= I18N::translate('Therefore, this data fix enables you to move away from using that configuration option.') . ' ' ?>
+                  <?= I18N::translate('The search cannot be implemented efficiently and may take some time in particular when displaying and updating a large number of records.') ?>
+              </p>
+        </div>
+    </div>
     
 </div>
 
