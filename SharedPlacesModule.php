@@ -51,6 +51,7 @@ use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Fisharebest\Webtrees\Place;
+use Fisharebest\Webtrees\PlaceLocation;
 use Fisharebest\Webtrees\Services\DataFixService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
@@ -69,6 +70,7 @@ use Vesta\Hook\HookInterfaces\EmptyFunctionsPlace;
 use Vesta\Hook\HookInterfaces\EmptyPrintFunctionsPlace;
 use Vesta\Hook\HookInterfaces\FunctionsClippingsCartInterface;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceInterface;
+use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 use Vesta\Hook\HookInterfaces\PrintFunctionsPlaceInterface;
@@ -114,8 +116,8 @@ class SharedPlacesModule extends AbstractModule implements
   use EmptyFunctionsPlace;
   use EmptyPrintFunctionsPlace;
 
-  protected $module_service;
-
+  protected $module_service;  
+  
   public function __construct(
           ModuleService $module_service) {
     
@@ -959,6 +961,10 @@ class SharedPlacesModule extends AbstractModule implements
       return $this->recordsToFixWrtXrefs($tree);
     }
     
+    if ($params['mode'] === 'enhance') {
+      return $this->recordsToFixWrtEnhance($tree);
+    }
+    
     return new Collection();
   }
   
@@ -973,6 +979,24 @@ class SharedPlacesModule extends AbstractModule implements
         ->sort(static function (stdClass $x, stdClass $y) {
             return $x->xref <=> $y->xref;
         });
+  }
+
+  protected function getPlac2GovSupporters(Tree $tree): array {
+    $self = $this;
+    return app('cache.array')->remember('Plac2GovSupporters_'.$tree->id(), function () use ($self, $tree) {
+        $functionsPlaceProviders = FunctionsPlaceUtils::accessibleModules($self, $tree, Auth::user())
+            ->toArray();
+        
+        $plac2GovSupporters = [];
+        
+        foreach ($functionsPlaceProviders as $functionsPlaceProvider) {
+          if ($functionsPlaceProvider->plac2govSupported()) {
+            $plac2GovSupporters[] = $functionsPlaceProvider;
+          }
+        }
+        
+        return $plac2GovSupporters;
+    });
   }
 
   protected function recordsToFixWrtXrefs(Tree $tree): Collection {
@@ -1006,6 +1030,19 @@ class SharedPlacesModule extends AbstractModule implements
         });
   }
   
+  protected function recordsToFixWrtEnhance(Tree $tree): Collection {
+    $locations = $this->locationsToFixWrtEnhance($tree);
+    
+    $records = new Collection();
+    $records = $records->concat($this->mergePendingRecords($locations, $tree, Location::RECORD_TYPE));
+        
+    return $records
+        ->unique()
+        ->sort(static function (stdClass $x, stdClass $y) {
+            return $x->xref <=> $y->xref;
+        });
+  }
+  
   public function doesRecordNeedUpdate(GedcomRecord $record, array $params): bool {
     if (!array_key_exists('mode', $params)) {
       return false;
@@ -1017,6 +1054,10 @@ class SharedPlacesModule extends AbstractModule implements
     
     if ($params['mode'] === 'xrefs') {
       return $this->doesRecordNeedUpdateWrtXrefs($record);
+    }
+    
+    if ($params['mode'] === 'enhance') {
+      return $this->doesRecordNeedUpdateWrtEnhance($record);
     }
     
     return false;
@@ -1055,7 +1096,53 @@ class SharedPlacesModule extends AbstractModule implements
 
     return preg_match($this->createRegex('1 NAME.*,.*\n'), $record->gedcom()) === 1;
   }
+  
+  protected function doesRecordNeedUpdateWrtEnhance(GedcomRecord $record): bool {
+    if (!($record instanceof SharedPlace)) {
+      return false;
+    }
+    
+    if (($record->getLati() === null) && ($record->getLong() === null)) {
+      foreach ($record->namesAsPlaces() as $place) {
+        $ll = $this->getLatLon($place->gedcomName());
+        if ($ll !== null) {
+          return true;
+        }
+      }
+    }
+    
+    $plac2GovSupporters = $this->getPlac2GovSupporters($record->tree());
+    
+    if ((sizeof($plac2GovSupporters) > 0) && $record->getGov() === null) {
+      error_log("!!!");
+      foreach ($plac2GovSupporters as $plac2GovSupporter) {
+        foreach ($record->namesAsPlaces() as $place) {
+          error_log("???");
+          $gov = $plac2GovSupporter->plac2gov(PlaceStructure::fromPlace($place));
+          if ($gov !== null) {
+            return true;
+          }
+        }
+      }
+    }
+    
+    return false;
+  }
+  
+  //cf WebtreesLocationDataModule
+  protected function getLatLon(string $gedcomName): ?array {
+    $location = new PlaceLocation($gedcomName);
+    $latitude = $location->latitude();
+    $longitude = $location->longitude();
 
+    //wtf webtrees: 0.0; 0.0 are valid coordinates, why do you use them for 'unknown'?
+    if (($latitude !== 0.0) && ($longitude !== 0.0)) {
+      return array($latitude, $longitude);
+    }
+
+    return null;
+  }
+  
   public function previewUpdate(GedcomRecord $record, array $params): string {
     if (!array_key_exists('mode', $params)) {
       return '';
@@ -1067,6 +1154,10 @@ class SharedPlacesModule extends AbstractModule implements
     
     if ($params['mode'] === 'xrefs') {
       return $this->previewUpdateWrtXrefs($record);
+    }
+    
+    if ($params['mode'] === 'enhance') {
+      return $this->previewUpdateWrtEnhance($record);
     }
     
     return '';
@@ -1143,6 +1234,14 @@ class SharedPlacesModule extends AbstractModule implements
     return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
   }
 
+  protected function previewUpdateWrtEnhance(GedcomRecord $record): string {
+    $old = $record->gedcom();
+    $new = $this->updateGedcomWrtEnhance($record);
+    
+    $data_fix_service = app(DataFixService::class);
+    return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
+  }
+  
   public function updateRecord(GedcomRecord $record, array $params): void {
     if (!array_key_exists('mode', $params)) {
       return;
@@ -1155,6 +1254,11 @@ class SharedPlacesModule extends AbstractModule implements
     
     if ($params['mode'] === 'xrefs') {
       $this->updateRecordWrtXrefs($record);
+      return;
+    }
+    
+    if ($params['mode'] === 'enhance') {
+      $this->updateRecordWrtEnhance($record);
       return;
     }
     
@@ -1230,7 +1334,15 @@ class SharedPlacesModule extends AbstractModule implements
     //B is created twice (if unmake isn't called)
     Factory::location()->unmake($record->xref(), $record->tree());
   }
+   
+  protected function updateRecordWrtEnhance(GedcomRecord $record): void {
+    $new = $this->updateGedcomWrtEnhance($record);
     
+    $record->updateRecord($new, false);
+    
+    //strictly we should unmake here as well, in practice irrelevant
+  }
+  
   private function updateGedcomWrtXrefs(GedcomRecord $record): string {
     $new = $record->gedcom();
     foreach ($record->facts([]) as $fact) {
@@ -1257,6 +1369,43 @@ class SharedPlacesModule extends AbstractModule implements
     return preg_replace($regex, '$1$2', $record->gedcom());
   }
   
+  private function updateGedcomWrtEnhance(GedcomRecord $record): string {
+    $gedcom = $record->gedcom();
+    
+    if (!($record instanceof SharedPlace)) {
+      return $gedcom;
+    }
+    
+    if (($record->getLati() === null) && ($record->getLong() === null)) {
+      foreach ($record->namesAsPlaces() as $place) {
+        $ll = $this->getLatLon($place->gedcomName());
+        
+        if ($ll !== null) {
+          $map_lati = ($ll[0] < 0)?"S".str_replace('-', '', $ll[0]):"N".$ll[0];
+          $map_long = ($ll[1] < 0)?"W".str_replace('-', '', $ll[1]):"E".$ll[1];
+          $gedcom .= "\n1 MAP\n2 LATI ".$map_lati."\n2 LONG ".$map_long;
+          break;
+        }
+      }
+    }
+    
+    $plac2GovSupporters = $this->getPlac2GovSupporters($record->tree());
+    
+    if ((sizeof($plac2GovSupporters) > 0) && $record->getGov() === null) {      
+      foreach ($plac2GovSupporters as $plac2GovSupporter) {
+        foreach ($record->namesAsPlaces() as $place) {
+          $gov = $plac2GovSupporter->plac2gov(PlaceStructure::fromPlace($place));
+          if ($gov !== null) {
+            $gedcom .= "\n1 _GOV ".$gov->getId();
+            break;
+          }
+        }
+      }
+    }
+    
+    return $gedcom;
+  }
+  
   /**
    * XREFs of location records that might need fixing.
    *
@@ -1279,7 +1428,35 @@ class SharedPlacesModule extends AbstractModule implements
 
     return $query->pluck('o_id');
   }
+  
+  /**
+   * XREFs of location records that might need fixing.
+   *
+   * @param Tree                 $tree
+   *
+   * @return Collection<string>|null
+   */
+  public function locationsToFixWrtEnhance(Tree $tree): Collection {
+    
+    $query = DB::table('other')
+        ->where('o_file', '=', $tree->id())
+        ->where('o_type', '=', Location::RECORD_TYPE);
 
+    $regexp = $this->regexpOp(true);
+    
+    if ($regexp !== null) {
+      $self = $this;
+      $query->where(static function (Builder $q) use ($regexp, $self, $tree): void {
+                $q->where('o_gedcom', $regexp, $self->subst('[\n]1 MAP'));
+                if (sizeof($self->getPlac2GovSupporters($tree)) > 0) {
+                  $q->orWhere('o_gedcom', $regexp, $self->subst('[\n]1 _GOV'));
+                }                
+            });
+    }    
+
+    return $query->pluck('o_id');
+  }
+  
   private function recordQuery(Builder $query, string $column, string $search): void
   {
 
@@ -1301,6 +1478,29 @@ class SharedPlacesModule extends AbstractModule implements
             // Not available
             break;
     }
+  }
+  
+  private function subst(string $search): string {
+    // Substituting newlines seems to be necessary on *some* versions
+    //.of MySQL (e.g. 5.7), and harmless on others (e.g. 8.0).
+    $search = strtr($search, ['\n' => "\n"]);
+    
+    return $search;
+  }
+          
+  private function regexpOp(bool $invert = false): ?string
+  {
+    switch (DB::connection()->getDriverName()) {
+        case 'sqlite':
+        case 'mysql':
+            return $invert?'NOT REGEXP':'REGEXP';
+        case 'pgsql':
+            return $invert?'!~':'~';
+        case 'sqlsvr':
+            return null;
+    }
+    
+    return null;
   }
   
   private function createRegex(string $search): string {

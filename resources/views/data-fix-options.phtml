@@ -68,7 +68,23 @@ use Fisharebest\Webtrees\I18N;
                   <?= I18N::translate('Therefore, this data fix enables you to move away from using that configuration option.') . ' ' ?>
                   <?= I18N::translate('The search cannot be implemented efficiently and may take some time in particular when displaying and updating a large number of records.') ?>
               </p>
-        </div>
+            </div>
+            
+            <div class="form-check">
+              <input type="radio" class="form-check-input"
+                  name="mode"
+                  id="mode-enhance"
+                  value="enhance"
+              >
+              <label class="form-check-label" for="mode-enhance">
+                  Enhance existing shared places with global data
+              </label>
+              <p class="small text-muted">
+                  <?= I18N::translate('This data fix adds data (managed outside GEDCOM) to existing shared places.') . ' ' ?>
+                  <?= I18N::translate('In particular, map coordinates from webtrees \'Geographic data\' and GOV ids from the Gov4Webtrees module are added.') . ' ' ?>
+                  <?= I18N::translate('Matching shared places are determined as via the configuration option \'Additionally link shared places via name\'.') . ' ' ?>
+              </p>
+            </div>
     </div>
     
 </div>

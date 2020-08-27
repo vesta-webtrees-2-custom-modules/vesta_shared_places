@@ -40,7 +40,7 @@ class FunctionsEditPlacHandler {
   
   //for edit-fact (existing PLAC/_LOC, also missing subtags of PLAC)
   public static function addSimpleTag(Tree $tree, $tag, $upperlevel = '', $label = ''): string {
-    return FunctionsEdit::addSimpleTag($tree, ($level + 1) . ' ' . $subtag, '', GedcomTag::getLabel($label . ':' . $subtag));
+    return FunctionsEdit::addSimpleTag($tree, $tag, $upperlevel, $label);
   }
   
   //add-fact uses one of the above
