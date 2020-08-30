@@ -333,6 +333,9 @@ class SharedPlacesModule extends AbstractModule implements
       } else if ('_myartjaub_ruraltheme_' === $themeName) {
         //and the custom 'rural' theme
         $themeName = 'minimal';
+      } else if ('_jc-theme-justlight_' === $themeName) {
+        //and the custom 'JustLight' theme
+        $themeName = 'minimal';
       } else {
         //default
         $themeName = 'webtrees';
@@ -539,7 +542,7 @@ class SharedPlacesModule extends AbstractModule implements
     $searchService = app(SearchServiceExt::class);
     
     if ($useHierarchy) {
-      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
+      $parts = SharedPlace::placeNameParts($placeGedcomName);
       $head = reset($parts);
       $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $head));
       foreach ($sharedPlaces as $sharedPlace) {
@@ -573,7 +576,7 @@ class SharedPlacesModule extends AbstractModule implements
     $searchService = app(SearchServiceExt::class);
     
     if ($useHierarchy) {
-      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
+      $parts = SharedPlace::placeNameParts($placeGedcomName);
       $head = reset($parts);
       $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $head));
       $ret = new Collection();
@@ -616,8 +619,9 @@ class SharedPlacesModule extends AbstractModule implements
     $match = $this->placename2sharedPlaceImpl($placeGedcomName, $tree, $useHierarchy);
     
     if (($match === null) && ($parentLevels > 0)) {
-      $placeGedcomName = implode(Gedcom::PLACE_SEPARATOR, array_slice(explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName), 1));
-      return $this->placename2sharedPlacePL($placeGedcomName, $tree, $parentLevels-1);
+      $parts = SharedPlace::placeNameParts($placeGedcomName);
+      $tail = SharedPlace::placeNamePartsTail($parts);
+      return $this->placename2sharedPlacePL($tail, $tree, $parentLevels-1);
     }
     
     return $match;    
@@ -956,13 +960,21 @@ class SharedPlacesModule extends AbstractModule implements
     if ($params['mode'] === 'hierarchicalize') {
       return $this->recordsToFixWrtHierarchy($tree);
     }
+        
+    if ($params['mode'] === 'enhance') {
+      return $this->recordsToFixWrtEnhance($tree);
+    }
     
     if ($params['mode'] === 'xrefs') {
       return $this->recordsToFixWrtXrefs($tree);
     }
     
-    if ($params['mode'] === 'enhance') {
-      return $this->recordsToFixWrtEnhance($tree);
+    if ($params['mode'] === 'create1') {
+      return $this->recordsToFixWrtXrefs($tree);
+    }
+    
+    if ($params['mode'] === 'create2') {
+      return $this->recordsToFixWrtXrefs($tree);
     }
     
     return new Collection();
@@ -980,25 +992,57 @@ class SharedPlacesModule extends AbstractModule implements
             return $x->xref <=> $y->xref;
         });
   }
+  
+  protected function locationsToFixWrtHierarchy(Tree $tree): Collection {
+    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
+    
+    if (!$useHierarchy) {
+      return new Collection();
+    }
+    
+    $query = DB::table('other')
+        ->where('o_file', '=', $tree->id())
+        ->where('o_type', '=', Location::RECORD_TYPE);
 
-  protected function getPlac2GovSupporters(Tree $tree): array {
-    $self = $this;
-    return app('cache.array')->remember('Plac2GovSupporters_'.$tree->id(), function () use ($self, $tree) {
-        $functionsPlaceProviders = FunctionsPlaceUtils::accessibleModules($self, $tree, Auth::user())
-            ->toArray();
-        
-        $plac2GovSupporters = [];
-        
-        foreach ($functionsPlaceProviders as $functionsPlaceProvider) {
-          if ($functionsPlaceProvider->plac2govSupported()) {
-            $plac2GovSupporters[] = $functionsPlaceProvider;
-          }
-        }
-        
-        return $plac2GovSupporters;
-    });
+    $this->recordQuery($query, 'o_gedcom', '[\n]1 NAME[^\n]*,');
+
+    return $query->pluck('o_id');
   }
+      
+  protected function recordsToFixWrtEnhance(Tree $tree): Collection {
+    $locations = $this->locationsToFixWrtEnhance($tree);
+    
+    $records = new Collection();
+    $records = $records->concat($this->mergePendingRecords($locations, $tree, Location::RECORD_TYPE));
+        
+    return $records
+        ->unique()
+        ->sort(static function (stdClass $x, stdClass $y) {
+            return $x->xref <=> $y->xref;
+        });
+  }
+  
+  protected function locationsToFixWrtEnhance(Tree $tree): Collection {
+    
+    $query = DB::table('other')
+        ->where('o_file', '=', $tree->id())
+        ->where('o_type', '=', Location::RECORD_TYPE);
 
+    $regexp = $this->regexpOp(true);
+    
+    if ($regexp !== null) {
+      $self = $this;
+      $query->where(static function (Builder $q) use ($regexp, $self, $tree): void {
+                $q->where('o_gedcom', $regexp, $self->subst('[\n]1 MAP'));
+                if (sizeof($self->getPlac2GovSupporters($tree)) > 0) {
+                  $q->orWhere('o_gedcom', $regexp, $self->subst('[\n]1 _GOV'));
+                }                
+            });
+    }    
+
+    return $query->pluck('o_id');
+  }
+  
   protected function recordsToFixWrtXrefs(Tree $tree): Collection {
 
     //count
@@ -1030,19 +1074,6 @@ class SharedPlacesModule extends AbstractModule implements
         });
   }
   
-  protected function recordsToFixWrtEnhance(Tree $tree): Collection {
-    $locations = $this->locationsToFixWrtEnhance($tree);
-    
-    $records = new Collection();
-    $records = $records->concat($this->mergePendingRecords($locations, $tree, Location::RECORD_TYPE));
-        
-    return $records
-        ->unique()
-        ->sort(static function (stdClass $x, stdClass $y) {
-            return $x->xref <=> $y->xref;
-        });
-  }
-  
   public function doesRecordNeedUpdate(GedcomRecord $record, array $params): bool {
     if (!array_key_exists('mode', $params)) {
       return false;
@@ -1051,34 +1082,23 @@ class SharedPlacesModule extends AbstractModule implements
     if ($params['mode'] === 'hierarchicalize') {
       return $this->doesRecordNeedUpdateWrtHierarchy($record);
     }
+        
+    if ($params['mode'] === 'enhance') {
+      return $this->doesRecordNeedUpdateWrtEnhance($record);
+    }
     
     if ($params['mode'] === 'xrefs') {
       return $this->doesRecordNeedUpdateWrtXrefs($record);
     }
     
-    if ($params['mode'] === 'enhance') {
-      return $this->doesRecordNeedUpdateWrtEnhance($record);
+    if ($params['mode'] === 'create1') {
+      return $this->doesRecordNeedUpdateWrtCreate($record, false);
     }
     
-    return false;
-  }
-    
-  protected function doesRecordNeedUpdateWrtXrefs(GedcomRecord $record): bool {
-    //is there actually a _LOC available for at least one PLAC with missing _LOC?
-    
-    foreach ($record->facts([]) as $fact) {
-      $ps = PlaceStructure::fromFact($fact);
-      if ($ps !== null) {
-        $loc = $ps->getLoc();
-        if ($loc !== null) {
-          continue;
-        }
-
-        if ($this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree()) !== null) {
-          return true;
-        }
-      }
+    if ($params['mode'] === 'create2') {
+      return $this->doesRecordNeedUpdateWrtCreate($record, true);
     }
+    
     return false;
   }
   
@@ -1114,10 +1134,8 @@ class SharedPlacesModule extends AbstractModule implements
     $plac2GovSupporters = $this->getPlac2GovSupporters($record->tree());
     
     if ((sizeof($plac2GovSupporters) > 0) && $record->getGov() === null) {
-      error_log("!!!");
       foreach ($plac2GovSupporters as $plac2GovSupporter) {
         foreach ($record->namesAsPlaces() as $place) {
-          error_log("???");
           $gov = $plac2GovSupporter->plac2gov(PlaceStructure::fromPlace($place));
           if ($gov !== null) {
             return true;
@@ -1128,19 +1146,64 @@ class SharedPlacesModule extends AbstractModule implements
     
     return false;
   }
-  
-  //cf WebtreesLocationDataModule
-  protected function getLatLon(string $gedcomName): ?array {
-    $location = new PlaceLocation($gedcomName);
-    $latitude = $location->latitude();
-    $longitude = $location->longitude();
+      
+  protected function doesRecordNeedUpdateWrtXrefs(GedcomRecord $record): bool {
+    //is there actually a _LOC available for at least one PLAC with missing _LOC?
+    
+    foreach ($record->facts([]) as $fact) {
+      $ps = PlaceStructure::fromFact($fact);
+      if ($ps !== null) {
+        $loc = $ps->getLoc();
+        if ($loc !== null) {
+          continue;
+        }
 
-    //wtf webtrees: 0.0; 0.0 are valid coordinates, why do you use them for 'unknown'?
-    if (($latitude !== 0.0) && ($longitude !== 0.0)) {
-      return array($latitude, $longitude);
+        if ($this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree()) !== null) {
+          return true;
+        }
+      }
     }
+    return false;
+  }
+  
+  protected function doesRecordNeedUpdateWrtCreate(GedcomRecord $record, bool $unconditionally): bool {
+    foreach ($record->facts([]) as $fact) {
+      $ps = PlaceStructure::fromFact($fact);
+      if ($ps !== null) {
+        $loc = $ps->getLoc();
+        if ($loc !== null) {
+          continue;
+        }
+        
+        if ($unconditionally) {
+          return true;
+        }
+                
+        if ($this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree()) !== null) {
+          //existing loc, but XREF is missing
+          return true;
+        }
 
-    return null;
+        //is there global data available?
+        $ll = $this->getLatLon($ps->getGedcomName());
+        if ($ll !== null) {
+          return true;
+        }
+        
+        $plac2GovSupporters = $this->getPlac2GovSupporters($record->tree());
+    
+        if (sizeof($plac2GovSupporters) > 0) {
+          foreach ($plac2GovSupporters as $plac2GovSupporter) {
+            $gov = $plac2GovSupporter->plac2gov($ps);
+            if ($gov !== null) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    
+    return false;
   }
   
   public function previewUpdate(GedcomRecord $record, array $params): string {
@@ -1152,23 +1215,23 @@ class SharedPlacesModule extends AbstractModule implements
       return $this->previewUpdateWrtHierarchy($record);
     }
     
+    if ($params['mode'] === 'enhance') {
+      return $this->previewUpdateWrtEnhance($record);
+    }
+        
     if ($params['mode'] === 'xrefs') {
       return $this->previewUpdateWrtXrefs($record);
     }
     
-    if ($params['mode'] === 'enhance') {
-      return $this->previewUpdateWrtEnhance($record);
+    if ($params['mode'] === 'create1') {
+      return $this->previewUpdateWrtCreate($record, false);
+    }
+    
+    if ($params['mode'] === 'create2') {
+      return $this->previewUpdateWrtCreate($record, true);
     }
     
     return '';
-  }
-  
-  protected function previewUpdateWrtXrefs(GedcomRecord $record): string {
-    $old = $record->gedcom();
-    $new = $this->updateGedcomWrtXrefs($record);
-    
-    $data_fix_service = app(DataFixService::class);
-    return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
   }
   
   protected function previewUpdateWrtHierarchy(GedcomRecord $record): string {
@@ -1193,9 +1256,10 @@ class SharedPlacesModule extends AbstractModule implements
     //higher-level shared places for all names
     $creator = app(CreateSharedPlaceAction::class);
     $newlyCreated = '';
+    
     foreach ($record->namesNN() as $placeGedcomName) {
-      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
-      $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
+      $parts = SharedPlace::placeNameParts($placeGedcomName);
+      $tail = SharedPlace::placeNamePartsTail($parts);
       
       if ($tail !== '') {
         $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), true);
@@ -1241,6 +1305,82 @@ class SharedPlacesModule extends AbstractModule implements
     $data_fix_service = app(DataFixService::class);
     return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
   }
+    
+  protected function previewUpdateWrtXrefs(GedcomRecord $record): string {
+    $old = $record->gedcom();
+    $new = $this->updateGedcomWrtXrefs($record);
+    
+    $data_fix_service = app(DataFixService::class);
+    return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
+  }
+  
+  protected function previewUpdateWrtCreate(GedcomRecord $record, bool $unconditionally): string {
+    //we need immediate accepts in order to avoid potential duplicates when creating new shared places!
+    if (Auth::user()->getPreference(User::PREF_AUTO_ACCEPT_EDITS) !== '1') {
+      return '';
+    }    
+    
+    $old = $record->gedcom();
+    
+    //cf GedcomRecord::updateFact
+    // First line of record may contain data - e.g. NOTE records.
+    [$new_gedcom] = explode("\n", $record->gedcom(), 2);
+    
+    $creator = app(CreateSharedPlaceAction::class);
+    $newlyCreated = '';
+    
+    //avoid previewing multiple creations for same place in multiple facts
+    $refs = [];
+    
+    foreach ($record->facts([]) as $fact) {
+      $factGedcom = $fact->gedcom();
+      $newFactGedcom = null;
+      
+      $ps = PlaceStructure::fromFact($fact);
+      if ($ps !== null) {
+        $loc = $ps->getLoc();
+        if ($loc === null) {
+          
+          $reused = false;
+          if (array_key_exists($ps->getGedcomName(), $refs)) {
+            $ref = $refs[$ps->getGedcomName()];
+            $reused = true;
+          } else {
+            $ref = $creator->createIfRequired(
+                  $ps->getGedcomName(), 
+                  '', 
+                  $record->tree(), 
+                  true, 
+                  $this,
+                  !$unconditionally);  
+          }
+          
+          if ($ref !== null) {
+            $newFactGedcom = $this->updatePlacGedcomWithLoc($factGedcom, $ref->record()->xref());
+
+            if (!$reused) {
+              $refs[$ps->getGedcomName()] = $ref;
+              
+              while (($ref !== null) && (!$ref->existed())) {
+                $newlyCreated .= "\n";
+                $newlyCreated .= str_replace("@@", "@" .$ref->record()->xref() . "@", $ref->record()->gedcom());
+                $ref = $ref->parent();
+              }
+            }
+          }
+        }
+      }
+      
+      if ($newFactGedcom === null) {
+        $newFactGedcom = $factGedcom;        
+      }
+      $new_gedcom .= "\n" . $newFactGedcom;
+    }
+    $new_gedcom .= $newlyCreated;
+    
+    $data_fix_service = app(DataFixService::class);
+    return $data_fix_service->gedcomDiff($record->tree(), $old, $new_gedcom);
+  }
   
   public function updateRecord(GedcomRecord $record, array $params): void {
     if (!array_key_exists('mode', $params)) {
@@ -1251,26 +1391,28 @@ class SharedPlacesModule extends AbstractModule implements
       $this->updateRecordWrtHierarchy($record);
       return;
     }
+        
+    if ($params['mode'] === 'enhance') {
+      $this->updateRecordWrtEnhance($record);
+      return;
+    }
     
     if ($params['mode'] === 'xrefs') {
       $this->updateRecordWrtXrefs($record);
       return;
     }
     
-    if ($params['mode'] === 'enhance') {
-      $this->updateRecordWrtEnhance($record);
+    if ($params['mode'] === 'create1') {
+      $this->updateRecordWrtCreate($record, false);
+      return;
+    }
+
+    if ($params['mode'] === 'create2') {
+      $this->updateRecordWrtCreate($record, true);
       return;
     }
     
     return;
-  }
-  
-  protected function updateRecordWrtXrefs(GedcomRecord $record): void {
-    $new = $this->updateGedcomWrtXrefs($record);
-    
-    $record->updateRecord($new, false);
-    
-    //strictly we should unmake here as well, in practice irrelevant
   }
   
   protected function updateRecordWrtHierarchy(GedcomRecord $record): void {
@@ -1290,8 +1432,8 @@ class SharedPlacesModule extends AbstractModule implements
     //higher-level shared places for all names
     $creator = app(CreateSharedPlaceAction::class);
     foreach ($record->namesNN() as $placeGedcomName) {
-      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
-      $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
+      $parts = SharedPlace::placeNameParts($placeGedcomName);
+      $tail = SharedPlace::placeNamePartsTail($parts);
       
       if ($tail !== '') {
         $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), true);
@@ -1342,34 +1484,83 @@ class SharedPlacesModule extends AbstractModule implements
     
     //strictly we should unmake here as well, in practice irrelevant
   }
+    
+  protected function updateRecordWrtXrefs(GedcomRecord $record): void {
+    $new = $this->updateGedcomWrtXrefs($record);
+    
+    $record->updateRecord($new, false);
+    
+    //strictly we should unmake here as well, in practice irrelevant
+  }
   
-  private function updateGedcomWrtXrefs(GedcomRecord $record): string {
-    $new = $record->gedcom();
+  protected function updateRecordWrtCreate(GedcomRecord $record, bool $unconditionally): void {
+    //we need immediate accepts in order to avoid potential duplicates when creating new shared places!
+    if (Auth::user()->getPreference(User::PREF_AUTO_ACCEPT_EDITS) !== '1') {
+      return;
+    }    
+    
+    $old = $record->gedcom();
+    
+    //cf GedcomRecord::updateFact
+    // First line of record may contain data - e.g. NOTE records.
+    [$new_gedcom] = explode("\n", $record->gedcom(), 2);
+    
+    $creator = app(CreateSharedPlaceAction::class);
+    
     foreach ($record->facts([]) as $fact) {
       $factGedcom = $fact->gedcom();
+      $newFactGedcom = null;
       
       $ps = PlaceStructure::fromFact($fact);
       if ($ps !== null) {
         $loc = $ps->getLoc();
-        if ($loc !== null) {
-          continue;
-        }
+        if ($loc === null) {
+          
+          $ref = $creator->createIfRequired(
+                  $ps->getGedcomName(), 
+                  '', 
+                  $record->tree(), 
+                  false, 
+                  $this,
+                  !$unconditionally);
 
-        $sharedPlace = $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree());
-        if ($sharedPlace !== null) {
-          $new = str_replace($factGedcom, $factGedcom."\n3 _LOC @" . $sharedPlace->xref() . "@", $new);
+          if ($ref !== null) {
+            $newFactGedcom = $this->updatePlacGedcomWithLoc($factGedcom, $ref->record()->xref());
+          }
         }
       }
+      
+      if ($newFactGedcom === null) {
+        $newFactGedcom = $factGedcom;        
+      }
+      $new_gedcom .= "\n" . $newFactGedcom;
     }
-    return $new;
+    
+    $record->updateRecord($new_gedcom, false);
   }
   
-  private function updateGedcomWrtHierarchy(GedcomRecord $record): string {
+  protected function updatePlacGedcomWithLoc(string $factGedcom, string $xref): string {
+    $factGedcomArray = explode("\n", $factGedcom);
+    $insertAt = null;
+    foreach ($factGedcomArray as $key => $factGedcomElement) {
+      if (str_starts_with($factGedcomElement, "2 PLAC")) {
+        $insertAt = $key;
+      }
+    }
+    if ($insertAt !== null) {
+      array_splice($factGedcomArray, $insertAt+1, 0, ["3 _LOC @" . $xref . "@"]);
+    }            
+    $newFactGedcom = implode("\n", $factGedcomArray);
+    
+    return $newFactGedcom;
+  }
+  
+  protected function updateGedcomWrtHierarchy(GedcomRecord $record): string {
     $regex = $this->createRegex('(1 NAME[^,]*),[^\n]*');
     return preg_replace($regex, '$1$2', $record->gedcom());
   }
   
-  private function updateGedcomWrtEnhance(GedcomRecord $record): string {
+  protected function updateGedcomWrtEnhance(GedcomRecord $record): string {
     $gedcom = $record->gedcom();
     
     if (!($record instanceof SharedPlace)) {
@@ -1405,60 +1596,68 @@ class SharedPlacesModule extends AbstractModule implements
     
     return $gedcom;
   }
-  
-  /**
-   * XREFs of location records that might need fixing.
-   *
-   * @param Tree                 $tree
-   *
-   * @return Collection<string>|null
-   */
-  public function locationsToFixWrtHierarchy(Tree $tree): Collection {
-    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
     
-    if (!$useHierarchy) {
-      return new Collection();
+  protected function updateGedcomWrtXrefs(GedcomRecord $record): string {
+    //cf GedcomRecord::updateFact
+    // First line of record may contain data - e.g. NOTE records.
+    [$new_gedcom] = explode("\n", $record->gedcom(), 2);
+    
+    foreach ($record->facts([]) as $fact) {
+      $factGedcom = $fact->gedcom();
+      $newFactGedcom = null;
+      
+      $ps = PlaceStructure::fromFact($fact);
+      if ($ps !== null) {
+        $loc = $ps->getLoc();
+        if ($loc === null) {
+        $sharedPlace = $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree());
+          if ($sharedPlace !== null) {
+            $newFactGedcom = $this->updatePlacGedcomWithLoc($factGedcom, $sharedPlace->xref());
+          }
+        }
+      }
+      
+      if ($newFactGedcom === null) {
+        $newFactGedcom = $factGedcom;        
+      }
+      $new_gedcom .= "\n" . $newFactGedcom;
     }
-    
-    $query = DB::table('other')
-        ->where('o_file', '=', $tree->id())
-        ->where('o_type', '=', Location::RECORD_TYPE);
-
-    $this->recordQuery($query, 'o_gedcom', '[\n]1 NAME[^\n]*,');
-
-    return $query->pluck('o_id');
+    return $new_gedcom;
   }
   
-  /**
-   * XREFs of location records that might need fixing.
-   *
-   * @param Tree                 $tree
-   *
-   * @return Collection<string>|null
-   */
-  public function locationsToFixWrtEnhance(Tree $tree): Collection {
-    
-    $query = DB::table('other')
-        ->where('o_file', '=', $tree->id())
-        ->where('o_type', '=', Location::RECORD_TYPE);
-
-    $regexp = $this->regexpOp(true);
-    
-    if ($regexp !== null) {
-      $self = $this;
-      $query->where(static function (Builder $q) use ($regexp, $self, $tree): void {
-                $q->where('o_gedcom', $regexp, $self->subst('[\n]1 MAP'));
-                if (sizeof($self->getPlac2GovSupporters($tree)) > 0) {
-                  $q->orWhere('o_gedcom', $regexp, $self->subst('[\n]1 _GOV'));
-                }                
-            });
-    }    
-
-    return $query->pluck('o_id');
+  public function getPlac2GovSupporters(Tree $tree): array {
+    $self = $this;
+    return app('cache.array')->remember('Plac2GovSupporters_'.$tree->id(), function () use ($self, $tree) {
+        $functionsPlaceProviders = FunctionsPlaceUtils::accessibleModules($self, $tree, Auth::user())
+            ->toArray();
+        
+        $plac2GovSupporters = [];
+        
+        foreach ($functionsPlaceProviders as $functionsPlaceProvider) {
+          if ($functionsPlaceProvider->plac2govSupported()) {
+            $plac2GovSupporters[] = $functionsPlaceProvider;
+          }
+        }
+        
+        return $plac2GovSupporters;
+    });
   }
   
-  private function recordQuery(Builder $query, string $column, string $search): void
-  {
+  //cf WebtreesLocationDataModule
+  public function getLatLon(string $gedcomName): ?array {
+    $location = new PlaceLocation($gedcomName);
+    $latitude = $location->latitude();
+    $longitude = $location->longitude();
+
+    //wtf webtrees: 0.0; 0.0 are valid coordinates, why do you use them for 'unknown'?
+    if (($latitude !== 0.0) && ($longitude !== 0.0)) {
+      return array($latitude, $longitude);
+    }
+
+    return null;
+  }
+  
+  protected function recordQuery(Builder $query, string $column, string $search): void {
 
     // Substituting newlines seems to be necessary on *some* versions
     //.of MySQL (e.g. 5.7), and harmless on others (e.g. 8.0).
@@ -1480,7 +1679,7 @@ class SharedPlacesModule extends AbstractModule implements
     }
   }
   
-  private function subst(string $search): string {
+  protected function subst(string $search): string {
     // Substituting newlines seems to be necessary on *some* versions
     //.of MySQL (e.g. 5.7), and harmless on others (e.g. 8.0).
     $search = strtr($search, ['\n' => "\n"]);
@@ -1488,8 +1687,7 @@ class SharedPlacesModule extends AbstractModule implements
     return $search;
   }
           
-  private function regexpOp(bool $invert = false): ?string
-  {
+  protected function regexpOp(bool $invert = false): ?string {
     switch (DB::connection()->getDriverName()) {
         case 'sqlite':
         case 'mysql':
@@ -1503,7 +1701,7 @@ class SharedPlacesModule extends AbstractModule implements
     return null;
   }
   
-  private function createRegex(string $search): string {
+  protected function createRegex(string $search): string {
 
     $regex = '/' . addcslashes($search, '/') . '/';
 

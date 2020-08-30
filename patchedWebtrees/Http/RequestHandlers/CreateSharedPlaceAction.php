@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
+use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
 use Cissee\WebtreesExt\Requests;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Factory;
-use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Ramsey\Uuid\Uuid;
+use Vesta\Model\PlaceStructure;
 use function app;
 use function assert;
 use function response;
@@ -43,7 +43,12 @@ class SharedPlaceRef {
     return $this->parent;
   }
   
-  public function __construct(SharedPlace $record, bool $existed, int $created, ?SharedPlaceRef $parent) {
+  public function __construct(
+          SharedPlace $record, 
+          bool $existed, 
+          int $created, 
+          ?SharedPlaceRef $parent) {
+    
     $this->record = $record;
     $this->existed = $existed;
     $this->created = $created;
@@ -154,17 +159,28 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
             ]);
     }
     
-    //useHierarchy === true
     public function createIfRequired(
             string $placeGedcomName,
             string $govId,
             Tree $tree,
-            bool $simulate = false): SharedPlaceRef {
+            bool $simulate = false,
+            ?SharedPlacesModule $enhanceWithGlobalData = null,
+            bool $onlyIfGlobalDataAvailable = false): ?SharedPlaceRef {
       
-      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
-      $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
+      $parts = SharedPlace::placeNameParts($placeGedcomName);        
+      $tail = SharedPlace::placeNamePartsTail($parts);
       $head = reset($parts);
-
+      
+      //hacky - should we een support this here?
+      if ($enhanceWithGlobalData !== null) {
+        $useHierarchy = boolval($enhanceWithGlobalData->getPreference('USE_HIERARCHY', '1'));
+        
+        if (!$useHierarchy) {
+          $head = $placeGedcomName;
+          $tail = '';
+        }
+      }
+      
       //if the place exists (with hierarchy), just return
       $searchService = app(SearchServiceExt::class);
       $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $head));
@@ -178,13 +194,44 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
       
       $ref = null;
       if ($tail !== '') {
-        $ref = $this->createIfRequired($tail, '', $tree, $simulate);
+        //missing parents have to be created regardless of $onlyIfGlobalDataAvailable!
+        $ref = $this->createIfRequired($tail, '', $tree, $simulate, $enhanceWithGlobalData);
       }
       
       $gedcom = "0 @@ _LOC\n1 NAME " . $head;
 
+      $enhancedWithGlobalData = false;
+      
       if ($govId != '') {
         $gedcom .= "\n1 _GOV " . $govId;
+      } else if ($enhanceWithGlobalData !== null) {
+        $plac2GovSupporters = $enhanceWithGlobalData->getPlac2GovSupporters($tree);
+        
+        if (sizeof($plac2GovSupporters) > 0) {
+          foreach ($plac2GovSupporters as $plac2GovSupporter) {
+            $gov = $plac2GovSupporter->plac2gov(PlaceStructure::fromName($head, $tree));
+            if ($gov !== null) {
+              $gedcom .= "\n1 _GOV " . $gov->getId();
+              $enhancedWithGlobalData = true;
+              break;
+            }
+          }
+        }
+      }
+      
+      if ($enhanceWithGlobalData !== null) {
+        $ll = $enhanceWithGlobalData->getLatLon($head);
+        
+        if ($ll !== null) {
+          $map_lati = ($ll[0] < 0)?"S".str_replace('-', '', $ll[0]):"N".$ll[0];
+          $map_long = ($ll[1] < 0)?"W".str_replace('-', '', $ll[1]):"E".$ll[1];
+          $gedcom .= "\n1 MAP\n2 LATI ".$map_lati."\n2 LONG ".$map_long;
+          $enhancedWithGlobalData = true;
+        }
+      }
+      
+      if ($onlyIfGlobalDataAvailable && !$enhancedWithGlobalData) {
+        return null;
       }
       
       if ($ref !== null) {
@@ -195,7 +242,7 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
       if (!$simulate) {
         $record = $tree->createRecord($gedcom); //returns GedcomRecord
       }
-      $newXref = 'NEXT_XREF_' . Uuid::uuid4()->toString();
+      $newXref = 'NX_' . CreateSharedPlaceAction::generateRandomString(16);
       if (!$simulate) {
         $newXref = $record->xref();
       }
@@ -206,5 +253,17 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
         $count += $ref->created();
       }
       return new SharedPlaceRef($record, false, $count, $ref);
+    }
+    
+    //Uuid::uuid4() is to long for XREF (max length 20)
+    //https://stackoverflow.com/questions/4356289/php-random-string-generator
+    public static function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

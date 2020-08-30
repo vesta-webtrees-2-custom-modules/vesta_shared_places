@@ -24,8 +24,10 @@ class ExtendedFunctionsEditPlacHandler extends FunctionsEditPlacHandler {
         }
     }
     echo FunctionsEdit::addSimpleTag($tree, '0 MAP', $fact);
-    echo FunctionsEdit::addSimpleTag($tree, '0 LATI', $fact);
-    echo FunctionsEdit::addSimpleTag($tree, '0 LONG', $fact);
+    //echo FunctionsEdit::addSimpleTag($tree, '0 LATI', $fact);
+    echo FunctionsEditLoc::addSimpleTagWithGedcomRecord(null, $tree, '0 LATI', $fact); //must use this method to create proper 'child_of_'
+    //echo FunctionsEdit::addSimpleTag($tree, '0 LONG', $fact);
+    echo FunctionsEditLoc::addSimpleTagWithGedcomRecord(null, $tree, '0 LATI', $fact); //must use this method to create proper 'child_of_'
   }
   
   //for edit-fact (PLAC missing completely)
@@ -41,8 +43,10 @@ class ExtendedFunctionsEditPlacHandler extends FunctionsEditPlacHandler {
         }
     }
     echo FunctionsEdit::addSimpleTag($tree, '3 MAP');
-    echo FunctionsEdit::addSimpleTag($tree, '4 LATI');
-    echo FunctionsEdit::addSimpleTag($tree, '4 LONG');
+    //echo FunctionsEdit::addSimpleTag($tree, '4 LATI');
+    echo FunctionsEditLoc::addSimpleTagWithGedcomRecord(null, $tree, '4 LATI'); //must use this method to create proper 'child_of_'
+    //echo FunctionsEdit::addSimpleTag($tree, '4 LONG');
+    echo FunctionsEditLoc::addSimpleTagWithGedcomRecord(null, $tree, '4 LONG'); //must use this method to create proper 'child_of_'
   }
   
   //for edit-fact (existing PLAC/_LOC, also missing subtags of PLAC)

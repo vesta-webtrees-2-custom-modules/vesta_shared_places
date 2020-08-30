@@ -146,6 +146,12 @@ class FunctionsEditLoc {
           $upperlevel = '', 
           $label = ''): string
   {
+    //[RC] gah so hacky - we need this for LATI/LONG because we write PLAC!
+    // Some form fields need access to previous form fields.
+    static $previous_ids = [
+        'PLAC' => '',
+    ];
+        
     $parts = explode(' ', $tag, 3);
     $level = $parts[0] ?? '';
     $fact  = $parts[1] ?? '';
@@ -179,7 +185,9 @@ class FunctionsEditLoc {
       $upperlevelDOM .= '_PLAC';
     }
   
-    $id = $fact . Uuid::uuid4()->toString();
+    $id = $fact . Uuid::uuid4()->toString();    
+    $previous_ids[$fact] = $id;
+    
     // field value
     $islink = (bool) preg_match('/^@[^#@][^@]*@$/', $value);
     if ($islink) {
@@ -187,7 +195,24 @@ class FunctionsEditLoc {
     }
 
     $row_class = 'form-group row';
-
+    switch ($fact) {
+        case 'DATA':
+        case 'MAP':
+            // These GEDCOM tags should have no data, just child tags.
+            if ($value === '') {
+                $row_class .= ' d-none';
+            }
+            break;
+        case 'LATI':
+        case 'LONG':
+            // Indicate that this row is a child of a previous row, so we can expand/collapse them.
+            $row_class .= ' child_of_' . $previous_ids['PLAC'];
+            if ($value === '') {
+                $row_class .= ' collapse';
+            }
+            break;
+    }
+        
     $html = '';
     $html .= '<div class="' . $row_class . '">';
     $html .= '<label class="col-sm-3 col-form-label" for="' . $id . '">';
@@ -304,10 +329,12 @@ class FunctionsEditLoc {
         break;
       case 'LATI':
         //same as original FunctionsEdit
+        //(but for LATI/LONG under PLAC, note the $previous_ids hack!)
         $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" oninput="valid_lati_long(this, \'N\', \'S\')">';
         break;
       case 'LONG':
         //same as original FunctionsEdit
+        //(but for LATI/LONG under PLAC, note the $previous_ids hack!)
         $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" oninput="valid_lati_long(this, \'E\', \'W\')">';
         break;
       //_LOC.TYPE

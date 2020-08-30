@@ -789,7 +789,7 @@ class FunctionsEdit
             $level  = (int) $fields[0];
             $type   = $fields[1] ?? '';
             $text   = $fields[2] ?? '';
-
+            
             // Keep track of our hierarchy, e.g. 1=>BIRT, 2=>PLAC, 3=>FONE
             $stack[$level] = $type;
             // Merge them together, e.g. BIRT:PLAC:FONE
@@ -825,11 +825,11 @@ class FunctionsEdit
                 }
             } elseif ($type === 'STAT') {
                 echo self::addSimpleTag($tree, $subrecord, $level1type, GedcomTag::getLabel($label));
-            } elseif (($type !== 'PLAC') && ($type !== '_LOC')) {
+            } elseif (($type !== 'PLAC') && ($type !== '_LOC') && ($type !== 'LATI') && ($type !== 'LONG')) {
                 echo self::addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
             } else {
-               $handler = app(FunctionsEditPlacHandler::class);
-               echo $handler->addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
+                $handler = app(FunctionsEditPlacHandler::class);
+                echo $handler->addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
             }
 
             // Get a list of tags present at the next level
@@ -852,7 +852,10 @@ class FunctionsEdit
                       echo self::addSimpleTag($tree, ($level + 1) . ' ' . $subtag, '', GedcomTag::getLabel($label . ':' . $subtag));
                     }                    
                     foreach ($expected_subtags[$subtag] ?? [] as $subsubtag) {
-                        echo self::addSimpleTag($tree, ($level + 2) . ' ' . $subsubtag, '', GedcomTag::getLabel($label . ':' . $subtag . ':' . $subsubtag));
+                        $handler = app(FunctionsEditPlacHandler::class);
+                        echo $handler->addSimpleTag($tree, ($level + 2) . ' ' . $subsubtag, '', GedcomTag::getLabel($label . ':' . $subtag . ':' . $subsubtag)); 
+                        //must use this method to create proper 'child_of_'
+                        //echo self::addSimpleTag($tree, ($level + 2) . ' ' . $subsubtag, '', GedcomTag::getLabel($label . ':' . $subtag . ':' . $subsubtag));
                     }
                 }
             }
@@ -957,8 +960,12 @@ class FunctionsEdit
                             }
                         }
                         echo self::addSimpleTag($tree, '3 MAP');
-                        echo self::addSimpleTag($tree, '4 LATI');
-                        echo self::addSimpleTag($tree, '4 LONG');
+                        
+                        $handler = app(FunctionsEditPlacHandler::class);
+                        //echo self::addSimpleTag($tree, '4 LATI');
+                        echo $handler->addSimpleTag($tree, '4 LATI'); //must use this method to create proper 'child_of_'
+                        //echo self::addSimpleTag($tree, '4 LONG');
+                        echo $handler->addSimpleTag($tree, '4 LONG'); //must use this method to create proper 'child_of_'
                     }
                 }
             }

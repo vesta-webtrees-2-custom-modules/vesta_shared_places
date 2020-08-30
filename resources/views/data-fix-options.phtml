@@ -52,6 +52,22 @@ use Fisharebest\Webtrees\I18N;
                 <?php endif ?>
               <?php endif ?>
             </div>
+            
+            <div class="form-check">
+              <input type="radio" class="form-check-input"
+                  name="mode"
+                  id="mode-enhance"
+                  value="enhance"
+              >
+              <label class="form-check-label" for="mode-enhance">
+                  Enhance existing shared places with global data
+              </label>
+              <p class="small text-muted">
+                  <?= I18N::translate('This data fix adds global data (managed outside GEDCOM) to existing shared places.') . ' ' ?>
+                  <?= I18N::translate('In particular, map coordinates from webtrees \'Geographic data\' and GOV ids from the Gov4Webtrees module are added.') . ' ' ?>
+                  <?= I18N::translate('Matching shared places are determined as via the configuration option \'Additionally link shared places via name\'.') . ' ' ?>
+              </p>
+            </div>
 
             <div class="form-check">
               <input type="radio" class="form-check-input"
@@ -70,21 +86,61 @@ use Fisharebest\Webtrees\I18N;
               </p>
             </div>
             
+            <?php if (false) : ?>
             <div class="form-check">
               <input type="radio" class="form-check-input"
                   name="mode"
-                  id="mode-enhance"
-                  value="enhance"
+                  id="mode-create1"
+                  value="create1"
               >
               <label class="form-check-label" for="mode-enhance">
-                  Enhance existing shared places with global data
+                  Create missing shared places from global data, and add missing XREFs
               </label>
               <p class="small text-muted">
-                  <?= I18N::translate('This data fix adds data (managed outside GEDCOM) to existing shared places.') . ' ' ?>
+                  <?= I18N::translate('This data fix creates missing shared places, if global data (managed outside GEDCOM) is available for the respective place.') . ' ' ?>
                   <?= I18N::translate('In particular, map coordinates from webtrees \'Geographic data\' and GOV ids from the Gov4Webtrees module are added.') . ' ' ?>
-                  <?= I18N::translate('Matching shared places are determined as via the configuration option \'Additionally link shared places via name\'.') . ' ' ?>
+                  <?= I18N::translate('The created shared places, as well as existing shared places, are linked via XREFs to event places.') . ' ' ?>
+                  <?= I18N::translate('Matching shared places are determined as via the configuration option \'Additionally link shared places via name\', including parent levels if set.') ?>
               </p>
+              
+              <?php if (!$autoAcceptEdits) : ?>
+                <h4>
+                    <?= I18N::translate('Attention!') ?>
+                </h4>
+                <p class="small text-muted">
+                    <?= I18N::translate('Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check \'Automatically accept changes made by this user\' in the user administration, at least for the duration of this data fix.') ?>
+                    <?= I18N::translate('This data fix currently won\'t update anything, because this preference isn\'t set.') ?>
+                </p>
+              <?php endif ?>
             </div>
+            
+            <div class="form-check">
+              <input type="radio" class="form-check-input"
+                  name="mode"
+                  id="mode-create2"
+                  value="create2"
+              >
+              <label class="form-check-label" for="mode-enhance">
+                  Create all missing shared places, and add missing XREFs
+              </label>
+              <p class="small text-muted">
+                  <?= I18N::translate('This data fix creates missing shared places, even if no global data (managed outside GEDCOM) is available for the respective place.') . ' ' ?>
+                  <?= I18N::translate('If globally managed data is available, map coordinates from webtrees \'Geographic data\' and GOV ids from the Gov4Webtrees module are added.') . ' ' ?>
+                  <?= I18N::translate('The created shared places, as well as existing shared places, are linked via XREFs to event places.') . ' ' ?>
+                  <?= I18N::translate('Matching shared places are determined as via the configuration option \'Additionally link shared places via name\', including parent levels if set.') ?>
+              </p>
+              
+              <?php if (!$autoAcceptEdits) : ?>
+                <h4>
+                    <?= I18N::translate('Attention!') ?>
+                </h4>
+                <p class="small text-muted">
+                    <?= I18N::translate('Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check \'Automatically accept changes made by this user\' in the user administration, at least for the duration of this data fix.') ?>
+                    <?= I18N::translate('This data fix currently won\'t update anything, because this preference isn\'t set.') ?>
+                </p>
+              <?php endif ?>
+            </div>
+            <?php endif ?>
     </div>
     
 </div>

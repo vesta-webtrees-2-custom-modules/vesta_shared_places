@@ -405,13 +405,25 @@ class SharedPlace extends Location {
     return $places;
   }
   
+  public static function placeNameParts(string $placeGedcomName): array {
+    // Ignore any empty parts in place names such as "Village, , , Country".
+    $partsColl = new Collection(explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName));      
+    $parts = $partsColl->filter()->toArray();
+    return $parts;
+  }
+  
+  public static function placeNamePartsTail(array $parts): string {
+    $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
+    return $tail;
+  }
+  
   public function matchesWithHierarchyAsArg(
           string $placeGedcomName,
           bool $useHierarchy): bool {
     
     if ($useHierarchy) {
-      $parts = explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName);
-      $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
+      $parts = SharedPlace::placeNameParts($placeGedcomName);
+      $tail = SharedPlace::placeNamePartsTail($parts);
       $head = reset($parts);
       
       foreach ($this->namesNN() as $name) {
