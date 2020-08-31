@@ -13,6 +13,41 @@ use Ramsey\Uuid\Uuid;
 
 <h2 class="wt-page-title"><?= $title ?></h2>
 
+<?php
+  //cf LocationController.php/location-edit.phtml
+?>
+<?php if ($record->tag() === '_LOC' && $fact === 'MAP') : ?>
+  <div class="form-group row">
+      <div class="col-sm-12">
+          <div id="osm-map" class="wt-ajax-load col-sm-12 osm-admin-map" dir="ltr"></div>
+      </div>
+  </div>
+
+  <?php
+    $locationName = $record->canonicalPlace()->gedcomName();  
+    $map_bounds = [[-180.0, -90.0], [180.0, 90.0]];
+  ?>
+
+  <?= view('edit/fact-location-edit', [
+                'locationName'    => $locationName,
+                'latitude'        => 0.0,
+                'longitude'       => 0.0,
+                'map_bounds'      => $map_bounds,
+                'marker_position' => [
+                                          ($map_bounds[0][0] + $map_bounds[1][0]) / 2.0,
+                                          ($map_bounds[0][1] + $map_bounds[1][1]) / 2.0,
+                                      ],
+                'provider'        => [
+                    'url'     => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    'options' => [
+                        'attribution' => '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap</a> contributors',
+                        'max_zoom'    => 19
+                    ]
+                ],
+            ]) ?>
+
+<?php endif ?>
+
 <form method="post" action="<?= e(route(EditFactAction::class, ['tree' => $tree->name(), 'xref' => $record->xref()])) ?>" class="wt-page-content">
     <?= csrf_field() ?>
 

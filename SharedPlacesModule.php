@@ -263,6 +263,9 @@ class SharedPlacesModule extends AbstractModule implements
       View::registerCustomView('::edit/add-fact', $this->name() . '::edit/add-fact');
       View::registerCustomView('::edit/edit-fact', $this->name() . '::edit/edit-fact');
       
+      //plus adjustment
+      View::registerCustomView('::edit/fact-location-edit', $this->name() . '::edit/fact-location-edit');
+      
       // (adjustments for _LOC under PLAC)
       View::registerCustomView('::edit/new-individual', $this->name() . '::edit/new-individual');      
       // Register a view under the main namespace

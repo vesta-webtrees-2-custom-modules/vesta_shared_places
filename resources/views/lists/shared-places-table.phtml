@@ -60,7 +60,19 @@ if ($showLinkCounts) {
               <tr class="<?= $sharedPlace->isPendingDeletion() ? 'wt-old' : ($sharedPlace->isPendingAddition() ? 'wt-new' : '') ?>">
                   <!-- Title -->
                   <td data-sort="<?= e($sharedPlace->fullName()) ?>">
+                      <?php
+                        $primaryName = $sharedPlace->namesNN()[$sharedPlace->getPrimaryName()];
+                      ?>
+                      <a title="<?= $primaryName ?>" href="<?= e($sharedPlace->url()) ?>" class="<?= $primaryName == $sharedPlace->fullName() ? 'name2' : '' ?>">
+                        <?= $primaryName ?>
+                      </a>
+                      <br>
                       <?php foreach ($sharedPlace->namesNN() as $name) : ?>
+                        <?php
+                          if ($name === $primaryName) {
+                            continue;
+                          }
+                        ?>
                         <a title="<?= $name ?>" href="<?= e($sharedPlace->url()) ?>" class="<?= $name == $sharedPlace->fullName() ? 'name2' : '' ?>">
                             <?= $name ?>
                         </a>

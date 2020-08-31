@@ -1,12 +1,15 @@
 <?php
 
 use Cissee\WebtreesExt\Functions\FunctionsEditLoc;
+use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Config;
+use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Functions\FunctionsEdit;
-use Fisharebest\Webtrees\Http\RequestHandlers\EditRawFactPage;
 use Fisharebest\Webtrees\Http\RequestHandlers\EditFactAction;
+use Fisharebest\Webtrees\Http\RequestHandlers\EditRawFactPage;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Tree;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -20,6 +23,67 @@ use Ramsey\Uuid\Uuid;
 ?>
 
 <h2 class="wt-page-title"><?= $title ?></h2>
+
+<?php
+  //cf LocationController.php/location-edit.phtml
+?>
+
+<?php if ($fact->record()->tag() === '_LOC' && $fact->getTag() === 'MAP') : ?>
+  <div class="form-group row">
+      <div class="col-sm-12">
+          <div id="osm-map" class="wt-ajax-load col-sm-12 osm-admin-map" dir="ltr"></div>
+      </div>
+  </div>
+
+  <?php
+    $locationName = $fact->record()->canonicalPlace()->gedcomName();
+    $latitude = $fact->record()->getLati();
+    $longitude = $fact->record()->getLong();
+    $marker_position = [$latitude, $longitude];
+    
+    //$map_bounds = (new PlaceLocation($locationName))->boundingRectangle();
+    //cf PlaceLocation, this could be improved!
+    // Just one co-ordinate?  Draw a box around it.
+    switch (sizeof(SharedPlace::placeNameParts($locationName))) {
+        case 1:
+            // Countries
+            $delta = 5.0;
+            break;
+        case 2:
+            // Regions
+            $delta = 1.0;
+            break;
+        default:
+            // Cities and districts
+            $delta = 0.2;
+            break;
+    }
+
+    $map_bounds = [[
+        max($latitude - $delta, -90.0),
+        max($longitude - $delta, -180.0),
+    ], [
+        min($latitude + $delta, 90.0),
+        min($longitude + $delta, 180.0),
+    ]];
+  ?>
+
+  <?= view('edit/fact-location-edit', [
+                'locationName'    => $locationName,
+                'latitude'        => $latitude,
+                'longitude'       => $longitude,
+                'map_bounds'      => $map_bounds,
+                'marker_position' => $marker_position,
+                'provider'        => [
+                    'url'     => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    'options' => [
+                        'attribution' => '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap</a> contributors',
+                        'max_zoom'    => 19
+                    ]
+                ],
+            ]) ?>
+
+<?php endif ?>
 
 <form method="post" action="<?= e(route(EditFactAction::class, ['tree' => $tree->name(), 'xref' => $fact->record()->xref(), 'fact_id' => $fact->id()])) ?>" class="wt-page-content">
     <?= csrf_field() ?>

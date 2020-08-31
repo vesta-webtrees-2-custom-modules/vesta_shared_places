@@ -464,10 +464,19 @@ class SharedPlace extends Location {
     return $this->matchesWithHierarchyAsArg($placeGedcomName, $this->useHierarchy);
   }
 
+  public function updateFact(string $fact_id, string $gedcom, bool $update_chan): void {
+    parent::updateFact($fact_id, $gedcom, $update_chan);
+    
+    //reset cached data (buggy in webtrees, which leads to 'undefined offset' errors wrt names)
+    $this->getAllNames = null;
+    $this->getPrimaryName = null;
+    $this->getSecondaryName = null;
+  }
+  
   public function updateRecord(string $gedcom, bool $update_chan): void {
     parent::updateRecord($gedcom, $update_chan);
     
-    //reset cached data (buggy in webtrees)
+    //reset cached data (buggy in webtrees, which leads to 'undefined offset' errors wrt names)
     $this->getAllNames = null;
     $this->getPrimaryName = null;
     $this->getSecondaryName = null;
