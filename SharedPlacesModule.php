@@ -13,6 +13,7 @@ use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
 use Cissee\WebtreesExt\FactPlaceAdditions;
 use Cissee\WebtreesExt\Functions\ExtendedFunctionsEditPlacHandler;
 use Cissee\WebtreesExt\Functions\FunctionsEditPlacHandler;
+use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
 use Cissee\WebtreesExt\Http\Controllers\ModulePlaceHierarchyInterface;
 use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyLink;
 use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyParticipant;
@@ -27,13 +28,13 @@ use Cissee\WebtreesExt\PlaceViaSharedPlace;
 use Cissee\WebtreesExt\Requests;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
+use Cissee\WebtreesExt\SharedPlacePreferences;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
-use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Middleware\AuthEditor;
 use Fisharebest\Webtrees\I18N;
@@ -87,6 +88,7 @@ use function redirect;
 use function response;
 use function route;
 use function str_contains;
+use function str_starts_with;
 use function view;
 
 //cannot use original AbstractModule because we override setName
@@ -232,7 +234,28 @@ class SharedPlacesModule extends AbstractModule implements
       $cache = app('cache.array');
       $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
       $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
-      $sharedPlaceFactory = new SharedPlaceFactory($cache, $useHierarchy, $useIndirectLinks);
+      
+      $addfactsStr = $this->getPreference('_LOC_FACTS_ADD', 'NAME,_LOC:TYPE,NOTE,SHARED_NOTE,SOUR,_LOC:_LOC');
+      $addfacts = FunctionsPrintExt::adjust(preg_split("/[, ]+/", $addfactsStr, -1, PREG_SPLIT_NO_EMPTY));
+      
+      $uniquefactsStr = $this->getPreference('_LOC_FACTS_UNIQUE', 'MAP,_GOV');
+      $uniquefacts = FunctionsPrintExt::adjust(preg_split("/[, ]+/", $uniquefactsStr, -1, PREG_SPLIT_NO_EMPTY));
+      
+      $requiredfactsStr = $this->getPreference('_LOC_FACTS_REQUIRED', '');
+      $requiredfacts = FunctionsPrintExt::adjust(preg_split("/[, ]+/", $requiredfactsStr, -1, PREG_SPLIT_NO_EMPTY));
+            
+      $quickfactsStr = $this->getPreference('_LOC_FACTS_QUICK', 'NAME,_LOC:_LOC,MAP,NOTE,SHARED_NOTE,_GOV');
+      $quickfacts = FunctionsPrintExt::adjust(preg_split("/[, ]+/", $quickfactsStr, -1, PREG_SPLIT_NO_EMPTY));      
+      
+      $preferences = new SharedPlacePreferences(
+              $useHierarchy, 
+              $useIndirectLinks,
+              $addfacts,
+              $uniquefacts,
+              $requiredfacts,
+              $quickfacts);
+      
+      $sharedPlaceFactory = new SharedPlaceFactory($cache, $preferences);
       Factory::location($sharedPlaceFactory);
 
       $router_container = app(RouterContainer::class);
@@ -257,6 +280,9 @@ class SharedPlacesModule extends AbstractModule implements
       // Replace an existing view with our own version.
       // (media management via admin)
       View::registerCustomView('::media-page', $this->name() . '::media-page');
+
+      // Replace an existing view with our own version.
+      View::registerCustomView('::note-page', $this->name() . '::note-page');
 
       // Replace an existing view with our own version.
       // (adjustments for _LOC.NAME, _LOC.MAP, _LOC._GOV, _LOC.TYPE, , _LOC._LOC)
@@ -307,7 +333,7 @@ class SharedPlacesModule extends AbstractModule implements
       I18N::translate('Type of location');
       I18N::translate('GOV-Id for type of location');
       
-      $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 2);
+      $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 3);
   }
   
   public function getHelpAction(ServerRequestInterface $request): ResponseInterface {

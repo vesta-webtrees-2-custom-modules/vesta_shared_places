@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
+use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
 use Cissee\WebtreesExt\Requests;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Tree;
@@ -65,12 +66,16 @@ class CreateSharedPlaceModal implements RequestHandlerInterface
 
         $useHierarchy = boolval($this->module->getPreference('USE_HIERARCHY', '1'));
         
+        $requiredfactsStr = $this->module->getPreference('_LOC_FACTS_REQUIRED', '');
+        $requiredfacts = FunctionsPrintExt::adjust(preg_split("/[, ]+/", $requiredfactsStr, -1, PREG_SPLIT_NO_EMPTY));
+      
         return response(view($this->moduleName . '::modals/create-shared-place', [
                     'moduleName' => $this->moduleName,
                     'useHierarchy' => $useHierarchy,
                     'sharedPlaceName' => $sharedPlaceName,
                     'selector' => $selector,
                     'additionalControls' => $additionalControls,
+                    'requiredfacts' => $requiredfacts,
                     'tree' => $tree,
         ]));
     }

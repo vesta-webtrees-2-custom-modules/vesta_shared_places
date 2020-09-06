@@ -2,6 +2,7 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
+use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\I18N;
 use Vesta\ControlPanelUtils\Model\ControlPanelCheckbox;
 use Vesta\ControlPanelUtils\Model\ControlPanelFactRestriction;
@@ -87,6 +88,45 @@ trait SharedPlacesModuleTrait {
                 'INDIRECT_LINKS_PARENT_LEVELS',
                 0)));
     
+    $factsSub = array();
+    $factsSub[] = new ControlPanelSubsection(
+            /* I18N: Module Configuration */I18N::translate('All shared place facts'),
+            array(     
+        ControlPanelFactRestriction::createWithFacts(
+                SharedPlacesModuleTrait::getPicklistFactsLoc(),
+                /* I18N: Module Configuration */I18N::translate('This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list.'),
+                '_LOC_FACTS_ADD',
+                'NAME,_LOC:TYPE,NOTE,SHARED_NOTE,SOUR,_LOC:_LOC')));
+    $factsSub[] = new ControlPanelSubsection(
+            /* I18N: Module Configuration */I18N::translate('Unique shared place facts'),
+            array(     
+        ControlPanelFactRestriction::createWithFacts(
+                SharedPlacesModuleTrait::getPicklistFactsLoc(),
+                /* I18N: Module Configuration */I18N::translate('This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list.'),
+                '_LOC_FACTS_UNIQUE',
+                'MAP,_GOV')));
+    
+    //really not that useful currently
+    /*
+    $factsSub[] = new ControlPanelSubsection(
+            I18N::translate('Facts for new shared places'),
+            array(     
+        ControlPanelFactRestriction::createWithFacts(
+                SharedPlacesModuleTrait::getPicklistFactsLoc(true),
+                I18N::translate('This is the list of GEDCOM facts that will be shown when adding a new shared place.'),
+                '_LOC_FACTS_REQUIRED',
+                '')));
+    */
+    
+    $factsSub[] = new ControlPanelSubsection(
+            /* I18N: Module Configuration */I18N::translate('Quick shared place facts'),
+            array(
+        ControlPanelFactRestriction::createWithFacts(
+                SharedPlacesModuleTrait::getPicklistFactsLoc(),
+                /* I18N: Module Configuration */I18N::translate('This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list. '),
+                '_LOC_FACTS_QUICK',
+                'NAME,_LOC:_LOC,MAP,NOTE,SHARED_NOTE,_GOV')));
+    
     $factsAndEventsSub = array();
     $factsAndEventsSub[] = new ControlPanelSubsection(
             /* I18N: Module Configuration */I18N::translate('Displayed data'),
@@ -142,6 +182,10 @@ trait SharedPlacesModuleTrait {
             null,
             $generalSub);
     $sections[] = new ControlPanelSection(
+            /* I18N: Module Configuration */I18N::translate('Facts for shared place records'),
+            null,
+            $factsSub);
+    $sections[] = new ControlPanelSection(
             /* I18N: Module Configuration */I18N::translate('Facts and Events Tab Settings'),
             null,
             $factsAndEventsSub);
@@ -153,4 +197,31 @@ trait SharedPlacesModuleTrait {
     return new ControlPanelPreferences($sections);
   }
 
+  public static function getPicklistFactsLoc(bool $forRequired = false): array {
+    $tags = [
+        "NAME",
+        "_LOC:TYPE",
+        "NOTE",
+        "SHARED_NOTE",
+        "SOUR",
+        "_LOC:_LOC",
+        "MAP",
+        "_GOV"];
+    
+    if ($forRequired) {
+      //others are redundant, tricky, or anyway TBI
+      $tags = [
+        "NOTE"];
+      
+        //"SHARED_NOTE" problematic (potential modal within modal)
+    }
+    
+    $facts = [];
+    foreach ($tags as $tag) {
+        $facts[$tag] = GedcomTag::getLabel($tag);
+    }
+    uasort($facts, '\Fisharebest\Webtrees\I18N::strcasecmp');
+
+    return $facts;
+  }
 }

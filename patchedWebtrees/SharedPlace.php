@@ -25,28 +25,29 @@ class SharedPlace extends Location {
 
   protected const ROUTE_NAME  = SharedPlacePage::class;
 
-  protected $useHierarchy;
-  protected $useIndirectLinks;
+  protected $preferences;
 
   public function useHierarchy(): bool {
-    return $this->useHierarchy;
+    return $this->preferences->useHierarchy();
   }
   
   public function useIndirectLinks(): bool {
-    return $this->useIndirectLinks;
+    return $this->preferences->useIndirectLinks();
+  }
+  
+  public function preferences(): SharedPlacePreferences {
+    return $this->preferences;
   }
   
   public function __construct(
-          bool $useHierarchy, 
-          bool $useIndirectLinks, 
+          SharedPlacePreferences $preferences, 
           string $xref, 
           string $gedcom, 
           $pending, 
           Tree $tree) {
 
     parent::__construct($xref, $gedcom, $pending, $tree);
-    $this->useHierarchy = $useHierarchy;
-    $this->useIndirectLinks = $useIndirectLinks;
+    $this->preferences = $preferences;
     
     //make sure all places exist
     foreach ($this->namesAsPlaces() as $place) {
@@ -364,7 +365,7 @@ class SharedPlace extends Location {
   
   public function canonicalPlaceAt(GedcomDateInterval $date): Place {
     $head = $this->namesNN()[$this->getPrimaryNameAt($date)];
-    if (!$this->useHierarchy) {
+    if (!$this->useHierarchy()) {
       return new Place($head, $this->tree);
     }
     
@@ -386,7 +387,7 @@ class SharedPlace extends Location {
     $places = array();
     foreach ($this->getAllNames() as $nameStructure) {
       $head = $nameStructure['fullNN'];
-      if ($this->useHierarchy) {
+      if ($this->useHierarchy()) {
         $parents = $this->getParents();
         if (empty($parents)) {
           $places[] = new Place($head, $this->tree);
@@ -461,7 +462,7 @@ class SharedPlace extends Location {
   public function matches(
           string $placeGedcomName): bool {
     
-    return $this->matchesWithHierarchyAsArg($placeGedcomName, $this->useHierarchy);
+    return $this->matchesWithHierarchyAsArg($placeGedcomName, $this->useHierarchy());
   }
 
   public function updateFact(string $fact_id, string $gedcom, bool $update_chan): void {

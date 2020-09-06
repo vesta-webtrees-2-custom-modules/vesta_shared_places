@@ -1,7 +1,9 @@
 <?php
 
+use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\View;
+use Illuminate\Support\Collection;
+
 ?>
 
 <div class="form-group">
@@ -21,6 +23,26 @@ use Fisharebest\Webtrees\View;
     foreach ($additionalControls as $gve) {
       echo $gve->getMain();
     }
+
+    //TODO integrate $additionalControls better with the following!
+
+    //cf new-individual.phtml
+    $tags = new Collection($requiredfacts);
+
+    foreach (Fact::sortFactTags($tags) as $tag) {
+      if ('NOTE' === $tag) {
+        echo view('cards/add-note', [
+            'level' => 1,
+            'tree'  => $tree,
+        ]);
+      } else if ('SHARED_NOTE' === $tag) {
+        echo view('cards/add-shared-note', [
+            'level' => 1,
+            'tree'  => $tree,
+        ]);
+      } //else skip        
+    }
+  
     ?>
 </div>
 

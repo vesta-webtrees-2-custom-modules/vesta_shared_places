@@ -3,6 +3,7 @@
 namespace Cissee\WebtreesExt\Factories;
 
 use Cissee\WebtreesExt\SharedPlace;
+use Cissee\WebtreesExt\SharedPlacePreferences;
 use Closure;
 use Fisharebest\Webtrees\Cache;
 use Fisharebest\Webtrees\Contracts\LocationFactoryInterface;
@@ -16,17 +17,14 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
 
   private const TYPE_CHECK_REGEX = '/^0 @[^@]+@ ' . SharedPlace::RECORD_TYPE . '/';
   
-  protected $useHierarchy;
-  protected $useIndirectLinks;
+  protected $preferences;
 
   public function __construct(
           Cache $cache, 
-          bool $useHierarchy,
-          bool $useIndirectLinks) {
+          SharedPlacePreferences $preferences) {
     
     parent::__construct($cache); 
-    $this->useHierarchy = $useHierarchy;
-    $this->useIndirectLinks = $useIndirectLinks;
+    $this->preferences = $preferences;
   }
 
   public function unmake(string $xref, Tree $tree) {
@@ -54,7 +52,7 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
 
           $xref = $this->extractXref($gedcom ?? $pending, $xref);
           
-          return new SharedPlace($this->useHierarchy, $this->useIndirectLinks, $xref, $gedcom ?? '', $pending, $tree);
+          return new SharedPlace($this->preferences, $xref, $gedcom ?? '', $pending, $tree);
       });
   }
     
@@ -86,7 +84,7 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
    * @return SharedPlace
    */
   public function new(string $xref, string $gedcom, ?string $pending, Tree $tree): Location {
-    return new SharedPlace($this->useHierarchy, $this->useIndirectLinks, $xref, $gedcom, $pending, $tree);
+    return new SharedPlace($this->preferences, $xref, $gedcom, $pending, $tree);
   }
   
   /**
