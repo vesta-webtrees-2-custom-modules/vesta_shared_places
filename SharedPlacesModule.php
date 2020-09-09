@@ -26,6 +26,7 @@ use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Module\ClippingsCartModule;
 use Cissee\WebtreesExt\PlaceViaSharedPlace;
 use Cissee\WebtreesExt\Requests;
+use Cissee\WebtreesExt\Services\GedcomEditServiceExt;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlacePreferences;
@@ -54,6 +55,7 @@ use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\PlaceLocation;
 use Fisharebest\Webtrees\Services\DataFixService;
+use Fisharebest\Webtrees\Services\GedcomEditService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
@@ -147,15 +149,6 @@ class SharedPlacesModule extends AbstractModule implements
   }  
   
   public function listTitle(): string {
-    /*
-    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
-    if ($useHierarchy) {
-      return $this->getListTitle(I18N::translate('Shared place hierarchy'));
-    }
-    
-    //old-style list
-    */
-    
     return $this->getListTitle(I18N::translate("Shared places"));
   }
 
@@ -219,6 +212,9 @@ class SharedPlacesModule extends AbstractModule implements
    * Bootstrap the module
    */
   public function onBoot(): void {
+      //replace to handle subtags of PLAC
+      app()->instance(GedcomEditService::class, new GedcomEditServiceExt());
+
       //explicitly register in order to re-use in views where we cannot pass via variable
       //(e.g. FunctionsEditLoc via replaced edit-fact.phtml)
       app()->instance(SharedPlacesModule::class, $this); //do not use bind()! for some reason leads to 'Illegal offset type in isset or empty'

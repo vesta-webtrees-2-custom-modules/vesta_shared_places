@@ -26,7 +26,7 @@ use Fisharebest\Webtrees\I18N;
                   value="hierarchicalize"
               >
               <label class="form-check-label" for="mode-hierarchicalize">
-                  Hierarchize Shared Places
+                  <?= I18N::translate('Hierarchize Shared Places'); ?>
               </label>
               <p class="small text-muted">
                   <?= I18N::translate('This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to higher-level shared places via XREFs).') ?>
@@ -60,10 +60,10 @@ use Fisharebest\Webtrees\I18N;
                   value="enhance"
               >
               <label class="form-check-label" for="mode-enhance">
-                  Enhance existing shared places with global data
+                  <?= I18N::translate('Enhance existing shared places with tree-independent data'); ?>                  
               </label>
               <p class="small text-muted">
-                  <?= I18N::translate('This data fix adds global data (managed outside GEDCOM) to existing shared places.') . ' ' ?>
+                  <?= I18N::translate('This data fix adds tree-independent data (managed outside GEDCOM) to existing shared places.') . ' ' ?>
                   <?= I18N::translate('In particular, map coordinates from webtrees \'Geographic data\' and GOV ids from the Gov4Webtrees module are added.') . ' ' ?>
                   <?= I18N::translate('Matching shared places are determined as via the configuration option \'Additionally link shared places via name\'.') . ' ' ?>
               </p>
@@ -76,7 +76,7 @@ use Fisharebest\Webtrees\I18N;
                   value="xrefs"
               >
               <label class="form-check-label" for="mode-xrefs">
-                  Add missing XREFs
+                  <?= I18N::translate('Add missing XREFs'); ?>
               </label>
               <p class="small text-muted">
                   <?= I18N::translate('This data fix adds XREFs, linking all places within events directly to the respective shared places.') . ' ' ?>
@@ -93,10 +93,10 @@ use Fisharebest\Webtrees\I18N;
                   value="create1"
               >
               <label class="form-check-label" for="mode-enhance">
-                  Create missing shared places from global data, and add missing XREFs
+                  <?= I18N::translate('Create missing shared places from tree-independent data, and add missing XREFs'); ?>                  
               </label>
               <p class="small text-muted">
-                  <?= I18N::translate('This data fix creates missing shared places, if global data (managed outside GEDCOM) is available for the respective place.') . ' ' ?>
+                  <?= I18N::translate('This data fix creates missing shared places, if tree-independent data (managed outside GEDCOM) is available for the respective place.') . ' ' ?>
                   <?= I18N::translate('In particular, map coordinates from webtrees \'Geographic data\' and GOV ids from the Gov4Webtrees module are added.') . ' ' ?>
                   <?= I18N::translate('The created shared places, as well as existing shared places, are linked via XREFs to event places.') . ' ' ?>
                   <?= I18N::translate('Matching shared places are determined as via the configuration option \'Additionally link shared places via name\', including parent levels if set.') ?>
@@ -120,11 +120,11 @@ use Fisharebest\Webtrees\I18N;
                   value="create2"
               >
               <label class="form-check-label" for="mode-enhance">
-                  Create all missing shared places, and add missing XREFs
+                  <?= I18N::translate('Create all missing shared places, and add missing XREFs'); ?>
               </label>
               <p class="small text-muted">
-                  <?= I18N::translate('This data fix creates missing shared places, even if no global data (managed outside GEDCOM) is available for the respective place.') . ' ' ?>
-                  <?= I18N::translate('If globally managed data is available, map coordinates from webtrees \'Geographic data\' and GOV ids from the Gov4Webtrees module are added.') . ' ' ?>
+                  <?= I18N::translate('This data fix creates missing shared places, even if no tree-independent data (managed outside GEDCOM) is available for the respective place.') . ' ' ?>
+                  <?= I18N::translate('If tree-independent data is available, map coordinates from webtrees \'Geographic data\' and GOV ids from the Gov4Webtrees module are added.') . ' ' ?>
                   <?= I18N::translate('The created shared places, as well as existing shared places, are linked via XREFs to event places.') . ' ' ?>
                   <?= I18N::translate('Matching shared places are determined as via the configuration option \'Additionally link shared places via name\', including parent levels if set.') ?>
               </p>
