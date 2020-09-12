@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-12 20:25+0200\n"
-"PO-Revision-Date: 2020-09-10 12:50+0200\n"
+"PO-Revision-Date: 2020-09-12 21:36+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:100
 #, php-format
@@ -61,7 +63,7 @@ msgstr "%s toevoegen aan de stamboomknipsels"
 
 #: resources/views/data-fix-options.phtml:79
 msgid "Add missing XREFs"
-msgstr "Ontbrekende XREF's toevoegen"
+msgstr "oeg ontbrekende XREF's toe"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:76
@@ -92,11 +94,14 @@ msgstr "Een gedeelde plaats maken"
 
 #: resources/views/data-fix-options.phtml:123
 msgid "Create all missing shared places, and add missing XREFs"
-msgstr "Creëer alle ontbrekende gedeelde plaatsen en voeg ontbrekende XREF's toe"
+msgstr ""
+"Creëer alle ontbrekende gedeelde plaatsen, en voeg ontbrekende XREF's toe"
 
 #: resources/views/data-fix-options.phtml:96
 msgid "Create missing shared places from tree-independent data, and add missing XREFs"
-msgstr "Creëer ontbrekende gedeelde plaatsen op basis van buiten GEDCOM beheerde plaatstgegevens en voeg ontbrekende XREF's toe"
+msgstr ""
+"Creëer ontbrekende gedeelde plaatsen uit stamboomonafhankelijke gegevens, en "
+"voeg ontbrekende XREF's toe"
 
 #: resources/views/data-fix-options.phtml:18
 msgid "Data Fix"
@@ -123,7 +128,8 @@ msgstr "Schakel de module Vesta Plaatsen en Grafische kwartierstaat in om de hi�
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
-msgstr "Verbeter bestaande gedeelde plaatsen met buiten GEDCOM beheerde lokatiegegevens"
+msgstr ""
+"Verbeter bestaande gedeelde plaatsen met stamboomonafhankelijke gegevens"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:189
@@ -173,7 +179,10 @@ msgstr "Als deze optie is ingeschakeld, worden gegevens van gedeelde plaatsen al
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
-msgstr "Als er buiten GEDCOM beheerde lokatiegegevens beschikbaar zijn, worden kaartcoördinaten van webtrees 'Geografische gegevens' en GOV-id's van de Gov4Webtrees-module toegevoegd."
+msgstr ""
+"Als er stamboomonafhankelijke gegevens beschikbaar zijn, worden "
+"kaartcoördinaten van webtrees 'Geografische gegevens' en GOV-id's van de "
+"Gov4Webtrees-module toegevoegd."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:80
@@ -204,7 +213,7 @@ msgstr "In het bijzonder worden kaartcoördinaten van webtrees 'Geografische dat
 #: SharedPlacesModuleTrait.php:51
 #, php-format
 msgid "Include the %1$s symbol in the list menu entry"
-msgstr "Het symbool %1$s opnemen in het Lijsten-menu"
+msgstr "Het %1$s-symbool opnemen in het Lijsten-menu"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:47
 msgid "Individuals"
@@ -245,7 +254,7 @@ msgstr "Locatie"
 
 #: SharedPlacesModuleTrait.php:28
 msgid "Main Readme."
-msgstr "Belangrijkste Readme."
+msgstr "Belangrijkste Leesmij."
 
 #: resources/views/data-fix-options.phtml:83
 #: resources/views/data-fix-options.phtml:102
@@ -286,7 +295,10 @@ msgstr "Opmerking:"
 
 #: HelpTexts.php:29 HelpTexts.php:39
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
-msgstr "Plaatsnamen kunnen in de loop van de tijd veranderen. U kunt meerdere namen toevoegen aan een gedeelde plaats en historische namen aangeven via een geschikt datumbereik."
+msgstr ""
+"Plaatsnamen kunnen in de loop van de tijd veranderen. U kunt meerdere namen "
+"toevoegen aan een gedeelde plaats, en historische namen aangeven via een "
+"geschikt datumbereik."
 
 #: HelpTexts.php:35
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
@@ -298,7 +310,7 @@ msgstr "Plaatsnamen moeten worden ingevoerd als enkele plaatsnaam (gebruik hier 
 
 #: patchedWebtrees/SharedPlace.php:529
 msgid "Private"
-msgstr ""
+msgstr "Privé"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:35
@@ -458,15 +470,23 @@ msgstr "Deze gegevenscorrectie voegt XREF's toe en koppelt alle plaatsen binnen 
 
 #: resources/views/data-fix-options.phtml:66
 msgid "This data fix adds tree-independent data (managed outside GEDCOM) to existing shared places."
-msgstr "Deze gegevenscorrectie voegt buiten GEDCOM beheerde lokatiegegevens toe aan bestaande gedeelde plaatsen."
+msgstr ""
+"Deze gegevenscorrectie voegt stamboomonafhankelijke gegevens (beheerd buiten "
+"GEDCOM) toe aan bestaande gedeelde plaatsen."
 
 #: resources/views/data-fix-options.phtml:126
 msgid "This data fix creates missing shared places, even if no tree-independent data (managed outside GEDCOM) is available for the respective place."
-msgstr "Deze gegevenscorrectie creëert ontbrekende gedeelde plaatsen, zelfs als er geen buiten GEDCOM beheerde lokatiegegevens beschikbaar zijn voor de desbetreffende plaats."
+msgstr ""
+"Deze gegevenscorrectie creëert ontbrekende gedeelde plaatsen, zelfs als er "
+"geen stamboomonafhankelijke gegevens (beheerd buiten GEDCOM) beschikbaar "
+"zijn voor de desbetreffende plaats."
 
 #: resources/views/data-fix-options.phtml:99
 msgid "This data fix creates missing shared places, if tree-independent data (managed outside GEDCOM) is available for the respective place."
-msgstr "Deze gegevenscorrectie creëert ontbrekende gedeelde plaatsen als buiten GEDCOM beheerde lokatiegegevens beschikbaar zijn voor de desbetreffende plaats."
+msgstr ""
+"Deze gegevenscorrectie creëert ontbrekende gedeelde plaatsen als "
+"stamboomonafhankelijke gegevens (beheerd buiten GEDCOM) beschikbaar zijn "
+"voor de desbetreffende plaats."
 
 #: resources/views/data-fix-options.phtml:50
 #: resources/views/data-fix-options.phtml:111
@@ -579,7 +599,7 @@ msgstr "administratieve"
 
 #: patchedWebtrees/SharedPlace.php:598
 msgid "circular shared place hierarchy"
-msgstr ""
+msgstr "cirkelhiërarchie van gedeelde plaatsen"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:531
