@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the vesta package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-12 20:25+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2020-09-12 21:36+0000\n"
+"Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:100
 #, php-format
@@ -38,7 +40,7 @@ msgstr ""
 
 #: SharedPlacesModuleTrait.php:24
 msgid "A module providing support for shared places."
-msgstr ""
+msgstr "Un module ajoutant la prise en charge des lieux partagés."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:33
@@ -77,12 +79,12 @@ msgstr ""
 #: resources/views/data-fix-options.phtml:107
 #: resources/views/data-fix-options.phtml:134
 msgid "Attention!"
-msgstr ""
+msgstr "Attention !"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:150
 msgid "Automatically expand shared place data"
-msgstr ""
+msgstr "Étendre automatiquement les données des lieux partagés"
 
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:303
 #: resources/views/modals/create-shared-place.phtml:10
@@ -110,12 +112,12 @@ msgstr ""
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:132 SharedPlacesModuleTrait.php:172
 msgid "Displayed data"
-msgstr ""
+msgstr "Données affichées"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:43
 msgid "Displayed title"
-msgstr ""
+msgstr "Titre affiché"
 
 #: SharedPlacesModule.php:201
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
@@ -137,7 +139,7 @@ msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:52
 msgid "Families"
-msgstr ""
+msgstr "Familles"
 
 #: SharedPlacesModule.php:330
 msgid "GOV-Id for type of location"
@@ -146,7 +148,7 @@ msgstr ""
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:181
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
@@ -183,7 +185,7 @@ msgstr ""
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:33
 #: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
-msgstr ""
+msgstr "Remarque importante :"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:137
@@ -208,7 +210,7 @@ msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:47
 msgid "Individuals"
-msgstr ""
+msgstr "Individus"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:78
@@ -241,7 +243,7 @@ msgstr ""
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:324
 msgid "Location"
-msgstr ""
+msgstr "Emplacement"
 
 #: SharedPlacesModuleTrait.php:28
 msgid "Main Readme."
@@ -282,15 +284,21 @@ msgstr ""
 
 #: resources/views/data-fix-options.phtml:38
 msgid "Note:"
-msgstr ""
+msgstr "Remarque :"
 
 #: HelpTexts.php:29 HelpTexts.php:39
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
+"Les noms de lieu peuvent changer au cours du temps. Vous pouvez ajouter "
+"plusieurs noms à un lieu partagé, et indiquer le nom historique avec le jeu "
+"de données approprié."
 
 #: HelpTexts.php:35
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
+"Les noms de lieu doivent être entrés sous forme de liste et séparés par des "
+"virgules, en allant du lieu le plus petit au pays. Par exemple « "
+"Westminster, Londres, Angleterre »."
 
 #: HelpTexts.php:24
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
@@ -298,7 +306,7 @@ msgstr ""
 
 #: patchedWebtrees/SharedPlace.php:529
 msgid "Private"
-msgstr ""
+msgstr "Privé"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:35
@@ -348,15 +356,15 @@ msgstr "Lieu partagé"
 
 #: SharedPlacesModule.php:537
 msgid "Shared place data"
-msgstr ""
+msgstr "Données du lieu partagé"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/place-hierarchy.phtml:13
 msgid "Shared place hierarchy"
-msgstr ""
+msgstr "Hiérarchie du lieu partagé"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/list.phtml:12
 msgid "Shared place list"
-msgstr ""
+msgstr "Liste des lieux partagés"
 
 #: resources/views/modals/shared-place-fields.phtml:17
 msgid "Shared place name"
