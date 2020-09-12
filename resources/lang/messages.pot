@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-09-07 18:37+0200\n"
+"POT-Creation-Date: 2020-09-12 20:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Show all shared places in a list"
 msgstr ""
 
-#: SharedPlaceHierarchyUtils.php:55 SharedPlacesListController.php:51
+#: SharedPlaceHierarchyUtils.php:55 SharedPlacesListController.php:50
 #: SharedPlacesModule.php:152
 #: resources/views/lists/shared-places-table.phtml:38
 msgid "Shared places"
@@ -366,7 +366,7 @@ msgstr ""
 
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:303
 #: resources/views/modals/create-shared-place.phtml:10
-#: resources/views/shared-places-list-page.phtml:56
+#: resources/views/shared-places-list-page.phtml:41
 msgid "Create a shared place"
 msgstr ""
 
@@ -417,6 +417,14 @@ msgstr ""
 
 #: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:118
 msgid "Summary"
+msgstr ""
+
+#: patchedWebtrees/SharedPlace.php:529
+msgid "Private"
+msgstr ""
+
+#: patchedWebtrees/SharedPlace.php:598
+msgid "circular shared place hierarchy"
 msgstr ""
 
 #: resources/views/data-fix-options.phtml:12
@@ -553,22 +561,22 @@ msgid "Shared place list"
 msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:33
-#: resources/views/shared-places-list-page.phtml:17
+#: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
 msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:36
-#: resources/views/shared-places-list-page.phtml:20
+#: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:37
-#: resources/views/shared-places-list-page.phtml:21
+#: resources/views/shared-places-list-page.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:40
-#: resources/views/shared-places-list-page.phtml:24
+#: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr ""
 

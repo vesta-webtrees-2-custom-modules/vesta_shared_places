@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-09-07 18:37+0200\n"
+"POT-Creation-Date: 2020-09-12 20:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,7 @@ msgstr ""
 
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:303
 #: resources/views/modals/create-shared-place.phtml:10
-#: resources/views/shared-places-list-page.phtml:56
+#: resources/views/shared-places-list-page.phtml:41
 msgid "Create a shared place"
 msgstr "Créer un lieu partagé"
 
@@ -181,7 +181,7 @@ msgid "If you are using hierarchical shared places, a place with the name \"A, B
 msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:33
-#: resources/views/shared-places-list-page.phtml:17
+#: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
 msgstr ""
 
@@ -216,7 +216,7 @@ msgid "It is now recommended to use XREFs, as this improves performance and flex
 msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:40
-#: resources/views/shared-places-list-page.phtml:24
+#: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr ""
 
@@ -296,6 +296,10 @@ msgstr ""
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
 
+#: patchedWebtrees/SharedPlace.php:529
+msgid "Private"
+msgstr ""
+
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:35
 msgid "Provides location data to other custom modules."
@@ -371,7 +375,7 @@ msgstr ""
 msgid "Shared place summary"
 msgstr ""
 
-#: SharedPlaceHierarchyUtils.php:55 SharedPlacesListController.php:51
+#: SharedPlaceHierarchyUtils.php:55 SharedPlacesListController.php:50
 #: SharedPlacesModule.php:152
 #: resources/views/lists/shared-places-table.phtml:38
 msgid "Shared places"
@@ -490,7 +494,7 @@ msgid "This is the list of GEDCOM facts that your users can only add once to sha
 msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:37
-#: resources/views/shared-places-list-page.phtml:21
+#: resources/views/shared-places-list-page.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr ""
 
@@ -519,7 +523,7 @@ msgid "This shared place has been edited. You should review the changes and then
 msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:36
-#: resources/views/shared-places-list-page.phtml:20
+#: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr ""
 
@@ -571,6 +575,10 @@ msgstr ""
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:522
 msgid "administrative"
+msgstr ""
+
+#: patchedWebtrees/SharedPlace.php:598
+msgid "circular shared place hierarchy"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
