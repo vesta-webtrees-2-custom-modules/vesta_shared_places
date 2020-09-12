@@ -92,14 +92,14 @@ class SharedPlacePage implements RequestHandlerInterface {
             return redirect($sharedPlace->url(), StatusCodeInterface::STATUS_MOVED_PERMANENTLY);
         }
         
-      $canonical = $sharedPlace->canonicalPlace()->gedcomName();
+      $canonical = $sharedPlace->primaryPlace()->gedcomName();
       
       $hierarchyHtml = '';
       
       //what was the point of this? summary shows same data!
       /*
       $mainForDisplay = $sharedPlace->fullName();
-      $canonicalForDisplay = $sharedPlace->canonicalPlace()->fullName();
+      $canonicalForDisplay = $sharedPlace->primaryPlace()->fullName();
       
       if ($mainForDisplay !== $canonicalForDisplay) {
         $hierarchyHtml = '<tr class=""><th scope="row">' . I18N::translate('Shared place hierarchy') . '</th><td class="">' . $canonicalForDisplay . '</td></tr>';

@@ -1,7 +1,6 @@
 <?php
 
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
-use Cissee\WebtreesExt\MoreI18N;
 use Fisharebest\Webtrees\I18N;
 use Ramsey\Uuid\Uuid;
 use Vesta\VestaAdminController;
@@ -24,20 +23,6 @@ use Vesta\VestaAdminController;
           <?= I18N::translate('It is recommended to run the data fix for this custom module to resolve this issue.') ?>
       </p>
     <?php endif ?>          
-    <?php
-    $count_individuals = [];
-    $count_families = [];
-
-    if ($showLinkCounts) {
-      //note: performance isn't great in case of $useIndirectLinks - don't see a way to improve this
-      //thus $showLinkCounts
-
-      foreach ($sharedPlaces as $sharedPlace) {
-        $count_individuals[$sharedPlace->xref()] = count($sharedPlace->linkedIndividuals('_LOC'));
-        $count_families[$sharedPlace->xref()] = count($sharedPlace->linkedFamilies('_LOC'));
-      }
-    }
-    ?>
 
     <?php
     //create new shared place

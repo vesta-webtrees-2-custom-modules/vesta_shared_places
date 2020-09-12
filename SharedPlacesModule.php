@@ -466,7 +466,7 @@ class SharedPlacesModule extends AbstractModule implements
             $sharedPlace->url());
 
     //add name if different from PLAC name
-    $nameAt = $sharedPlace->canonicalPlaceAt($place->getEventDateInterval())->gedcomName();
+    $nameAt = $sharedPlace->primaryPlaceAt($place->getEventDateInterval())->gedcomName();
     if ($nameAt !== $place->getGedcomName()) {
       $html .= '<div class="indent">';
       $html .= $nameAt;
@@ -735,7 +735,7 @@ class SharedPlacesModule extends AbstractModule implements
     
     if ($sharedPlace !== null) {
       if (!empty($sharedPlace->namesNN())) {
-        $ps = PlaceStructure::fromNameAndLoc($sharedPlace->canonicalPlace()->gedcomName(), $sharedPlace->xref(), $sharedPlace->tree(), $loc->getLevel(), $sharedPlace);
+        $ps = PlaceStructure::fromNameAndLoc($sharedPlace->primaryPlace()->gedcomName(), $sharedPlace->xref(), $sharedPlace->tree(), $loc->getLevel(), $sharedPlace);
         if ($ps !== null) {
           return $ps;
         }
@@ -823,9 +823,9 @@ class SharedPlacesModule extends AbstractModule implements
           foreach ($current->getParents() as $parent) {            
             if (!$ret->contains($parent)) {
               $queue->prepend($parent);
-            }              
+            }
           }
-        }        
+        }
       }
     }    
     

@@ -24,7 +24,7 @@ use Ramsey\Uuid\Uuid;
   </div>
 
   <?php
-    $locationName = $record->canonicalPlace()->gedcomName();  
+    $locationName = $record->primaryPlace()->gedcomName();  
     $map_bounds = [[-180.0, -90.0], [180.0, 90.0]];
   ?>
 

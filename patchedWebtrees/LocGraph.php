@@ -28,8 +28,8 @@ class LocGraph {
     $ret = new Collection();
     $handled = new Collection();
     
-    //safer wrt loops (than to use getTransitiveLinks recursively)
-    $queue = new Collection();        
+    //safer wrt loops (than to use method recursively)
+    $queue = new Collection();
     foreach ($locXrefs as $locXref) {
       $queue->prepend($locXref);
     }
@@ -60,7 +60,7 @@ class LocGraph {
     $ret = new Collection();
     $handled = new Collection();
     
-    //safer wrt loops (than to use getTransitiveLinks recursively)
+    //safer wrt loops (than to use method recursively)
     $queue = new Collection();
     foreach ($locXrefs as $locXref) {
       $queue->prepend($locXref);

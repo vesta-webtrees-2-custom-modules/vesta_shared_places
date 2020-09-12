@@ -11,8 +11,8 @@ if ($showLinkCounts) {
   //thus $showLinkCounts
 
   foreach ($sharedPlaces as $sharedPlace) {
-    $count_individuals[$sharedPlace->xref()] = count($sharedPlace->linkedIndividuals('_LOC'));
-    $count_families[$sharedPlace->xref()] = count($sharedPlace->linkedFamilies('_LOC'));
+    $count_individuals[$sharedPlace->xref()] = $sharedPlace->countLinkedIndividuals('_LOC');
+    $count_families[$sharedPlace->xref()] = $sharedPlace->countLinkedFamilies('_LOC');
   }
 }
     
@@ -51,12 +51,7 @@ if ($showLinkCounts) {
         </thead>
 
         <tbody>
-            <?php foreach ($sharedPlaces as $sharedPlace) : ?>
-              <?php
-              if (!$sharedPlace->canShow()) {
-                continue;
-              }
-              ?>
+            <?php foreach ($sharedPlaces as $sharedPlace) : ?>              
               <tr class="<?= $sharedPlace->isPendingDeletion() ? 'wt-old' : ($sharedPlace->isPendingAddition() ? 'wt-new' : '') ?>">
                   <!-- Title -->
                   <td data-sort="<?= e($sharedPlace->fullName()) ?>">
@@ -90,7 +85,7 @@ if ($showLinkCounts) {
                   <!-- Place (in hierarchy) --> 
 
                   <td class="center">
-                      <?= $sharedPlace->canonicalPlace()->shortName(true) ?>
+                      <?= $sharedPlace->primaryPlace()->shortName(true) ?>
                   </td>
                   
                   <!-- Coordinates --> 

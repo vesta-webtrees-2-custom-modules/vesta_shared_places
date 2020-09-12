@@ -42,7 +42,7 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
    */
   public function make(string $xref, Tree $tree, string $gedcom = null): ?Location
   {
-      return $this->cache->remember(__CLASS__ . $xref . '@' . $tree->id(), function () use ($xref, $tree, $gedcom) {
+      $ret = $this->cache->remember(__CLASS__ . $xref . '@' . $tree->id(), function () use ($xref, $tree, $gedcom) {
           $gedcom  = $gedcom ?? $this->gedcom($xref, $tree);
           $pending = $this->pendingChanges($tree)->get($xref);
 
@@ -54,6 +54,27 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
           
           return new SharedPlace($this->preferences, $xref, $gedcom ?? '', $pending, $tree);
       });
+      
+      if ($ret === null) {
+        return $ret;
+      }
+      
+      //check
+      $cacheKey = __CLASS__ . $xref . '@' . $tree->id() . '#CHECK';
+      $this->cache->remember($cacheKey, function () use ($cacheKey, $ret) {
+          
+          //not cached: add 'dummy' cache entry first so that we won't loop endlessly in case of circularity
+          $this->cache->remember($cacheKey, function () {
+            return true;
+          });
+          
+          //now actually check
+          $ret->check();
+          
+          return true;
+      });
+      
+      return $ret;
   }
     
   /**

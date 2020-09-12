@@ -283,7 +283,7 @@ class FunctionsEditLoc {
         $location = Factory::location()->make($value, $tree);
         $locationName = '';
         if ($location !== null) {
-          $locationName = $location->canonicalPlace()->gedcomName();
+          $locationName = $location->primaryPlace()->gedcomName();
         }        
         
         $selector = '';

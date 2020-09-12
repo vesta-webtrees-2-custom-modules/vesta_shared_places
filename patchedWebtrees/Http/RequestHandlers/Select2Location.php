@@ -57,7 +57,7 @@ class Select2Location extends AbstractSelect2WithDateHandler
             return [
                 'id'    => $at . $location->xref() . $at,
                 'text'  => view('selects/location', ['location' => $location]),
-                'title' => $location->canonicalPlaceAt($date)->gedcomName(),
+                'title' => $location->primaryPlaceAt($date)->gedcomName(),
             ];
         });
     }

@@ -34,9 +34,8 @@ class SharedPlacesListController extends AbstractBaseController {
   }
   
   public function sharedPlacesList(Tree $tree, $showLinkCounts): ResponseInterface {
-    //TODO: filter places we can't show here, not in view?
     $sharedPlaces = SharedPlacesListController::allSharedPlaces($tree);
-
+    
     //select2 initializers for modal placeholder ajax-modal-vesta.phtml used via CreateSharedPlaceModal, urgh
     $select2Initializers = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
             ->map(function (GovIdEditControlsInterface $module) {
@@ -64,6 +63,15 @@ class SharedPlacesListController extends AbstractBaseController {
    * @return Collection
    */
   private function allSharedPlaces(Tree $tree): Collection {
+    /*
+    $count = DB::table('other')
+                    ->where('o_file', '=', $tree->id())
+                    ->where('o_type', '=', '_LOC')
+                    ->count();
+    
+    error_log("count".$count);
+    */
+    
     return DB::table('other')
                     ->where('o_file', '=', $tree->id())
                     ->where('o_type', '=', '_LOC')

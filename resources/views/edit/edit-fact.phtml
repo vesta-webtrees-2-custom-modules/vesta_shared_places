@@ -36,7 +36,7 @@ use Ramsey\Uuid\Uuid;
   </div>
 
   <?php
-    $locationName = $fact->record()->canonicalPlace()->gedcomName();
+    $locationName = $fact->record()->primaryPlace()->gedcomName();
     $latitude = $fact->record()->getLati();
     $longitude = $fact->record()->getLong();
     $marker_position = [$latitude, $longitude];

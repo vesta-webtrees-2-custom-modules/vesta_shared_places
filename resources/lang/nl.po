@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-07 18:37+0200\n"
-"PO-Revision-Date: 2020-09-07 10:45+0200\n"
+"PO-Revision-Date: 2020-09-10 12:50+0200\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -61,7 +61,7 @@ msgstr "%s toevoegen aan de stamboomknipsels"
 
 #: resources/views/data-fix-options.phtml:79
 msgid "Add missing XREFs"
-msgstr ""
+msgstr "Ontbrekende XREF's toevoegen"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:76
@@ -71,7 +71,7 @@ msgstr "Koppel daarnaast gedeelde plaatsen via naam"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:93
 msgid "All shared place facts"
-msgstr ""
+msgstr "Alle gedeeldeplaatsfeiten"
 
 #: resources/views/data-fix-options.phtml:46
 #: resources/views/data-fix-options.phtml:107
@@ -92,11 +92,11 @@ msgstr "Een gedeelde plaats maken"
 
 #: resources/views/data-fix-options.phtml:123
 msgid "Create all missing shared places, and add missing XREFs"
-msgstr ""
+msgstr "Creëer alle ontbrekende gedeelde plaatsen en voeg ontbrekende XREF's toe"
 
 #: resources/views/data-fix-options.phtml:96
 msgid "Create missing shared places from tree-independent data, and add missing XREFs"
-msgstr ""
+msgstr "Creëer ontbrekende gedeelde plaatsen op basis van buiten GEDCOM beheerde plaatstgegevens en voeg ontbrekende XREF's toe"
 
 #: resources/views/data-fix-options.phtml:18
 msgid "Data Fix"
@@ -123,7 +123,7 @@ msgstr "Schakel de module Vesta Plaatsen en Grafische kwartierstaat in om de hi�
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
-msgstr ""
+msgstr "Verbeter bestaande gedeelde plaatsen met buiten GEDCOM beheerde lokatiegegevens"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:189
@@ -133,7 +133,7 @@ msgstr "Instellingen voor tabblad Feiten en gebeurtenissen"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:185
 msgid "Facts for shared place records"
-msgstr ""
+msgstr "Feiten voor gedeeldeplaatsrecords"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:52
 msgid "Families"
@@ -150,7 +150,7 @@ msgstr "Algemeen"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
-msgstr ""
+msgstr "Hiërarchiseer gedeelde plaatsen"
 
 #: SharedPlacesModule.php:327
 msgid "Higher-level shared place"
@@ -173,7 +173,7 @@ msgstr "Als deze optie is ingeschakeld, worden gegevens van gedeelde plaatsen al
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
-msgstr ""
+msgstr "Als er buiten GEDCOM beheerde lokatiegegevens beschikbaar zijn, worden kaartcoördinaten van webtrees 'Geografische gegevens' en GOV-id's van de Gov4Webtrees-module toegevoegd."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:80
@@ -304,7 +304,7 @@ msgstr "Biedt locatiegegevens aan andere aangepaste modules."
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:122
 msgid "Quick shared place facts"
-msgstr ""
+msgstr "Snelle gedeeldeplaatsfeiten"
 
 #: SharedPlacesModuleTrait.php:56
 msgid "Readme"
@@ -429,7 +429,7 @@ msgstr "De gedeelde plaats %s is gecreëerd."
 
 #: HelpTexts.php:17
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
-msgstr "De samenvatting toont de gedeeldeplaatsgegevens, op dezelfde manier opgemaakt als voor gebeurtenissen met een plaats die is toegewezen aan de desbetreffende gedeelde plaats."
+msgstr "De samenvatting toont de gedeeldelokatiegegevens, op dezelfde manier opgemaakt als voor gebeurtenissen met een plaats die is toegewezen aan de desbetreffende gedeelde plaats."
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
@@ -454,15 +454,15 @@ msgstr "Deze gegevenscorrectie voegt XREF's toe en koppelt alle plaatsen binnen 
 
 #: resources/views/data-fix-options.phtml:66
 msgid "This data fix adds tree-independent data (managed outside GEDCOM) to existing shared places."
-msgstr ""
+msgstr "Deze gegevenscorrectie voegt buiten GEDCOM beheerde lokatiegegevens toe aan bestaande gedeelde plaatsen."
 
 #: resources/views/data-fix-options.phtml:126
 msgid "This data fix creates missing shared places, even if no tree-independent data (managed outside GEDCOM) is available for the respective place."
-msgstr ""
+msgstr "Deze gegevenscorrectie creëert ontbrekende gedeelde plaatsen, zelfs als er geen buiten GEDCOM beheerde lokatiegegevens beschikbaar zijn voor de desbetreffende plaats."
 
 #: resources/views/data-fix-options.phtml:99
 msgid "This data fix creates missing shared places, if tree-independent data (managed outside GEDCOM) is available for the respective place."
-msgstr ""
+msgstr "Deze gegevenscorrectie creëert ontbrekende gedeelde plaatsen als buiten GEDCOM beheerde lokatiegegevens beschikbaar zijn voor de desbetreffende plaats."
 
 #: resources/views/data-fix-options.phtml:50
 #: resources/views/data-fix-options.phtml:111
@@ -477,17 +477,17 @@ msgstr "Deze gegevenscorrectie maakt van gedeelde plaatsen met door komma's gesc
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:97
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list."
-msgstr ""
+msgstr "Dit is de lijst met GEDCOM-feiten die uw gebruikers kunnen toevoegen aan gedeelde plaatsen. U kunt deze lijst wijzigen door zo nodig feitennamen te verwijderen of toe te voegen. Feitnamen die in deze lijst voorkomen, mogen niet ook voorkomen in de lijst \"Unieke gedeeldeplaatsfeiten\"."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:126
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list. "
-msgstr ""
+msgstr "Dit is de lijst met GEDCOM-feiten die uw gebruikers kunnen toevoegen aan gedeelde plaatsen. U kunt deze lijst wijzigen door zo nodig feitennamen te verwijderen of toe te voegen. Feitnamen die in deze lijst voorkomen, mogen niet ook voorkomen in de lijst \"Unieke gedeeldeplaatsfeiten\". "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:105
 msgid "This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list."
-msgstr ""
+msgstr "Dit is de lijst met GEDCOM-feiten die uw gebruikers slechts één keer kunnen toevoegen aan gedeelde plaatsen. Als bijvoorbeeld NAME in deze lijst staat, kunnen gebruikers niet meer dan één NAME-record aan een gedeelde plaats toevoegen. Feitnamen die in deze lijst voorkomen, mogen niet ook voorkomen in de lijst \"Alle gedeeldeplaatsfeiten\"."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:37
 #: resources/views/shared-places-list-page.phtml:21
@@ -534,7 +534,7 @@ msgstr "Type locatie"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:101
 msgid "Unique shared place facts"
-msgstr ""
+msgstr "Unieke gedeeldeplaatsfeiten"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:61
