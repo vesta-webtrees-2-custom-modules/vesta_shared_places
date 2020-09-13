@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-12 20:25+0200\n"
-"PO-Revision-Date: 2020-09-12 21:36+0000\n"
+"PO-Revision-Date: 2020-09-13 10:36+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
@@ -63,7 +63,7 @@ msgstr "%s toevoegen aan de stamboomknipsels"
 
 #: resources/views/data-fix-options.phtml:79
 msgid "Add missing XREFs"
-msgstr "oeg ontbrekende XREF's toe"
+msgstr "Voeg ontbrekende XREF's toe"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:76
@@ -445,7 +445,10 @@ msgstr "De gedeelde plaats %s is gecreëerd."
 
 #: HelpTexts.php:17
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
-msgstr "De samenvatting toont de gedeeldelokatiegegevens, op dezelfde manier opgemaakt als voor gebeurtenissen met een plaats die is toegewezen aan de desbetreffende gedeelde plaats."
+msgstr ""
+"De samenvatting toont de gedeeldelocatiegegevens, op dezelfde manier "
+"opgemaakt als voor gebeurtenissen met een plaats die is toegewezen aan de "
+"desbetreffende gedeelde plaats."
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
