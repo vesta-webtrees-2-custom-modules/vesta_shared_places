@@ -4,6 +4,7 @@ namespace Cissee\Webtrees\Module\SharedPlaces;
 
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\I18N;
+use Vesta\CommonI18N;
 use Vesta\ControlPanelUtils\Model\ControlPanelCheckbox;
 use Vesta\ControlPanelUtils\Model\ControlPanelFactRestriction;
 use Vesta\ControlPanelUtils\Model\ControlPanelPreferences;
@@ -16,7 +17,7 @@ use Vesta\ControlPanelUtils\Model\ControlPanelSubsection;
 trait SharedPlacesModuleTrait {
 
   protected function getMainTitle() {
-    return I18N::translate('Vesta Shared Places');
+    return CommonI18N::titleVestaSharedPlaces();
   }
 
   public function getShortDescription() {
@@ -25,22 +26,24 @@ trait SharedPlacesModuleTrait {
   }
 
   protected function getFullDescription() {
-    $link1 = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_shared_places">'.I18N::translate('Main Readme.').'</a>';
-    $link2 = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_common/blob/master/docs/LocationData.md">'.I18N::translate('Vesta location data management overview.').'</a>';
+    $link1 = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_shared_places">'.CommonI18N::readme().'</a>';
+    $link2 = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_common/blob/master/docs/LocationData.md">'.CommonI18N::readmeLocationData().'</a>';
 
     $description = array();    
     //TODO add link to https://genealogy.net/GEDCOM/
     $description[] = /* I18N: Module Configuration */I18N::translate('A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended \'Facts and events\' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module.');
-    $description[] = /* I18N: Module Configuration */I18N::translate('Requires the \'%1$s Vesta Common\' module, and the \'%1$s Vesta Facts and events\' module.', $this->getVestaSymbol());
-    $description[] = /* I18N: Module Configuration */I18N::translate('Provides location data to other custom modules.');
-    $description[] = $link1 . ' ' . $link2;
+    $description[] = 
+            CommonI18N::requires2(CommonI18N::titleVestaCommon(), CommonI18N::titleVestaPersonalFacts());
+    $description[] = 
+            CommonI18N::providesLocationData();
+    $description[] = $link1 . '. ' . $link2 . '.';;
     return $description;
   }
 
   protected function createPrefs() {
     $generalSub = array();
     $generalSub[] = new ControlPanelSubsection(
-            /* I18N: Module Configuration */I18N::translate('Displayed title'),
+            CommonI18N::displayedTitle(),
             array(
                 /*new ControlPanelCheckbox(
                 I18N::translate('Include the %1$s symbol in the module title', $this->getVestaSymbol()),
@@ -48,12 +51,12 @@ trait SharedPlacesModuleTrait {
                 'VESTA',
                 '1'),*/
         new ControlPanelCheckbox(
-                /* I18N: Module Configuration */I18N::translate('Include the %1$s symbol in the list menu entry', $this->getVestaSymbol()),
-                null,
+                CommonI18N::vestaSymbolInListTitle(),
+                CommonI18N::vestaSymbolInTitle2(),
                 'VESTA_LIST',
                 '1')));
     
-    $link = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_shared_places">'.I18N::translate('Readme').'</a>';
+    $link = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_shared_places">'.CommonI18N::readme().'</a>';
     
     $generalSub[] = new ControlPanelSubsection(
             /* I18N: Module Configuration */I18N::translate('Shared place structure'),
@@ -129,20 +132,20 @@ trait SharedPlacesModuleTrait {
     
     $factsAndEventsSub = array();
     $factsAndEventsSub[] = new ControlPanelSubsection(
-            /* I18N: Module Configuration */I18N::translate('Displayed data'),
+            CommonI18N::displayedData(),
             array(     
         new ControlPanelCheckbox(
                 /* I18N: Module Configuration */I18N::translate('Restrict to specific facts and events'),
                 /* I18N: Module Configuration */I18N::translate('If this option is checked, shared place data is only displayed for the following facts and events. ') .
-                /* I18N: Module Configuration */I18N::translate('In particular if both lists are empty, no additional facts and events of this kind will be shown.'),
+                CommonI18N::bothEmpty(),
                 'RESTRICTED',
                 '0'),
         ControlPanelFactRestriction::createWithIndividualFacts(
-                /* I18N: Module Configuration */I18N::translate('Restrict to this list of GEDCOM individual facts and events. You can modify this list by removing or adding fact and event names, even custom ones, as necessary.'),
+                CommonI18N::restrictIndi(),
                 'RESTRICTED_INDI',
                 'BIRT,OCCU,RESI,DEAT'),
         ControlPanelFactRestriction::createWithFamilyFacts(
-                /* I18N: Module Configuration */I18N::translate('Restrict to this list of GEDCOM family facts and events. You can modify this list by removing or adding fact and event names, even custom ones, as necessary.'),
+                CommonI18N::restrictFam(),
                 'RESTRICTED_FAM',
                 'MARR')));
 
@@ -169,7 +172,7 @@ trait SharedPlacesModuleTrait {
 
     $listSub = array();
     $listSub[] = new ControlPanelSubsection(
-            /* I18N: Module Configuration */I18N::translate('Displayed data'),
+            CommonI18N::displayedData(),
             array(new ControlPanelCheckbox(
                 /* I18N: Module Configuration */I18N::translate('Show link counts for shared places list'),
                 /* I18N: Module Configuration */I18N::translate('Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It\'s recommended to only select this option if places are assigned via XREFs.'),
@@ -178,7 +181,7 @@ trait SharedPlacesModuleTrait {
 
     $sections = array();
     $sections[] = new ControlPanelSection(
-            /* I18N: Module Configuration */I18N::translate('General'),
+            CommonI18N::general(),
             null,
             $generalSub);
     $sections[] = new ControlPanelSection(
@@ -186,7 +189,7 @@ trait SharedPlacesModuleTrait {
             null,
             $factsSub);
     $sections[] = new ControlPanelSection(
-            /* I18N: Module Configuration */I18N::translate('Facts and Events Tab Settings'),
+            CommonI18N::factsAndEventsTabSettings(),
             null,
             $factsAndEventsSub);
     $sections[] = new ControlPanelSection(

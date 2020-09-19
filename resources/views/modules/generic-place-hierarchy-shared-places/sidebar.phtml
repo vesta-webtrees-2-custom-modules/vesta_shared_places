@@ -1,5 +1,6 @@
 <?php
 
+use Cissee\WebtreesExt\MoreI18N;
 use Cissee\WebtreesExt\PlaceViaSharedPlace;
 use Fisharebest\Webtrees\I18N;
 
@@ -44,12 +45,12 @@ use Fisharebest\Webtrees\I18N;
     <?php endif ?>
 
     <div class="row">
-        <div class="col-sm-9"><?= I18N::translate('Individuals') ?></div>
+        <div class="col-sm-9"><?= MoreI18N::xlate('Individuals') ?></div>
         <div class="col-sm-3 align-digits"><?= $stats['INDI'] ?></div>
     </div>
 
     <div class="row">
-        <div class="col-sm-9"><?= I18N::translate('Families') ?></div>
+        <div class="col-sm-9"><?= MoreI18N::xlate('Families') ?></div>
         <div class="col-sm-3 align-digits"><?= $stats['FAM'] ?></div>
     </div>
 </li>
