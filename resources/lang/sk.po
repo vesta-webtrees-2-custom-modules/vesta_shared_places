@@ -8,24 +8,25 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:44+0200\n"
-"PO-Revision-Date: 2020-08-09 22:20+0200\n"
-"Last-Translator: Ladislav Rosival <lacoros@gmail.com>\n"
-"Language-Team: \n"
-"Language: sk_SK\n"
+"PO-Revision-Date: 2020-09-24 10:40+0000\n"
+"Last-Translator: ro-la <lacoros@gmail.com>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:100
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
-msgstr ""
+msgstr " (Poznámka: bolo vytvorených aj %s zdieľaných miest vyššej úrovne)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:98
 msgid " (Note: A higher-level shared place has also been created)"
-msgstr ""
+msgstr " (Poznámka: Bolo vytvorené aj zdieľané miesto vyššej úrovne)"
 
 #: SharedPlacesModule.php:887
 #, php-format
@@ -45,15 +46,24 @@ msgstr "Modul poskytujúci podporu pre zdieľané miesta."
 #: SharedPlacesModuleTrait.php:34
 msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended 'Facts and events' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module."
 msgstr ""
+"Modul podporujúci zdieľané miesta ako GEDCOM objekty úrovne 0 an základe "
+"dodatku GEDCOM-L k špecifikácii GEDCOM 5.5.1. Zdieľané miesta môžu obsahovať "
+"napr. geografické koordináty, poznámky a objekty médií. Modul zobrazuje "
+"všetky zodpovedajúce miesta cez rozšírenú záložku \"Fakty a udalosti\". V "
+"kombinácii s modulom Gov4Webtrees môže byť využitý aj na správu GOV-id."
 
 #: resources/views/modals/shared-place-fields.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
 msgstr ""
+"Názov miesta s časťami, oddelenými čiarkami, bude prevedený na hierarchiu "
+"miest. Súčasne budú vytvorené chýbajúce zdieľané miesta vyššej úrovne."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:80
 msgid "According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. "
 msgstr ""
+"V súlade s dodatkom GEDCOM-L, na zdieľané miesta sa odkazuje pomocou XREF, "
+"tak isto ako na zdieľané poznámky a pod. "
 
 #: SharedPlacesModule.php:870
 #, php-format
@@ -62,7 +72,7 @@ msgstr "Pridať %s do schránky"
 
 #: resources/views/data-fix-options.phtml:79
 msgid "Add missing XREFs"
-msgstr ""
+msgstr "Pridať chýbajúce XREF"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:79
@@ -72,7 +82,7 @@ msgstr "Doplnkovo prepojiť zdieľané miesta cez názov"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:96
 msgid "All shared place facts"
-msgstr ""
+msgstr "Všetky fakty zdieľaných miest"
 
 #: resources/views/data-fix-options.phtml:46
 #: resources/views/data-fix-options.phtml:107
@@ -93,20 +103,26 @@ msgstr "Vytvoriť zdieľané miesto"
 
 #: resources/views/data-fix-options.phtml:123
 msgid "Create all missing shared places, and add missing XREFs"
-msgstr ""
+msgstr "Vytvoriť všetky chýbajúce zdieľané miesta a pridať chýbajúce XREF"
 
 #: resources/views/data-fix-options.phtml:96
 msgid "Create missing shared places from tree-independent data, and add missing XREFs"
 msgstr ""
+"Vytvoriť chýbajúce zdieľané miesta z údajov nezávislých od rodokmeňov a "
+"pridať chýbajúce XREF"
 
 #: resources/views/data-fix-options.phtml:18
 msgid "Data Fix"
-msgstr ""
+msgstr "Oprava údajov"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:178
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr ""
+"Zisťovanie počtu odkazov (pripojených osôb/rodín) je náročné ak sú prepojené "
+"zdieľané miesta cez meno a preto môže spôsobiť oneskorenie pri zobrazovaní "
+"zoznamu zdieľaných miest. Túto voľbu sa odporúča zvoliť len v prípade, ak sú "
+"miesta prepojené prostredníctvom XREF."
 
 #: SharedPlacesModule.php:201
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
@@ -114,34 +130,41 @@ msgstr "Povoľte modul Vesta Places and Pedigree map, aby ste mohli prezerať hi
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
-msgstr ""
+msgstr "Doplniť existujúce zdieľané miesta údajmi nezávislými na rodokmeni"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:188
 msgid "Facts for shared place records"
-msgstr ""
+msgstr "Fakty pre zdieľané miesta"
 
 #: SharedPlacesModule.php:330
 msgid "GOV-Id for type of location"
-msgstr ""
+msgstr "GOV-id pre typ lokality"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
-msgstr ""
+msgstr "Hierarchizujte zdieľané miesta"
 
 #: SharedPlacesModule.php:327
 msgid "Higher-level shared place"
-msgstr ""
+msgstr "Zdieľané miesta vyššej úrovne"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:82
 msgid "However, you can still check this option and link shared places via the place name itself. In this case, links are established internally by searching for a shared place with any name matching case-insensitively."
 msgstr ""
+"Akokoľvek, môžete stále zvoliť túto možnosť túto možnosť a prepojiť zdieľané "
+"miesta cez ich názov. V takom prípade sa prepojenie vytvára interne "
+"vyhľadávaním zdieľaného miesta so zhodným názvom (bez ohľadu  na písanie "
+"malých a veľkých písmen)."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:65
 msgid "If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to higher-level shared places, as described in the specification."
 msgstr ""
+"Ak je zvolené, vzťahy medzi zdieľanými miestami sú modelované "
+"prostredníctvom explicitnej hierarchie, kde zdieľané miesta majú XREF k "
+"zdieľanému miestu vyššej úrovne, tak ako je popísané v špecifikácii."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:139
@@ -151,11 +174,16 @@ msgstr "Keď je zvolená táto možnosť, zdieľané miesta sa budú zobrazovať
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"Ak sú k dispozícii údaje nezávislé od rodokmeňa, tak sa pridajú geografické "
+"koordináty z webtrees \"Geografické údaje\" a GOV id z modulu Gov4Webtrees."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:83
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
 msgstr ""
+"Ak používate hierarchické zdieľané miesta, tak sa miesto s názvom \"A. B, C\""
+" mapuje na zdieľané miesto \"A\" so zdieľaným miestom vyššej úrovne , ktoré "
+"ja mapované na \"B, C\"."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:33
 #: resources/views/shared-places-list-page.phtml:16
@@ -171,11 +199,15 @@ msgstr "Konkrétne, hiererchické zdieľané miesta nemajú názvy s časťami o
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"Najmä sa pridajú geografické koordináty z webtrees \"Geografické údaje\" a "
+"GOV id z modulu Gov4Webtrees."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:81
 msgid "It is now recommended to use XREFs, as this improves performance and flexibility. There is a data fix available which may be used to add XREFs. "
 msgstr ""
+"Odporúča sa používať XREF, keďže to zvyšuje výkon a flexibilitu. K "
+"dispozícii je oprava údajov, ktorá sa môže použiť na pridanie XREF. "
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:40
 #: resources/views/shared-places-list-page.phtml:23
@@ -194,6 +226,9 @@ msgstr "Je veľmi vhodné, aby ste začali používať hierarchické zdieľané 
 #: resources/views/data-fix-options.phtml:33
 msgid "It usually will have to be carried out once only, as a migration when switching to hierarchical shared places via the respective configuration option."
 msgstr ""
+"Vo všeobecnosti stačí vykonať raz, ako migráciu, keď sa zapne "
+"prostredníctvom príslušného nastavenia používanie hierarchických zdieľaných "
+"miest."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:76
@@ -210,6 +245,9 @@ msgstr "Miesto"
 #: resources/views/data-fix-options.phtml:129
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name', including parent levels if set."
 msgstr ""
+"Príslušné zdieľané miesta s zistia tak, ako cez konfiguračnú možnosť "
+"\"Dodatočne prepojiť zdieľané miesta cez meno\", včítane vyšších úrovní, ak "
+"sú nastavené."
 
 #: resources/views/data-fix-options.phtml:68
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name'."
