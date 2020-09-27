@@ -8,6 +8,7 @@ use Closure;
 use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Location;
+use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -34,6 +35,24 @@ class SearchServiceExt {
     $this->tree_service = $tree_service;
   }
 
+  public function searchLocationsInPlace(Place $place): Collection
+    {
+        return DB::table('other')
+            ->join('placelinks', static function (JoinClause $query) {
+                $query
+                    ->on('other.o_file', '=', 'placelinks.pl_file')
+                    ->on('other.o_id', '=', 'placelinks.pl_gid');
+            })
+            ->where('o_type', '=', '_LOC')
+            ->where('o_file', '=', $place->tree()->id())
+            ->where('pl_p_id', '=', $place->id())
+            ->select(['other.*'])
+            ->get()
+            //->each($this->rowLimiter()) //unlikely to be relevant anyway
+            ->map($this->locationRowMapper())
+            ->filter(GedcomRecord::accessFilter());
+    }
+    
   /**
    * Search for shared places.
    *
@@ -75,6 +94,9 @@ class SearchServiceExt {
   }
   
   public function searchTopLevelLocations(array $trees, int $offset = 0, int $limit = PHP_INT_MAX): Collection {
+    //not useful because a location may have links to parent locations for some dates
+    //while being a top-level location at some other date
+    /*
     $query = DB::table('other')
             ->leftJoin('link', static function (JoinClause $join): void {
                 $join
@@ -85,7 +107,27 @@ class SearchServiceExt {
             ->whereNull('l_from')
             ->where('o_type', '=', '_LOC');
 
+    $this->whereTrees($query, 'o_file', $trees);    
+    */
+    
+    //a top-level location is a location linked to at least one top-level (i.e. parentless) place
+    /* @var $query \Illuminate\Database\Query\Builder */
+    $query = DB::table('other')
+            ->join('placelinks', static function (JoinClause $join): void {
+                $join
+                    ->on('pl_file', '=', 'o_file')                    
+                    ->on('pl_gid', '=', 'o_id');
+            })
+            ->join('places', static function (JoinClause $join): void {
+                $join
+                    ->on('p_id', '=', 'pl_p_id');
+            })
+            ->where('p_parent_id', '=', 0)
+            ->where('o_type', '=', '_LOC');
+
     $this->whereTrees($query, 'o_file', $trees);
+    $query->distinct();
+    $query->select(['o_id','o_file','o_type','o_gedcom']); //must select explicitly, otherwise '*' which messes up the distinct
     
     return $this->paginateQuery($query, $this->locationRowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
   }
@@ -111,7 +153,7 @@ class SearchServiceExt {
    */
   private function paginateQuery(Builder $query, Closure $row_mapper, Closure $row_filter, int $offset, int $limit): Collection {
     $collection = new Collection();
-
+    
     foreach ($query->cursor() as $row) {
       $record = $row_mapper($row);
       // If the object has a method "canShow()", then use it to filter for privacy.

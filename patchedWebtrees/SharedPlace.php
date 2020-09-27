@@ -15,7 +15,6 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use stdClass;
 use Vesta\Model\GedcomDateInterval;
-use function GuzzleHttp\json_decode;
 use function str_contains;
 
 /**
@@ -58,23 +57,36 @@ class SharedPlace extends Location {
   }
 
   public function check(): void {
-    //make sure all places exist, and are linked to this record 
+    
+    //foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
+    //  error_log("placename for ".$this->xref(). ": " . $place->gedcomName());
+    //}
+
+    //make sure all places _for_all_dates_ exist, and are linked to this record 
     //(otherwise they will be deleted again in next FunctionsImport::updateRecord() call as 'orphaned places')
     
     //also cleanup obsolete placelinks
     //(should all this be done on updateRecord()? tricky wrt place hierarchies!)
     
+    //note that we only link shared place 1:1 to place name, not to higher-level place names
+    //(this is different from indi:place and fam:place links elsewhere in webtrees)
+    
     $allPlaceIds = new Collection();
     //cf FunctionsImport::updatePlaces
-    foreach ($this->namesAsPlaces() as $place) {
+    foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
 
+        if ($place->id() !== 0) {
+            $allPlaceIds->add($place->id());          
+        } //else actually unexpected!
+      
         // Calling Place::id() will create the entry in the database, if it doesn't already exist.
         while ($place->id() !== 0) {
-            $allPlaceIds->add($place->id());
             $place = $place->parent();
         }
     }
-        
+    
+    //error_log(print_r($allPlaceIds, true));
+    
     // Place links (first step: delete obsolete links)
     DB::table('placelinks')
         ->where('pl_gid', '=', $this->xref())
@@ -263,12 +275,13 @@ class SharedPlace extends Location {
       //regardless of INDIRECT_LINKS_PARENT_LEVELS
       $placeIds = [];
       foreach ($sharedPlaces as $sharedPlace) {
-        foreach ($sharedPlace->namesAsPlaces() as $place) {
+        foreach ($sharedPlace->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
           $place_id = $place->id();
           $placeIds[] = $place_id;
         }
       }  
 
+      //TODO optimize - use placelinks for loc:place as well!
       $indis = DB::table('placelinks')
             ->whereIn('pl_p_id', $placeIds)
             ->where('pl_file', '=', $anySharedPlace->tree()->id())
@@ -279,7 +292,7 @@ class SharedPlace extends Location {
               })
             ->select(['i_id','i_gedcom'])
             ->get();
-    
+              
       $main = $main->concat($indis); //not sufficient to use unique() here - structures are different! 
     }
     
@@ -350,12 +363,13 @@ class SharedPlace extends Location {
       //regardless of INDIRECT_LINKS_PARENT_LEVELS
       $placeIds = [];
       foreach ($sharedPlaces as $sharedPlace) {
-        foreach ($sharedPlace->namesAsPlaces() as $place) {
+        foreach ($sharedPlace->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
           $place_id = $place->id();
           $placeIds[] = $place_id;
         }
-      }  
-
+      }
+      
+      //TODO optimize - use placelinks for loc:place as well!
       $fams = DB::table('placelinks')
             ->whereIn('pl_p_id', $placeIds)
             ->where('pl_file', '=', $anySharedPlace->tree()->id())
@@ -375,7 +389,7 @@ class SharedPlace extends Location {
   
   /**
    * 
-   * @return Collection key: xref, value: array of SharedPlace (direct parents)
+   * @return Collection key: xref, value: Collection<SharedPlaceParentAt> (direct parents)
    */
   public function getTransitiveParentsAt(GedcomDateInterval $date): Collection {
     $ret = new Collection();
@@ -386,11 +400,12 @@ class SharedPlace extends Location {
         
     while ($queue->count() > 0) {
       $current = $queue->pop();
-      $parents = $current->getParentsAt($date);
+      $parents = $current->getWrappedParentsAt($date, true);
       $ret->put($current->xref(), $parents);
-      foreach ($parents as $parent) {            
-        if (!$ret->has($parent->xref())) {
-          $queue->prepend($parent);
+      foreach ($parents as $parent) {
+        $parentSharedPlace = $parent->getSharedPlace();
+        if (($parentSharedPlace !== null) && !$ret->has($parentSharedPlace->xref())) {
+          $queue->prepend($parentSharedPlace);
         }
       }
     }
@@ -399,40 +414,79 @@ class SharedPlace extends Location {
   }
   
   //do not use recursively! Tree may have circular hierarchies
-  public function getParents(): array {
-    return $this->getParentsAt(GedcomDateInterval::createNow());
+  public function getParents(): Collection {
+    return $this->getWrappedParentsAt(GedcomDateInterval::createNow(), false)
+            ->map(function (SharedPlaceParentAt $element): SharedPlace {
+              //non-null because we don't fillInterval!
+              return $element->getSharedPlace();
+            });
   }
   
   //do not use recursively! Tree may have circular hierarchies
-  public function getParentsAt(GedcomDateInterval $date): array {
+  /**
+   * 
+   * @param GedcomDateInterval $date
+   * @return Collection<SharedPlaceParentAt>, sorted by date
+   */
+  public function getWrappedParentsAt(
+          GedcomDateInterval $date,
+          bool $fillInterval): Collection {
+    
     $sharedPlaces = [];
-    $sharedPlaces2 = [];
+    $indexOfFact = -1;
     foreach ($this->facts(['_LOC']) as $parent) {
+      $indexOfFact++;
       $parentDate = GedcomDateInterval::create($parent->attribute("DATE"));
       
-      if ($date->intersect($parentDate) !== null) {
-        $sharedPlaces[] = $parent->target();
+      $intersectedDate = $date->intersect($parentDate);
+      if ($intersectedDate !== null) {
+        $sharedPlaces[] = new SharedPlaceParentAt($intersectedDate, $parent->target(), $indexOfFact);
       } else if ($parent->attribute("DATE") === '') {
-        $sharedPlaces2[] = $parent->target();
+        $sharedPlaces[] = new SharedPlaceParentAt($date, $parent->target(), $indexOfFact);
       }
     }
-    
-    /*
-    preg_match_all('/\n1 _LOC @(' . Gedcom::REGEX_XREF . ')@/', $this->gedcom(), $matches);
-    foreach ($matches[1] as $match) {
-        $loc = Factory::location()->make($match, $this->tree());
-        if ($loc && $loc->canShow()) {
-            $sharedPlaces[] = $loc;
-        }
-    }
-    */
 
-    return array_merge($sharedPlaces, $sharedPlaces2);
+    //order: by date.getFrom (nulls first), then by original order
+    uasort($sharedPlaces, function (SharedPlaceParentAt $x, SharedPlaceParentAt $y): int {
+        $xJulianDay = $x->getDate()->getFrom() ?? 0;
+        $yJulianDay = $y->getDate()->getFrom() ?? 0;
+
+        $cmp = $xJulianDay <=> $yJulianDay;
+
+        if ($cmp === 0) {
+          //use original order (we have to handle this explicitly, sort is only stable in php starting with 8.0)
+          return $x->getIndexOfFact() <=> $y->getIndexOfFact();
+        }
+
+        return $cmp;
+    });
+    
+    if (!$fillInterval) {
+      return new Collection($sharedPlaces);
+    }
+    
+    //fill given interval (which also means there is always at least one SharedPlaceParentAt)
+    $filled = $date->fillInterval(
+            new Collection($sharedPlaces),
+            function (SharedPlaceParentAt $element): GedcomDateInterval {
+              return $element->getDate();
+            },
+            function (GedcomDateInterval $date): SharedPlaceParentAt {
+              //no actual parent
+              return new SharedPlaceParentAt($date, null, -1);
+            });
+    
+    return $filled;
   }
   
-  //cf GedcomRecord addName()
-  protected function createName(string $type, string $value, string $gedcom): array
-  {
+  //cf GedcomRecord addName(), but add GedcomDateInterval, indexOfFact
+  protected function createName(
+          string $type, 
+          string $value, 
+          string $gedcom,
+          GedcomDateInterval $date,
+          int $indexOfFact): array {
+    
       return [
           'type'   => $type,
           'sort'   => preg_replace_callback('/([0-9]+)/', static function (array $matches): string {
@@ -442,10 +496,13 @@ class SharedPlace extends Location {
           // This is used for display
           'fullNN' => $value,
           // This goes into the database
+                  
+          'date' => $date, 
+          'indexOfFact' => $indexOfFact,       
       ];
   }
     
-  //cf GedcomRecord extractNamesFromFacts() (but return results rather than write to cache array)
+  //cf GedcomRecord extractNamesFromFacts() (but return results rather than write to cache array, and add date)
   /**
    * Get all the names of a record, including ROMN, FONE and _HEB alternatives.
    * Records without a name (e.g. FAM) will need to redefine this function.
@@ -454,6 +511,7 @@ class SharedPlace extends Location {
    * ['type'] = the gedcom fact, e.g. NAME, TITL, FONE, _HEB, etc.
    * ['full'] = the name as specified in the record, e.g. 'Vincent van Gogh' or 'John Unknown'
    * ['sort'] = a sortable version of the name (not for display), e.g. 'Gogh, Vincent' or '@N.N., John'
+   * ['date'] = intersected date interval
    *
    * @param GedcomDateInterval $date
    * @param int                $level
@@ -462,36 +520,60 @@ class SharedPlace extends Location {
    *
    * @return array
    */
-  protected function extractNamesFromFactsAt(GedcomDateInterval $date, int $level, string $fact_type, Collection $facts): array
-  {
+  protected function extractNamesFromFactsAt(
+          GedcomDateInterval $date, 
+          int $level, 
+          string $fact_type, 
+          Collection $facts): array {
+    
       $extractedNames = [];    
     
       $sublevel    = $level + 1;
       $subsublevel = $sublevel + 1;
+      
+      $indexOfFact = -1;
       foreach ($facts as $fact) {
+          $indexOfFact++;
+        
           $nameDate = GedcomDateInterval::create($fact->attribute("DATE"));      
           
           //[RC] adjusted
-          if ($date->intersect($nameDate) === null) {
+          $intersectedDate = $date->intersect($nameDate);
+          if ($intersectedDate === null) {
             continue;
           }
-      
+                
           if (preg_match_all("/^{$level} ({$fact_type}) (.+)((\n[{$sublevel}-9].+)*)/m", $fact->gedcom(), $matches, PREG_SET_ORDER)) {
               foreach ($matches as $match) {
                   // Treat 1 NAME / 2 TYPE married the same as _MARNM
                   if ($match[1] === 'NAME' && str_contains($match[3], "\n2 TYPE married")) {
-                      $extractedNames []= $this->createName('_MARNM', $match[2], $fact->gedcom());
+                      $extractedNames []= $this->createName('_MARNM', $match[2], $fact->gedcom(), $intersectedDate, $indexOfFact);
                   } else {
-                      $extractedNames []= $this->createName($match[1], $match[2], $fact->gedcom());
+                      $extractedNames []= $this->createName($match[1], $match[2], $fact->gedcom(), $intersectedDate, $indexOfFact);
                   }
                   if ($match[3] && preg_match_all("/^{$sublevel} (ROMN|FONE|_\w+) (.+)((\n[{$subsublevel}-9].+)*)/m", $match[3], $submatches, PREG_SET_ORDER)) {
                       foreach ($submatches as $submatch) {
-                          $extractedNames []= $this->createName($submatch[1], $submatch[2], $match[3]);
+                          $extractedNames []= $this->createName($submatch[1], $submatch[2], $match[3], $intersectedDate, $indexOfFact);
                       }
                   }
               }
           }
       }
+      
+      //order: by $intersectedDate.getFrom (nulls first), then by original order
+      uasort($extractedNames, function (array $x, array $y): int {
+          $xJulianDay = $x['date']->getFrom() ?? 0;
+          $yJulianDay = $y['date']->getFrom() ?? 0;
+          
+          $cmp = $xJulianDay <=> $yJulianDay;
+          
+          if ($cmp === 0) {
+            //use original order (we have to handle this explicitly, sort is only stable in php starting with 8.0)
+            return $x['indexOfFact'] <=> $y['indexOfFact'];
+          }
+          
+          return $cmp;
+      });
       
       return $extractedNames;
   }
@@ -511,22 +593,37 @@ class SharedPlace extends Location {
   
   //cf GedcomRecord getAllNames() (but don't cache results unless $date is null)
   public function getAllNamesAt(?GedcomDateInterval $date): array {
+    
+    $actualDate = $date;
     if ($date === null) {
       if ($this->getAllNames !== null) {
         return $this->getAllNames;
       }
+      
+      //null was just for caching
+      $actualDate = GedcomDateInterval::createNow();
     }
     
     $getAllNames = [];
     if ($this->canShowName()) {
         // Ask the record to extract its names
-        $getAllNames = $this->extractNamesAt(($date === null)?GedcomDateInterval::createNow():$date);
-        // No name found? Use a fallback.
-        if (!$getAllNames) {
-            $getAllNames []= $this->createName(static::RECORD_TYPE, $this->getFallBackName(), '');
-        }
+        $getAllNames = $this->extractNamesAt($actualDate);
+        
+        $self = $this;
+        //and fill given interval (which also means there is always at least one name)
+        $filled = $actualDate->fillInterval(
+                new Collection($getAllNames),
+                function (array $element): GedcomDateInterval {
+                  return $element['date'];
+                },
+                function (GedcomDateInterval $date) use($self): array {
+                  //fallback name
+                  return $self->createName(static::RECORD_TYPE, $this->getFallBackName(), '', $date, -1);
+                });
+                
+        $getAllNames = $filled->all();
     } else {
-        $getAllNames []= $this->createName(static::RECORD_TYPE, I18N::translate('Private'), '');
+        $getAllNames []= $this->createName(static::RECORD_TYPE, I18N::translate('Private'), '', $actualDate, -1);
     }
     
     if ($date === null) {
@@ -536,7 +633,7 @@ class SharedPlace extends Location {
 
     return $getAllNames;
   }
-
+  
   public function getPrimaryNameIndexWrtUnfilteredNames(): int {
     return $this->getPrimaryNameAt(GedcomDateInterval::createNow());
   }
@@ -573,7 +670,7 @@ class SharedPlace extends Location {
    * @return array place names (unnamed places and circular hierarchies properly handled)
    */
   private static function namesAsStringsAt(
-          GedcomDateInterval $date,
+          ?GedcomDateInterval $date,
           bool $primaryOnly,
           string $xref,
           Collection $alreadySeenXrefs,
@@ -595,7 +692,7 @@ class SharedPlace extends Location {
         }
         
         //append
-        $ret []= $head . Gedcom::PLACE_SEPARATOR . json_decode('"\u221E"') . " <" . I18N::translate("circular shared place hierarchy") . ">";
+        $ret []= $head . Gedcom::PLACE_SEPARATOR . /*json_decode('"\u221E"') .*/ " <" . I18N::translate("circular shared place hierarchy") . ">";
       }
       
       return $ret;
@@ -613,25 +710,31 @@ class SharedPlace extends Location {
     foreach ($nextNames as $nameStructure) {            
       $fullNN = $nameStructure['fullNN'];
       
+      /* @var $nameDate GedcomDateInterval */
+      $nameDate = $nameStructure['date'];
+      
       $toMerge = SharedPlace::namesAsStringsSingleAt(
           $date,
           $primaryOnly,
           $xref, 
           $nextAlreadySeenXrefs,
           $fullNN,
+          $nameDate, 
           $transitiveParents,
           $currentNames);
+      
       $ret = array_merge($ret, $toMerge);
     }
     return $ret;
   }
   
   private static function namesAsStringsSingleAt(
-          GedcomDateInterval $date,
+          ?GedcomDateInterval $date,
           bool $primaryOnly,
           string $xref,
           Collection $alreadySeenXrefs,
           string $nextName,
+          GedcomDateInterval $nextNameDate,
           Collection $transitiveParents,
           array $currentNames): array {
     
@@ -647,40 +750,58 @@ class SharedPlace extends Location {
       }
     }
     
-    //add parents
+    /* @var $parents Collection<SharedPlaceParentAt> */
     $parents = $transitiveParents->get($xref);
     
-    if (sizeof($parents) === 0) {
-      //leaf
-      return $nextNames;
-    }
-    
     $ret = [];
-    foreach ($parents as $parent) {
-      if ($primaryOnly) {
-        //only use primary name, also restrict to primary parent
-        $parentNames = [$parent->getAllNames($date)[0]];
-        return SharedPlace::namesAsStringsAt(
-            $date,
-            $primaryOnly, 
-            $parent->xref(), 
-            $alreadySeenXrefs,
-            $parentNames,
-            $transitiveParents,
-            $nextNames);
-      }
-        
-      $parentNames = $parent->getAllNamesAt($date);
+    foreach ($parents as $parent) {          
+
+      /* @var $parent SharedPlaceParentAt */
       
-      $toMerge = SharedPlace::namesAsStringsAt(
-            $date,
-            $primaryOnly, 
-            $parent->xref(), 
-            $alreadySeenXrefs,
-            $parentNames,
-            $transitiveParents,
-            $nextNames);
-      $ret = array_merge($ret, $toMerge);
+      //special intersect! 
+      $intersectedDate = $parent->getDate()->intersect($nextNameDate, true);
+      
+      if ($intersectedDate === null) {
+        //irrelevant parent for this name
+        continue;
+      }
+      
+      /* @var $parentSharedPlace SharedPlace */
+      $parentSharedPlace = $parent->getSharedPlace();
+      
+      if ($parentSharedPlace === null) {
+        //leaf
+        $ret = array_merge($ret, $nextNames);
+      } else {
+        
+        //we have an actual parent with an intersecting date
+        $parentNames = $parentSharedPlace->getAllNamesAt($date);
+        
+        if ($primaryOnly) {
+          //only use primary name, also restrict to primary parent
+          $parentNames = [$parentNames[0]];
+          
+          return SharedPlace::namesAsStringsAt(
+              $intersectedDate,
+              $primaryOnly, 
+              $parentSharedPlace->xref(), 
+              $alreadySeenXrefs,
+              $parentNames,
+              $transitiveParents,
+              $nextNames);
+        }
+
+        $toMerge = SharedPlace::namesAsStringsAt(
+              $intersectedDate,
+              $primaryOnly, 
+              $parentSharedPlace->xref(), 
+              $alreadySeenXrefs,
+              $parentNames,
+              $transitiveParents,
+              $nextNames);
+        
+        $ret = array_merge($ret, $toMerge);
+      }
     }
     return $ret;
   }
@@ -688,29 +809,38 @@ class SharedPlace extends Location {
   //if shared places hierarchy is used, build returned place names via hierarchy!
   //but beware of loops (circular references in shared place hierarchy)
   public function namesAsPlaces(): array {
+    return $this->namesAsPlacesAt(null);
+  }
+  
+  public function namesAsPlacesAt(?GedcomDateInterval $date): array {
     if (!$this->useHierarchy()) {
-      $places = array();
-      foreach ($this->getAllNames() as $nameStructure) {
-        $head = $nameStructure['fullNN'];
-        $places[] = new Place($head, $this->tree);
-      }      
-      return $places;
+      $places = new Collection();
+      foreach ($this->getAllNamesAt($date) as $nameStructure) {
+        $full = $nameStructure['fullNN'];
+        $places->add(new Place($full, $this->tree));
+      }
+      return $places->unique(function ($place) {
+          return $place->id();
+      })->all();
     }
 
-    $ret = [];
+    $places = new Collection();
     $namesAsString = SharedPlace::namesAsStringsAt(
-            GedcomDateInterval::createNow(),
+            $date,
             false,
             $this->xref(), 
             new Collection(),
-            $this->getAllNamesAt(GedcomDateInterval::createNow()),
-            $this->getTransitiveParentsAt(GedcomDateInterval::createNow()),
+            $this->getAllNamesAt($date),
+            $this->getTransitiveParentsAt(($date == null)?GedcomDateInterval::createNow():$date),
             []);
 
     foreach ($namesAsString as $name) {
-      $ret []= new Place($name, $this->tree);
+      $places->add(new Place($name, $this->tree));
     }
-    return $ret;
+    
+    return $places->unique(function ($place) {
+        return $place->id();
+    })->all();
 
     //not safe wrt loops
     /*
@@ -743,7 +873,7 @@ class SharedPlace extends Location {
       return new Place($name, $this->tree);
     }
     
-    $names = [$this->getAllNames($date)[0]];
+    $names = [$this->getAllNamesAt($date)[0]];
     $namesAsString = SharedPlace::namesAsStringsAt(
               $date,
               true,
@@ -752,6 +882,10 @@ class SharedPlace extends Location {
               $names,
               $this->getTransitiveParentsAt($date),
               []);
+    
+    if (sizeof($namesAsString) === 0) {
+      throw new \Exception("unexpectedly empty!");
+    }
     
     if (sizeof($namesAsString) !== 1) {
       throw new \Exception("unexpected!");
@@ -774,53 +908,6 @@ class SharedPlace extends Location {
   public static function placeNamePartsTail(array $parts): string {
     $tail = implode(Gedcom::PLACE_SEPARATOR, array_slice($parts, 1));
     return $tail;
-  }
-  
-  public function matchesWithHierarchyAsArg(
-          string $placeGedcomName,
-          bool $useHierarchy): bool {
-    
-    if ($useHierarchy) {
-      $parts = SharedPlace::placeNameParts($placeGedcomName);
-      $tail = SharedPlace::placeNamePartsTail($parts);
-      $head = reset($parts);
-      
-      foreach ($this->namesNN() as $name) {
-        if (strtolower($head) === strtolower($name)) {
-          //name matches - check parent hierarchy!
-          $parents = $this->getParents();
-          
-          if ($head === $placeGedcomName) {
-            //top-level: any parentless shared place matches!
-            if (empty($parents)) {
-              return true;
-            }
-          } else {
-            foreach ($this->getParents() as $parent) {
-              if ($parent->matches($tail)) {
-                return true;
-              }
-            }              
-          }          
-        }
-      }
-      
-      return false;
-    }
-    
-    foreach ($this->namesNN() as $name) {
-      if (strtolower($placeGedcomName) === strtolower($name)) {
-        return true;
-      }
-    }
-    
-    return false;
-  }
-  
-  public function matches(
-          string $placeGedcomName): bool {
-    
-    return $this->matchesWithHierarchyAsArg($placeGedcomName, $this->useHierarchy());
   }
 
   public function updateFact(string $fact_id, string $gedcom, bool $update_chan): void {

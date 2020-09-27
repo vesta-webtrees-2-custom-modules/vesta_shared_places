@@ -99,7 +99,7 @@ class LocGraph {
     $fam = array();
     $loc = array();
     
-    $rows = DB::table('link')
+    $query = DB::table('link')
               ->leftJoin('individuals', function (JoinClause $join): void {
                 $join
                 ->on('link.l_from', '=', 'individuals.i_id')
@@ -118,8 +118,9 @@ class LocGraph {
               })
               ->where('l_file', '=', $tree->id())
               ->where('l_type', '=', '_LOC')
-              ->select(['l_from', 'l_to','i_id','i_gedcom','f_id','f_gedcom','o_id'])
-              ->get();
+              ->select(['l_from', 'l_to','i_id','i_gedcom','f_id','f_gedcom','o_id']);
+              
+    $rows = $query->get();
               
     foreach ($rows as $row) {
       if ($row->i_id !== null) {

@@ -164,19 +164,6 @@ class SharedPlacesModule extends AbstractModule implements
     $user = $request->getAttribute('user');
     Auth::checkComponentAccess($this, ModuleListInterface::class, $tree, $user);
     
-    /*
-    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
-    if ($useHierarchy) {
-      $searchService = app(SearchServiceExt::class);
-      $controller = new GenericPlaceHierarchyController(
-              new SharedPlaceHierarchyUtils($this, $searchService), 10000);
-
-      return $controller->show($request);
-    }
-
-    //old-style list
-    */
-    
     $link = null;
     $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
     $locationsToFix = $this->locationsToFixWrtHierarchy($tree);
@@ -464,7 +451,7 @@ class SharedPlacesModule extends AbstractModule implements
             $this->name() . '::icons/shared-place', 
             I18N::translate('Shared place'), 
             $sharedPlace->url());
-
+            
     //add name if different from PLAC name
     $nameAt = $sharedPlace->primaryPlaceAt($place->getEventDateInterval())->gedcomName();
     if ($nameAt !== $place->getGedcomName()) {
@@ -557,70 +544,21 @@ class SharedPlacesModule extends AbstractModule implements
   
   public function placename2sharedPlaceImpl(
           string $placeGedcomName, 
-          Tree $tree,
-          bool $useHierarchy): ?SharedPlace {
+          Tree $tree): ?SharedPlace {
     
-    if ($placeGedcomName === '') {
-      return null;
-    }
-    
-    $searchService = app(SearchServiceExt::class);
-    
-    if ($useHierarchy) {
-      $parts = SharedPlace::placeNameParts($placeGedcomName);
-      $head = reset($parts);
-      $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $head));
-      foreach ($sharedPlaces as $sharedPlace) {
-        if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
-          return $sharedPlace;
-        }
-      }
-      return null;
-    }
-    
-    $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $placeGedcomName));
-    foreach ($sharedPlaces as $sharedPlace) {
-      if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
-        //first match wins, we don't expect multiple _LOC with same name
-        //(for now) TODO resolve via date?
-        return $sharedPlace;
-      }
-    }
-    return null;
+    return $this->placename2sharedPlacesImpl($placeGedcomName, $tree)->first();
   }
   
   public function placename2sharedPlacesImpl(
           string $placeGedcomName, 
-          Tree $tree,
-          bool $useHierarchy): Collection {
+          Tree $tree): Collection {
     
     if ($placeGedcomName === '') {
       return new Collection();
     }
     
-    $searchService = app(SearchServiceExt::class);
-    
-    if ($useHierarchy) {
-      $parts = SharedPlace::placeNameParts($placeGedcomName);
-      $head = reset($parts);
-      $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $head));
-      $ret = new Collection();
-      foreach ($sharedPlaces as $sharedPlace) {
-        if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
-          $ret->add($sharedPlace);
-        }
-      }
-      return $ret;
-    }
-    
-    $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 NAME " . $placeGedcomName));
-    $ret = new Collection();
-    foreach ($sharedPlaces as $sharedPlace) {
-      if ($sharedPlace->matchesWithHierarchyAsArg($placeGedcomName, $useHierarchy)) {
-        $ret->add($sharedPlace);
-      }
-    }
-    return $ret;
+    $searchService = app(SearchServiceExt::class);    
+    return $searchService->searchLocationsInPlace(new Place($placeGedcomName, $tree));
   }
   
   protected function placename2sharedPlace(
@@ -640,8 +578,7 @@ class SharedPlacesModule extends AbstractModule implements
           Tree $tree,
           int $parentLevels): ?SharedPlace {
     
-    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
-    $match = $this->placename2sharedPlaceImpl($placeGedcomName, $tree, $useHierarchy);
+    $match = $this->placename2sharedPlaceImpl($placeGedcomName, $tree);
     
     if (($match === null) && ($parentLevels > 0)) {
       $parts = SharedPlace::placeNameParts($placeGedcomName);
@@ -820,7 +757,7 @@ class SharedPlacesModule extends AbstractModule implements
         while ($queue->count() > 0) {
           $current = $queue->pop();
           $ret->add($current);
-          foreach ($current->getParents() as $parent) {            
+          foreach ($current->getParents() as $parent) {
             if (!$ret->contains($parent)) {
               $queue->prepend($parent);
             }
@@ -950,7 +887,7 @@ class SharedPlacesModule extends AbstractModule implements
     $actual = Place::find($id, $tree);
     
     //find matching shared places
-    $sharedPlaces = $this->placename2sharedPlacesImpl($actual->gedcomName(), $actual->tree(), true);    
+    $sharedPlaces = $this->placename2sharedPlacesImpl($actual->gedcomName(), $actual->tree());    
     $searchService = app(SearchServiceExt::class);
     return new PlaceViaSharedPlace($actual, $urls, $sharedPlaces, $this, $searchService);
   }
@@ -1287,11 +1224,7 @@ class SharedPlacesModule extends AbstractModule implements
       $tail = SharedPlace::placeNamePartsTail($parts);
       
       if ($tail !== '') {
-        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), true);
-        if ($parentRecord == null) {
-          //shared place with hierarchical name is also ok here, we assume it will be handled later by data fix
-          $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), false);
-        }
+        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree());
         
         if ($parentRecord != null) {
           //we may already have this link (added manually or in some other way)
@@ -1461,11 +1394,7 @@ class SharedPlacesModule extends AbstractModule implements
       $tail = SharedPlace::placeNamePartsTail($parts);
       
       if ($tail !== '') {
-        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), true);
-        if ($parentRecord == null) {
-          //shared place with hierarchical name is also ok here, we assume it will be handled later by data fix
-          $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree(), false);
-        }
+        $parentRecord = $this->placename2sharedPlaceImpl($tail, $record->tree());
         
         if ($parentRecord != null) {
           //we may already have this link (added manually or in some other way)
@@ -1500,6 +1429,9 @@ class SharedPlacesModule extends AbstractModule implements
     //and run the data fix:
     //B is created twice (if unmake isn't called)
     Factory::location()->unmake($record->xref(), $record->tree());
+    
+    //we must check() in order to update place links
+    Factory::location()->make($record->xref(), $record->tree()); 
   }
    
   protected function updateRecordWrtEnhance(GedcomRecord $record): void {
