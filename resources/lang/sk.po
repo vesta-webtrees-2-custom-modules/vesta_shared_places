@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:44+0200\n"
-"PO-Revision-Date: 2020-10-05 12:12+0000\n"
+"PO-Revision-Date: 2020-10-05 15:26+0000\n"
 "Last-Translator: ro-la <lacoros@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
@@ -46,24 +46,24 @@ msgstr "Modul poskytujúci podporu pre zdieľané miesta."
 #: SharedPlacesModuleTrait.php:34
 msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended 'Facts and events' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module."
 msgstr ""
-"Modul podporujúci zdieľané miesta ako GEDCOM objekty úrovne 0 an základe "
+"Modul podporujúci zdieľané miesta ako GEDCOM objekty úrovne 0 na základe "
 "dodatku GEDCOM-L k špecifikácii GEDCOM 5.5.1. Zdieľané miesta môžu obsahovať "
 "napr. geografické koordináty, poznámky a objekty médií. Modul zobrazuje "
-"všetky zodpovedajúce miesta cez rozšírenú záložku \"Fakty a udalosti\". V "
+"všetky zodpovedajúce miesta cez rozšírenú záložku „Fakty a udalosti“. V "
 "kombinácii s modulom Gov4Webtrees môže byť využitý aj na správu GOV-id."
 
 #: resources/views/modals/shared-place-fields.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
 msgstr ""
-"Názov miesta s časťami, oddelenými čiarkami, bude prevedený na hierarchiu "
-"miest. Súčasne budú vytvorené chýbajúce zdieľané miesta vyššej úrovne."
+"Názov miesta s časťami oddelenými čiarkami, bude prevedený na hierarchiu "
+"miest. Súčasne sa vytvoria chýbajúce zdieľané miesta vyššej úrovne."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:80
 msgid "According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. "
 msgstr ""
-"V súlade s dodatkom GEDCOM-L, na zdieľané miesta sa odkazuje pomocou XREF, "
-"tak isto ako na zdieľané poznámky a pod. "
+"V súlade s dodatkom GEDCOM-L sa na zdieľané miesta odkazuje pomocou XREF, "
+"podobne ako na zdieľané poznámky a pod. "
 
 #: SharedPlacesModule.php:870
 #, php-format
@@ -143,7 +143,7 @@ msgstr "GOV-id pre typ lokality"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
-msgstr "Hierarchizujte zdieľané miesta"
+msgstr "Vytvoriť hierarchické zdieľané miesta"
 
 #: SharedPlacesModule.php:327
 msgid "Higher-level shared place"
@@ -153,10 +153,9 @@ msgstr "Zdieľané miesto vyššej úrovne"
 #: SharedPlacesModuleTrait.php:82
 msgid "However, you can still check this option and link shared places via the place name itself. In this case, links are established internally by searching for a shared place with any name matching case-insensitively."
 msgstr ""
-"Akokoľvek, môžete stále zvoliť túto možnosť túto možnosť a prepojiť zdieľané "
-"miesta cez ich názov. V takom prípade sa prepojenie vytvára interne "
-"vyhľadávaním zdieľaného miesta so zhodným názvom (bez ohľadu na písanie "
-"malých a veľkých písmen)."
+"Akokoľvek, môžete zvoliť túto možnosť a prepojiť zdieľané miesta cez ich "
+"názov. V takom prípade sa prepojenie vytvára interne vyhľadávaním zdieľaného "
+"miesta so zhodným názvom (bez ohľadu na písanie malých a veľkých písmen)."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:65
@@ -216,7 +215,7 @@ msgstr "Odporúčame, aby ste spustili opravu údajov pre tento užívateľský 
 
 #: resources/views/data-fix-options.phtml:13
 msgid "It is strongly recommended to backup your tree first."
-msgstr "Dôrazne odporúčame, aby najprv spravili zálohu vášho rodokmeňa."
+msgstr "Dôrazne odporúčame, aby ste najprv spravili zálohu vášho rodokmeňa."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:71
