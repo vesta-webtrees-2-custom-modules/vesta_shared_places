@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:44+0200\n"
-"PO-Revision-Date: 2020-10-05 15:26+0000\n"
+"PO-Revision-Date: 2020-10-06 15:26+0000\n"
 "Last-Translator: ro-la <lacoros@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
@@ -126,7 +126,9 @@ msgstr ""
 
 #: SharedPlacesModule.php:201
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
-msgstr "Povoľte modul Vesta Places and Pedigree map, aby ste mohli prezerať hierarchiu zdieľaných miest."
+msgstr ""
+"Povoľte modul „Vesta Mapa miest a predkov“, aby ste mohli prezerať "
+"hierarchiu zdieľaných miest."
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
