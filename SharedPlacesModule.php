@@ -32,7 +32,6 @@ use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlacePreferences;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
@@ -54,6 +53,7 @@ use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\PlaceLocation;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\DataFixService;
 use Fisharebest\Webtrees\Services\GedcomEditService;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -214,7 +214,7 @@ class SharedPlacesModule extends AbstractModule implements
       //webtrees isn't interested in solving this properly, see
       //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
       
-      $cache = app('cache.array');
+      $cache = Registry::cache()->array();
       $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
       $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
       
@@ -239,7 +239,7 @@ class SharedPlacesModule extends AbstractModule implements
               $quickfacts);
       
       $sharedPlaceFactory = new SharedPlaceFactory($cache, $preferences);
-      Factory::location($sharedPlaceFactory);
+      Registry::locationFactory($sharedPlaceFactory);
 
       $router_container = app(RouterContainer::class);
       assert($router_container instanceof RouterContainer);
@@ -592,7 +592,7 @@ class SharedPlacesModule extends AbstractModule implements
   protected function plac2sharedPlace(PlaceStructure $ps): ?SharedPlace {
     $loc = $ps->getLoc();
     if ($loc !== null) {
-      return Factory::gedcomRecord()->make($loc, $ps->getTree());
+      return Registry::gedcomRecordFactory()->make($loc, $ps->getTree());
     }
     
     $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
@@ -623,7 +623,7 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   public function loc2gov(LocReference $loc): ?GovReference {
-    $sharedPlace = Factory::gedcomRecord()->make($loc->getXref(), $loc->getTree());
+    $sharedPlace = Registry::gedcomRecordFactory()->make($loc->getXref(), $loc->getTree());
     
     if (($sharedPlace !== null) && ($sharedPlace instanceof SharedPlace)) {
       $gov = $sharedPlace->getGov();
@@ -651,7 +651,7 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   public function loc2map(LocReference $loc): ?MapCoordinates {
-    $sharedPlace = Factory::gedcomRecord()->make($loc->getXref(), $loc->getTree());
+    $sharedPlace = Registry::gedcomRecordFactory()->make($loc->getXref(), $loc->getTree());
     
     if ($sharedPlace !== null) {
       $lati = $sharedPlace->getLati();
@@ -668,7 +668,7 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   public function loc2plac(LocReference $loc): ?PlaceStructure {
-    $sharedPlace = Factory::gedcomRecord()->make($loc->getXref(), $loc->getTree());
+    $sharedPlace = Registry::gedcomRecordFactory()->make($loc->getXref(), $loc->getTree());
     
     if ($sharedPlace !== null) {
       if (!empty($sharedPlace->namesNN())) {
@@ -683,7 +683,7 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   public function loc2linkIcon(LocReference $loc): ?string {
-    $sharedPlace = Factory::gedcomRecord()->make($loc->getXref(), $loc->getTree());
+    $sharedPlace = Registry::gedcomRecordFactory()->make($loc->getXref(), $loc->getTree());
     
     if ($sharedPlace !== null) {
       return $this->getLinkForSharedPlace($sharedPlace);
@@ -693,7 +693,7 @@ class SharedPlacesModule extends AbstractModule implements
   }
   
   public function locPloc(LocReference $locReference, GedcomDateInterval $dateInterval, Collection $typesOfLocation, int $maxLevels = PHP_INT_MAX): Collection {
-    $sharedPlace = Factory::gedcomRecord()->make($locReference->getXref(), $locReference->getTree());
+    $sharedPlace = Registry::gedcomRecordFactory()->make($locReference->getXref(), $locReference->getTree());
     
     $currentLevel = 0;
     $trace = $locReference->getTrace();
@@ -796,7 +796,7 @@ class SharedPlacesModule extends AbstractModule implements
 
         $xref = $request->getQueryParams()['xref'];
 
-        $sharedPlace = Factory::location()->make($xref, $tree);
+        $sharedPlace = Registry::locationFactory()->make($xref, $tree);
 
         if ($sharedPlace === null) {
             throw new SharedPlaceNotFoundException();
@@ -835,7 +835,7 @@ class SharedPlacesModule extends AbstractModule implements
         $xref   = $params['xref'];
         $option = $params['option'];
  
-        $sharedPlace = Factory::location()->make($xref, $tree);
+        $sharedPlace = Registry::locationFactory()->make($xref, $tree);
 
         if ($sharedPlace === null) {
             throw new SharedPlaceNotFoundException();
@@ -1428,10 +1428,10 @@ class SharedPlacesModule extends AbstractModule implements
     //switch to hierarchy
     //and run the data fix:
     //B is created twice (if unmake isn't called)
-    Factory::location()->unmake($record->xref(), $record->tree());
+    Registry::locationFactory()->unmake($record->xref(), $record->tree());
     
     //we must check() in order to update place links
-    Factory::location()->make($record->xref(), $record->tree()); 
+    Registry::locationFactory()->make($record->xref(), $record->tree()); 
   }
    
   protected function updateRecordWrtEnhance(GedcomRecord $record): void {
@@ -1584,7 +1584,7 @@ class SharedPlacesModule extends AbstractModule implements
   
   public function getPlac2GovSupporters(Tree $tree): array {
     $self = $this;
-    return app('cache.array')->remember('Plac2GovSupporters_'.$tree->id(), function () use ($self, $tree) {
+    return Registry::cache()->array()->remember('Plac2GovSupporters_'.$tree->id(), function () use ($self, $tree) {
         $functionsPlaceProviders = FunctionsPlaceUtils::accessibleModules($self, $tree, Auth::user())
             ->toArray();
         

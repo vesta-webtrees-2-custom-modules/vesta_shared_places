@@ -2,11 +2,11 @@
 
 namespace Cissee\WebtreesExt;
 
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
-use function app;
 
 class LocGraph {
 
@@ -89,7 +89,7 @@ class LocGraph {
   }
   
   public static function get(Tree $tree): LocGraph {
-    return app('cache.array')->remember('locGraph', function () use ($tree) {
+    return Registry::cache()->array()->remember('locGraph', function () use ($tree) {
       return LocGraph::create($tree);
     });
   }

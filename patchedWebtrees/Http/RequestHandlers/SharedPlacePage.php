@@ -10,9 +10,9 @@ use Cissee\WebtreesExt\SharedPlace;
 use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\ClipboardService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Tree;
@@ -80,7 +80,7 @@ class SharedPlacePage implements RequestHandlerInterface {
         assert($tree instanceof Tree);
 
         $xref = $request->getAttribute('xref');
-        $sharedPlace = Factory::location()->make($xref, $tree);
+        $sharedPlace = Registry::locationFactory()->make($xref, $tree);
 
         //we don't need a specific method here, 
         //if we ever refactor this:

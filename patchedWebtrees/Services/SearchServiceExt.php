@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Cissee\WebtreesExt\Services;
 
 use Closure;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -111,7 +111,7 @@ class SearchServiceExt {
     */
     
     //a top-level location is a location linked to at least one top-level (i.e. parentless) place
-    /* @var $query \Illuminate\Database\Query\Builder */
+    /* @var $query Builder */
     $query = DB::table('other')
             ->join('placelinks', static function (JoinClause $join): void {
                 $join
@@ -136,7 +136,7 @@ class SearchServiceExt {
     {
         return function (stdClass $row): Location {
             $tree = $this->tree_service->find((int) $row->o_file);
-            return Factory::location()->mapper($tree)($row);
+            return Registry::locationFactory()->mapper($tree)($row);
         };
     }
 

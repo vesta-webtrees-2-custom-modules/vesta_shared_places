@@ -4,11 +4,11 @@ namespace Cissee\WebtreesExt;
 
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Exception;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
@@ -234,7 +234,7 @@ class SharedPlace extends Location {
     }
     $anySharedPlace = $sharedPlaces->first();
     return SharedPlace::linkedIndividualsRaw($sharedPlaces)
-            ->map(Factory::individual()->mapper($anySharedPlace->tree()))
+            ->map(Registry::individualFactory()->mapper($anySharedPlace->tree()))
             ->unique()
             ->filter(self::accessFilter());
   }
@@ -322,7 +322,7 @@ class SharedPlace extends Location {
     }
     $anySharedPlace = $sharedPlaces->first();
     return SharedPlace::linkedFamiliesRaw($sharedPlaces)
-            ->map(Factory::family()->mapper($anySharedPlace->tree()))
+            ->map(Registry::familyFactory()->mapper($anySharedPlace->tree()))
             ->unique()
             ->filter(self::accessFilter());
   }

@@ -6,11 +6,11 @@ use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
 use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\GedcomService;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -23,7 +23,6 @@ use Vesta\Model\LocReference;
 use Vesta\Model\MapCoordinates;
 use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
-use function app;
 
 class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   
@@ -104,9 +103,9 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
         ->map(function (stdClass $row) use ($parent_text, $tree): array {
             $place = new Place($row->p_place . $parent_text, $tree);
             $id = $row->p_id;
-            app('cache.array')->remember('place-' . $place->gedcomName(), function () use ($id): int {return $id;});
+            Registry::cache()->array()->remember('place-' . $place->gedcomName(), function () use ($id): int {return $id;});
             
-            $sharedPlace = Factory::location()->mapper($tree)($row);
+            $sharedPlace = Registry::locationFactory()->mapper($tree)($row);
             return ["actual" => $place, "record" => $sharedPlace];
         })
         ->mapToGroups(static function ($item): array {

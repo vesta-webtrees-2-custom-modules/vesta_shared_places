@@ -8,10 +8,10 @@ use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
 use Cissee\WebtreesExt\Requests;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Place;
+use Fisharebest\Webtrees\Registry;
+use Fisharebest\Webtrees\Tree;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -141,7 +141,7 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
         }
 
         $record = $tree->createRecord($gedcom); //returns GedcomRecord
-        $record = Factory::location()->make($record->xref(), $tree); //we need Location for proper names!
+        $record = Registry::locationFactory()->make($record->xref(), $tree); //we need Location for proper names!
         
         //FlashMessages::addMessage(I18N::translate('The shared place %s has been created.', $name), 'info');
 
@@ -249,7 +249,7 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
       
       //we need Location for proper names!
       //and we must check() in order to update place links
-      $record = Factory::location()->make($newXref, $tree, $gedcom); 
+      $record = Registry::locationFactory()->make($newXref, $tree, $gedcom); 
       
       $count = 1;
       if ($ref !== null) {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
 use Cissee\WebtreesExt\Services\SearchServiceExt;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Location;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
 use Vesta\Model\GedcomDateInterval;
@@ -45,7 +45,7 @@ class Select2Location extends AbstractSelect2WithDateHandler
     protected function search(Tree $tree, GedcomDateInterval $date, string $query, int $offset, int $limit, string $at): Collection
     {
         // Search by XREF
-        $location = Factory::location()->make($query, $tree);
+        $location = Registry::locationFactory()->make($query, $tree);
 
         if ($location instanceof Location) {
             $results = new Collection([$location]);

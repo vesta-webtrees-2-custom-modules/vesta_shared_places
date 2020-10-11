@@ -2,16 +2,16 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
+use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyLink;
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Controllers\AbstractBaseController;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
-use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyLink;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 
@@ -76,7 +76,7 @@ class SharedPlacesListController extends AbstractBaseController {
                     ->where('o_file', '=', $tree->id())
                     ->where('o_type', '=', '_LOC')
                     ->get()
-                    ->map(Factory::location()->mapper($tree))
+                    ->map(Registry::locationFactory()->mapper($tree))
                     ->filter(GedcomRecord::accessFilter());
   }
 

@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Functions;
 
+use Cissee\WebtreesExt\Functions\FunctionsEditPlacHandler;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Census\Census;
 use Fisharebest\Webtrees\Config;
 use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Gedcom;
-use Cissee\WebtreesExt\Functions\FunctionsEditPlacHandler;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeAdop;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeLang;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeName;
@@ -23,6 +22,8 @@ use Fisharebest\Webtrees\GedcomCode\GedcomCodeStat;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeTemp;
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\Html;
+use Fisharebest\Webtrees\Http\RequestHandlers\AutoCompleteCitation;
+use Fisharebest\Webtrees\Http\RequestHandlers\AutoCompletePlace;
 use Fisharebest\Webtrees\Http\RequestHandlers\CreateMediaObjectModal;
 use Fisharebest\Webtrees\Http\RequestHandlers\CreateNoteModal;
 use Fisharebest\Webtrees\Http\RequestHandlers\CreateRepositoryModal;
@@ -31,6 +32,7 @@ use Fisharebest\Webtrees\Http\RequestHandlers\CreateSubmitterModal;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\CensusAssistantModule;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\LocalizationService;
 use Fisharebest\Webtrees\Services\MessageService;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -38,7 +40,6 @@ use Fisharebest\Webtrees\Services\UserService;
 use Fisharebest\Webtrees\Tree;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
-
 use function app;
 use function array_key_exists;
 use function array_merge;
@@ -377,7 +378,7 @@ class FunctionsEdit
 
         // Show names for spouses in MARR/HUSB/AGE and MARR/WIFE/AGE
         if ($fact === 'HUSB' || $fact === 'WIFE') {
-            $family = Factory::family()->make($xref, $tree);
+            $family = Registry::familyFactory()->make($xref, $tree);
             if ($family instanceof Family) {
                 $spouse_link = $family->facts([$fact])->first();
                 if ($spouse_link instanceof Fact) {
@@ -402,7 +403,7 @@ class FunctionsEdit
                 ]);
 
                 $census_assistant = app(ModuleService::class)->findByInterface(CensusAssistantModule::class)->first();
-                $record           = Factory::individual()->make($xref, $tree);
+                $record           = Registry::individualFactory()->make($xref, $tree);
 
                 if ($census_assistant instanceof CensusAssistantModule && $record instanceof Individual) {
                     $html .= $census_assistant->createCensusAssistant($record);
@@ -429,11 +430,11 @@ class FunctionsEdit
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => GedcomCodeLang::getValues()]);
         } elseif ($fact === 'ALIA') {
             $html .= '<div class="input-group">';
-            $html .= view('components/select-individual', ['id' => $id, 'name' => $name, 'individual' => Factory::individual()->make($value, $tree), 'tree' => $tree]);
+            $html .= view('components/select-individual', ['id' => $id, 'name' => $name, 'individual' => Registry::individualFactory()->make($value, $tree), 'tree' => $tree]);
             $html .= '</div>';
         } elseif ($fact === 'ASSO' || $fact === '_ASSO') {
             $html .= '<div class="input-group">';
-            $html .= view('components/select-individual', ['id' => $id, 'name' => $name, 'individual' => Factory::individual()->make($value, $tree), 'tree' => $tree]);
+            $html .= view('components/select-individual', ['id' => $id, 'name' => $name, 'individual' => Registry::individualFactory()->make($value, $tree), 'tree' => $tree]);
             $html .= '</div>';
             if ($level === '1') {
                 $html .= '<p class="small text-muted">' . I18N::translate('An associate is another individual who was involved with this individual, such as a friend or an employer.') . '</p>';
@@ -455,7 +456,7 @@ class FunctionsEdit
             $html .=
                 '<div class="input-group">' .
                 '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-backdrop="static" data-target="#modal-create-family" data-element-id="' . $id . '" title="' . I18N::translate('Create a family') . '">' . view('icons/add') . '</button></div>' .
-                view('components/select-family', ['id' => $id, 'name' => $name, 'family' => Factory::family()->make($value, $tree), 'tree' => $tree]) .
+                view('components/select-family', ['id' => $id, 'name' => $name, 'family' => Registry::familyFactory()->make($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'LATI') {
             $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" oninput="webtrees.reformatLatitude(this)">';
@@ -469,13 +470,13 @@ class FunctionsEdit
                 '' . view('icons/add') . '<' .
                 '/button>' .
                 '</div>' .
-                view('components/select-note', ['id' => $id, 'name' => $name, 'note' => Factory::note()->make($value, $tree), 'tree' => $tree]) .
+                view('components/select-note', ['id' => $id, 'name' => $name, 'note' => Registry::noteFactory()->make($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'OBJE') {
             $html .=
                 '<div class="input-group">' .
                 '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-backdrop="static" data-href="' . e(route(CreateMediaObjectModal::class, ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a media object') . '">' . view('icons/add') . '</button></div>' .
-                view('components/select-media', ['id' => $id, 'name' => $name, 'media' => Factory::media()->make($value, $tree), 'tree' => $tree]) .
+                view('components/select-media', ['id' => $id, 'name' => $name, 'media' => Registry::mediaFactory()->make($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'PAGE') {
             $html .= '<input ' . Html::attributes([
@@ -485,8 +486,8 @@ class FunctionsEdit
                     'name'                    => $name,
                     'value'                   => $value,
                     'type'                    => 'text',
-                    'data-autocomplete-url'   => route('autocomplete-page', ['tree'  => $tree->name(), 'query' => 'QUERY']),
-                    'data-autocomplete-extra' => '#' . $previous_ids['SOUR'],
+                    'data-autocomplete-url'   => route(AutoCompleteCitation::class, ['tree'  => $tree->name()]),
+                    'data-autocomplete-extra' => 'SOUR',
                 ]) . '>';
         } elseif ($fact === 'PEDI') {
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => GedcomCodePedi::getValues()]);
@@ -499,7 +500,7 @@ class FunctionsEdit
                     'name'                  => $name,
                     'value'                 => $value,
                     'type'                  => 'text',
-                    'data-autocomplete-url' => route('autocomplete-place', ['tree'  => $tree->name(), 'query' => 'QUERY']),
+                    'data-autocomplete-url' => route(AutoCompletePlace::class, ['tree'  => $tree->name()]),
                 ]) . '>';
 
             $html .= view('edit/input-addon-coordinates', ['id' => $id]);
@@ -513,7 +514,7 @@ class FunctionsEdit
             $html .=
                 '<div class="input-group">' .
                 '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-backdrop="static" data-href="' . e(route(CreateRepositoryModal::class, ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a repository') . '">' . view('icons/add') . '</button></div>' .
-                view('components/select-repository', ['id' => $id, 'name' => $name, 'repository' => Factory::repository()->make($value, $tree), 'tree' => $tree]) .
+                view('components/select-repository', ['id' => $id, 'name' => $name, 'repository' => Registry::repositoryFactory()->make($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'RESN') {
             $html .= '<div class="input-group">';
@@ -527,7 +528,7 @@ class FunctionsEdit
             $html .=
                 '<div class="input-group">' .
                 '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-backdrop="static" data-href="' . e(route(CreateSourceModal::class, ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a source') . '">' . view('icons/add') . '</button></div>' .
-                view('components/select-source', ['id' => $id, 'name' => $name, 'source' => Factory::source()->make($value, $tree), 'tree' => $tree]) .
+                view('components/select-source', ['id' => $id, 'name' => $name, 'source' => Registry::sourceFactory()->make($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'STAT') {
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => GedcomCodeStat::statusNames($upperlevel)]);
@@ -535,7 +536,7 @@ class FunctionsEdit
             $html .=
                 '<div class="input-group">' .
                 '<div class="input-group-prepend"><button class="btn btn-secondary" type="button" data-toggle="modal" data-backdrop="static" data-href="' . e(route(CreateSubmitterModal::class, ['tree' => $tree->name()])) . '" data-target="#wt-ajax-modal" data-select-id="' . $id . '" title="' . I18N::translate('Create a submitter') . '">' . view('icons/add') . '</button></div>' .
-                view('components/select-submitter', ['id' => $id, 'name' => $name, 'submitter' => Factory::submitter()->make($value, $tree), 'tree' => $tree]) .
+                view('components/select-submitter', ['id' => $id, 'name' => $name, 'submitter' => Registry::submitterFactory()->make($value, $tree), 'tree' => $tree]) .
                 '</div>';
         } elseif ($fact === 'TEMP') {
             $html .= view('components/select', ['id' => $id, 'name' => $name, 'selected' => $value, 'options' => self::optionsTemples()]);

@@ -8,12 +8,13 @@ use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Functions\FunctionsEdit;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\Html;
+use Fisharebest\Webtrees\Http\RequestHandlers\AutoCompletePlace;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\LocalizationService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
@@ -252,7 +253,7 @@ class FunctionsEditLoc {
                 'name'                  => $name,
                 'value'                 => $value,
                 'type'                  => 'text',
-                'data-autocomplete-url' => route('autocomplete-place', ['tree'  => $tree->name(), 'query' => 'QUERY']),
+                'data-autocomplete-url' => route(AutoCompletePlace::class, ['tree'  => $tree->name()]),
             ]) . '>';
 
         //except without coordinates
@@ -280,7 +281,7 @@ class FunctionsEditLoc {
       case '_LOC':
         //cf SHARED_NOTE, but use special vesta modal!
         
-        $location = Factory::location()->make($value, $tree);
+        $location = Registry::locationFactory()->make($value, $tree);
         $locationName = '';
         if ($location !== null) {
           $locationName = $location->primaryPlace()->gedcomName();
@@ -410,7 +411,7 @@ class FunctionsEditLoc {
                 'data-vesta-name'       => $name2, //for identication (update via _LOC, $name is unhelpful in case of existing fact)
                 'value'                 => $value,
                 //'type'                  => 'text',
-                'data-autocomplete-url' => route('autocomplete-place', ['tree'  => $tree->name(), 'query' => 'QUERY']),
+                'data-autocomplete-url' => route(AutoCompletePlace::class, ['tree'  => $tree->name()]),
 
                 'data-vesta-unchanged'  => 'true',
             
