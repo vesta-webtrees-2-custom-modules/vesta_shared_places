@@ -8,9 +8,10 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:44+0200\n"
-"PO-Revision-Date: 2020-09-12 19:00+0000\n"
+"PO-Revision-Date: 2020-10-15 13:18+0000\n"
 "Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,6 +27,8 @@ msgstr " %s Test2"
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:98
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr ""
+" (Hinweis: Es wurde auch ein Gemeinsamer Ort auf einer höheren Ebene "
+"angelegt)"
 
 #: SharedPlacesModule.php:887
 #, php-format
