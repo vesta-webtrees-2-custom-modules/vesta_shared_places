@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:44+0200\n"
-"PO-Revision-Date: 2020-10-05 12:12+0000\n"
+"PO-Revision-Date: 2020-10-24 11:22+0000\n"
 "Last-Translator: Christophe Nemo <spam@teknow.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/fr/>\n"
@@ -17,21 +17,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.3.2-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:100
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
-msgstr ""
+msgstr " (Note : %s lieux partagés de niveau supérieur ont aussi été créés)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:98
 msgid " (Note: A higher-level shared place has also been created)"
-msgstr ""
+msgstr " (Note : un lieu partagé de niveau supérieur a aussi été créé)"
 
 #: SharedPlacesModule.php:887
 #, php-format
 msgid "%s and the individuals that reference it."
-msgstr ""
+msgstr "%s et les personnes qui le référencent."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:87
