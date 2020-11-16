@@ -89,7 +89,7 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.10.0.0
+* Current version: 2.0.10.1.0
 * Based on and tested with webtrees 2.0.10. Requires webtrees 2.0.9 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
@@ -101,9 +101,9 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Installation<a name="installation"/>
 
-* Unzip the files and copy them to the modules_v4 folder of your webtrees installation. All related modules are included in the zip file. It's safe to overwrite the respective directories if they already exist (they are bundled with other custom modules as well), as long as other custom models using these dependencies are also upgraded to their respective latest versions.
-* Enable the extended 'Facts and Events' module via Control Panel -> Modules -> Module Administration -> ⚶ Facts and Events.
-* Enable the main module via Control Panel -> Modules -> Module Administration -> ⚶ Shared Places. After that, you may configure some options.
+* Unzip the files and copy the contents of the modules_v4 folder to the respective folder of your webtrees installation. All related modules are included in the zip file. It's safe to overwrite the respective directories if they already exist (they are bundled with other custom modules as well), as long as other custom models using these dependencies are also upgraded to their respective latest versions.
+* Enable the extended 'Facts and Events' module via Control Panel -> Modules -> All modules -> ⚶ Facts and Events.
+* Enable the main module via Control Panel -> Modules -> All modules -> ⚶ Shared Places. After that, you may configure some options.
 * Configure the visibility of the old and the extended 'Facts and Events' tab via Control Panel -> Modules -> Tabs (usually, you'll want to use only one of them. You may just disable the oringinal 'Facts and Events' module altogether).
 
 ### License<a name="license"/>
