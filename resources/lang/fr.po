@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:44+0200\n"
-"PO-Revision-Date: 2020-10-25 18:26+0000\n"
+"PO-Revision-Date: 2020-11-16 21:28+0000\n"
 "Last-Translator: Vincent DENIS <vincent.denis06@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3.2-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:100
 #, php-format
@@ -71,7 +71,7 @@ msgstr ""
 #: SharedPlacesModule.php:870
 #, php-format
 msgid "Add %s to the clippings cart"
-msgstr ""
+msgstr "Ajouter %s au panier"
 
 #: resources/views/data-fix-options.phtml:79
 msgid "Add missing XREFs"
@@ -141,12 +141,10 @@ msgstr ""
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:188
-#, fuzzy
 msgid "Facts for shared place records"
-msgstr "Informations sur les enregistrements de lieux partagés"
+msgstr "Actes pour les enregistrements de lieux partagés"
 
 #: SharedPlacesModule.php:330
-#, fuzzy
 msgid "GOV-Id for type of location"
 msgstr "GOV-Id pour le type de lieu"
 
@@ -186,6 +184,9 @@ msgstr ""
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"Si des données indépendantes de l'arbre sont disponibles, les coordonnées "
+"cartographiques des «Données géographiques» de webtrees et des identifiants "
+"GOV du module Gov4Webtrees sont ajoutées."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:83
@@ -211,6 +212,8 @@ msgstr ""
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"En particulier, les coordonnées cartographiques des «Données géographiques» "
+"de webtrees et les identifiants GOV du module Gov4Webtrees sont ajoutés."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:81
@@ -333,18 +336,18 @@ msgstr "Privé"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:125
 msgid "Quick shared place facts"
-msgstr ""
+msgstr "Faits rapides sur les lieux partagés"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:138
 msgid "Restrict to specific facts and events"
-msgstr ""
+msgstr "Restreindre à des faits et événements spécifiques"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:68
 #, php-format
 msgid "See %1$s for details."
-msgstr ""
+msgstr "Voir %1$s pour les détails."
 
 #: SharedPlacesModule.php:434 SharedPlacesModule.php:465
 #: resources/views/lists/shared-places-table.phtml:43
@@ -369,16 +372,16 @@ msgstr "Nom du Lieu partagé"
 
 #: resources/views/modals/shared-place-fields.phtml:12
 msgid "Shared place name (complete hierarchy)"
-msgstr ""
+msgstr "Nom du lieu partagé (hiérarchie complète)"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:62
 msgid "Shared place structure"
-msgstr ""
+msgstr "Structure du lieu partagé"
 
 #: HelpTexts.php:15
 msgid "Shared place summary"
-msgstr ""
+msgstr "Résumé du lieu partagé"
 
 #: SharedPlaceHierarchyUtils.php:55 SharedPlacesListController.php:50
 #: SharedPlacesModule.php:152
@@ -389,37 +392,42 @@ msgstr "Lieux partagés"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:196
 msgid "Shared places list"
-msgstr ""
+msgstr "Liste des lieux partagés"
 
 #: SharedPlaceHierarchyUtils.php:51
 msgid "Show all shared places in a list"
-msgstr ""
+msgstr "Afficher tous les lieux partagés dans une liste"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:177
 msgid "Show link counts for shared places list"
-msgstr ""
+msgstr "Afficher le nombre de liens pour la liste des lieux partagés"
 
 #: SharedPlaceHierarchyUtils.php:47
 msgid "Show shared place hierarchy"
-msgstr ""
+msgstr "Afficher la hiérarchie des espaces partagés"
 
 #: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:118
 msgid "Summary"
-msgstr ""
+msgstr "Sommaire"
 
 #: resources/views/data-fix-options.phtml:101
 #: resources/views/data-fix-options.phtml:128
 msgid "The created shared places, as well as existing shared places, are linked via XREFs to event places."
 msgstr ""
+"Les lieux partagés créés, ainsi que les lieux partagés existants, sont liés "
+"via des XREF aux lieux d'événements."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:42
 msgid "The location of this shared place is not known."
-msgstr ""
+msgstr "L'emplacement de ce lieu partagé n'est pas connu."
 
 #: resources/views/data-fix-options.phtml:85
 msgid "The search cannot be implemented efficiently and may take some time in particular when displaying and updating a large number of records."
 msgstr ""
+"La recherche ne peut pas être mise en œuvre efficacement et peut prendre un "
+"certain temps en particulier lors de l'affichage et de la mise à jour d'un "
+"grand nombre d'enregistrements."
 
 #: resources/views/data-fix-options.phtml:41
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
