@@ -8,17 +8,20 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:44+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-11-22 13:28+0000\n"
+"Last-Translator: Luca Bighi <luca74@email.it>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: HelpTexts.php:15
 msgid "Shared place summary"
-msgstr ""
+msgstr "Riepilogo dei Luoghi Condivisi"
 
 #: HelpTexts.php:17
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
@@ -26,46 +29,55 @@ msgstr ""
 
 #: HelpTexts.php:18
 msgid "Therefore, the place name is displayed here including the full hierarchy."
-msgstr ""
+msgstr "Perciò, il nome del luogo è mostrato con la gerarchia completa."
 
 #: HelpTexts.php:24
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
+"I nomi dei luoghi devono essere inseriti singoli (non usare la lista "
+"separata da virgole)."
 
 #: HelpTexts.php:25
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
-msgstr ""
+msgstr "Usa il tag '%1$s' per modellare la gerarchia dei luoghi."
 
 #: HelpTexts.php:29 HelpTexts.php:39
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
+"I nomi dei luoghi possono cambiare nel tempo. Puoi aggiungere più nomi ad un "
+"luogo condiviso, e indicare un nome storico usando un intervallo di date."
 
 #: HelpTexts.php:35
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
+"I nomi dei luoghi possono essere inseriti con una lista separate da virgole, "
+"iniziando dal luogo più piccolo fino alla nazione. Per esempio, “"
+"Westminster, Londra, Inghilterra”."
 
 #: SharedPlaceHierarchyUtils.php:47
 msgid "Show shared place hierarchy"
-msgstr ""
+msgstr "Mostra la gerarchia dei luoghi condivisi"
 
 #: SharedPlaceHierarchyUtils.php:51
 msgid "Show all shared places in a list"
-msgstr ""
+msgstr "Mostra tutti i luoghi condivisi in una lista"
 
 #: SharedPlaceHierarchyUtils.php:55 SharedPlacesListController.php:50
 #: SharedPlacesModule.php:152
 #: resources/views/lists/shared-places-table.phtml:38
 msgid "Shared places"
-msgstr ""
+msgstr "Luoghi condivisi"
 
 #: SharedPlacesModule.php:199
 msgid "View Shared places hierarchy"
-msgstr ""
+msgstr "Mostra la gerarchia dei Luoghi condivisi"
 
 #: SharedPlacesModule.php:201
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
+"Abilita la visualizzazione della gerarchia dei luoghi condivisi nel modulo "
+"\"Vesta Places and Pedigree map\"."
 
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:324
