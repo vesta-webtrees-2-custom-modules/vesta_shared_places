@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:44+0200\n"
-"PO-Revision-Date: 2020-12-08 21:29+0000\n"
+"PO-Revision-Date: 2020-12-09 11:29+0000\n"
 "Last-Translator: Thomas Rindal <thomas@rindal.net>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/nb_NO/>\n"
@@ -26,6 +26,8 @@ msgstr "Oppsummering delte steder"
 #: HelpTexts.php:17
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
+"Sammendraget viser de delte stedsdataene, formatert på samme måte som for "
+"hendelser med et sted som er tilordnet til det respektive delte stedet."
 
 #: HelpTexts.php:18
 msgid "Therefore, the place name is displayed here including the full hierarchy."
@@ -82,7 +84,7 @@ msgstr ""
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:324
 msgid "Location"
-msgstr ""
+msgstr "Plassering"
 
 #: SharedPlacesModule.php:327
 msgid "Higher-level shared place"
@@ -600,24 +602,20 @@ msgstr ""
 "steder. Manglende delte steder på høyere nivå vil også bli opprettet."
 
 #: resources/views/modals/shared-place-fields.phtml:17
-#, fuzzy
 msgid "Shared place name"
 msgstr "Navn på delt sted"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/list.phtml:12
-#, fuzzy
 msgid "Shared place list"
 msgstr "Liste over delte steder"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:33
 #: resources/views/shared-places-list-page.phtml:16
-#, fuzzy
 msgid "Important note:"
 msgstr "Viktig merknad:"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:36
 #: resources/views/shared-places-list-page.phtml:19
-#, fuzzy
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr ""
 "Dette treet har delte steder med kommadelte navnedeler, samtidig som "
@@ -625,7 +623,6 @@ msgstr ""
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:37
 #: resources/views/shared-places-list-page.phtml:20
-#, fuzzy
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr ""
 "Dette fører til uoverensstemmelser ved tilordning av steder til delte "
@@ -640,44 +637,39 @@ msgstr ""
 "løse dette problemet."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/place-hierarchy.phtml:13
-#, fuzzy
 msgid "Shared place hierarchy"
-msgstr "Hierarki for delt sted"
+msgstr "Hierarki for delte steder"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:42
-#, fuzzy
 msgid "The location of this shared place is not known."
 msgstr "Plasseringen av dette delte stedet er ikke kjent."
 
 #. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
 #: resources/views/shared-place-page.phtml:31
-#, fuzzy, php-format
+#, php-format
 msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
 msgstr ""
 "Dette delte stedet er slettet. Du bør se gjennom slettingen og deretter %1$s "
 "eller %2$s den."
 
 #: resources/views/shared-place-page.phtml:34
-#, fuzzy
 msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
 msgstr ""
 "Dette delte stedet er slettet. Slettingen må gjennomgås av en moderator."
 
 #. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
 #: resources/views/shared-place-page.phtml:40
-#, fuzzy, php-format
+#, php-format
 msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
 msgstr ""
 "Dette delte stedet er redigert. Du bør gjennomgå endringene og deretter %1$s "
 "eller %2$s dem."
 
 #: resources/views/shared-place-page.phtml:43
-#, fuzzy
 msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
 msgstr ""
 "Dette delte stedet er redigert. Endringene må gjennomgås av en moderator."
 
 #: resources/views/shared-place-page.phtml:77
-#, fuzzy
 msgid "Next lower-level shared places"
 msgstr "Neste delte steder på lavere nivå"
