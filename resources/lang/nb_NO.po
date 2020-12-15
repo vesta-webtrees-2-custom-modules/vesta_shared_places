@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:44+0200\n"
-"PO-Revision-Date: 2020-12-09 11:29+0000\n"
+"PO-Revision-Date: 2020-12-15 22:10+0000\n"
 "Last-Translator: Thomas Rindal <thomas@rindal.net>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/nb_NO/>\n"
@@ -26,8 +26,8 @@ msgstr "Oppsummering delte steder"
 #: HelpTexts.php:17
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
-"Sammendraget viser de delte stedsdataene, formatert på samme måte som for "
-"hendelser med et sted som er tilordnet til det respektive delte stedet."
+"Oppsummeringen viser data om delte steder, formattert på samme måte som for "
+"hendelser med et sted mappet til det respektive delte stedet."
 
 #: HelpTexts.php:18
 msgid "Therefore, the place name is displayed here including the full hierarchy."
@@ -84,7 +84,7 @@ msgstr ""
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:324
 msgid "Location"
-msgstr "Plassering"
+msgstr "Sted"
 
 #: SharedPlacesModule.php:327
 msgid "Higher-level shared place"
