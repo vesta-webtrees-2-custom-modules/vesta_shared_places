@@ -89,7 +89,7 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.10.3.0
+* Current version: 2.0.10.4.0
 * Based on and tested with webtrees 2.0.10. Requires webtrees 2.0.9 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
