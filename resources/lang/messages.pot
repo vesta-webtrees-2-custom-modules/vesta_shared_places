@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-09-19 15:44+0200\n"
+"POT-Creation-Date: 2020-12-27 11:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,69 +46,60 @@ msgstr ""
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
 
-#: SharedPlaceHierarchyUtils.php:47
-msgid "Show shared place hierarchy"
-msgstr ""
-
-#: SharedPlaceHierarchyUtils.php:51
-msgid "Show all shared places in a list"
-msgstr ""
-
-#: SharedPlaceHierarchyUtils.php:55 SharedPlacesListController.php:50
-#: SharedPlacesModule.php:152
+#: SharedPlacesListController.php:50 SharedPlacesModule.php:152
 #: resources/views/lists/shared-places-table.phtml:38
 msgid "Shared places"
 msgstr ""
 
-#: SharedPlacesModule.php:199
+#: SharedPlacesModule.php:186
 msgid "View Shared places hierarchy"
 msgstr ""
 
-#: SharedPlacesModule.php:201
+#: SharedPlacesModule.php:188
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:324
+#: SharedPlacesModule.php:311
 msgid "Location"
 msgstr ""
 
-#: SharedPlacesModule.php:327
+#: SharedPlacesModule.php:314
 msgid "Higher-level shared place"
 msgstr ""
 
-#: SharedPlacesModule.php:328
+#: SharedPlacesModule.php:315
 msgid "Type of hierarchical relationship"
 msgstr ""
 
-#: SharedPlacesModule.php:329
+#: SharedPlacesModule.php:316
 msgid "Type of location"
 msgstr ""
 
-#: SharedPlacesModule.php:330
+#: SharedPlacesModule.php:317
 msgid "GOV-Id for type of location"
 msgstr ""
 
-#: SharedPlacesModule.php:434 SharedPlacesModule.php:465
+#: SharedPlacesModule.php:421 SharedPlacesModule.php:452
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
 msgstr ""
 
-#: SharedPlacesModule.php:537
+#: SharedPlacesModule.php:524
 msgid "Shared place data"
 msgstr ""
 
-#: SharedPlacesModule.php:870
+#: SharedPlacesModule.php:807
 #, php-format
 msgid "Add %s to the clippings cart"
 msgstr ""
 
-#: SharedPlacesModule.php:887
+#: SharedPlacesModule.php:824
 #, php-format
 msgid "%s and the individuals that reference it."
 msgstr ""
 
-#: SharedPlacesModule.php:942
+#: SharedPlacesModule.php:879
 msgid "shared places"
 msgstr ""
 
@@ -296,53 +287,53 @@ msgstr ""
 msgid "This shared place does not exist or you do not have permission to view it."
 msgstr ""
 
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:303
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:304
 #: resources/views/modals/create-shared-place.phtml:10
 #: resources/views/shared-places-list-page.phtml:41
 msgid "Create a shared place"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:522
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:523
 msgid "administrative"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:525
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:526
 msgid "religious"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:528
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:529
 msgid "geographical"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:531
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:532
 msgid "cultural"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:534
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:535
 msgid "other"
 msgstr ""
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:90
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:91
 #, php-format
 msgid "The shared place %s already exists."
 msgstr ""
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:98
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:99
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr ""
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:100
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
 msgstr ""
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:111
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:155
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:112
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:156
 #, php-format
 msgid "The shared place %s has been created."
 msgstr ""
@@ -351,11 +342,11 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: patchedWebtrees/SharedPlace.php:529
+#: patchedWebtrees/SharedPlace.php:626
 msgid "Private"
 msgstr ""
 
-#: patchedWebtrees/SharedPlace.php:598
+#: patchedWebtrees/SharedPlace.php:695
 msgid "circular shared place hierarchy"
 msgstr ""
 
@@ -492,22 +483,22 @@ msgstr ""
 msgid "Shared place list"
 msgstr ""
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:33
+#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:32
 #: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
 msgstr ""
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:36
+#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:35
 #: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr ""
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:37
+#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:36
 #: resources/views/shared-places-list-page.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr ""
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:40
+#: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:39
 #: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr ""
