@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-12-27 11:49+0100\n"
-"PO-Revision-Date: 2020-10-06 15:26+0000\n"
+"POT-Creation-Date: 2020-09-19 15:44+0200\n"
+"PO-Revision-Date: 2020-12-28 15:29+0000\n"
 "Last-Translator: ro-la <lacoros@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
 "Language: sk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -35,7 +35,7 @@ msgstr "%s a osoby, ktoré sem odkazujú."
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:87
 msgid "... and fall back to n parent levels"
-msgstr "... \"fal back\" k n vyšším úrovniam"
+msgstr "... „fal back“ k n vyšším úrovniam"
 
 #: SharedPlacesModuleTrait.php:25
 msgid "A module providing support for shared places."
@@ -495,7 +495,7 @@ msgstr "administratívny"
 
 #: patchedWebtrees/SharedPlace.php:695
 msgid "circular shared place hierarchy"
-msgstr ""
+msgstr "zacyklená hierarchia zdieľaných miest"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:532
