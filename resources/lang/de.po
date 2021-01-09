@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-12-27 11:49+0100\n"
-"PO-Revision-Date: 2021-01-06 23:29+0000\n"
-"Last-Translator: Bernd Schwendinger <b0ernie@gmx.net>\n"
+"PO-Revision-Date: 2021-01-09 16:09+0000\n"
+"Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
 "Language: de\n"
@@ -465,8 +465,8 @@ msgstr ""
 #: resources/views/data-fix-options.phtml:84
 msgid "Therefore, this data fix enables you to move away from using that configuration option."
 msgstr ""
-"Daher können Sie mit dieser Datenkorrektur von der Verwendung jener "
-"Konfigurationsoption Abstand nehmen."
+"Dieser Datenkorrektur ermöglicht es, auf eine weitere Verwendung jener "
+"Konfigurationsoption zu verzichten."
 
 #: resources/views/data-fix-options.phtml:82
 msgid "This data fix adds XREFs, linking all places within events directly to the respective shared places."
@@ -589,7 +589,7 @@ msgstr "Art der hierarchischen Beziehung"
 
 #: SharedPlacesModule.php:316
 msgid "Type of location"
-msgstr "Siedlungs-Typ"
+msgstr "Objekttyp"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:104
