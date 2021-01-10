@@ -4,8 +4,8 @@ namespace Cissee\Webtrees\Module\SharedPlaces;
 
 use Aura\Router\Route;
 use Aura\Router\RouterContainer;
-use Cissee\Webtrees\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
-use Cissee\Webtrees\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
+use Vesta\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
+use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Cissee\Webtrees\Module\SharedPlaces\HelpTexts;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Exceptions\SharedPlaceNotFoundException;
@@ -311,10 +311,10 @@ class SharedPlacesModule extends AbstractModule implements
       /* I18N: translate just like 'Shared Place' for consistency */I18N::translate('Location');
       
       //added via GedcomTag.php
-      I18N::translate('Higher-level shared place');
-      I18N::translate('Type of hierarchical relationship');
-      I18N::translate('Type of location');
-      I18N::translate('GOV-Id for type of location');
+      /* I18N: Gedcom tag _LOC:_LOC */I18N::translate('Higher-level shared place');
+      /* I18N: Gedcom tag _LOC:_LOC:TYPE */I18N::translate('Type of hierarchical relationship');
+      /* I18N: Gedcom tag _LOC:TYPE */I18N::translate('Type of location');
+      /* I18N: Gedcom tag _LOC:TYPE:_GOVTYPE */I18N::translate('GOV-Id for type of location');
       
       $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 3);
   }
