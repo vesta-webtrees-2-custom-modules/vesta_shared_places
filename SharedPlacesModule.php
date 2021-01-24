@@ -209,11 +209,6 @@ class SharedPlacesModule extends AbstractModule implements
       //_LOC edit control on events
       app()->instance(FunctionsEditPlacHandler::class, new ExtendedFunctionsEditPlacHandler());
       
-      //define our 'pretty' routes
-      //note: potentially problematic in case of name clashes; 
-      //webtrees isn't interested in solving this properly, see
-      //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
-      
       $cache = Registry::cache()->array();
       $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
       $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
@@ -240,6 +235,11 @@ class SharedPlacesModule extends AbstractModule implements
       
       $sharedPlaceFactory = new SharedPlaceFactory($cache, $preferences);
       Registry::locationFactory($sharedPlaceFactory);
+      
+      //define our 'pretty' routes
+      //note: potentially problematic in case of name clashes; 
+      //webtrees isn't interested in solving this properly, see
+      //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
 
       $router_container = app(RouterContainer::class);
       assert($router_container instanceof RouterContainer);
