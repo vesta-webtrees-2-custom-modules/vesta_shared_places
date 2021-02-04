@@ -8,81 +8,96 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-01-09 17:15+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-02-04 11:41+0000\n"
+"Last-Translator: Osman Öz <osmanoz05@hotmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: HelpTexts.php:15
 msgid "Shared place summary"
-msgstr ""
+msgstr "Paylaşılan yer özeti"
 
 #: HelpTexts.php:17
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
+"Özet, ilgili paylaşılan yerle eşlenmiş bir yere sahip etkinliklerle aynı "
+"şekilde biçimlendirilmiş paylaşılan yer verilerini gösterir."
 
 #: HelpTexts.php:18
 msgid "Therefore, the place name is displayed here including the full hierarchy."
 msgstr ""
+"Bu nedenle, tam hiyerarşi de dahil olmak üzere yer adı burada görüntülenir."
 
 #: HelpTexts.php:24
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
+"Yer adları tek bir yer adı olarak girilmelidir (burada virgülle ayrılmış bir "
+"liste kullanmayın)."
 
 #: HelpTexts.php:25
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
-msgstr ""
+msgstr "Bir yer hiyerarşisini modellemek için ayrı '%1$s' etiketini kullanın."
 
 #: HelpTexts.php:29 HelpTexts.php:39
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
+"Yer adları zamanla değişebilir. Paylaşılan bir yere birden çok ad "
+"ekleyebilir ve uygun bir tarih aralığı aracılığıyla tarihi adları "
+"belirtebilirsiniz."
 
 #: HelpTexts.php:35
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
+"Yer adları, en küçük yerden başlayıp ülke ile biten virgülle ayrılmış bir "
+"liste olarak girilmelidir. Örneğin, \"Westminster, Londra, İngiltere\"."
 
 #: SharedPlacesListController.php:50 SharedPlacesModule.php:152
 #: resources/views/lists/shared-places-table.phtml:38
 msgid "Shared places"
-msgstr ""
+msgstr "Paylaşılan yerler"
 
 #: SharedPlacesModule.php:186
 msgid "View Shared places hierarchy"
-msgstr ""
+msgstr "Paylaşılan yerler hiyerarşisini görüntüleyin"
 
 #: SharedPlacesModule.php:188
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
+"Paylaşılan yerler hiyerarşisini görüntülemek için Vesta Places ve Pedigree "
+"harita modülünü etkinleştirin."
 
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:311
 msgid "Location"
-msgstr ""
+msgstr "Yer"
 
 #: SharedPlacesModule.php:314
 msgid "Higher-level shared place"
-msgstr ""
+msgstr "Daha yüksek düzeyde paylaşılan yer"
 
 #: SharedPlacesModule.php:315
 msgid "Type of hierarchical relationship"
-msgstr ""
+msgstr "Hiyerarşik ilişki türü"
 
 #: SharedPlacesModule.php:316
 msgid "Type of location"
-msgstr ""
+msgstr "Konum türü"
 
 #: SharedPlacesModule.php:317
 msgid "GOV-Id for type of location"
-msgstr ""
+msgstr "Konum türü için GOV-Id"
 
 #: SharedPlacesModule.php:421 SharedPlacesModule.php:452
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
-msgstr ""
+msgstr "Paylaşılan yer"
 
 #: SharedPlacesModule.php:524
 msgid "Shared place data"
