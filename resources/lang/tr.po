@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-01-09 17:15+0100\n"
-"PO-Revision-Date: 2021-02-04 21:41+0000\n"
+"PO-Revision-Date: 2021-02-05 08:41+0000\n"
 "Last-Translator: Osman Öz <osmanoz05@hotmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/tr/>\n"
@@ -198,371 +198,470 @@ msgstr "Paylaşılan yerlerin yerlere bağlanması"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:79
 msgid "Additionally link shared places via name"
-msgstr ""
+msgstr "Ek olarak, paylaşılan yerleri ad yoluyla bağlayın"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:80
 msgid "According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. "
 msgstr ""
+"GEDCOM-L Ekine göre, paylaşılan yerlere, paylaşılan notlar vb. gibi XREF'ler "
+"aracılığıyla başvurulur. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:81
 msgid "It is now recommended to use XREFs, as this improves performance and flexibility. There is a data fix available which may be used to add XREFs. "
 msgstr ""
+"Artık performansı ve esnekliği artırdığı için XREF'lerin kullanılması "
+"önerilmektedir. XREF'leri eklemek için kullanılabilecek bir veri düzeltmesi "
+"var. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:82
 msgid "However, you can still check this option and link shared places via the place name itself. In this case, links are established internally by searching for a shared place with any name matching case-insensitively."
 msgstr ""
+"Ancak yine de bu seçeneği işaretleyebilir ve paylaşılan yerleri yer adının "
+"kendisi aracılığıyla bağlayabilirsiniz. Bu durumda, bağlantılar, büyük/küçük "
+"harfe duyarlı olmayan herhangi bir ada sahip paylaşılan bir yer aranarak "
+"dahili olarak oluşturulur."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:83
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
 msgstr ""
+"Hiyerarşik paylaşılan yerler kullanıyorsanız, \"A, B, C\" adlı bir yer, \"B, "
+"C\" ile eşleşen daha yüksek düzeyde paylaşılan bir yer ile paylaşılan bir "
+"yer \"A\" ile eşleştirilir."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:87
 msgid "... and fall back to n parent levels"
-msgstr ""
+msgstr "... ve n ebeveyn seviyelerine geri dönün"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:88
 msgid "When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would also match shared places that match \"B, C\" and \"C\")"
 msgstr ""
+"Önceki seçenek işaretlendiğinde ve eşleşen bir paylaşılan yer "
+"bulunmadığında, n ana yerlere geri dönün (örneğin, n=2 için \"A, B, C\" yeri "
+"de \"B, C\" ve \"C\" ile eşleşen paylaşılan yerlerle eşleşecektir)"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:96
 msgid "All shared place facts"
-msgstr ""
+msgstr "Tüm paylaşılan yer gerçekleri"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:100
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list."
 msgstr ""
+"Bu, kullanıcılarınızın paylaşılan yerlere ekleyebileceği GEDCOM "
+"gerçeklerinin bir listesidir. Bu listeyi, gerçek adlarını gerektiği gibi "
+"kaldırarak veya ekleyerek değiştirebilirsiniz. Bu listede görünen gerçek "
+"adları da \"Benzersiz paylaşılan yer gerçekleri\" listesinde görünmemelidir."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:104
 msgid "Unique shared place facts"
-msgstr ""
+msgstr "Benzersiz paylaşılan yer gerçekleri"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:108
 msgid "This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list."
 msgstr ""
+"Bu, kullanıcılarınızın paylaşılan yerlere yalnızca bir kez ekleyebileceği "
+"GEDCOM gerçeklerinin bir listesidir. Örneğin, NAME bu listede ise, "
+"kullanıcılar paylaşılan bir yere birden fazla NAME kaydı ekleyemezler. Bu "
+"listede görünen gerçek adları da \"Tüm paylaşılan yer gerçekleri\" "
+"listesinde görünmemelidir."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:125
 msgid "Quick shared place facts"
-msgstr ""
+msgstr "Hızlı paylaşılan yer gerçekleri"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:129
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list. "
 msgstr ""
+"Bu, kullanıcılarınızın paylaşılan yerlere ekleyebileceği GEDCOM "
+"gerçeklerinin bir listesidir. Bu listeyi, gerçek adlarını gerektiği gibi "
+"kaldırarak veya ekleyerek değiştirebilirsiniz. Bu listede görünen gerçek "
+"adları da \"Benzersiz paylaşılan yer gerçekleri\" listesinde görünmemelidir. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:138
 msgid "Restrict to specific facts and events"
-msgstr ""
+msgstr "Belirli gerçekleri ve olayları sınırlayın"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:139
 msgid "If this option is checked, shared place data is only displayed for the following facts and events. "
 msgstr ""
+"Bu seçenek işaretlenirse, paylaşılan yer verileri yalnızca aşağıdaki "
+"gerçekler ve olaylar için görüntülenir. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:153
 msgid "Automatically expand shared place data"
-msgstr ""
+msgstr "Paylaşılan yer verilerini otomatik olarak genişletin"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:158
 msgid "no"
-msgstr ""
+msgstr "hayır"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:162
 msgid "yes, but only the first occurrence of the shared place"
-msgstr ""
+msgstr "evet, ama sadece paylaşılan yerin ilk oluşumu"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:163
 msgid "Note that the first occurrence may be within a toggleable, currently hidden fact or event (such as an event of a close relative). This will probably be improved in future versions of the module."
 msgstr ""
+"İlk oluşumun değiştirilebilir, şu anda gizli bir olgu veya olay (yakın bir "
+"akraba olayı gibi) içinde olabileceğini unutmayın. Bu, modülün gelecekteki "
+"sürümlerinde muhtemelen geliştirilecektir."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:166
 msgid "yes"
-msgstr ""
+msgstr "evet"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:177
 msgid "Show link counts for shared places list"
-msgstr ""
+msgstr "Paylaşılan yerler listesi için bağlantı sayılarını göster"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:178
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr ""
+"Paylaşılan yerleri ad yoluyla atarken bağlantı sayımlarının belirlenmesi ("
+"bağlantılı bireyler/aileler) maliyetlidir ve bu nedenle paylaşılan yerler "
+"listesi görüntülendiğinde gecikmelere neden olur. Bu seçeneğin yalnızca "
+"yerler XREF'ler aracılığıyla atanmışsa seçilmesi önerilir."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:188
 msgid "Facts for shared place records"
-msgstr ""
+msgstr "Paylaşılan yer kayıtları için gerçekler"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:196
 msgid "Shared places list"
-msgstr ""
+msgstr "Paylaşılan yerler listesi"
 
 #: patchedWebtrees/Exceptions/SharedPlaceNotFoundException.php:13
 msgid "This shared place does not exist or you do not have permission to view it."
-msgstr ""
+msgstr "Bu paylaşılan yer mevcut değil veya onu görüntüleme izniniz yok."
 
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:304
 #: resources/views/modals/create-shared-place.phtml:10
 #: resources/views/shared-places-list-page.phtml:41
 msgid "Create a shared place"
-msgstr ""
+msgstr "Paylaşılan bir yer oluşturun"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:523
 msgid "administrative"
-msgstr ""
+msgstr "yönetim"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:526
 msgid "religious"
-msgstr ""
+msgstr "dinî"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:529
 msgid "geographical"
-msgstr ""
+msgstr "coğrafî"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:532
 msgid "cultural"
-msgstr ""
+msgstr "kültürel"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:535
 msgid "other"
-msgstr ""
+msgstr "diğer"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:91
 #, php-format
 msgid "The shared place %s already exists."
-msgstr ""
+msgstr "Paylaşılan yer %s zaten var."
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:99
 msgid " (Note: A higher-level shared place has also been created)"
-msgstr ""
+msgstr " (Not: Daha yüksek düzeyde bir paylaşılan yer de oluşturuldu)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
-msgstr ""
+msgstr " (Not: %s üst düzey paylaşılan yerler de oluşturuldu)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:112
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:156
 #, php-format
 msgid "The shared place %s has been created."
-msgstr ""
+msgstr "Paylaşılan yer %s oluşturuldu."
 
 #: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:118
 msgid "Summary"
-msgstr ""
+msgstr "Özet"
 
 #: patchedWebtrees/SharedPlace.php:626
 msgid "Private"
-msgstr ""
+msgstr "Özel"
 
 #: patchedWebtrees/SharedPlace.php:695
 msgid "circular shared place hierarchy"
-msgstr ""
+msgstr "dairesel paylaşılan yer hiyerarşisi"
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
-msgstr ""
+msgstr "Çeşitli veri düzeltmeleri mevcuttur."
 
 #: resources/views/data-fix-options.phtml:13
 msgid "It is strongly recommended to backup your tree first."
-msgstr ""
+msgstr "Öncelikle ağacınızı yedeklemeniz şiddetle tavsiye edilir."
 
 #: resources/views/data-fix-options.phtml:18
 msgid "Data Fix"
-msgstr ""
+msgstr "Veri Düzeltme"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
-msgstr ""
+msgstr "Paylaşılan Yerleri Hiyerarşikleştirin"
 
 #: resources/views/data-fix-options.phtml:32
 msgid "This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to higher-level shared places via XREFs)."
 msgstr ""
+"Bu veri düzeltmesi, virgülle ayrılmış ad bölümleri olan paylaşılan yerleri "
+"hiyerarşik paylaşılan yerlere dönüştürür (bunlar, XREF'ler aracılığıyla daha "
+"yüksek düzeydeki paylaşılan yerlere bağlanır)."
 
 #: resources/views/data-fix-options.phtml:33
 msgid "It usually will have to be carried out once only, as a migration when switching to hierarchical shared places via the respective configuration option."
 msgstr ""
+"İlgili yapılandırma seçeneği aracılığıyla hiyerarşik paylaşımlı yerlere "
+"geçerken bir geçiş olarak genellikle yalnızca bir kez gerçekleştirilmesi "
+"gerekecektir."
 
 #: resources/views/data-fix-options.phtml:38
 msgid "Note:"
-msgstr ""
+msgstr "Not:"
 
 #: resources/views/data-fix-options.phtml:41
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
 msgstr ""
+"Bu veri düzeltmesi için yapılan arama şu anda hiçbir kayıtla eşleşmiyor "
+"çünkü 'Hiyerarşik paylaşılan yerleri kullan' yapılandırma seçeneği "
+"ayarlanmadı."
 
 #: resources/views/data-fix-options.phtml:46
 #: resources/views/data-fix-options.phtml:107
 #: resources/views/data-fix-options.phtml:134
 msgid "Attention!"
-msgstr ""
+msgstr "Dikkat!"
 
 #: resources/views/data-fix-options.phtml:49
 msgid "Missing higher-level shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr ""
+"Gerekirse eksik üst düzey paylaşılan yerler oluşturulur. Bunun potansiyel "
+"olarak yineleme oluşturmadan çalışması için, en azından bu veri düzeltmesi "
+"süresince kullanıcı yönetiminde 'Bu kullanıcı tarafından yapılan "
+"değişiklikleri otomatik olarak kabul et' seçeneğini işaretlemeniz gerekir."
 
 #: resources/views/data-fix-options.phtml:50
 #: resources/views/data-fix-options.phtml:111
 #: resources/views/data-fix-options.phtml:138
 msgid "This data fix currently won't update anything, because this preference isn't set."
 msgstr ""
+"Bu veri düzeltmesi şu anda hiçbir şeyi güncellemiyor, çünkü bu tercih "
+"ayarlanmadı."
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
-msgstr ""
+msgstr "Ağaçtan bağımsız verilerle mevcut paylaşımlı yerleri geliştirin"
 
 #: resources/views/data-fix-options.phtml:66
 msgid "This data fix adds tree-independent data (managed outside GEDCOM) to existing shared places."
 msgstr ""
+"Bu veri düzeltme, ağaçtan bağımsız verileri (GEDCOM dışında yönetilen) "
+"mevcut paylaşılan yerlere ekler."
 
 #: resources/views/data-fix-options.phtml:67
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"Özellikle, web ağaçlarının 'Coğrafi verilerinden' harita koordinatları ve "
+"Gov4Webtrees modülünden GOV kimlikleri eklenir."
 
 #: resources/views/data-fix-options.phtml:68
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name'."
 msgstr ""
+"Eşleşen paylaşılan yerler, 'Ek olarak paylaşılan yerleri adla bağla' "
+"yapılandırma seçeneğiyle belirlenir."
 
 #: resources/views/data-fix-options.phtml:79
 msgid "Add missing XREFs"
-msgstr ""
+msgstr "Eksik XREF'leri ekleyin"
 
 #: resources/views/data-fix-options.phtml:82
 msgid "This data fix adds XREFs, linking all places within events directly to the respective shared places."
 msgstr ""
+"Bu veri düzeltme, olayların içindeki tüm yerleri doğrudan ilgili paylaşılan "
+"yerlere bağlayan XREF'leri ekler."
 
 #: resources/views/data-fix-options.phtml:83
 #: resources/views/data-fix-options.phtml:102
 #: resources/views/data-fix-options.phtml:129
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name', including parent levels if set."
 msgstr ""
+"Eşleşen paylaşılan yerler, ayarlanmışsa üst düzeyler de dahil olmak üzere, "
+"'Ek olarak paylaşılan yerleri ad yoluyla bağla' yapılandırma seçeneği "
+"aracılığıyla belirlenir."
 
 #: resources/views/data-fix-options.phtml:84
 msgid "Therefore, this data fix enables you to move away from using that configuration option."
 msgstr ""
+"Bu nedenle, bu veri düzeltmesi, bu yapılandırma seçeneğini kullanmaktan "
+"vazgeçmenize olanak tanır."
 
 #: resources/views/data-fix-options.phtml:85
 msgid "The search cannot be implemented efficiently and may take some time in particular when displaying and updating a large number of records."
 msgstr ""
+"Arama verimli bir şekilde uygulanamaz ve özellikle çok sayıda kaydı "
+"görüntülerken ve güncellerken biraz zaman alabilir."
 
 #: resources/views/data-fix-options.phtml:96
 msgid "Create missing shared places from tree-independent data, and add missing XREFs"
 msgstr ""
+"Ağaçtan bağımsız verilerden eksik paylaşılan yerleri oluşturun ve eksik "
+"XREF'leri ekleyin"
 
 #: resources/views/data-fix-options.phtml:99
 msgid "This data fix creates missing shared places, if tree-independent data (managed outside GEDCOM) is available for the respective place."
 msgstr ""
+"İlgili yer için ağaçtan bağımsız veriler (GEDCOM dışında yönetilen) varsa, "
+"bu veri düzeltmesi eksik paylaşılan yerler oluşturur."
 
 #: resources/views/data-fix-options.phtml:101
 #: resources/views/data-fix-options.phtml:128
 msgid "The created shared places, as well as existing shared places, are linked via XREFs to event places."
 msgstr ""
+"Oluşturulan paylaşılan yerler ve mevcut paylaşılan yerler XREF'ler "
+"aracılığıyla etkinlik yerlerine bağlanır."
 
 #: resources/views/data-fix-options.phtml:110
 #: resources/views/data-fix-options.phtml:137
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr ""
+"Gerekirse eksik paylaşılan yerler oluşturulur. Bunun potansiyel olarak "
+"yineleme oluşturmadan çalışması için, en azından bu veri düzeltmesi "
+"süresince kullanıcı yönetiminde 'Bu kullanıcı tarafından yapılan "
+"değişiklikleri otomatik olarak kabul et' seçeneğini işaretlemeniz gerekir."
 
 #: resources/views/data-fix-options.phtml:123
 msgid "Create all missing shared places, and add missing XREFs"
-msgstr ""
+msgstr "Tüm eksik paylaşılan yerleri oluşturun ve eksik XREF'leri ekleyin"
 
 #: resources/views/data-fix-options.phtml:126
 msgid "This data fix creates missing shared places, even if no tree-independent data (managed outside GEDCOM) is available for the respective place."
 msgstr ""
+"Bu veri düzeltmesi, ilgili yer için ağaçtan bağımsız veri (GEDCOM dışında "
+"yönetilen) olmasa bile eksik paylaşılan yerler oluşturur."
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"Ağaçtan bağımsız veriler mevcutsa, web ağaçlarının 'Coğrafi verilerinden' "
+"harita koordinatları ve Gov4Webtrees modülünden GOV kimlikleri eklenir."
 
 #: resources/views/modals/shared-place-fields.phtml:12
 msgid "Shared place name (complete hierarchy)"
-msgstr ""
+msgstr "Paylaşılan yer adı (tam hiyerarşi)"
 
 #: resources/views/modals/shared-place-fields.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
 msgstr ""
+"Virgülle ayrılmış ad bölümleri olan bir yer adı, paylaşılan yerler "
+"hiyerarşisine çözümlenecektir. Eksik daha yüksek seviyeli paylaşılan yerler "
+"de oluşturulacaktır."
 
 #: resources/views/modals/shared-place-fields.phtml:17
 msgid "Shared place name"
-msgstr ""
+msgstr "Paylaşılan yer adı"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/list.phtml:12
 msgid "Shared place list"
-msgstr ""
+msgstr "Paylaşılan yer listesi"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:32
 #: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
-msgstr ""
+msgstr "Önemli not:"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:35
 #: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr ""
+"Bu ağaç, virgülle ayrılmış ad bölümleriyle paylaşılan yerlere sahipken, aynı "
+"zamanda 'hiyerarşik paylaşılan yerleri kullan' seçeneği seçilir."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:36
 #: resources/views/shared-places-list-page.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr ""
+"Bu, yerleri paylaşılan yerlere eşleştirirken tutarsızlıklara yol açar ve "
+"genel olarak paylaşılan yerler için belirtimle eşleşmez (bu özel modülün "
+"önceki sürümleri kesinlikle uymuyordu)."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:39
 #: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr ""
+"Bu sorunu çözmek üzere bu özel modül için veri düzeltmesinin çalıştırılması "
+"önerilir."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/place-hierarchy.phtml:13
 msgid "Shared place hierarchy"
-msgstr ""
+msgstr "Paylaşılan yer hiyerarşisi"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:42
 msgid "The location of this shared place is not known."
-msgstr ""
+msgstr "Bu paylaşılan yerin konumu bilinmemektedir."
 
 #. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
 #: resources/views/shared-place-page.phtml:31
 #, php-format
 msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
 msgstr ""
+"Bu paylaşılan yer silindi. Silme işlemini ve ardından %1$s veya %2$s "
+"dosyasını gözden geçirmelisiniz."
 
 #: resources/views/shared-place-page.phtml:34
 msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
 msgstr ""
+"Bu paylaşılan yer silindi. Silme işleminin bir moderatör tarafından gözden "
+"geçirilmesi gerekecektir."
 
 #. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
 #: resources/views/shared-place-page.phtml:40
 #, php-format
 msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
 msgstr ""
+"Bu paylaşılan yer düzenlendi. Değişiklikleri ve ardından %1$s veya %2$s'i "
+"gözden geçirmelisiniz."
 
 #: resources/views/shared-place-page.phtml:43
 msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
 msgstr ""
+"Bu paylaşılan yer düzenlendi. Değişikliklerin bir moderatör tarafından "
+"gözden geçirilmesi gerekir."
 
 #: resources/views/shared-place-page.phtml:77
 msgid "Next lower-level shared places"
-msgstr ""
+msgstr "Sonraki alt düzey paylaşılan yerler"
