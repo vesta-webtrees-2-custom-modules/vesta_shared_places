@@ -6,7 +6,9 @@ The project’s website is [cissee.de](https://cissee.de).
 
 This is a webtrees 2.x module - It cannot be used with webtrees 1.x. For its webtrees 1.x counterpart, see [here](https://github.com/ric2016/shared_places).
 
-See [here](https://github.com/vesta-webtrees-2-custom-modules/vesta_common/blob/master/docs/LocationData.md) for an overview of location data management in webtrees.
+## Overview: Location data management
+
+See [here](https://github.com/vesta-webtrees-2-custom-modules/vesta_common/blob/master/docs/LocationData.md) for an overview of location data management in webtrees, including different use cases for shared places.
 
 ## Contents
 
