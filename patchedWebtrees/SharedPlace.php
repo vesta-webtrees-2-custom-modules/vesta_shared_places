@@ -13,6 +13,7 @@ use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use stdClass;
 use Vesta\Model\GedcomDateInterval;
 use function str_contains;
@@ -65,22 +66,20 @@ class SharedPlace extends Location {
     //make sure all places _for_all_dates_ exist, and are linked to this record 
     //(otherwise they will be deleted again in next FunctionsImport::updateRecord() call as 'orphaned places')
     
+    //note that we must not only link shared place 1:1 to place name, but to higher-level place names as well
+    //(as with indi:place and fam:place links elsewhere in webtrees)
+    //(again, otherwise they will be deleted again in next FunctionsImport::updateRecord() call as 'orphaned places')
+    
     //also cleanup obsolete placelinks
     //(should all this be done on updateRecord()? tricky wrt place hierarchies!)
-    
-    //note that we only link shared place 1:1 to place name, not to higher-level place names
-    //(this is different from indi:place and fam:place links elsewhere in webtrees)
     
     $allPlaceIds = new Collection();
     //cf FunctionsImport::updatePlaces
     foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
-
-        if ($place->id() !== 0) {
-            $allPlaceIds->add($place->id());          
-        } //else actually unexpected!
       
         // Calling Place::id() will create the entry in the database, if it doesn't already exist.
         while ($place->id() !== 0) {
+            $allPlaceIds->add($place->id());
             $place = $place->parent();
         }
     }
@@ -144,6 +143,14 @@ class SharedPlace extends Location {
     return $names;
   }
 
+  public function namesNNAt(?GedcomDateInterval $date) {
+    $names = array();
+    foreach ($this->getAllNamesAt($date) as $nameStructure) {
+      $names[] = $nameStructure['fullNN'];
+    }
+    return $names;
+  }
+  
   public function getLati() {
     //cf FunctionsPrint
     $map_lati = null;
@@ -258,8 +265,7 @@ class SharedPlace extends Location {
     }
     $anySharedPlace = $sharedPlaces->first();
     
-    //for compatibility with indirect links, we consider all child places as well
-    //(that's how placelinks work)
+    //for compatibility with indirect links, we consider all child places as well (that's how placelinks work)
     
     //in particular for batch operations, loading the entire _LOC-graph seems to be the most efficient solution if we cache it.
     $main = LocGraph::get($anySharedPlace->tree())
@@ -281,7 +287,6 @@ class SharedPlace extends Location {
         }
       }  
 
-      //TODO optimize - use placelinks for loc:place as well!
       $indis = DB::table('placelinks')
             ->whereIn('pl_p_id', $placeIds)
             ->where('pl_file', '=', $anySharedPlace->tree()->id())
@@ -346,8 +351,7 @@ class SharedPlace extends Location {
     }
     $anySharedPlace = $sharedPlaces->first();
     
-    //for compatibility with indirect links, we consider all child places as well
-    //(that's how placelinks work)
+    //for compatibility with indirect links, we consider all child places as well (that's how placelinks work)
     
     //in particular for batch operations, loading the entire _LOC-graph seems to be the most efficient solution if we cache it.
     $main = LocGraph::get($anySharedPlace->tree())
@@ -369,7 +373,6 @@ class SharedPlace extends Location {
         }
       }
       
-      //TODO optimize - use placelinks for loc:place as well!
       $fams = DB::table('placelinks')
             ->whereIn('pl_p_id', $placeIds)
             ->where('pl_file', '=', $anySharedPlace->tree()->id())
@@ -817,11 +820,10 @@ class SharedPlace extends Location {
       $places = new Collection();
       foreach ($this->getAllNamesAt($date) as $nameStructure) {
         $full = $nameStructure['fullNN'];
-        $places->add(new Place($full, $this->tree));
+        $place = new Place($full, $this->tree);
+        $places->put($place->id(), $place);
       }
-      return $places->unique(function ($place) {
-          return $place->id();
-      })->all();
+      return $places->all();
     }
 
     $places = new Collection();
@@ -835,12 +837,11 @@ class SharedPlace extends Location {
             []);
 
     foreach ($namesAsString as $name) {
-      $places->add(new Place($name, $this->tree));
+      $place = new Place($name, $this->tree);
+      $places->put($place->id(), $place);
     }
     
-    return $places->unique(function ($place) {
-        return $place->id();
-    })->all();
+    return $places->all();
 
     //not safe wrt loops
     /*
@@ -866,14 +867,33 @@ class SharedPlace extends Location {
     return $this->primaryPlaceAt(GedcomDateInterval::createNow());
   }
   
-  public function primaryPlaceAt(GedcomDateInterval $date): Place {
+  public function primaryPlaceAt(GedcomDateInterval $date, ?string $query = null): Place {
     if (!$this->useHierarchy()) {
       $primaryIndex = $this->getPrimaryNameIndexWrtUnfilteredNamesAt($date);
       $name = $this->namesNN()[$primaryIndex];
       return new Place($name, $this->tree);
     }
     
-    $names = [$this->getAllNamesAt($date)[0]];
+    $firstMatch = null;
+    
+    if ($query !== null) {
+      //which of the names best matches the query?
+      //(note: none of them may match the query, which may have matched some other part of the location's gedcom)
+      
+      foreach ($this->getAllNamesAt($date) as $nameAtDate) {
+        $fullNN = $nameAtDate['fullNN'];
+        if (Str::contains(mb_strtolower($fullNN), mb_strtolower($query))) {
+          $firstMatch = $nameAtDate;
+          break;
+        }
+      }
+    }    
+    
+    if ($firstMatch === null) {
+      $firstMatch = $this->getAllNamesAt($date)[0];
+    }
+      
+    $names = [$firstMatch];
     $namesAsString = SharedPlace::namesAsStringsAt(
               $date,
               true,

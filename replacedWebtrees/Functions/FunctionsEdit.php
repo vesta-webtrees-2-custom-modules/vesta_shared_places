@@ -820,7 +820,9 @@ class FunctionsEdit
             } elseif (!$inSource && $type === 'DATE') {
                 $handler = app(FunctionsEditPlacHandler::class);
                 //adjust upperlevel to align with _LOC, upperlevel anyway not used by original code!
-                echo $handler->addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
+                //[2021/02] this seems to be a bad idea, reverting to $level1type
+                //echo $handler->addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
+                echo $handler->addSimpleTag($tree, $subrecord, $level1type, GedcomTag::getLabel($label));
                 //echo self::addSimpleTag($tree, $subrecord, $level1type, GedcomTag::getLabel($label));
                 if ($level === 2) {
                     // We already have a date - no need to add one.

@@ -883,19 +883,24 @@ class SharedPlacesModule extends AbstractModule implements
     return 'sharedPlaces';
   }
   
-  public function findPlace(int $id, Tree $tree, PlaceUrls $urls): PlaceWithinHierarchy {
+  public function findPlace(
+          int $id, 
+          Tree $tree, 
+          PlaceUrls $urls,
+          bool $asAdditionalParticipant = false): PlaceWithinHierarchy {
+    
     $actual = Place::find($id, $tree);
     
     //find matching shared places
     $sharedPlaces = $this->placename2sharedPlacesImpl($actual->gedcomName(), $actual->tree());    
     $searchService = app(SearchServiceExt::class);
-    return new PlaceViaSharedPlace($actual, $urls, $sharedPlaces, $this, $searchService);
+    return new PlaceViaSharedPlace($actual, $asAdditionalParticipant, $urls, $sharedPlaces, $this, $searchService);
   }
   
   public function createNonMatchingPlace(Place $actual, PlaceUrls $urls) {
     //there are no matching shared places!
     $searchService = app(SearchServiceExt::class);
-    return new PlaceViaSharedPlace($actual, $urls, new Collection(), $this, $searchService);
+    return new PlaceViaSharedPlace($actual, false, $urls, new Collection(), $this, $searchService);
   }
   
   ////////////////////////////////////////////////////////////////////////////////
@@ -1416,10 +1421,10 @@ class SharedPlacesModule extends AbstractModule implements
     
     $record->updateRecord($new, false);
     
-    //important to update the cache (this should be in webtrees)
+    //important to update the cache (this should be in webtrees, see https://github.com/fisharebest/webtrees/issues/3747)
     //otherwise this record may be found via search on updated names (via db), but with old parents (via cache)
     //(within same request, i.e. during updateAll)
-    //leading to unintended duplicates
+    //leading to unintended duplicatesn
     //
     //test: create (without hierarchy)
     //A1, B, C, D, E

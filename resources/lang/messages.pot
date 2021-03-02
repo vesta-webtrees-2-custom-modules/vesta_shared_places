@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-01-09 17:15+0100\n"
+"POT-Creation-Date: 2021-03-02 09:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,18 +64,22 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
+#. I18N: Gedcom tag _LOC:_LOC
 #: SharedPlacesModule.php:314
 msgid "Higher-level shared place"
 msgstr ""
 
+#. I18N: Gedcom tag _LOC:_LOC:TYPE
 #: SharedPlacesModule.php:315
 msgid "Type of hierarchical relationship"
 msgstr ""
 
+#. I18N: Gedcom tag _LOC:TYPE
 #: SharedPlacesModule.php:316
 msgid "Type of location"
 msgstr ""
 
+#. I18N: Gedcom tag _LOC:TYPE:_GOVTYPE
 #: SharedPlacesModule.php:317
 msgid "GOV-Id for type of location"
 msgstr ""
@@ -274,47 +278,62 @@ msgid "Determining the link counts (linked individual/families) is expensive whe
 msgstr ""
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:188
+#: SharedPlacesModuleTrait.php:186
+msgid "Filter to unique shared places"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:187
+msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:197
 msgid "Facts for shared place records"
 msgstr ""
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:196
+#: SharedPlacesModuleTrait.php:205
 msgid "Shared places list"
+msgstr ""
+
+#. I18N: Module Configuration
+#: SharedPlacesModuleTrait.php:209
+msgid "Place hierarchy"
 msgstr ""
 
 #: patchedWebtrees/Exceptions/SharedPlaceNotFoundException.php:13
 msgid "This shared place does not exist or you do not have permission to view it."
 msgstr ""
 
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:304
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:311
 #: resources/views/modals/create-shared-place.phtml:10
 #: resources/views/shared-places-list-page.phtml:41
 msgid "Create a shared place"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:523
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:542
 msgid "administrative"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:526
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:545
 msgid "religious"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:529
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:548
 msgid "geographical"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:532
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:551
 msgid "cultural"
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:535
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:554
 msgid "other"
 msgstr ""
 
@@ -342,11 +361,11 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: patchedWebtrees/SharedPlace.php:626
+#: patchedWebtrees/SharedPlace.php:629
 msgid "Private"
 msgstr ""
 
-#: patchedWebtrees/SharedPlace.php:695
+#: patchedWebtrees/SharedPlace.php:698
 msgid "circular shared place hierarchy"
 msgstr ""
 

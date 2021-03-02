@@ -53,11 +53,11 @@ class Select2Location extends AbstractSelect2WithDateHandler
             $results = $this->search_service->searchLocations([$tree], [$query], $offset, $limit);
         }
 
-        return $results->map(static function (Location $location) use ($at, $date): array {
+        return $results->map(static function (Location $location) use ($at, $date, $query): array {
             return [
                 'id'    => $at . $location->xref() . $at,
                 'text'  => view('selects/location', ['location' => $location]),
-                'title' => $location->primaryPlaceAt($date)->gedcomName(),
+                'title' => $location->primaryPlaceAt($date, $query)->gedcomName(),
             ];
         });
     }

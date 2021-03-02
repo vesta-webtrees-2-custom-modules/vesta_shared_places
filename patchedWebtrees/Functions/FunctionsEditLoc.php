@@ -146,7 +146,7 @@ class FunctionsEditLoc {
           $tag, 
           $upperlevel = '', 
           $label = ''): string
-  {
+  {    
     //[RC] gah so hacky - we need this for LATI/LONG because we write PLAC!
     // Some form fields need access to previous form fields.
     static $previous_ids = [
@@ -281,18 +281,25 @@ class FunctionsEditLoc {
       case '_LOC':
         //cf SHARED_NOTE, but use special vesta modal!
         
+        /** @var SharedPlace $location */
         $location = Registry::locationFactory()->make($value, $tree);
         $locationName = '';
         if ($location !== null) {
           $locationName = $location->primaryPlace()->gedcomName();
-        }        
+        }
         
         $selector = '';
         $selectorForDate = '';
-        if (Str::endsWith($upperlevel, 'PLAC') || ($upperlevel === 'INDI') || ($upperlevel === 'FAM')) {
+        if (Str::endsWith($upperlevel, 'PLAC') || ($upperlevel === 'INDI') || ($upperlevel === 'FAM')) {          
           //we have to disambiguate here ('[id]'): the input element is duplicated, apparently by the typeahead functionality, bah
           $selector = '[id][data-vesta-name="'.$upperlevelDOM.'"]';
           $selectorForDate = '[id][data-vesta-name="'.str_replace('PLAC','DATE',$upperlevelDOM).'"]';
+          
+          /*
+          error_log("got selector!".$selector);
+          error_log("got selectorForDate!".$selectorForDate);
+          error_log("upperlevelDOM".$upperlevelDOM);
+          */
         }
 
         $html .=
@@ -320,7 +327,8 @@ class FunctionsEditLoc {
           $script = '<script>' .
               '$(\'#' . $id . '\').on(\'select2:select\', function (e) {' .
               '    var data = e.params.data;' .
-              '    updatewholenamePLAC(\'' . $locationName . '\', data.title, \'' . $selector. '\');' .
+              //'    updatewholenamePLAC(\'' . $locationName . '\', data.title, \'' . $selector. '\');' .
+              '    updatewholenamePLAC2(' . (($location !== null)?'true':'false') . ', data.title, \'' . $selector. '\');' .
               '});' . 
               '</script>';
           echo $script;
@@ -403,7 +411,8 @@ class FunctionsEditLoc {
       //PLAC (not under 0 _LOC, but elsewhere with _LOC subtag)  
       case 'PLAC':
         $html .= '<div class="input-group">';
-        $html .= '<input ' . Html::attributes([
+        
+        $attributes = [
                 'autocomplete'          => 'off',
                 'class'                 => 'form-control',
                 'id'                    => $id,
@@ -413,10 +422,20 @@ class FunctionsEditLoc {
                 //'type'                  => 'text',
                 'data-autocomplete-url' => route(AutoCompletePlace::class, ['tree'  => $tree->name()]),
 
-                'data-vesta-unchanged'  => 'true',
+                //obsolete
+                //'data-vesta-unchanged'  => 'true',
             
-                'oninput'               => 'updateTextNamePLAC(\'' . $id . '\')',
-            ]) . '>';
+                //obsolete
+                //'oninput'               => 'updateTextNamePLAC(\'' . $id . '\')',
+            
+                'oninput'               => 'updateTextNamePLAC2(\'' . $id . '\')',
+            ];
+        
+        if ($value !== '') {
+          $attributes['data-vesta-plac-was-set'] = 'true';
+        }
+        
+        $html .= '<input ' . Html::attributes($attributes) . '>';
 
         //[RC] twitter-typeahead stuff apparently wraps input, leading to styling issues wrt background-color when using 'readonly'
         //solution via readonly input would otherwise be preferable to second input element

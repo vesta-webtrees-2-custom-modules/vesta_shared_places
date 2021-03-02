@@ -179,6 +179,15 @@ trait SharedPlacesModuleTrait {
                 'LINK_COUNTS',
                 '1')));
 
+    $hierarchySub = array();
+    $hierarchySub[] = new ControlPanelSubsection(
+            CommonI18N::displayedData(),
+            array(new ControlPanelCheckbox(
+                /* I18N: Module Configuration */I18N::translate('Filter to unique shared places'),
+                /* I18N: Module Configuration */I18N::translate('In the place hierarchy list, when using the option \'restrict to shared places\', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place\'s primary name, and also show its additional names.'),
+                'UNIQUE_SP_IN_HIERARCHY',
+                '0')));
+    
     $sections = array();
     $sections[] = new ControlPanelSection(
             CommonI18N::general(),
@@ -196,6 +205,10 @@ trait SharedPlacesModuleTrait {
             /* I18N: Module Configuration */I18N::translate('Shared places list'),
             null,
             $listSub);
+    $sections[] = new ControlPanelSection(
+            /* I18N: Module Configuration */I18N::translate('Place hierarchy'),
+            null,
+            $hierarchySub);
 
     return new ControlPanelPreferences($sections);
   }

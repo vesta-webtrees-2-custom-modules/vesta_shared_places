@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cissee\WebtreesExt\Services;
 
+use Cissee\WebtreesExt\SharedPlace;
 use Closure;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Location;
@@ -17,6 +18,7 @@ use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use stdClass;
+use Vesta\Model\GedcomDateInterval;
 
 /**
  * Search trees for genealogy records.
@@ -35,7 +37,22 @@ class SearchServiceExt {
     $this->tree_service = $tree_service;
   }
 
-  public function searchLocationsInPlace(Place $place): Collection
+  public function searchLocationsInPlace(Place $place): Collection 
+    {
+      //it may seem more efficient to filter to roots via LocGraph,
+      //but there are edge cases where that isn't correct (if a shared places maps to "A, B" as well as "B")
+    
+      return $this->searchLocationHierarchiesInPlace($place)
+              ->filter(function (SharedPlace $sharedPlace) use ($place): bool {
+                //include only if name matches!
+                $names = new Collection($sharedPlace->namesAsPlacesAt(GedcomDateInterval::createEmpty()));
+                return $names->has($place->id());
+              });
+    }
+    
+  //[2021/03] now that placelinks includes all child LOCs as well (placelinks requires these to prevent orphaning),
+  //this function returns more than usually intended: cf searchLocationsInPlace
+  public function searchLocationHierarchiesInPlace(Place $place): Collection
     {
         return DB::table('other')
             ->join('placelinks', static function (JoinClause $query) {

@@ -6,9 +6,8 @@ use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
 use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
+use Exception;
 use Fisharebest\Webtrees\Gedcom;
-use Fisharebest\Webtrees\GedcomRecord;
-use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\GedcomService;
@@ -28,6 +27,9 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   
   protected $actual;
   
+  /** @var bool */
+  protected $asAdditionalParticipant;
+  
   /** @var PlaceUrls */
   protected $urls;
   
@@ -46,12 +48,14 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   
   public function __construct(
           Place $actual,
+          bool $asAdditionalParticipant,
           PlaceUrls $urls,
           Collection $sharedPlaces,
           SharedPlacesModule $module,
           SearchServiceExt $search_service_ext) {
 
     $this->actual = $actual;
+    $this->asAdditionalParticipant = $asAdditionalParticipant;
     $this->urls = $urls;
     $this->module = $module;
     $this->sharedPlaces = $sharedPlaces;
@@ -70,11 +74,28 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   }
   
   public function placeName(): string {
+    $uniqueSharedPlaces = boolval($this->module->getPreference('UNIQUE_SP_IN_HIERARCHY', '0'));
+    
+    if ($uniqueSharedPlaces && !$this->asAdditionalParticipant) {
+      //by design only current names (exclude historical names!)
+      $place_name = $this->sharedPlaces
+              ->flatMap(function (SharedPlace $sharedPlace): array {
+                return $sharedPlace->namesNNAt(null);
+              })
+              ->reduce(function ($carry, $item): string {
+                  return ($carry === "")?$item:$carry . " | " . $item;
+              }, "");
+              
+      return '<span dir="auto">' . e($place_name) . '</span>';
+    }
+    
     return $this->actual->placeName();
   }
   
   //cf DefaultPlaceWithinHierarchy, but map to SharedPlace/PlaceViaSharedPlace directly from query
-  public function getChildPlacesCacheIds(Place $place): Collection {
+  public function getChildPlacesCacheIds(
+          Place $place): Collection {
+    
     $self = $this;
     
     if ($place->gedcomName() !== '') {
@@ -85,7 +106,7 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
 
     $tree = $place->tree();
 
-    return DB::table('places')
+    $place2sharedPlaceMap = DB::table('places')
         ->where('p_file', '=', $tree->id())
         ->where('p_parent_id', '=', $place->id())
         ->join('placelinks', static function (JoinClause $join): void {
@@ -108,6 +129,52 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
             $sharedPlace = Registry::locationFactory()->mapper($tree)($row);
             return ["actual" => $place, "record" => $sharedPlace];
         })
+        //must filter as in SearchServiceExt::searchLocationsInPlace
+        ->filter(function ($item): bool {
+            //include only if name matches!
+            $names = new Collection($item["record"]->namesAsPlacesAt(GedcomDateInterval::createEmpty()));
+            return $names->has($item["actual"]->id());
+        });
+    
+    if ($place2sharedPlaceMap->isEmpty()) {
+      return new Collection();
+    }
+    
+    $uniqueSharedPlaces = boolval($this->module->getPreference('UNIQUE_SP_IN_HIERARCHY', '0'));
+    
+    //if $asAdditionalParticipant, we just need the additional data (map coordinates)
+    //and do not evaluate $uniqueSharedPlaces
+    if ($uniqueSharedPlaces && !$this->asAdditionalParticipant) {
+      $place2sharedPlaceMap = $place2sharedPlaceMap  
+        ->mapToGroups(static function ($item): array {
+          /** @var SharedPlace $sharedPlace */
+          $sharedPlace = $item["record"];
+          return [$sharedPlace->xref() => $item];
+        })
+        ->map(static function (Collection $groupedItems): array {
+          $first = $groupedItems->first();
+          /** @var SharedPlace $sharedPlace */
+          $sharedPlace = $first["record"];
+          
+          //which place to use? follow order from shared place
+          $place = null;
+          foreach ($sharedPlace->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $placeViaSharedPlace) {
+            foreach ($groupedItems as $groupedItem) {
+              if ($placeViaSharedPlace->id() === $groupedItem["actual"]->id()) {
+                $place = $groupedItem["actual"];
+                break 2;
+              }
+            }
+          }
+          
+          if ($place === null) {
+            throw new Exception("unexpected null place!");
+          }
+          return ["actual" => $place, "record" => $sharedPlace];
+        });
+    }
+        
+    $childPlaces = $place2sharedPlaceMap  
         ->mapToGroups(static function ($item): array {
           $place = $item["actual"];
           return [$place->id() => $item];
@@ -122,15 +189,22 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
                       return $sharedPlace->xref();
                   });
 
-          return new PlaceViaSharedPlace($first["actual"], $self->urls, $sharedPlaces, $self->module, $self->search_service_ext);
+          return new PlaceViaSharedPlace(
+                  $first["actual"], 
+                  $self->asAdditionalParticipant, 
+                  $self->urls, 
+                  $sharedPlaces, 
+                  $self->module, 
+                  $self->search_service_ext);
         })
         ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
           return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
         })
-        //
         ->mapWithKeys(static function (PlaceViaSharedPlace $place): array {
           return [$place->id() => $place];
         });
+        
+    return $childPlaces;    
   }
   
   public function getChildPlaces(): array {
@@ -139,102 +213,6 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
             ->toArray();
     
     return $ret;
-  }
-  
-  //needlessly complicated! 
-  public function getChildPlacesLegacy(): array {
-    $self = $this;
-    if ($this->actual->id() === 0) {      
-      
-      //top-level
-      $ret = $this->search_service_ext
-              ->searchTopLevelLocations([$this->tree()])
-              ->filter(GedcomRecord::accessFilter())
-              ->flatMap(static function (SharedPlace $record): array {
-                //don't use the primary name only - confusing because other names exist in hierarchy anyway via places table
-                //$name = $record->namesNN()[$record->getPrimaryName()];                
-                //$actual = new Place($name, $record->tree());
-                //$actual->id(); //make sure place exists in db
-                //return ["actual" => $actual, "record" => $record];
-                
-                //TODO: optimize - filter immediately to top-level via arg?
-                $places = $record->namesAsPlacesAt(GedcomDateInterval::createEmpty());
-                
-                $ret = [];                
-                foreach ($places as $place) {
-                  //only use the top-level place names!
-                  /* @var $place Place */
-                  if ($place->parent()->id() === 0) {
-                    $ret []= ["actual" => $place, "record" => $record];
-                  }                  
-                }                
-                return $ret;
-              })
-              ->mapToGroups(static function ($item): array {
-                $place = $item["actual"];
-                return [$place->id() => $item];
-              })
-              ->map(static function (Collection $groupedItems) use ($self): PlaceViaSharedPlace {
-                $first = $groupedItems->first();
-                $sharedPlaces = $groupedItems
-                        ->map(static function (array $inner): SharedPlace {
-                            return $inner["record"];
-                        })
-                        ->unique(function (SharedPlace $sharedPlace): string {
-                            return $sharedPlace->xref();
-                        });
-                        
-                return new PlaceViaSharedPlace($first["actual"], $self->urls, $sharedPlaces, $self->module, $self->search_service_ext);
-              })
-              ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
-                return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
-              })
-              //
-              ->mapWithKeys(static function (PlaceViaSharedPlace $place): array {
-                return [$place->id() => $place];
-              })
-              ->toArray();
-              
-      return $ret;        
-    }
-    
-    $ret = new Collection();
-    foreach ($this->sharedPlaces as $sharedPlace) {
-      $ret = $ret->merge(
-            $sharedPlace
-            ->linkedLocations('_LOC')
-            ->filter(GedcomRecord::accessFilter())
-            ->map(static function (Location $record) use ($self): array {
-              //TODO: must choose proper name here - which isn'T always the primary name!
-              $name = $record->namesNN()[$record->getPrimaryName()];
-              $actual = new Place($name . Gedcom::PLACE_SEPARATOR . $self->gedcomName(), $record->tree());
-              $actual->id(); //make sure place exists in db
-              return ["actual" => $actual, "record" => $record];
-            })
-            ->mapToGroups(static function ($item): array {
-              //group by place id
-              $place = $item["actual"];
-              return [$place->id() => $item];
-            })
-            ->map(static function (Collection $groupedItems) use ($self): PlaceViaSharedPlace {
-              $first = $groupedItems->first();
-              $sharedPlaces = $groupedItems->map(static function ($inner): Location {
-                return $inner["record"];
-              });
-              return new PlaceViaSharedPlace($first["actual"], $self->urls, $sharedPlaces, $self->module, $self->search_service_ext);
-            })
-            ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
-              return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
-            }));
-    }
-    
-    return $ret
-            ->unique()
-            //must do this after merging because we use numeric keys
-            ->mapWithKeys(static function (PlaceViaSharedPlace $place): array {
-              return [$place->id() => $place];
-            })
-            ->toArray();
   }
   
   public function id(): int {
