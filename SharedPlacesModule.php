@@ -919,6 +919,9 @@ class SharedPlacesModule extends AbstractModule implements
         'autoAcceptEdits' => $autoAcceptEdits]);
   }
     
+  //easier wrt start/end params handling to use method from trait!
+  //override by record type instead!
+  /*
   public function recordsToFix(Tree $tree, array $params): Collection {
     if (!array_key_exists('mode', $params)) {
       return new Collection();
@@ -946,21 +949,25 @@ class SharedPlacesModule extends AbstractModule implements
     
     return new Collection();
   }
+  */
   
-  protected function recordsToFixWrtHierarchy(Tree $tree): Collection {
-    $locations = $this->locationsToFixWrtHierarchy($tree);
+  protected function locationsToFix(Tree $tree, array $params): ?Collection {
+    if (!array_key_exists('mode', $params)) {
+      return null;
+    }
     
-    $records = new Collection();
-    $records = $records->concat($this->mergePendingRecords($locations, $tree, Location::RECORD_TYPE));
+    if ($params['mode'] === 'hierarchicalize') {
+      return $this->locationsToFixWrtHierarchy($tree, $params);
+    }
         
-    return $records
-        ->unique()
-        ->sort(static function (stdClass $x, stdClass $y) {
-            return $x->xref <=> $y->xref;
-        });
+    if ($params['mode'] === 'enhance') {
+      return $this->locationsToFixWrtEnhance($tree, $params);
+    }
+        
+    return null;
   }
-  
-  protected function locationsToFixWrtHierarchy(Tree $tree): Collection {
+    
+  protected function locationsToFixWrtHierarchy(Tree $tree, array $params = []): Collection {
     $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
     
     if (!$useHierarchy) {
@@ -975,21 +982,8 @@ class SharedPlacesModule extends AbstractModule implements
 
     return $query->pluck('o_id');
   }
-      
-  protected function recordsToFixWrtEnhance(Tree $tree): Collection {
-    $locations = $this->locationsToFixWrtEnhance($tree);
-    
-    $records = new Collection();
-    $records = $records->concat($this->mergePendingRecords($locations, $tree, Location::RECORD_TYPE));
-        
-    return $records
-        ->unique()
-        ->sort(static function (stdClass $x, stdClass $y) {
-            return $x->xref <=> $y->xref;
-        });
-  }
   
-  protected function locationsToFixWrtEnhance(Tree $tree): Collection {
+  protected function locationsToFixWrtEnhance(Tree $tree, array $params = []): Collection {
     
     $query = DB::table('other')
         ->where('o_file', '=', $tree->id())
@@ -1007,10 +1001,34 @@ class SharedPlacesModule extends AbstractModule implements
             });
     }    
 
+    if (isset($params['start'], $params['end'])) {
+        $query->whereBetween('o_id', [$params['start'], $params['end']]);
+    }
+    
     return $query->pluck('o_id');
   }
   
-  protected function recordsToFixWrtXrefs(Tree $tree): Collection {
+  protected function individualsToFix(Tree $tree, array $params): ?Collection {
+    if (!array_key_exists('mode', $params)) {
+      return new Collection();
+    }
+    
+    if ($params['mode'] === 'xrefs') {
+      return $this->individualsToFixWrtXrefs($tree, $params);
+    }
+    
+    if ($params['mode'] === 'create1') {
+      return $this->individualsToFixWrtXrefs($tree, $params);
+    }
+    
+    if ($params['mode'] === 'create2') {
+      return $this->individualsToFixWrtXrefs($tree, $params);
+    }
+    
+    return null;
+  }
+  
+  protected function individualsToFixWrtXrefs(Tree $tree, array $params = []): Collection {
 
     //count
     //\n2 PLAC
@@ -1022,23 +1040,50 @@ class SharedPlacesModule extends AbstractModule implements
             ->where('i_file', '=', $tree->id())
             ->whereRaw('((CHAR_LENGTH(i_gedcom) - CHAR_LENGTH(REPLACE(i_gedcom, \'\n2 PLAC\', \'\'))) / 7) > ((CHAR_LENGTH(i_gedcom) - CHAR_LENGTH(REPLACE(i_gedcom, \'\n3 _LOC\', \'\'))) / 7)');
 
-    $indi = $query->pluck('i_id');
+    if (isset($params['start'], $params['end'])) {
+        $query->whereBetween('i_id', [$params['start'], $params['end']]);
+    }
+    
+    return $query->pluck('i_id');
+  }
+  
+  protected function familiesToFix(Tree $tree, array $params): ?Collection {
+    if (!array_key_exists('mode', $params)) {
+      return new Collection();
+    }
+    
+    if ($params['mode'] === 'xrefs') {
+      return $this->familiesToFixWrtXrefs($tree, $params);
+    }
+    
+    if ($params['mode'] === 'create1') {
+      return $this->familiesToFixWrtXrefs($tree, $params);
+    }
+    
+    if ($params['mode'] === 'create2') {
+      return $this->familiesToFixWrtXrefs($tree, $params);
+    }
+    
+    return null;
+  }
+  
+  protected function familiesToFixWrtXrefs(Tree $tree, array $params = []): Collection {
+
+    //count
+    //\n2 PLAC
+    //vs
+    //\n3 _LOC
+    //see https://stackoverflow.com/questions/5427467/mysql-count-instances-of-substring-then-order-by
     
     $query = DB::table('families')
             ->where('f_file', '=', $tree->id())
             ->whereRaw('((CHAR_LENGTH(f_gedcom) - CHAR_LENGTH(REPLACE(f_gedcom, \'\n2 PLAC\', \'\'))) / 7) > ((CHAR_LENGTH(f_gedcom) - CHAR_LENGTH(REPLACE(f_gedcom, \'\n3 _LOC\', \'\'))) / 7)');
 
-    $fam = $query->pluck('f_id');
+    if (isset($params['start'], $params['end'])) {
+        $query->whereBetween('f_id', [$params['start'], $params['end']]);
+    }
     
-    $records = new Collection();
-    $records = $records->concat($this->mergePendingRecords($indi, $tree, Individual::RECORD_TYPE));
-    $records = $records->concat($this->mergePendingRecords($fam, $tree, Family::RECORD_TYPE));
-        
-    return $records
-        ->unique()
-        ->sort(static function (stdClass $x, stdClass $y) {
-            return $x->xref <=> $y->xref;
-        });
+    return $query->pluck('f_id');
   }
   
   public function doesRecordNeedUpdate(GedcomRecord $record, array $params): bool {
@@ -1277,11 +1322,14 @@ class SharedPlacesModule extends AbstractModule implements
     return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
   }
   
-  protected function previewUpdateWrtCreate(GedcomRecord $record, bool $unconditionally): string {
+  protected function previewUpdateWrtCreate(
+          GedcomRecord $record, 
+          bool $unconditionally): string {
+    
     //we need immediate accepts in order to avoid potential duplicates when creating new shared places!
     if (Auth::user()->getPreference(User::PREF_AUTO_ACCEPT_EDITS) !== '1') {
       return '';
-    }    
+    }
     
     $old = $record->gedcom();
     

@@ -192,12 +192,6 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
       
       //otherwise create (including missing parents)
       
-      $ref = null;
-      if ($tail !== '') {
-        //missing parents have to be created regardless of $onlyIfGlobalDataAvailable!
-        $ref = $this->createIfRequired($tail, '', $tree, $simulate, $enhanceWithGlobalData);
-      }
-      
       $gedcom = "0 @@ _LOC\n1 NAME " . $head;
 
       $enhancedWithGlobalData = false;
@@ -209,7 +203,7 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
         
         if (sizeof($plac2GovSupporters) > 0) {
           foreach ($plac2GovSupporters as $plac2GovSupporter) {
-            $gov = $plac2GovSupporter->plac2gov(PlaceStructure::fromName($head, $tree));
+            $gov = $plac2GovSupporter->plac2gov(PlaceStructure::fromName($placeGedcomName, $tree));
             if ($gov !== null) {
               $gedcom .= "\n1 _GOV " . $gov->getId();
               $enhancedWithGlobalData = true;
@@ -220,7 +214,7 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
       }
       
       if ($enhanceWithGlobalData !== null) {
-        $ll = $enhanceWithGlobalData->getLatLon($head);
+        $ll = $enhanceWithGlobalData->getLatLon($placeGedcomName);
         
         if ($ll !== null) {
           $map_lati = ($ll[0] < 0)?"S".str_replace('-', '', $ll[0]):"N".$ll[0];
@@ -234,11 +228,21 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
         return null;
       }
       
+      /////////////////////////////////////////////////////////////////////////
+      
+      //start to actually change something!
+      
+      $ref = null;
+      if ($tail !== '') {
+        //missing parents have to be created regardless of their own $onlyIfGlobalDataAvailable!
+        $ref = $this->createIfRequired($tail, '', $tree, $simulate, $enhanceWithGlobalData);
+      }
+            
       if ($ref !== null) {
         $gedcom .= "\n1 _LOC @" . $ref->record()->xref() . "@";
         $gedcom .= "\n2 TYPE POLI";
       }
-
+      
       if (!$simulate) {
         $record = $tree->createRecord($gedcom); //returns GedcomRecord
       }
@@ -250,6 +254,7 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
       //we need Location for proper names!
       //and we must check() in order to update place links
       $record = Registry::locationFactory()->make($newXref, $tree, $gedcom); 
+      $record->check();
       
       $count = 1;
       if ($ref !== null) {
