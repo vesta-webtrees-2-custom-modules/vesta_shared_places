@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-03-02 09:56+0100\n"
-"PO-Revision-Date: 2021-02-05 08:41+0000\n"
-"Last-Translator: Osman Öz <osmanoz05@hotmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/tr/>\n"
+"PO-Revision-Date: 2021-03-10 17:02+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -124,7 +125,7 @@ msgstr "Paylaşılan yer kayıtları için gerçekler"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:186
 msgid "Filter to unique shared places"
-msgstr ""
+msgstr "Benzersiz paylaşılan yerlere göre filtrele"
 
 #. I18N: Gedcom tag _LOC:TYPE:_GOVTYPE
 #: SharedPlacesModule.php:317
@@ -183,6 +184,11 @@ msgstr "Özellikle, web ağaçlarının 'Coğrafi verilerinden' harita koordinat
 #: SharedPlacesModuleTrait.php:187
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr ""
+"Yer hiyerarşisi listesinde, 'paylaşılan yerlerle sınırla' seçeneği "
+"kullanılırken, birden çok ada sahip paylaşılan yerler ayrı girişler olarak "
+"birden çok kez görünür. Bu durumda her bir paylaşılan yeri, paylaşılan yerin "
+"birincil adı altında yalnızca bir kez göstermek ve ayrıca diğer adlarını da "
+"göstermek için bu seçeneği işaretleyin."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:81
@@ -257,7 +263,7 @@ msgstr "Not:"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:209
 msgid "Place hierarchy"
-msgstr ""
+msgstr "Yer hiyerarşisi"
 
 #: HelpTexts.php:29 HelpTexts.php:39
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
