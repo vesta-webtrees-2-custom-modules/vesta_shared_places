@@ -91,8 +91,8 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.11.4.0
-* Based on and tested with webtrees 2.0.11. Requires webtrees 2.0.9 or later.
+* Current version: 2.0.12.0.0
+* Based on and tested with webtrees 2.0.12. Requires webtrees 2.0.12 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
 * Provides location data to other custom modules.
@@ -107,6 +107,7 @@ Note that currently only selected parts of this structure are displayed and supp
 * Enable the extended 'Facts and Events' module via Control Panel -> Modules -> All modules -> ⚶ Facts and Events.
 * Enable the main module via Control Panel -> Modules -> All modules -> ⚶ Shared Places. After that, you may configure some options.
 * Configure the visibility of the old and the extended 'Facts and Events' tab via Control Panel -> Modules -> Tabs (usually, you'll want to use only one of them. You may just disable the oringinal 'Facts and Events' module altogether).
+* Configure the visibility of the old 'Locations' and the extended 'Shared places' list via Control Panel -> Modules -> Lists (usually, you'll want to use only one of them. You may just disable the original 'Locations' module altogether).
 
 ### License<a name="license"/>
 

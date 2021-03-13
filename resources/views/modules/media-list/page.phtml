@@ -6,7 +6,10 @@ use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Media;
+use Fisharebest\Webtrees\MediaFile;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
+use Fisharebest\Webtrees\Registry;
+use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
 use League\Flysystem\FilesystemInterface;
 
@@ -18,12 +21,14 @@ use League\Flysystem\FilesystemInterface;
  * @var array<string>       $folders
  * @var string              $format
  * @var array<string>       $formats
+ * @var int                 $max
  * @var Collection<Media>   $media_objects
  * @var ModuleListInterface $module
  * @var int                 $page
  * @var int                 $pages
  * @var string              $subdirs
  * @var string              $title
+ * @var Tree                $tree
  */
 
 ?>
@@ -107,21 +112,24 @@ use League\Flysystem\FilesystemInterface;
                                 <?= $media_file->displayImage(300, 200, 'contain', ['class' => 'img-fluid']) ?>
                             <?php endforeach ?>
 
+                            <?php $media_file = $media_object->mediaFiles()->first() ?>
+                            <?php if ($media_file instanceof MediaFile): ?>
                             <p class="card-text">
                                 <?php
                                 // Show file details
                                 $mediatype = $media_file->type();
-                                if ($mediatype) {
-                                    echo GedcomTag::getLabelValue('TYPE', GedcomTag::getFileFormTypeValue($mediatype));
+                                    if ($media_file->type() !== '') {
+                                        $element = Registry::elementFactory()->make('OBJE:FILE:FORM:TYPE');
+                                        echo $element->labelValue($media_file->type(), $media_object->tree());
                                 }
                                 echo FunctionsPrintFacts::printFactSources($tree, $media_object->gedcom(), 1);
                                 echo FunctionsPrint::printFactNotes($tree, $media_object->gedcom(), 1);
                                 if ($media_file->isExternal()) {
-                                    echo GedcomTag::getLabelValue('URL', e($media_file->filename()));
+                                        echo Registry::elementFactory()->make('OBJE:FILE')->labelValue($media_file->filename(), $media_object->tree());
                                 } elseif ($media_file->fileExists($data_filesystem)) {
-                                    echo GedcomTag::getLabelValue('FORM', $media_file->mimeType());
+                                        echo Registry::elementFactory()->make('OBJE:FILE:FORM')->labelValue($media_file->mimeType(), $media_object->tree());
                                     if (Auth::isEditor($tree)) {
-                                        echo GedcomTag::getLabelValue('FILE', e($media_file->filename()));
+                                            echo Registry::elementFactory()->make('OBJE:FILE')->labelValue($media_file->filename(), $media_object->tree());
                                     }
                                     if (Auth::isEditor($tree)) {
                                         foreach ($media_file->attributes($data_filesystem) as $tag => $value) {
@@ -133,6 +141,7 @@ use League\Flysystem\FilesystemInterface;
                                 }
                                 ?>
                             </p>
+                            <?php endif ?>
                         </div>
                         <div class="card-footer">
                             <?php foreach ($media_object->linkedIndividuals('OBJE') as $record) : ?>

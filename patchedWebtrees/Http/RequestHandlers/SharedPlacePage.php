@@ -85,7 +85,7 @@ class SharedPlacePage implements RequestHandlerInterface {
         //we don't need a specific method here, 
         //if we ever refactor this:
         //use SharedPlaceNotFoundException! 
-        Auth::checkRecordAccess($sharedPlace, false);
+        Auth::checkLocationAccess($sharedPlace, false);
 
         // Redirect to correct xref/slug
         if ($sharedPlace->xref() !== $xref || $request->getAttribute('slug') !== $sharedPlace->slug()) {

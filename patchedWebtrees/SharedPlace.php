@@ -2,9 +2,9 @@
 
 namespace Cissee\WebtreesExt;
 
-use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Exception;
 use Fisharebest\Webtrees\Gedcom;
+use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use stdClass;
 use Vesta\Model\GedcomDateInterval;
+use function mb_strtolower;
 use function str_contains;
 
 /**
@@ -26,7 +27,9 @@ class SharedPlace extends Location {
   
   public const RECORD_TYPE = '_LOC';
 
-  protected const ROUTE_NAME  = SharedPlacePage::class;
+  //[from 2.0.12] use standard name (relevant e.g. for ClippingsCartModule.php, where the standard names are hard-coded)
+  //and redefine this route with SharedPlacePage::class as handler!
+  protected const ROUTE_NAME  = LocationPage::class;
 
   protected $preferences;
 

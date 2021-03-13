@@ -10,6 +10,12 @@ use Fisharebest\Webtrees\Tree;
 
 class ExtendedFunctionsEditPlacHandler extends FunctionsEditPlacHandler {
   
+  public function expectedSubtagsPlac(): array {
+    //note: could set _LOC via tree preferences, seems better to do it centrally
+    //in particular a change at this point [2.0.12] would be surprising for users
+    return ['MAP', '_LOC'];
+  }
+  
   //for new-individual via cards/add-fact
   public function addSimpleTagsPlac(Tree $tree, string $fact): void {
 

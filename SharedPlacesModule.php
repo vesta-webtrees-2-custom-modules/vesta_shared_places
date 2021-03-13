@@ -2,13 +2,9 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
-use Aura\Router\Route;
 use Aura\Router\RouterContainer;
-use Vesta\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
-use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Cissee\Webtrees\Module\SharedPlaces\HelpTexts;
 use Cissee\WebtreesExt\AbstractModule;
-use Cissee\WebtreesExt\Exceptions\SharedPlaceNotFoundException;
 use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
 use Cissee\WebtreesExt\FactPlaceAdditions;
 use Cissee\WebtreesExt\Functions\ExtendedFunctionsEditPlacHandler;
@@ -23,7 +19,6 @@ use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
 use Cissee\WebtreesExt\Http\RequestHandlers\Select2Location;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
-use Cissee\WebtreesExt\Module\ClippingsCartModule;
 use Cissee\WebtreesExt\PlaceViaSharedPlace;
 use Cissee\WebtreesExt\Requests;
 use Cissee\WebtreesExt\Services\GedcomEditServiceExt;
@@ -31,14 +26,17 @@ use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlacePreferences;
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Elements\CustomElement;
+use Fisharebest\Webtrees\Elements\HierarchicalRelationship;
+use Fisharebest\Webtrees\Elements\LocationRecord;
+use Fisharebest\Webtrees\Elements\XrefLocation;
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Middleware\AuthEditor;
+use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
@@ -67,15 +65,17 @@ use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
-use stdClass;
 use Throwable;
+use Vesta\Hook\HookInterfaces\ClippingsCartAddToCartInterface;
 use Vesta\Hook\HookInterfaces\EmptyFunctionsPlace;
+use Vesta\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Vesta\Hook\HookInterfaces\EmptyPrintFunctionsPlace;
 use Vesta\Hook\HookInterfaces\FunctionsClippingsCartInterface;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceInterface;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
+use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Vesta\Hook\HookInterfaces\PrintFunctionsPlaceInterface;
 use Vesta\Model\GedcomDateInterval;
 use Vesta\Model\GenericViewElement;
@@ -86,9 +86,7 @@ use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
 use Vesta\VestaModuleTrait;
 use function app;
-use function redirect;
 use function response;
-use function route;
 use function str_contains;
 use function str_starts_with;
 use function view;
@@ -246,8 +244,17 @@ class SharedPlacesModule extends AbstractModule implements
       $router = $router_container->getMap();
       
       //(cf WebRoutes.php "Visitor routes with a tree")
-      //note: this has the side effect of handling pricacy properly (Issue #9)
-      $router->get(SharedPlacePage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
+      //note: this format has the side effect of handling privacy properly (Issue #9)
+      //from 2.0.12, use standard name with specific handler!
+      
+      //for this, we have to remove the original route, otherwise: RouteAlreadyExists (meh)
+      $existingRoutes = $router->getRoutes();
+      if (array_key_exists(LocationPage::class, $existingRoutes)) {
+        unset($existingRoutes[LocationPage::class]);        
+      }
+      $router->setRoutes($existingRoutes);
+      
+      $router->get(LocationPage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
     
       // Replace an existing view with our own version.
       // (media management via list module)
@@ -310,11 +317,17 @@ class SharedPlacesModule extends AbstractModule implements
       ////////////////////////////////////////////////////////////////////////////
       /* I18N: translate just like 'Shared Place' for consistency */I18N::translate('Location');
       
-      //added via GedcomTag.php
-      /* I18N: Gedcom tag _LOC:_LOC */I18N::translate('Higher-level shared place');
-      /* I18N: Gedcom tag _LOC:_LOC:TYPE */I18N::translate('Type of hierarchical relationship');
-      /* I18N: Gedcom tag _LOC:TYPE */I18N::translate('Type of location');
-      /* I18N: Gedcom tag _LOC:TYPE:_GOVTYPE */I18N::translate('GOV-Id for type of location');
+      //note: replacement for GedcomTag still required in some places!
+      
+      //for now, keep established terminology
+      $ef = Registry::elementFactory();
+      $ef->register([
+          '_LOC' => new LocationRecord(I18N::translate('Shared place')),
+          '_LOC:_LOC' => new XrefLocation(I18N::translate('Higher-level shared place')),
+          '_LOC:TYPE' => new CustomElement(I18N::translate('Type of location')), //actually same term as webtrees
+          '_LOC:_LOC:TYPE' => new HierarchicalRelationship(I18N::translate('Type of hierarchical relationship')),
+          '_LOC:TYPE:_GOVTYPE' => new CustomElement(I18N::translate('GOV id for type of location'))          
+          ]);
       
       $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 3);
   }
@@ -722,7 +735,48 @@ class SharedPlacesModule extends AbstractModule implements
   
   ////////////////////////////////////////////////////////////////////////////////
   //FunctionsClippingsCartInterface
+  
+  public function getAddLocationActionAdditionalOptions(Location $location): ?array {
+    $name = strip_tags($location->fullName());
+    return [
+      'linked' => I18N::translate('%s and the individuals and families that reference it.', $name),
+    ];
+  }
+  
+  public function postAddLocationActionHandleOption(ClippingsCartAddToCartInterface $target, Location $location, string $option): bool {
+    switch ($option) {
+      case 'linked':
+        foreach ($location->linkedIndividuals('_LOC') as $individual) {
+            $target->doAddIndividualToCart($individual);
+        }
+        foreach ($location->linkedFamilies('_LOC') as $family) {
+            $target->doAddFamilyToCart($family);
+        }
+              
+        return true;
+    }
     
+    return false;
+  }
+  
+  public function getIndirectLocations(GedcomRecord $record): Collection {
+    $ret = new Collection();
+    
+    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    if ($indirect) {
+      $places = $record->getAllEventPlaces([]);
+      foreach ($places as $place) {
+        $sharedPlace = $this->placename2sharedPlace($place->gedcomName(), $record->tree());
+        if ($sharedPlace != null) {
+          $ret->push($sharedPlace->xref());
+        }
+      }
+    }    
+    
+    return $ret;
+  }  
+    
+  /*  
   public function getDirectLinkTypes(): Collection {
     return new Collection(["_LOC"]);
   }
@@ -861,6 +915,7 @@ class SharedPlacesModule extends AbstractModule implements
 
         return redirect($sharedPlace->url());
     }
+  */
   
   ////////////////////////////////////////////////////////////////////////////////
   //PlaceHierarchyParticipant
