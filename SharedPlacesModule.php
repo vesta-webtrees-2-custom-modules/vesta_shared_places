@@ -35,6 +35,8 @@ use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Middleware\AuthEditor;
+use Fisharebest\Webtrees\Http\RequestHandlers\CreateLocationAction;
+use Fisharebest\Webtrees\Http\RequestHandlers\CreateLocationModal;
 use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Location;
@@ -252,6 +254,21 @@ class SharedPlacesModule extends AbstractModule implements
       if (array_key_exists(LocationPage::class, $existingRoutes)) {
         unset($existingRoutes[LocationPage::class]);        
       }
+      
+      //while we're at it: webtrees 2.0.12 has CreateLocationModal and CreateLocationAction on the same urls
+      //as our CreateSharedPlaceModal and CreateSharedPlaceAction, we have to drop those!
+      if (array_key_exists(CreateLocationModal::class, $existingRoutes)) {
+        unset($existingRoutes[CreateLocationModal::class]);        
+      }
+      if (array_key_exists(CreateLocationAction::class, $existingRoutes)) {
+        unset($existingRoutes[CreateLocationAction::class]);        
+      }
+      
+      //same with Select2Location
+      if (array_key_exists("Fisharebest\Webtrees\Http\RequestHandlers\Select2Location", $existingRoutes)) {        
+        unset($existingRoutes["Fisharebest\Webtrees\Http\RequestHandlers\Select2Location"]);        
+      }
+      
       $router->setRoutes($existingRoutes);
       
       $router->get(LocationPage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
@@ -1714,8 +1731,7 @@ class SharedPlacesModule extends AbstractModule implements
     $latitude = $location->latitude();
     $longitude = $location->longitude();
 
-    //wtf webtrees: 0.0; 0.0 are valid coordinates, why do you use them for 'unknown'?
-    if (($latitude !== 0.0) && ($longitude !== 0.0)) {
+    if (($latitude !== null) && ($longitude !== null)) {
       return array($latitude, $longitude);
     }
 

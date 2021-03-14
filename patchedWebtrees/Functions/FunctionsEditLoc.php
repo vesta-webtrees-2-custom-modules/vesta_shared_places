@@ -220,13 +220,10 @@ class FunctionsEditLoc {
 
     // tag name
     if ($label) {
-        error_log("getLabel 3".$fact);
         $html .= $label;
     } elseif ($upperlevel) {
-        error_log("getLabel 2".$fact);
         $html .= GedcomTag::getLabel($upperlevel . ':' . $fact);
     } else {
-        error_log("getLabel".$fact);
         $html .= GedcomTag::getLabel($fact);
     }
     
