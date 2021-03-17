@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-03-13 17:14+0100\n"
-"PO-Revision-Date: 2020-12-28 15:29+0000\n"
+"PO-Revision-Date: 2021-03-17 13:18+0000\n"
 "Last-Translator: ro-la <lacoros@gmail.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -30,7 +31,7 @@ msgstr " (Poznámka: Bolo vytvorené aj zdieľané miesto vyššej úrovne)"
 #: SharedPlacesModule.php:742
 #, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr ""
+msgstr "%s a osoby a rodiny, ktoré sú s týmto miestom spojené."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:89
@@ -119,11 +120,11 @@ msgstr "Fakty pre zdieľané miesta"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:188
 msgid "Filter to unique shared places"
-msgstr ""
+msgstr "Vyfiltrovať jedinečné zdieľané miesta"
 
 #: SharedPlacesModule.php:329
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "GOV id druhu lokality"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
@@ -176,6 +177,10 @@ msgstr "Najmä sa pridajú geografické koordináty z webtrees \"Geografické ú
 #: SharedPlacesModuleTrait.php:189
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr ""
+"V zozname hierarchie miest. keď sa použije voľba „obmedziť na zdieľané "
+"miesta“, zobrazia sa zdieľané miesta s viacerými názvami ako samostatné "
+"položky. Zvoľte túto voľbu, ak sa má zobraziť každé zdieľané miesto iba raz, "
+"pod primárnym názvom miesta a zobrazia sa aj dodatočné názvy."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:83
@@ -250,7 +255,7 @@ msgstr "Poznámka:"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:211
 msgid "Place hierarchy"
-msgstr ""
+msgstr "Hierarchia miest"
 
 #: HelpTexts.php:29 HelpTexts.php:39
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
@@ -275,12 +280,12 @@ msgstr "Rýchle fakty zdieľaných miest"
 
 #: SharedPlacesModuleTrait.php:26
 msgid "Replacement for the original 'Locations' module."
-msgstr ""
+msgstr "Náhrada za originálny modul „Lokality“."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:36
 msgid "Replaces the original 'Locations' module."
-msgstr ""
+msgstr "Nahrádza pôvodný modul „Lokality“."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:140
