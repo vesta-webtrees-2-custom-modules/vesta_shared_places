@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-03-02 09:56+0100\n"
-"PO-Revision-Date: 2021-03-18 21:18+0000\n"
+"PO-Revision-Date: 2021-03-20 14:18+0000\n"
 "Last-Translator: mpwt <der@bauschaffen.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
@@ -157,17 +157,27 @@ msgstr "Gemeinsamer Ort höherer Ebene"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:84
 msgid "However, you can still check this option and link shared places via the place name itself. In this case, links are established internally by searching for a shared place with any name matching case-insensitively."
-msgstr "Sie können diese Option aktivieren und gemeinsame Orte über den Ortsnamen selbst verknüpfen. In diesem Fall werden Links intern hergestellt, indem nach einem gemeinsamen Ort gesucht wird, dessen Name ohne Berücksichtigung der Groß- und Kleinschreibung übereinstimmt."
+msgstr ""
+"Sie können diese Option aktivieren und gemeinsame Orte über den Ortsnamen "
+"selbst verknüpfen. In diesem Fall werden Links intern hergestellt, indem "
+"nach einem gemeinsamen Ort gesucht wird, dessen Name ohne Berücksichtigung "
+"der Groß- und Kleinschreibung übereinstimmt."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:67
 msgid "If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to higher-level shared places, as described in the specification."
-msgstr "Wenn diese Option aktiviert ist, werden Beziehungen zwischen gemeinsamen Orten über eine explizite Hierarchie modelliert, in der gemeinsame Orte XREFs zu gemeinsamen Orten höherer Ebene aufweisen, wie in der Spezifikation beschrieben."
+msgstr ""
+"Wenn diese Option aktiviert ist, werden Beziehungen zwischen gemeinsamen "
+"Orten über eine explizite Hierarchie modelliert, in der gemeinsame Orte "
+"XREFs zu gemeinsamen Orten höherer Ebene aufweisen, wie in der Spezifikation "
+"beschrieben."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:141
 msgid "If this option is checked, shared place data is only displayed for the following facts and events. "
-msgstr "Wenn diese Option aktiviert ist, werden Daten gemeinsamer Orte nur für die folgenden Tatsachen und Ereignisse angezeigt. "
+msgstr ""
+"Wenn diese Option aktiviert ist, werden Daten gemeinsamer Orte nur für die "
+"folgenden Tatsachen und Ereignisse angezeigt. "
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
