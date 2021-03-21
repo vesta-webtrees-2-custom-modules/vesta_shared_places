@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-03-13 17:14+0100\n"
-"PO-Revision-Date: 2020-11-17 13:28+0000\n"
+"PO-Revision-Date: 2021-03-19 19:18+0000\n"
 "Last-Translator: Vincent DENIS <vincent.denis06@gmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/fr/>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -30,7 +31,7 @@ msgstr " (Note : un lieu partagé de niveau supérieur a aussi été créé)"
 #: SharedPlacesModule.php:742
 #, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr ""
+msgstr "%s et les personnes et familles qui y font référence."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:89
@@ -119,11 +120,11 @@ msgstr "Actes pour les enregistrements de lieux partagés"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:188
 msgid "Filter to unique shared places"
-msgstr ""
+msgstr "Filtrer vers des lieux partagés uniques"
 
 #: SharedPlacesModule.php:329
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "Identifiant GOV pour le type d'emplacement"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
@@ -176,6 +177,11 @@ msgstr "En particulier, les coordonnées cartographiques des «Données géograp
 #: SharedPlacesModuleTrait.php:189
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr ""
+"Dans la liste de hiérarchie des lieux, lors de l'utilisation de l'option «"
+"restreindre aux espaces partagés», les lieux partagés avec plusieurs noms "
+"apparaissent plusieurs fois comme des entrées séparées. Cochez cette option "
+"pour afficher chaque lieu partagé une seule fois dans ce cas, sous le nom "
+"principal du lieu partagé, et afficher également ses noms supplémentaires."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:83
@@ -250,7 +256,7 @@ msgstr "Remarque :"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:211
 msgid "Place hierarchy"
-msgstr ""
+msgstr "Hiérarchie des lieux"
 
 #: HelpTexts.php:29 HelpTexts.php:39
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
@@ -275,12 +281,12 @@ msgstr "Faits rapides sur les lieux partagés"
 
 #: SharedPlacesModuleTrait.php:26
 msgid "Replacement for the original 'Locations' module."
-msgstr ""
+msgstr "Remplacement du module d'origine 'Emplacements'."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:36
 msgid "Replaces the original 'Locations' module."
-msgstr ""
+msgstr "Remplace le module d'origine «Emplacements»."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:140
