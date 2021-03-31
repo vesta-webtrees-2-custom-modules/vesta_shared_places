@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-03-13 17:14+0100\n"
-"PO-Revision-Date: 2020-12-15 22:10+0000\n"
-"Last-Translator: Thomas Rindal <thomas@rindal.net>\n"
-"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/nb_NO/>\n"
+"PO-Revision-Date: 2021-03-28 19:30+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -28,9 +29,9 @@ msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Merk: Det er også opprettet et delt sted på høyere nivå)"
 
 #: SharedPlacesModule.php:742
-#, php-format
+#, fuzzy, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr ""
+msgstr "%s og og personene og familiene som viser til den."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:89
@@ -119,11 +120,12 @@ msgstr "Fakta for delt stedpost"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:188
 msgid "Filter to unique shared places"
-msgstr ""
+msgstr "Filtrer til unike delte steder"
 
 #: SharedPlacesModule.php:329
+#, fuzzy
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "GOV-ID for stedstypen"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
@@ -174,8 +176,13 @@ msgstr "Spesielt legges kartkoordinater fra webtrees 'Geographic data' og GOV id
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:189
+#, fuzzy
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr ""
+"I stedshierarkilisten, når valget «begrens til delte steder» er valgt, vil "
+"delte steder med flere navn vises flere ganger som egne oppføringer. Bruk "
+"dette for å vise hvert delte sted kun én gang hvis dette er tilfelle, under "
+"det delte stedets hovednavn, og også for å vise dets andre navn."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:83
@@ -250,7 +257,7 @@ msgstr "Notat:"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:211
 msgid "Place hierarchy"
-msgstr ""
+msgstr "Stedshierarki"
 
 #: HelpTexts.php:29 HelpTexts.php:39
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
@@ -274,13 +281,15 @@ msgid "Quick shared place facts"
 msgstr "Hurtigfakta om delte steder"
 
 #: SharedPlacesModuleTrait.php:26
+#, fuzzy
 msgid "Replacement for the original 'Locations' module."
-msgstr ""
+msgstr "Erstatning av den opprinelige stedsmodulen."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:36
+#, fuzzy
 msgid "Replaces the original 'Locations' module."
-msgstr ""
+msgstr "Erstatter den opprinnelige stedsmodulen."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:140
