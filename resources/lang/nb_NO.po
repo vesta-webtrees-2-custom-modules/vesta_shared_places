@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-03-13 17:14+0100\n"
-"PO-Revision-Date: 2021-03-28 19:30+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2021-04-12 20:21+0000\n"
+"Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -29,9 +29,9 @@ msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Merk: Det er også opprettet et delt sted på høyere nivå)"
 
 #: SharedPlacesModule.php:742
-#, fuzzy, php-format
+#, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr "%s og og personene og familiene som viser til den."
+msgstr "%s og personene og familiene som viser til den."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:89
@@ -281,13 +281,11 @@ msgid "Quick shared place facts"
 msgstr "Hurtigfakta om delte steder"
 
 #: SharedPlacesModuleTrait.php:26
-#, fuzzy
 msgid "Replacement for the original 'Locations' module."
 msgstr "Erstatning av den opprinelige stedsmodulen."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:36
-#, fuzzy
 msgid "Replaces the original 'Locations' module."
 msgstr "Erstatter den opprinnelige stedsmodulen."
 
