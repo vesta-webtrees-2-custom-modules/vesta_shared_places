@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-03-13 17:14+0100\n"
-"PO-Revision-Date: 2021-04-12 20:20+0000\n"
+"PO-Revision-Date: 2021-04-12 20:21+0000\n"
 "Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/nb_NO/>\n"
@@ -281,13 +281,11 @@ msgid "Quick shared place facts"
 msgstr "Hurtigfakta om delte steder"
 
 #: SharedPlacesModuleTrait.php:26
-#, fuzzy
 msgid "Replacement for the original 'Locations' module."
 msgstr "Erstatning av den opprinelige stedsmodulen."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:36
-#, fuzzy
 msgid "Replaces the original 'Locations' module."
 msgstr "Erstatter den opprinnelige stedsmodulen."
 
