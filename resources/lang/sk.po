@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-03-17 13:18+0000\n"
+"PO-Revision-Date: 2021-05-02 19:31+0000\n"
 "Last-Translator: ro-la <lacoros@gmail.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -276,7 +277,7 @@ msgstr "Rýchle fakty zdieľaných miest"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:189
 msgid "Reference year"
-msgstr ""
+msgstr "Referenčný rok"
 
 #: SharedPlacesModuleTrait.php:27
 msgid "Replacement for the original 'Locations' module."
@@ -327,7 +328,7 @@ msgstr "Názov zdieľaného miesta (úplná hierarchia)"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:224
 msgid "Shared place page"
-msgstr ""
+msgstr "Stránka zdieľaného miesta"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:65
@@ -395,6 +396,8 @@ msgstr "Zhrnutie zobrazuje údaje zdieľaného miesta v takom formáte, ako sa z
 #: SharedPlacesModuleTrait.php:190
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
 msgstr ""
+"Rok, ktorý je tu zadaný, môžu použiť iné moduly na rozšírenie popisu miesta "
+"dodatočnými údajmi. Ak je prázdny, použije sa aktuálny rok."
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
@@ -529,6 +532,8 @@ msgstr "Keď nie je zvolené, tak sa použije predchádzajúci spôsob, v ktorom
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"V konfigurácii modulu môžete nastaviť referenčný rok, ktorý môžu využiť iné "
+"moduly, ako napr. %1$s."
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:542
