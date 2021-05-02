@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-03-17 09:18+0000\n"
+"PO-Revision-Date: 2021-05-02 19:31+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -276,7 +277,7 @@ msgstr "Snelle gedeeldeplaatsfeiten"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:189
 msgid "Reference year"
-msgstr ""
+msgstr "Referentiejaar"
 
 #: SharedPlacesModuleTrait.php:27
 msgid "Replacement for the original 'Locations' module."
@@ -327,7 +328,7 @@ msgstr "Naam van gedeelde plaatsen (volledige hiërarchie)"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:224
 msgid "Shared place page"
-msgstr ""
+msgstr "Pagina met gedeelde plaatsen"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:65
@@ -395,6 +396,9 @@ msgstr "De samenvatting toont de gedeeldelocatiegegevens, op dezelfde manier opg
 #: SharedPlacesModuleTrait.php:190
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
 msgstr ""
+"Het jaar dat hier is ingesteld, kan door andere modules worden gebruikt om "
+"de plaatsbeschrijving te verbeteren met aanvullende gegevens. Als het leeg "
+"blijft, wordt het huidige jaar gebruikt."
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
@@ -529,6 +533,8 @@ msgstr "Indien niet aangevinkt, wordt de eerste benadering gebruikt, waarbij hi�
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"U kunt een referentiejaar (dat kan worden geëvalueerd door andere modules, "
+"zoals %1$s) instellen in de moduleconfiguratie."
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:542
