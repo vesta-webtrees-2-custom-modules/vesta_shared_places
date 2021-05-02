@@ -28,5 +28,11 @@
 		"version": "2.0.15.3.0",
 		"from": "2.0.12",
 		"to": "2.0.16"
+	},
+	{
+		"version": "2.0.15.4.0",
+		"from": "2.0.12",
+		"to": "2.0.16",
+		"changelog": ["Added option to set a reference date for the summary on the shared place page."]
 	}
 ]

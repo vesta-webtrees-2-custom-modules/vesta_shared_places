@@ -349,7 +349,7 @@ class SharedPlacesModule extends AbstractModule implements
           '_LOC:TYPE:_GOVTYPE' => new CustomElement(I18N::translate('GOV id for type of location'))          
           ]);
       
-      $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 3);
+      $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 4);
   }
   
   public function getHelpAction(ServerRequestInterface $request): ResponseInterface {

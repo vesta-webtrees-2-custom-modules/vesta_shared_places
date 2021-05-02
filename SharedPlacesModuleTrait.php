@@ -13,6 +13,7 @@ use Vesta\ControlPanelUtils\Model\ControlPanelRadioButtons;
 use Vesta\ControlPanelUtils\Model\ControlPanelRange;
 use Vesta\ControlPanelUtils\Model\ControlPanelSection;
 use Vesta\ControlPanelUtils\Model\ControlPanelSubsection;
+use Vesta\ControlPanelUtils\Model\ControlPanelTextbox;
 
 trait SharedPlacesModuleTrait {
 
@@ -181,6 +182,18 @@ trait SharedPlacesModuleTrait {
                 'LINK_COUNTS',
                 '1')));
 
+    $pageSub = array();
+    $pageSub[] = new ControlPanelSubsection(
+            /* I18N: Module Configuration */I18N::translate('Summary'),
+            array(new ControlPanelTextbox(
+                /* I18N: Module Configuration */I18N::translate('Reference year'),
+                /* I18N: Module Configuration */I18N::translate('The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used.'),
+                'REF_YEAR',
+                '',
+                false,
+                4,
+                '[1-2][0-9][0-9][0-9]')));
+
     $hierarchySub = array();
     $hierarchySub[] = new ControlPanelSubsection(
             CommonI18N::displayedData(),
@@ -207,6 +220,10 @@ trait SharedPlacesModuleTrait {
             /* I18N: Module Configuration */I18N::translate('Shared places list'),
             null,
             $listSub);
+    $sections[] = new ControlPanelSection(
+            /* I18N: Module Configuration */I18N::translate('Shared place page'),
+            null,
+            $pageSub);
     $sections[] = new ControlPanelSection(
             /* I18N: Module Configuration */I18N::translate('Place hierarchy'),
             null,

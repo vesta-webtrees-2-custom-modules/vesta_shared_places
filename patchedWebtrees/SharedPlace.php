@@ -923,8 +923,12 @@ class SharedPlace extends Location {
   
   public static function placeNameParts(string $placeGedcomName): array {
     // Ignore any empty parts in place names such as "Village, , , Country".
-    $partsColl = new Collection(explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName));      
-    $parts = $partsColl->filter()->toArray();
+    //$partsColl = new Collection(explode(Gedcom::PLACE_SEPARATOR, $placeGedcomName));
+    //$parts = $partsColl->filter()->toArray();
+    
+    //.. but match badly formed separators as well
+    $parts = preg_split(Gedcom::PLACE_SEPARATOR_REGEX, $placeGedcomName, -1, PREG_SPLIT_NO_EMPTY);
+        
     return $parts;
   }
   

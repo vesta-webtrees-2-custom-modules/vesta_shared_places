@@ -110,7 +110,13 @@ class SharedPlacePage implements RequestHandlerInterface {
       //if there is a module that provides this summary
       $summaryHtml = '';
       if (!empty($sharedPlace->namesNN())) {
-        $ps = PlaceStructure::fromNameAndLocNow($canonical, $sharedPlace->xref(), $sharedPlace->tree(), 0, $sharedPlace);
+        $refYear = intVal($this->module->getPreference('REF_YEAR', ''));
+        if ($refYear) {
+          $ps = PlaceStructure::fromNameAndLocWithYear($refYear, $canonical, $sharedPlace->xref(), $sharedPlace->tree(), 0, $sharedPlace);
+        } else {
+          $ps = PlaceStructure::fromNameAndLocNow($canonical, $sharedPlace->xref(), $sharedPlace->tree(), 0, $sharedPlace);
+        }
+        
         if ($ps !== null) {
           $summaryGve = FunctionsPlaceUtils::plac2html($this->module, $ps);
 
