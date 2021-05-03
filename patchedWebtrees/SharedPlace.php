@@ -433,6 +433,7 @@ class SharedPlace extends Location {
    * 
    * @param GedcomDateInterval $date
    * @return Collection<SharedPlaceParentAt>, sorted by date
+   * returned elements have non-null return for ->getSharedPlace() if $fillInterval is false!
    */
   public function getWrappedParentsAt(
           GedcomDateInterval $date,
@@ -440,16 +441,21 @@ class SharedPlace extends Location {
     
     $sharedPlaces = [];
     $indexOfFact = -1;
-    foreach ($this->facts(['_LOC']) as $parent) {
+    
+    foreach ($this->facts(['_LOC']) as $parent) {      
       $indexOfFact++;
       $parentDate = GedcomDateInterval::create($parent->attribute("DATE"));
       
-      $intersectedDate = $date->intersect($parentDate);
-      if ($intersectedDate !== null) {
-        $sharedPlaces[] = new SharedPlaceParentAt($intersectedDate, $parent->target(), $indexOfFact);
-      } else if ($parent->attribute("DATE") === '') {
-        $sharedPlaces[] = new SharedPlaceParentAt($date, $parent->target(), $indexOfFact);
-      }
+      $target = $parent->target();
+      
+      if ($target !== null) {
+        $intersectedDate = $date->intersect($parentDate);
+        if ($intersectedDate !== null) {
+          $sharedPlaces[] = new SharedPlaceParentAt($intersectedDate, $target, $indexOfFact);
+        } else if ($parent->attribute("DATE") === '') {
+          $sharedPlaces[] = new SharedPlaceParentAt($date, $target, $indexOfFact);
+        }
+      } //else could not make() target, e.g. due to invalid xref, skip
     }
 
     //order: by date.getFrom (nulls first), then by original order
@@ -471,7 +477,8 @@ class SharedPlace extends Location {
       return new Collection($sharedPlaces);
     }
     
-    //fill given interval (which also means there is always at least one SharedPlaceParentAt)
+    //fill given interval 
+    //(which also means there is always at least one SharedPlaceParentAt, but its target may be null)
     $filled = $date->fillInterval(
             new Collection($sharedPlaces),
             function (SharedPlaceParentAt $element): GedcomDateInterval {

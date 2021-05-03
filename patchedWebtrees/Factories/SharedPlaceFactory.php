@@ -5,7 +5,6 @@ namespace Cissee\WebtreesExt\Factories;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlacePreferences;
 use Closure;
-use Fisharebest\Webtrees\Cache;
 use Fisharebest\Webtrees\Contracts\LocationFactoryInterface;
 use Fisharebest\Webtrees\Factories\AbstractGedcomRecordFactory;
 use Fisharebest\Webtrees\Location;
@@ -20,10 +19,9 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
   protected $preferences;
 
   public function __construct(
-          Cache $cache, 
           SharedPlacePreferences $preferences) {
     
-    parent::__construct($cache); 
+    parent::__construct(); 
     $this->preferences = $preferences;
   }
 

@@ -212,7 +212,6 @@ class SharedPlacesModule extends AbstractModule implements
       //_LOC edit control on events
       app()->instance(FunctionsEditPlacHandler::class, new ExtendedFunctionsEditPlacHandler());
       
-      $cache = Registry::cache()->array();
       $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
       $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
       
@@ -236,7 +235,7 @@ class SharedPlacesModule extends AbstractModule implements
               $requiredfacts,
               $quickfacts);
       
-      $sharedPlaceFactory = new SharedPlaceFactory($cache, $preferences);
+      $sharedPlaceFactory = new SharedPlaceFactory($preferences);
       Registry::locationFactory($sharedPlaceFactory);
       
       //define our 'pretty' routes
