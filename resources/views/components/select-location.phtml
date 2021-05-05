@@ -12,6 +12,8 @@ use Fisharebest\Webtrees\View;
  * @var string|null     $id
  * @var string          $name
  * @var Tree            $tree
+ * 
+ * @var string          $selectorForDate not set when called directly from webtrees (merging records)
  */
 
 $at = $at ?? '';
@@ -43,7 +45,7 @@ $at = $at ?? '';
 </select>
 
 <?php View::push('javascript') ?>
-<?php if ($selectorForDate !== ''): ?>
+<?php if (isset($selectorForDate) && ($selectorForDate !== '')): ?>
 <script>
 $(document).ready(function() {
   $('#<?= e($id ?? $name) ?>').select2({

@@ -313,7 +313,7 @@ class FunctionsEditLoc {
                 '' . view('icons/add') . '<' .
                 '/button>' .
                 '</div>' .
-                view('components/select-location', [
+                view('components/select-location-ext', [
                     'id' => $id, 
                     'name' => $name, 
                     'location' => $location, 

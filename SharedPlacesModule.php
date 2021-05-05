@@ -328,7 +328,10 @@ class SharedPlacesModule extends AbstractModule implements
       ////////////////////////////////////////////////////////////////////////////
       // Location support, some of this could be in webtrees itself
       
+      //note that webtrees now (starting 2.0.16) also defines this view!
+      //still easier to use our view everywhere
       View::registerCustomView('::components/select-location', $this->name() . '::components/select-location');
+      
       View::registerCustomView('::selects/location', $this->name() . '::selects/location');
       
       $router->post(Select2Location::class, '/tree/{tree}/select2-location', Select2Location::class);
