@@ -45,5 +45,11 @@
 		"from": "2.0.12",
 		"to": "2.0.17",
 		"changelog": ["Bugfix."]
+	},
+	{
+		"version": "2.0.16.0.2",
+		"from": "2.0.12",
+		"to": "2.0.17",
+		"changelog": ["Bugfix."]
 	}
 ]
