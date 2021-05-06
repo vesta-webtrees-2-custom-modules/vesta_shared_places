@@ -21,6 +21,7 @@ use Cissee\WebtreesExt\Http\RequestHandlers\Select2Location;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Module\ModuleMetaInterface;
 use Cissee\WebtreesExt\Module\ModuleMetaTrait;
+use Cissee\WebtreesExt\MoreI18N;
 use Cissee\WebtreesExt\PlaceViaSharedPlace;
 use Cissee\WebtreesExt\Requests;
 use Cissee\WebtreesExt\Services\GedcomEditServiceExt;
@@ -31,6 +32,7 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Elements\CustomElement;
 use Fisharebest\Webtrees\Elements\HierarchicalRelationship;
 use Fisharebest\Webtrees\Elements\LocationRecord;
+use Fisharebest\Webtrees\Elements\PlaceName;
 use Fisharebest\Webtrees\Elements\XrefLocation;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
@@ -345,6 +347,10 @@ class SharedPlacesModule extends AbstractModule implements
       $ef = Registry::elementFactory();
       $ef->register([
           '_LOC' => new LocationRecord(I18N::translate('Shared place')),
+          
+          //'Place' seems confusing here - if hierarchical shared places are used, this should be just one part of the place name
+          '_LOC:NAME' => new PlaceName(MoreI18N::xlate('Name'), ['ABBR' => '0:1', 'DATE' => '0:1', 'LANG' => '0:1', 'SOUR' => '0:M']),
+          
           '_LOC:_LOC' => new XrefLocation(I18N::translate('Higher-level shared place')),
           '_LOC:TYPE' => new CustomElement(I18N::translate('Type of location')), //actually same term as webtrees
           '_LOC:_LOC:TYPE' => new HierarchicalRelationship(I18N::translate('Type of hierarchical relationship')),
