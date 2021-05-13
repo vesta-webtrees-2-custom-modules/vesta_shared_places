@@ -8,570 +8,721 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-05-13 11:53+0000\n"
+"Last-Translator: Продай Своё <ol810car@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: HelpTexts.php:16
 msgid "Shared place summary"
-msgstr ""
+msgstr "Краткое описание общего места"
 
 #: HelpTexts.php:18
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
+"Сводка показывает данные общего места, отформатированные таким же образом, "
+"как и для событий с местом, сопоставленным с соответствующим общим местом."
 
 #: HelpTexts.php:19
 msgid "Therefore, the place name is displayed here including the full hierarchy."
-msgstr ""
+msgstr "Поэтому здесь отображается название места, включая полную иерархию."
 
 #: HelpTexts.php:20
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"Вы можете установить базовый год (который может оцениваться другими "
+"модулями, такими как %1$s) в конфигурации модуля."
 
 #: HelpTexts.php:26
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
+"Названия мест следует вводить как одно название места (не используйте здесь "
+"список, разделенный запятыми)."
 
 #: HelpTexts.php:27
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
-msgstr ""
+msgstr "Используйте отдельный тег «%1$s» для моделирования иерархии мест."
 
 #: HelpTexts.php:31 HelpTexts.php:41
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
+"Названия мест могут со временем меняться. Вы можете добавить несколько имен "
+"к общему месту и указать исторические имена через подходящий диапазон дат."
 
 #: HelpTexts.php:37
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
+"Названия мест следует вводить в виде списка, разделенного запятыми, начиная "
+"с наименьшего места и заканчивая страной. Например, «Вестминстер, Лондон, "
+"Англия»."
 
 #: SharedPlacesListController.php:50 SharedPlacesModule.php:155
 #: resources/views/lists/shared-places-table.phtml:38
 msgid "Shared places"
-msgstr ""
+msgstr "Общие места"
 
 #: SharedPlacesModule.php:189
 msgid "View Shared places hierarchy"
-msgstr ""
+msgstr "Просмотр иерархии общих мест"
 
 #: SharedPlacesModule.php:191
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
+"Включите модуль карты Vesta Places и Pedigree, чтобы просмотреть иерархию "
+"общих мест."
 
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:338
 msgid "Location"
-msgstr ""
+msgstr "Место расположения"
 
 #: SharedPlacesModule.php:345 SharedPlacesModule.php:454
 #: SharedPlacesModule.php:485
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
-msgstr ""
+msgstr "Общее место"
 
 #: SharedPlacesModule.php:346
 msgid "Higher-level shared place"
-msgstr ""
+msgstr "Общее место более высокого уровня"
 
 #: SharedPlacesModule.php:347
 msgid "Type of location"
-msgstr ""
+msgstr "Тип местоположения"
 
 #: SharedPlacesModule.php:348
 msgid "Type of hierarchical relationship"
-msgstr ""
+msgstr "Тип иерархических отношений"
 
 #: SharedPlacesModule.php:349
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "Идентификатор GOV для типа местоположения"
 
 #: SharedPlacesModule.php:557
 msgid "Shared place data"
-msgstr ""
+msgstr "Общие данные о месте"
 
 #: SharedPlacesModule.php:762
 #, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr ""
+msgstr "%s, а также лица и семьи, которые на него ссылаются."
 
 #: SharedPlacesModule.php:954
 msgid "shared places"
-msgstr ""
+msgstr "общие места"
 
 #: SharedPlacesModuleTrait.php:26
 msgid "A module providing support for shared places."
-msgstr ""
+msgstr "Модуль, обеспечивающий поддержку общих мест."
 
 #: SharedPlacesModuleTrait.php:27
 msgid "Replacement for the original 'Locations' module."
-msgstr ""
+msgstr "Замена оригинального модуля «Локации»."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:36
 msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended 'Facts and events' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module."
 msgstr ""
+"Модуль, поддерживающий общие места как объекты GEDCOM уровня 0, на основе "
+"дополнения GEDCOM-L к спецификации GEDCOM 5.5.1. Общие места могут "
+"содержать, например, координаты карты, заметки и медиа-объекты. Модуль "
+"отображает эти данные для всех подходящих мест через расширенную вкладку «"
+"Факты и события». Его также можно использовать для управления "
+"идентификаторами GOV в сочетании с модулем Gov4Webtrees."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:37
 msgid "Replaces the original 'Locations' module."
-msgstr ""
+msgstr "Заменяет исходный модуль «Местоположения»."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:65
 msgid "Shared place structure"
-msgstr ""
+msgstr "Структура общего места"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:67
 msgid "Use hierarchical shared places"
-msgstr ""
+msgstr "Используйте иерархические общие места"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:68
 msgid "If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to higher-level shared places, as described in the specification."
 msgstr ""
+"Если этот флажок установлен, отношения между общими местами моделируются с "
+"помощью явной иерархии, где общие места имеют внешние ссылки на общие места "
+"более высокого уровня, как описано в спецификации."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:69
 msgid "Note that this also affects the way shared places are created, and the way they are mapped to places."
 msgstr ""
+"Обратите внимание, что это также влияет на способ создания общих мест и "
+"способ их сопоставления с местами."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:70
 msgid "In particular, hierarchical shared places do not have names with comma-separated name parts."
 msgstr ""
+"В частности, иерархические общие места не имеют имен с разделенными запятыми "
+"частями имени."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:71
 #, php-format
 msgid "See %1$s for details."
-msgstr ""
+msgstr "Подробнее см. %1$s."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:72
 msgid "There is a data fix available which may be used to convert existing shared places."
 msgstr ""
+"Доступно исправление данных, которое можно использовать для преобразования "
+"существующих общих мест."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:73
 msgid "When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated name parts."
 msgstr ""
+"Если этот флажок не установлен, используется первый подход, в котором "
+"иерархии только намекаются с помощью общих имен мест с разделенными запятыми "
+"частями имен."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:74
 msgid "It is strongly recommended to switch to hierarchical shared places."
-msgstr ""
+msgstr "Настоятельно рекомендуется перейти на иерархические общие места."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:79
 msgid "Linking of shared places to places"
-msgstr ""
+msgstr "Связывание общих мест с местами"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:82
 msgid "Additionally link shared places via name"
-msgstr ""
+msgstr "Дополнительно связывать общие места через имя"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:83
 msgid "According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. "
 msgstr ""
+"Согласно дополнению GEDCOM-L, общие места указываются через внешние ссылки, "
+"как и общие заметки и т. Д. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:84
 msgid "It is now recommended to use XREFs, as this improves performance and flexibility. There is a data fix available which may be used to add XREFs. "
 msgstr ""
+"Теперь рекомендуется использовать внешние ссылки, так как это повышает "
+"производительность и гибкость. Доступно исправление данных, которое можно "
+"использовать для добавления внешних ссылок. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:85
 msgid "However, you can still check this option and link shared places via the place name itself. In this case, links are established internally by searching for a shared place with any name matching case-insensitively."
 msgstr ""
+"Однако вы все равно можете установить этот флажок и связывать общие места "
+"через само название места. В этом случае ссылки устанавливаются внутри путем "
+"поиска общего места с любым именем, совпадающим без учета регистра."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:86
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
 msgstr ""
+"Если вы используете иерархические общие места, место с именем «A, B, C» "
+"сопоставляется с общим местом «A» с общим местом более высокого уровня, "
+"которое сопоставляется с «B, C»."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:90
 msgid "... and fall back to n parent levels"
-msgstr ""
+msgstr "... и вернуться к n родительским уровням"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:91
 msgid "When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would also match shared places that match \"B, C\" and \"C\")"
 msgstr ""
+"Когда отмечен предыдущий параметр и не найдено ни одного подходящего общего "
+"места, вернитесь к n родительским местам (так, например, для n = 2 место «A, "
+"B, C» также будет соответствовать общим местам, которые соответствуют «B, C» "
+"и \"C\")"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:99
 msgid "All shared place facts"
-msgstr ""
+msgstr "Все факты об общих местах"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:103
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list."
 msgstr ""
+"Это список фактов GEDCOM, которые ваши пользователи могут добавлять в общие "
+"места. Вы можете изменить этот список, удалив или добавив названия фактов по "
+"мере необходимости. Названия фактов, которые появляются в этом списке, не "
+"должны также появляться в списке «Уникальные общие факты о местах»."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:107
 msgid "Unique shared place facts"
-msgstr ""
+msgstr "Уникальные факты об общих местах"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:111
 msgid "This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list."
 msgstr ""
+"Это список фактов GEDCOM, которые ваши пользователи могут добавить в общие "
+"места только один раз. Например, если NAME находится в этом списке, "
+"пользователи не смогут добавить более одной записи NAME в общее место. "
+"Названия фактов, которые появляются в этом списке, не должны также "
+"появляться в списке «Все общие факты о местах»."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:128
 msgid "Quick shared place facts"
-msgstr ""
+msgstr "Краткие факты о совместных местах"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:132
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list. "
 msgstr ""
+"Это список фактов GEDCOM, которые ваши пользователи могут добавлять в общие "
+"места. Вы можете изменить этот список, удалив или добавив названия фактов по "
+"мере необходимости. Названия фактов, которые появляются в этом списке, не "
+"должны также появляться в списке «Уникальные общие факты о местах». "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:141
 msgid "Restrict to specific facts and events"
-msgstr ""
+msgstr "Ограничение конкретными фактами и событиями"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:142
 msgid "If this option is checked, shared place data is only displayed for the following facts and events. "
 msgstr ""
+"Если этот параметр отмечен, общие данные о местах отображаются только для "
+"следующих фактов и событий. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:156
 msgid "Automatically expand shared place data"
-msgstr ""
+msgstr "Автоматически расширять общие данные о местах"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:161
 msgid "no"
-msgstr ""
+msgstr "Нет"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:165
 msgid "yes, but only the first occurrence of the shared place"
-msgstr ""
+msgstr "Да, но только первое появление общего места"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:166
 msgid "Note that the first occurrence may be within a toggleable, currently hidden fact or event (such as an event of a close relative). This will probably be improved in future versions of the module."
 msgstr ""
+"Обратите внимание, что первое вхождение может быть в переключаемом, скрытом "
+"в данный момент факте или событии (например, в событии близкого родственника)"
+". Вероятно, это будет улучшено в будущих версиях модуля."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:169
 msgid "yes"
-msgstr ""
+msgstr "да"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:180
 msgid "Show link counts for shared places list"
-msgstr ""
+msgstr "Показывать количество ссылок в списке общих мест"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:181
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr ""
+"Определение количества ссылок (связанных отдельных лиц / семей) является "
+"дорогостоящим при назначении общих мест по имени и, следовательно, вызывает "
+"задержки при отображении списка общих мест. Рекомендуется выбирать этот "
+"вариант только в том случае, если места назначаются через внешние ссылки."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:187
 #: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:124
 msgid "Summary"
-msgstr ""
+msgstr "Резюме"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:189
 msgid "Reference year"
-msgstr ""
+msgstr "Базовый год"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:190
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
 msgstr ""
+"Установленный здесь год может использоваться другими модулями для дополнения "
+"описания места дополнительными данными. Если оставить поле пустым, "
+"используется текущий год."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:201
 msgid "Filter to unique shared places"
-msgstr ""
+msgstr "Фильтр по уникальным общим местам"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:202
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr ""
+"В иерархическом списке мест при использовании опции \"ограничить общими "
+"местами\" общие места с несколькими именами отображаются несколько раз как "
+"отдельные записи. Отметьте этот параметр, чтобы в этом случае каждое общее "
+"место отображалось только один раз, под основным именем общего места, а "
+"также показывались его дополнительные имена."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:212
 msgid "Facts for shared place records"
-msgstr ""
+msgstr "Факты для общих записей мест"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:220
 msgid "Shared places list"
-msgstr ""
+msgstr "Список общих мест"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:224
 msgid "Shared place page"
-msgstr ""
+msgstr "Страница общего места"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:228
 msgid "Place hierarchy"
-msgstr ""
+msgstr "Иерархия места"
 
 #: patchedWebtrees/Exceptions/SharedPlaceNotFoundException.php:13
 msgid "This shared place does not exist or you do not have permission to view it."
 msgstr ""
+"Этого общего места не существует, или у вас нет разрешения на его просмотр."
 
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:311
 #: resources/views/modals/create-shared-place.phtml:10
 #: resources/views/shared-places-list-page.phtml:41
 msgid "Create a shared place"
-msgstr ""
+msgstr "Создайте общее место"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:542
 msgid "administrative"
-msgstr ""
+msgstr "административный"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:545
 msgid "religious"
-msgstr ""
+msgstr "религия"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:548
 msgid "geographical"
-msgstr ""
+msgstr "географический"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:551
 msgid "cultural"
-msgstr ""
+msgstr "культура"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:554
 msgid "other"
-msgstr ""
+msgstr "Другие"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:91
 #, php-format
 msgid "The shared place %s already exists."
-msgstr ""
+msgstr "Общее место %s уже существует."
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:99
 msgid " (Note: A higher-level shared place has also been created)"
-msgstr ""
+msgstr " (Примечание: также было создано общее место более высокого уровня)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
-msgstr ""
+msgstr " (Примечание: были также созданы %s общих мест более высокого уровня)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:112
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:156
 #, php-format
 msgid "The shared place %s has been created."
-msgstr ""
+msgstr "Общее место %s создано."
 
 #: patchedWebtrees/SharedPlace.php:632
 msgid "Private"
-msgstr ""
+msgstr "Частный"
 
 #: patchedWebtrees/SharedPlace.php:701
 msgid "circular shared place hierarchy"
-msgstr ""
+msgstr "круговая иерархия общих мест"
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
-msgstr ""
+msgstr "Доступны различные исправления данных."
 
 #: resources/views/data-fix-options.phtml:13
 msgid "It is strongly recommended to backup your tree first."
 msgstr ""
+"Настоятельно рекомендуется сначала сделать резервную копию вашего дерева."
 
 #: resources/views/data-fix-options.phtml:18
 msgid "Data Fix"
-msgstr ""
+msgstr "Исправление данных"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
-msgstr ""
+msgstr "Иерархия общих мест"
 
 #: resources/views/data-fix-options.phtml:32
 msgid "This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to higher-level shared places via XREFs)."
 msgstr ""
+"Это исправление данных превращает общие места с разделенными запятыми "
+"частями имен в иерархические общие места (которые связаны с общими местами "
+"более высокого уровня через внешние ссылки)."
 
 #: resources/views/data-fix-options.phtml:33
 msgid "It usually will have to be carried out once only, as a migration when switching to hierarchical shared places via the respective configuration option."
 msgstr ""
+"Обычно это необходимо выполнить только один раз, в качестве миграции при "
+"переключении на иерархические общие места с помощью соответствующей опции "
+"конфигурации."
 
 #: resources/views/data-fix-options.phtml:38
 msgid "Note:"
-msgstr ""
+msgstr "Примечание:"
 
 #: resources/views/data-fix-options.phtml:41
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
 msgstr ""
+"Поиск этого исправления данных в настоящее время не соответствует ни одной "
+"записи, поскольку параметр конфигурации «Использовать иерархические общие "
+"места» не установлен."
 
 #: resources/views/data-fix-options.phtml:46
 #: resources/views/data-fix-options.phtml:107
 #: resources/views/data-fix-options.phtml:134
 msgid "Attention!"
-msgstr ""
+msgstr "Внимание!"
 
 #: resources/views/data-fix-options.phtml:49
 msgid "Missing higher-level shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr ""
+"При необходимости создаются отсутствующие общие места более высокого уровня. "
+"Чтобы это работало без потенциального создания дубликатов, вы должны "
+"установить флажок «Автоматически принимать изменения, сделанные этим "
+"пользователем» в администрировании пользователей, по крайней мере, на время "
+"этого исправления данных."
 
 #: resources/views/data-fix-options.phtml:50
 #: resources/views/data-fix-options.phtml:111
 #: resources/views/data-fix-options.phtml:138
 msgid "This data fix currently won't update anything, because this preference isn't set."
 msgstr ""
+"Это исправление данных в настоящее время ничего не обновляет, потому что это "
+"предпочтение не установлено."
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
 msgstr ""
+"Улучшение существующих общих мест с помощью данных, не зависящих от дерева"
 
 #: resources/views/data-fix-options.phtml:66
 msgid "This data fix adds tree-independent data (managed outside GEDCOM) to existing shared places."
 msgstr ""
+"Это исправление данных добавляет не зависящие от дерева данные (управляемые "
+"вне GEDCOM) в существующие общие места."
 
 #: resources/views/data-fix-options.phtml:67
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"В частности, добавляются координаты карты из веб-деревьев «Географические "
+"данные» и идентификаторы GOV из модуля Gov4Webtrees."
 
 #: resources/views/data-fix-options.phtml:68
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name'."
 msgstr ""
+"Соответствующие общие места определяются с помощью параметра конфигурации «"
+"Дополнительно связывать общие места по имени»."
 
 #: resources/views/data-fix-options.phtml:79
 msgid "Add missing XREFs"
-msgstr ""
+msgstr "Добавить отсутствующие внешние ссылки"
 
 #: resources/views/data-fix-options.phtml:82
 msgid "This data fix adds XREFs, linking all places within events directly to the respective shared places."
 msgstr ""
+"Это исправление данных добавляет внешние ссылки, связывая все места в "
+"событиях напрямую с соответствующими общими местами."
 
 #: resources/views/data-fix-options.phtml:83
 #: resources/views/data-fix-options.phtml:102
 #: resources/views/data-fix-options.phtml:129
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name', including parent levels if set."
 msgstr ""
+"Соответствующие общие места определяются с помощью параметра конфигурации «"
+"Дополнительно связывать общие места с помощью имени», включая родительские "
+"уровни, если они установлены."
 
 #: resources/views/data-fix-options.phtml:84
 msgid "Therefore, this data fix enables you to move away from using that configuration option."
 msgstr ""
+"Таким образом, это исправление данных позволяет отказаться от использования "
+"этого параметра конфигурации."
 
 #: resources/views/data-fix-options.phtml:85
 msgid "The search cannot be implemented efficiently and may take some time in particular when displaying and updating a large number of records."
 msgstr ""
+"Поиск не может быть реализован эффективно и может занять некоторое время, в "
+"частности, при отображении и обновлении большого количества записей."
 
 #: resources/views/data-fix-options.phtml:96
 msgid "Create missing shared places from tree-independent data, and add missing XREFs"
 msgstr ""
+"Создавайте отсутствующие общие места из данных, не зависящих от дерева, и "
+"добавляйте отсутствующие внешние ссылки"
 
 #: resources/views/data-fix-options.phtml:99
 msgid "This data fix creates missing shared places, if tree-independent data (managed outside GEDCOM) is available for the respective place."
 msgstr ""
+"Это исправление данных создает недостающие общие места, если для "
+"соответствующего места доступны не зависящие от дерева данные (управляемые "
+"вне GEDCOM)."
 
 #: resources/views/data-fix-options.phtml:101
 #: resources/views/data-fix-options.phtml:128
 msgid "The created shared places, as well as existing shared places, are linked via XREFs to event places."
 msgstr ""
+"Созданные общие места, а также существующие общие места связаны с местами "
+"событий через внешние ссылки."
 
 #: resources/views/data-fix-options.phtml:110
 #: resources/views/data-fix-options.phtml:137
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr ""
+"При необходимости создаются отсутствующие общие места. Чтобы это работало "
+"без потенциального создания дубликатов, вы должны установить флажок «"
+"Автоматически принимать изменения, сделанные этим пользователем» в "
+"администрировании пользователей, по крайней мере, на время этого исправления "
+"данных."
 
 #: resources/views/data-fix-options.phtml:123
 msgid "Create all missing shared places, and add missing XREFs"
 msgstr ""
+"Создайте все отсутствующие общие места и добавьте отсутствующие внешние "
+"ссылки"
 
 #: resources/views/data-fix-options.phtml:126
 msgid "This data fix creates missing shared places, even if no tree-independent data (managed outside GEDCOM) is available for the respective place."
 msgstr ""
+"Это исправление данных создает отсутствующие общие места, даже если для "
+"соответствующего места недоступны независимые от дерева данные (управляемые "
+"вне GEDCOM)."
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"Если доступны не зависящие от дерева данные, добавляются координаты карты из "
+"веб-деревьев «Географические данные» и идентификаторы GOV из модуля "
+"Gov4Webtrees."
 
 #: resources/views/modals/shared-place-fields.phtml:12
 msgid "Shared place name (complete hierarchy)"
-msgstr ""
+msgstr "Общее название места (полная иерархия)"
 
 #: resources/views/modals/shared-place-fields.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
 msgstr ""
+"Название места с разделенными запятыми частями названия будет преобразовано "
+"в иерархию общих мест. Также будут созданы отсутствующие общие места более "
+"высокого уровня."
 
 #: resources/views/modals/shared-place-fields.phtml:17
 msgid "Shared place name"
-msgstr ""
+msgstr "Общее название места"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/list.phtml:12
 msgid "Shared place list"
-msgstr ""
+msgstr "Общий список мест"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:32
 #: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
-msgstr ""
+msgstr "Важная заметка:"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:35
 #: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr ""
+"В этом дереве есть общие места с частями имени, разделенными запятыми, и в "
+"то же время выбрана опция «Использовать иерархические общие места»."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:36
 #: resources/views/shared-places-list-page.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr ""
+"Это приводит к несоответствиям при сопоставлении мест с общими местами и, "
+"как правило, не соответствует спецификации для общих мест (которым более "
+"ранние версии этого настраиваемого модуля не следовали строго)."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:39
 #: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr ""
+"Рекомендуется запустить исправление данных для этого настраиваемого модуля, "
+"чтобы решить эту проблему."
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/place-hierarchy.phtml:13
 msgid "Shared place hierarchy"
-msgstr ""
+msgstr "Иерархия общих мест"
 
 #: resources/views/modules/generic-place-hierarchy-shared-places/sidebar.phtml:42
 msgid "The location of this shared place is not known."
-msgstr ""
+msgstr "Местоположение этого общего места неизвестно."
 
 #. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
 #: resources/views/shared-place-page.phtml:31
 #, php-format
 msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
 msgstr ""
+"Это общее место было удалено. Вы должны просмотреть удаление, а затем %1$s "
+"или %2$s его."
 
 #: resources/views/shared-place-page.phtml:34
 msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
 msgstr ""
+"Это общее место было удалено. Удаление должно быть рассмотрено модератором."
 
 #. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
 #: resources/views/shared-place-page.phtml:40
 #, php-format
 msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
 msgstr ""
+"Это общее место было отредактировано. Вы должны просмотреть изменения, а "
+"затем %1$s или %2$s их."
 
 #: resources/views/shared-place-page.phtml:43
 msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
 msgstr ""
+"Это общее место было отредактировано. Изменения должны быть проверены "
+"модератором."
 
 #: resources/views/shared-place-page.phtml:77
 msgid "Next lower-level shared places"
-msgstr ""
+msgstr "Следующие общие места нижнего уровня"
