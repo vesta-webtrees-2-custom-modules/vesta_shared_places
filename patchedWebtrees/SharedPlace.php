@@ -2,6 +2,7 @@
 
 namespace Cissee\WebtreesExt;
 
+use Cissee\WebtreesExt\Elements\LanguageIdExt;
 use Exception;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
@@ -498,6 +499,7 @@ class SharedPlace extends Location {
           string $value, 
           string $gedcom,
           GedcomDateInterval $date,
+          int $langMatchScore, //smaller is better
           int $indexOfFact): array {
     
       return [
@@ -511,6 +513,7 @@ class SharedPlace extends Location {
           // This goes into the database
                   
           'date' => $date, 
+          'langMatchScore' => $langMatchScore,     
           'indexOfFact' => $indexOfFact,       
       ];
   }
@@ -544,6 +547,8 @@ class SharedPlace extends Location {
       $sublevel    = $level + 1;
       $subsublevel = $sublevel + 1;
       
+      $locales = LanguageIdExt::values();
+                
       $indexOfFact = -1;
       foreach ($facts as $fact) {
           $indexOfFact++;
@@ -555,37 +560,57 @@ class SharedPlace extends Location {
           if ($intersectedDate === null) {
             continue;
           }
-                
-          if (preg_match_all("/^{$level} ({$fact_type}) (.+)((\n[{$sublevel}-9].+)*)/m", $fact->gedcom(), $matches, PREG_SET_ORDER)) {
+          
+          $score = 1;
+          $lang = $fact->attribute("LANG");
+          if ($lang === null) {
+            $score = 0;
+          } else {            
+            if (array_key_exists($lang, $locales)) {
+              if ($locales[$lang]->code() === I18N::locale()->code()) {
+                $score = -1;
+              }
+            }
+            //else lang doesn't match: do not adjust score
+          }
+      
+          if (preg_match_all("/^{$level} ({$fact_type}) (.+)((\n[{$sublevel}-9].+)*)/m", $fact->gedcom(), $matches, PREG_SET_ORDER)) {            
               foreach ($matches as $match) {
                   // Treat 1 NAME / 2 TYPE married the same as _MARNM
                   if ($match[1] === 'NAME' && str_contains($match[3], "\n2 TYPE married")) {
-                      $extractedNames []= $this->createName('_MARNM', $match[2], $fact->gedcom(), $intersectedDate, $indexOfFact);
+                      $extractedNames []= $this->createName('_MARNM', $match[2], $fact->gedcom(), $intersectedDate, $score, $indexOfFact);
                   } else {
-                      $extractedNames []= $this->createName($match[1], $match[2], $fact->gedcom(), $intersectedDate, $indexOfFact);
+                      $extractedNames []= $this->createName($match[1], $match[2], $fact->gedcom(), $intersectedDate, $score, $indexOfFact);
                   }
                   if ($match[3] && preg_match_all("/^{$sublevel} (ROMN|FONE|_\w+) (.+)((\n[{$subsublevel}-9].+)*)/m", $match[3], $submatches, PREG_SET_ORDER)) {
                       foreach ($submatches as $submatch) {
-                          $extractedNames []= $this->createName($submatch[1], $submatch[2], $match[3], $intersectedDate, $indexOfFact);
+                          $extractedNames []= $this->createName($submatch[1], $submatch[2], $match[3], $intersectedDate, $score, $indexOfFact);
                       }
                   }
               }
           }
       }
       
-      //order: by $intersectedDate.getFrom (nulls first), then by original order
+      //order
+      //1. by langMatchScore
+      //2. by $intersectedDate.getFrom (nulls first)
+      //3. by original order
       uasort($extractedNames, function (array $x, array $y): int {
+          $cmp = $x['langMatchScore'] <=> $y['langMatchScore'];
+          if ($cmp !== 0) {
+            return $cmp;
+          }
+          
           $xJulianDay = $x['date']->getFrom() ?? 0;
           $yJulianDay = $y['date']->getFrom() ?? 0;
           
           $cmp = $xJulianDay <=> $yJulianDay;
-          
-          if ($cmp === 0) {
-            //use original order (we have to handle this explicitly, sort is only stable in php starting with 8.0)
-            return $x['indexOfFact'] <=> $y['indexOfFact'];
+          if ($cmp !== 0) {
+            return $cmp;
           }
           
-          return $cmp;
+          //use original order (we have to handle this explicitly, sort is only stable in php starting with 8.0)
+          return $x['indexOfFact'] <=> $y['indexOfFact'];
       });
       
       return $extractedNames;
@@ -631,12 +656,12 @@ class SharedPlace extends Location {
                 },
                 function (GedcomDateInterval $date) use($self): array {
                   //fallback name
-                  return $self->createName(static::RECORD_TYPE, $this->getFallBackName(), '', $date, -1);
+                  return $self->createName(static::RECORD_TYPE, $this->getFallBackName(), '', $date, 0, -1);
                 });
                 
         $getAllNames = $filled->all();
     } else {
-        $getAllNames []= $this->createName(static::RECORD_TYPE, I18N::translate('Private'), '', $actualDate, -1);
+        $getAllNames []= $this->createName(static::RECORD_TYPE, I18N::translate('Private'), '', $actualDate, 0, -1);
     }
     
     if ($date === null) {
@@ -645,30 +670,6 @@ class SharedPlace extends Location {
     }
 
     return $getAllNames;
-  }
-  
-  public function getPrimaryNameIndexWrtUnfilteredNames(): int {
-    return $this->getPrimaryNameAt(GedcomDateInterval::createNow());
-  }
-  
-  public function getPrimaryNameIndexWrtUnfilteredNamesAt(GedcomDateInterval $date): int {
-    $fallback = -1;
-    $counter = 0;
-    foreach ($this->facts(['NAME']) as $name) {
-      $nameDate = GedcomDateInterval::create($name->attribute("DATE"));
-      
-      if ($date->intersect($nameDate) !== null) {
-        return $counter;
-      }
-      
-      if (($name->attribute("DATE") === '') && ($fallback === -1)) {
-        $fallback = $counter;
-      }
-      
-      $counter++;
-    }
-    
-    return ($fallback === -1)?0:$fallback;
   }
   
   /**
@@ -878,12 +879,6 @@ class SharedPlace extends Location {
   }
   
   public function primaryPlaceAt(GedcomDateInterval $date, ?string $query = null): Place {
-    if (!$this->useHierarchy()) {
-      $primaryIndex = $this->getPrimaryNameIndexWrtUnfilteredNamesAt($date);
-      $name = $this->namesNN()[$primaryIndex];
-      return new Place($name, $this->tree);
-    }
-    
     $firstMatch = null;
     
     if ($query !== null) {
@@ -902,8 +897,14 @@ class SharedPlace extends Location {
     if ($firstMatch === null) {
       $firstMatch = $this->getAllNamesAt($date)[0];
     }
+    
+    if (!$this->useHierarchy()) {
+      $fullNN = $firstMatch['fullNN'];
+      return new Place($fullNN, $this->tree);
+    }
       
     $names = [$firstMatch];
+    
     $namesAsString = SharedPlace::namesAsStringsAt(
               $date,
               true,

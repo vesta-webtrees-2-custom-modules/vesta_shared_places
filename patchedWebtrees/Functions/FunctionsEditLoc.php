@@ -67,6 +67,9 @@ class FunctionsEditLoc {
           echo FunctionsEdit::addSimpleTag($tree, '2 DATE');
       } else if ($fact === 'NAME') {
           echo FunctionsEdit::addSimpleTag($tree, '2 DATE');
+          
+          //Issue #77
+          echo FunctionsEdit::addSimpleTag($tree, '2 LANG');
       }
       
       //_GOV:
@@ -138,6 +141,13 @@ class FunctionsEditLoc {
         echo FunctionsEdit::addSimpleTag($tree, '2 DATE');
       }
     }
+    
+    //Issue #77
+    if ($level1tag === 'NAME') {
+      if (!in_array('LANG', $tags, true)) {
+        echo FunctionsEdit::addSimpleTag($tree, '2 LANG');
+      }
+    }
   }
   
   public static function addSimpleTagWithGedcomRecord(
@@ -146,7 +156,8 @@ class FunctionsEditLoc {
           $tag, 
           $upperlevel = '', 
           $label = ''): string
-  {    
+  {
+    
     //[RC] gah so hacky - we need this for LATI/LONG because we write PLAC!
     // Some form fields need access to previous form fields.
     static $previous_ids = [
@@ -460,10 +471,16 @@ class FunctionsEditLoc {
         $html .= '</div>';
         break;
       default:
+        //#76
+        //we just default here (relevant e.g. for SOUR:DATA:TEXT)
+        return FunctionsEdit::addSimpleTag($tree, $tag, $upperlevel, $label);
+        
+        /*
         //#17
         ////may be a custom tag, so  just allow editing
         //throw new Exception("unexpected tag: " . $fact);
         $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '">';
+        */
         break;
     }
 

@@ -56,7 +56,7 @@ class ExtendedFunctionsEditPlacHandler extends FunctionsEditPlacHandler {
   }
   
   //for edit-fact (existing PLAC/_LOC, also missing subtags of PLAC)
-  public static function addSimpleTag(Tree $tree, $tag, $upperlevel = '', $label = ''): string {
+  public function addSimpleTag(Tree $tree, $tag, $upperlevel = '', $label = ''): string {
     return FunctionsEditLoc::addSimpleTagWithGedcomRecord(null, $tree, $tag, $upperlevel, $label);
   }
   
