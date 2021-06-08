@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-01-18 18:32+0000\n"
+"PO-Revision-Date: 2021-06-07 21:33+0000\n"
 "Last-Translator: Josef Prause <josef.prause@gmail.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -30,7 +31,7 @@ msgstr " (Poznámka: zároveň bylo vytvořeno sdílené místo vyšší úrovn�
 #: SharedPlacesModule.php:762
 #, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr ""
+msgstr "%s a osoby a rodiny, které jsou s tímto místem spojené."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:90
@@ -119,11 +120,11 @@ msgstr "Fakta pro záznamy sdílených míst"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:201
 msgid "Filter to unique shared places"
-msgstr ""
+msgstr "Filtrovat na jedinečná sdílená místa"
 
 #: SharedPlacesModule.php:349
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "GOV id typu lokality"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
@@ -176,6 +177,10 @@ msgstr "Konkrétně, přidají se zeměpisné souřadnice ze sekce webtrees \"Ge
 #: SharedPlacesModuleTrait.php:202
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr ""
+"Když se v seznamu hierarchie míst použije volba \"omezit na sdílená místa\", "
+"zobrazí se sdílená místa s více názvy jako samostatné položky. Nastavte tuto "
+"volbu, má-li se v tomto případě zobrazit každé sdílené místo jen jednou pod "
+"primárním názvem místa spolu s jeho dodatečnými názvy."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:84
@@ -250,7 +255,7 @@ msgstr "Poznámka:"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:228
 msgid "Place hierarchy"
-msgstr ""
+msgstr "Hierarchie míst"
 
 #: HelpTexts.php:31 HelpTexts.php:41
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
@@ -276,16 +281,16 @@ msgstr "Pohotová fakta sdílených míst"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:189
 msgid "Reference year"
-msgstr ""
+msgstr "Referenční rok"
 
 #: SharedPlacesModuleTrait.php:27
 msgid "Replacement for the original 'Locations' module."
-msgstr ""
+msgstr "Náhrada za původní modul 'Lokality'."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:37
 msgid "Replaces the original 'Locations' module."
-msgstr ""
+msgstr "Nahrazuje původní modul 'Lokality'."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:141
@@ -327,7 +332,7 @@ msgstr "Název sdíleného místa (úplná hierarchie)"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:224
 msgid "Shared place page"
-msgstr ""
+msgstr "Stránka sdíleného místa"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:65
@@ -395,6 +400,8 @@ msgstr "Shrnutí ukazuje údaje sdíleného místa ve stejném formátu jako pro
 #: SharedPlacesModuleTrait.php:190
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
 msgstr ""
+"Zde zadaný rok mohou použít ostatní moduly k rozšíření popisu místa o "
+"dodatečné údaje. Je-li prázdný, použije se aktuální rok."
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
@@ -529,6 +536,8 @@ msgstr "Když není zvolené, tak se použije předchozí přístup, v němž se
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"V konfiguraci modulu můžete nastavit referenční rok (který může být "
+"vyhodnocen jinými moduly, např. %1$s)."
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:542
