@@ -8,100 +8,116 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-06-11 06:33+0000\n"
+"Last-Translator: z-yurets <zaharchenko.yurij@gmail.com>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: HelpTexts.php:16
 msgid "Shared place summary"
-msgstr ""
+msgstr "Підсумок про спільне місце"
 
 #: HelpTexts.php:18
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
+"Підсумок показує дані спільного місця, відформатовані так само як і для "
+"подій із місцем, зіставленим із відповідним спільним місцем."
 
 #: HelpTexts.php:19
 msgid "Therefore, the place name is displayed here including the full hierarchy."
-msgstr ""
+msgstr "Тому тут відображається назва місця, включаючи повну ієрархію."
 
 #: HelpTexts.php:20
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"Ви можете встановити контрольний рік (який може оцінюватися іншими модулями, "
+"наприклад %1$s) у конфігурації модуля."
 
 #: HelpTexts.php:26
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
+"Назви місць слід вводити як окремі назви місць (не використовуючи розділений "
+"комами список)."
 
 #: HelpTexts.php:27
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
-msgstr ""
+msgstr "Використовуйте окремий тег '%1$s' для моделювання ієрархії місць."
 
 #: HelpTexts.php:31 HelpTexts.php:41
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
+"Назви місць можуть змінюватися з часом. Ви можете додати кілька імен у "
+"спільне місце та вказати історичні імена через відповідний діапазон дат."
 
 #: HelpTexts.php:37
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
+"Назви місць слід вводити як розділений комами список, починаючи з найменшого "
+"місця і закінчуючи країною. Наприклад, “Вестмінстер, Лондон, Англія”."
 
 #: SharedPlacesListController.php:50 SharedPlacesModule.php:155
 #: resources/views/lists/shared-places-table.phtml:38
 msgid "Shared places"
-msgstr ""
+msgstr "Спільні місця"
 
 #: SharedPlacesModule.php:189
 msgid "View Shared places hierarchy"
-msgstr ""
+msgstr "Перегляд ієрархії спільних місць"
 
 #: SharedPlacesModule.php:191
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
+"Увімкніть модуль Vesta Places and Pedigree map для перегляду ієрархії "
+"спільних місць."
 
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:338
 msgid "Location"
-msgstr ""
+msgstr "Локація"
 
 #: SharedPlacesModule.php:345 SharedPlacesModule.php:454
 #: SharedPlacesModule.php:485
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
-msgstr ""
+msgstr "Спільне місце"
 
 #: SharedPlacesModule.php:346
 msgid "Higher-level shared place"
-msgstr ""
+msgstr "Загальне місце більш високого рівня"
 
 #: SharedPlacesModule.php:347
 msgid "Type of location"
-msgstr ""
+msgstr "Тип локації"
 
 #: SharedPlacesModule.php:348
 msgid "Type of hierarchical relationship"
-msgstr ""
+msgstr "Тип ієрархічних відносин"
 
 #: SharedPlacesModule.php:349
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "Ідентифікатор GOV для типу локації"
 
 #: SharedPlacesModule.php:557
 msgid "Shared place data"
-msgstr ""
+msgstr "Інформація про спільне місце"
 
 #: SharedPlacesModule.php:762
 #, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr ""
+msgstr "%s та особи з сім'ями, які посилаються на нього."
 
 #: SharedPlacesModule.php:954
 msgid "shared places"
-msgstr ""
+msgstr "спільні місця"
 
 #: SharedPlacesModuleTrait.php:26
 msgid "A module providing support for shared places."
