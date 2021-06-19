@@ -1,0 +1,127 @@
+<?php
+
+use Cissee\WebtreesExt\MoreI18N;
+use Fisharebest\Webtrees\Http\RequestHandlers\SearchGeneralAction;
+use Fisharebest\Webtrees\Tree;
+use Illuminate\Support\Collection;
+use Fisharebest\Webtrees\I18N;
+
+/**
+ * @var Collection<Tree> $all_trees
+ * @var Collection       $families
+ * @var Collection       $individuals
+ * @var Collection       $notes
+ * @var string           $query
+ * @var Collection       $repositories
+ * @var Collection       $sources
+ * @var Collection       $locations
+ * @var bool             $search_families
+ * @var bool             $search_individuals
+ * @var bool             $search_locations
+ * @var bool             $search_notes
+ * @var bool             $search_repositories
+ * @var bool             $search_sources
+ * @var Collection<Tree> $search_trees
+ * @var string           $title
+ * @var Tree             $tree
+ */
+
+?>
+
+<h2 class="wt-page-title">
+    <?= $title ?>
+</h2>
+
+<form method="post" action="<?= e(route(SearchGeneralAction::class, ['tree' => $tree->name()])) ?>"
+      class="wt-page-options wt-page-options-search hidden-print mb-4" name="searchform">
+    <?= csrf_field() ?>
+    <div class="row form-group">
+        <label class="col-sm-3 col-form-label wt-page-options-label" for="query">
+            <?= MoreI18N::xlate('Search for') ?>
+        </label>
+        <div class="col-sm-9 wt-page-options-value">
+            <div class="input-group">
+                <input id="query" class="form-control" type="text" name="query" value="<?= e($query) ?>" required="required">
+                <?= view('edit/input-addon-keyboard', ['id' => 'query']) ?>
+            </div>
+        </div>
+    </div>
+    <fieldset class="form-group">
+        <div class="row">
+            <label class="col-sm-3 col-form-label wt-page-options-label">
+                <?= MoreI18N::xlate('Records') ?>
+            </label>
+            <div class="col-sm-9 wt-page-options-value">
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" <?= $search_individuals ? 'checked' : '' ?>
+                               name="search_individuals" type="checkbox">
+                        <?= MoreI18N::xlate('Individuals') ?>
+                    </label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" <?= $search_families ? 'checked' : '' ?> name="search_families"
+                               type="checkbox">
+                        <?= MoreI18N::xlate('Families') ?>
+                    </label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" <?= $search_sources ? 'checked' : '' ?> name="search_sources"
+                               type="checkbox">
+                        <?= MoreI18N::xlate('Sources') ?>
+                    </label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" <?= $search_repositories ? 'checked' : '' ?>
+                               name="search_repositories" type="checkbox">
+                        <?= MoreI18N::xlate('Repositories') ?>
+                    </label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" <?= $search_notes ? 'checked' : '' ?> name="search_notes"
+                               type="checkbox">
+                        <?= MoreI18N::xlate('Shared notes') ?>
+                    </label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" <?= $search_locations ? 'checked' : '' ?> name="search_locations"
+                               type="checkbox">
+                        <?= I18N::translate('Shared places') ?>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <?= view('search-trees', ['all_trees' => $all_trees, 'search_trees' => $search_trees]) ?>
+
+    <div class="row form-group">
+        <label class="col-sm-3 col-form-label wt-page-options-label"></label>
+        <div class="col-sm-9 wt-page-options-value">
+            <input type="submit" class="btn btn-primary" value="<?= /* I18N: A button label. */
+            MoreI18N::xlate('search') ?>">
+        </div>
+    </div>
+</form>
+
+<?php if ($query !== '') : ?>
+    <?php if ($individuals->isEmpty() && $families->isEmpty() && $repositories->isEmpty() && $sources->isEmpty() && $notes->isEmpty() && $locations->isEmpty()) : ?>
+        <div class="alert alert-info row">
+            <?= MoreI18N::xlate('No results found.') ?>
+        </div>
+    <?php else : ?>
+        <?= view('search-results-ext', ['families' => $families, 'individuals' => $individuals, 'locations' => $locations, 'notes' => $notes, 'repositories' => $repositories, 'sources' => $sources, 'search_families' => $search_families, 'search_individuals' => $search_individuals, 'search_locations' => $search_locations, 'search_notes' => $search_notes, 'search_repositories' => $search_repositories, 'search_sources' => $search_sources, 'tree' => $tree]) ?>
+    <?php endif ?>
+<?php endif ?>
+
+<?= view('modals/on-screen-keyboard') ?>

@@ -17,6 +17,8 @@ use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
+use Cissee\WebtreesExt\Http\RequestHandlers\SearchGeneralActionExt;
+use Cissee\WebtreesExt\Http\RequestHandlers\SearchGeneralPageExt;
 use Cissee\WebtreesExt\Http\RequestHandlers\Select2Location;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Module\ModuleMetaInterface;
@@ -42,6 +44,8 @@ use Fisharebest\Webtrees\Http\Middleware\AuthEditor;
 use Fisharebest\Webtrees\Http\RequestHandlers\CreateLocationAction;
 use Fisharebest\Webtrees\Http\RequestHandlers\CreateLocationModal;
 use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
+use Fisharebest\Webtrees\Http\RequestHandlers\SearchGeneralAction;
+use Fisharebest\Webtrees\Http\RequestHandlers\SearchGeneralPage;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
@@ -273,10 +277,25 @@ class SharedPlacesModule extends AbstractModule implements
         unset($existingRoutes["Fisharebest\Webtrees\Http\RequestHandlers\Select2Location"]);        
       }
       
-      $router->setRoutes($existingRoutes);
+      if (array_key_exists(SearchGeneralPage::class, $existingRoutes)) {
+        unset($existingRoutes[SearchGeneralPage::class]);        
+      }
       
+      if (array_key_exists(SearchGeneralAction::class, $existingRoutes)) {
+        unset($existingRoutes[SearchGeneralAction::class]);        
+      }
+      
+      $router->setRoutes($existingRoutes);
+            
       $router->get(LocationPage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
     
+      $router->get(SearchGeneralPage::class, '/tree/{tree}/search-general', SearchGeneralPageExt::class);    
+      $router->post(SearchGeneralAction::class, '/tree/{tree}/search-general', SearchGeneralActionExt::class);    
+      
+      // Register a view under the main namespace
+      View::registerCustomView('::search-general-page-ext', $this->name() . '::search-general-page-ext');
+      View::registerCustomView('::search-results-ext', $this->name() . '::search-results-ext');
+      
       // Replace an existing view with our own version.
       // (media management via list module)
       View::registerCustomView('::modules/media-list/page', $this->name() . '::modules/media-list/page');
@@ -308,7 +327,7 @@ class SharedPlacesModule extends AbstractModule implements
       // Register a view under the main namespace
       View::registerCustomView('::edit/plac', $this->name() . '::edit/plac');
       
-      // Register a view under the main namespace (referred to from replaced media-page)
+      // Register a view under the main namespace (referred to from replaced media-page, and from search results)
       View::registerCustomView('::lists/shared-places-table', $this->name() . '::lists/shared-places-table');
       
       
