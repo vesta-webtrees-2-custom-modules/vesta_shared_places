@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-06-23 13:34+0000\n"
+"PO-Revision-Date: 2021-07-01 14:33+0000\n"
 "Last-Translator: Grzegorz Kociubowski <gkociubowski@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/pl/>\n"
@@ -18,15 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: HelpTexts.php:16
 msgid "Shared place summary"
 msgstr "Posumowanie wspólnego miejsca"
 
 #: HelpTexts.php:18
+#, fuzzy
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
+"Podsumowanie pokazuje dane miejsca współdzielonego, sformatowane w taki sam "
+"sposób jak dla zdarzeń z miejscem zmapowanym do odpowiedniego miejsca "
+"współdzielonego."
 
 #: HelpTexts.php:19
 msgid "Therefore, the place name is displayed here including the full hierarchy."
@@ -34,83 +38,105 @@ msgstr ""
 "W związku z tym nazwa miejsca jest wyświetlana tutaj wraz z pełną hierarchią"
 
 #: HelpTexts.php:20
-#, php-format
+#, fuzzy, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"W konfiguracji modułu można ustawić rok referencyjny (który może być "
+"oceniany przez inne moduły, np. %1$s)."
 
 #: HelpTexts.php:26
+#, fuzzy
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
+"Nazwy miejscowości powinny być wpisane jako pojedyncza nazwa miejscowości ("
+"nie należy stosować listy rozdzielonej przecinkami)."
 
 #: HelpTexts.php:27
-#, php-format
+#, fuzzy, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr ""
+"Użyj oddzielnego znacznika \"%1$s\" w celu modelowania hierarchii miejsc."
 
 #: HelpTexts.php:31 HelpTexts.php:41
+#, fuzzy
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
+"Nazwy miejsc mogą zmieniać się z czasem. Możesz dodać wiele nazw do "
+"wspólnego miejsca i wskazać nazwy historyczne poprzez odpowiedni zakres dat."
 
 #: HelpTexts.php:37
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
+"Nazwy miejscowości powinny być wpisane jako lista oddzielona przecinkami, "
+"zaczynając od najmniejszej miejscowości, a kończąc na kraju. Na przykład: "
+"\"Bronowice, Lublin, Polska\"."
 
 #: SharedPlacesListController.php:50 SharedPlacesModule.php:155
 #: resources/views/lists/shared-places-table.phtml:38
+#, fuzzy
 msgid "Shared places"
-msgstr ""
+msgstr "Miejsca wspólne"
 
 #: SharedPlacesModule.php:189
+#, fuzzy
 msgid "View Shared places hierarchy"
-msgstr ""
+msgstr "Wyświetl hierarchię miejsc współdzielonych"
 
 #: SharedPlacesModule.php:191
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
+"Włącz moduł Vesta Miejscowości i mapa rodowodów, aby wyświetlić hierarchię "
+"wspólnych miejsc."
 
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:338
+#, fuzzy
 msgid "Location"
-msgstr ""
+msgstr "Lokalizacja"
 
 #: SharedPlacesModule.php:345 SharedPlacesModule.php:454
 #: SharedPlacesModule.php:485
 #: resources/views/lists/shared-places-table.phtml:43
+#, fuzzy
 msgid "Shared place"
-msgstr ""
+msgstr "Miejsce wspólne"
 
 #: SharedPlacesModule.php:346
+#, fuzzy
 msgid "Higher-level shared place"
-msgstr ""
+msgstr "Miejsce wspólne wyższego rzędu"
 
 #: SharedPlacesModule.php:347
+#, fuzzy
 msgid "Type of location"
-msgstr ""
+msgstr "Rodzaj lokalizacji"
 
 #: SharedPlacesModule.php:348
+#, fuzzy
 msgid "Type of hierarchical relationship"
-msgstr ""
+msgstr "Rodzaj relacji hierarchicznej"
 
 #: SharedPlacesModule.php:349
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "Identyfikator GOV dla rodzaju lokalizacji"
 
 #: SharedPlacesModule.php:557
 msgid "Shared place data"
 msgstr ""
 
 #: SharedPlacesModule.php:762
-#, php-format
+#, fuzzy, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr ""
+msgstr "%s oraz osoby i rodziny, które się do niego odwołują."
 
 #: SharedPlacesModule.php:954
 msgid "shared places"
 msgstr ""
 
 #: SharedPlacesModuleTrait.php:26
+#, fuzzy
 msgid "A module providing support for shared places."
-msgstr ""
+msgstr "Moduł zapewniający obsługę miejsc wspólnych."
 
 #: SharedPlacesModuleTrait.php:27
 msgid "Replacement for the original 'Locations' module."
