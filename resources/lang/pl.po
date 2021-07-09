@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-07-01 14:33+0000\n"
+"PO-Revision-Date: 2021-07-09 08:32+0000\n"
 "Last-Translator: Grzegorz Kociubowski <gkociubowski@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/pl/>\n"
@@ -130,8 +130,9 @@ msgid "%s and the individuals and families that reference it."
 msgstr "%s oraz osoby i rodziny, które się do niego odwołują."
 
 #: SharedPlacesModule.php:954
+#, fuzzy
 msgid "shared places"
-msgstr ""
+msgstr "miejsca wspólne"
 
 #: SharedPlacesModuleTrait.php:26
 #, fuzzy
@@ -150,17 +151,19 @@ msgstr ""
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:37
 msgid "Replaces the original 'Locations' module."
-msgstr ""
+msgstr "Zastępuje oryginalny moduł „Miejsca”."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:65
+#, fuzzy
 msgid "Shared place structure"
-msgstr ""
+msgstr "Struktura miejsca wspólnego"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:67
+#, fuzzy
 msgid "Use hierarchical shared places"
-msgstr ""
+msgstr "Użyj hierarchicznych miejsc wspólnych"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:68
@@ -179,9 +182,9 @@ msgstr ""
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:71
-#, php-format
+#, fuzzy, php-format
 msgid "See %1$s for details."
-msgstr ""
+msgstr "Zobacz %1$s aby uzyskać szczegółowe informacje."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:72
