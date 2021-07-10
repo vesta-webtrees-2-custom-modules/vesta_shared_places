@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-03-20 14:18+0000\n"
-"Last-Translator: mpwt <der@bauschaffen.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
+"PO-Revision-Date: 2021-07-10 15:32+0000\n"
+"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -486,7 +487,10 @@ msgstr "Dieser gemeinsame Ort wurde bearbeitet. Sie sollten die Änderungen prü
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:35
 #: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
-msgstr "Dieser Stammbaum verfügt über gemeinsame Orte mit durch Kommas getrennten Namensteilen, während gleichzeitig die Option 'Hierarchische gemeinsame Orte verwenden' ausgewählt ist."
+msgstr ""
+"Dieser Stammbaum verfügt über gemeinsame Orte mit durch Kommas getrennten "
+"Namensteilen, während gleichzeitig die Option „Hierarchische gemeinsame Orte "
+"verwenden“ ausgewählt ist."
 
 #: SharedPlacesModule.php:348
 msgid "Type of hierarchical relationship"
@@ -509,7 +513,9 @@ msgstr "Hierarchische gemeinsame Orte verwenden"
 #: HelpTexts.php:27
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
-msgstr "Verwenden Sie das gesonderte Tag '%1$s', um eine Ortshierarchie zu modellieren."
+msgstr ""
+"Verwenden Sie die gesonderte Markierung „%1$s“, um eine Ortshierarchie zu "
+"modellieren."
 
 #: SharedPlacesModule.php:189
 msgid "View Shared places hierarchy"

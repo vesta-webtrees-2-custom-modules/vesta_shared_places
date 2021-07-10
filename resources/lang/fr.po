@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-05-02 19:31+0000\n"
-"Last-Translator: Vincent DENIS <vincent.denis06@gmail.com>\n"
+"PO-Revision-Date: 2021-07-10 15:32+0000\n"
+"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -171,7 +171,9 @@ msgstr "En particulier, les espaces partagés hiérarchiques n'ont pas de noms a
 #: resources/views/data-fix-options.phtml:67
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
-msgstr "En particulier, les coordonnées cartographiques des «Données géographiques» de webtrees et les identifiants GOV du module Gov4Webtrees sont ajoutés."
+msgstr ""
+"En particulier, les coordonnées cartographiques des « Données géographiques »"
+" de webtrees et les identifiants GOV du module Gov4Webtrees sont ajoutés."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:202
@@ -490,7 +492,10 @@ msgstr "Ce lieu partagé a été modifié. Vous devriez revoir les changements e
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:35
 #: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
-msgstr "Cet arbre a des espaces partagés avec des parties de nom séparées par des virgules, tandis que l'option «Utiliser les espaces partagés hiérarchiques» est sélectionnée."
+msgstr ""
+"Cet arbre a des espaces partagés avec des parties de nom séparées par des "
+"virgules, tandis que l'option « Utiliser les espaces partagés hiérarchiques »"
+" est sélectionnée."
 
 #: SharedPlacesModule.php:348
 msgid "Type of hierarchical relationship"
@@ -513,7 +518,8 @@ msgstr "Utiliser des lieux partagés hiérarchiques"
 #: HelpTexts.php:27
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
-msgstr "Utilisez la balise séparée «%1$s» pour modéliser une hiérarchie de lieux."
+msgstr ""
+"Utilisez la balise séparée « %1$s » pour modéliser une hiérarchie de lieux."
 
 #: SharedPlacesModule.php:189
 msgid "View Shared places hierarchy"
