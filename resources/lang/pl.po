@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-07-09 08:32+0000\n"
+"PO-Revision-Date: 2021-07-13 12:35+0000\n"
 "Last-Translator: Grzegorz Kociubowski <gkociubowski@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/pl/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 
 #: HelpTexts.php:16
 msgid "Shared place summary"
@@ -140,8 +140,9 @@ msgid "A module providing support for shared places."
 msgstr "Moduł zapewniający obsługę miejsc wspólnych."
 
 #: SharedPlacesModuleTrait.php:27
+#, fuzzy
 msgid "Replacement for the original 'Locations' module."
-msgstr ""
+msgstr "Zastępuje oryginalny moduł „Miejsca”."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:36
