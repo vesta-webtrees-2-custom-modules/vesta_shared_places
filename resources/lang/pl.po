@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-07-13 12:35+0000\n"
-"Last-Translator: Grzegorz Kociubowski <gkociubowski@gmail.com>\n"
+"PO-Revision-Date: 2021-07-24 09:48+0000\n"
+"Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/pl/>\n"
 "Language: pl\n"
@@ -35,7 +35,7 @@ msgstr ""
 #: HelpTexts.php:19
 msgid "Therefore, the place name is displayed here including the full hierarchy."
 msgstr ""
-"W związku z tym nazwa miejsca jest wyświetlana tutaj wraz z pełną hierarchią"
+"W związku z tym nazwa miejsca jest wyświetlana tutaj wraz z pełną hierarchią."
 
 #: HelpTexts.php:20
 #, fuzzy, php-format
