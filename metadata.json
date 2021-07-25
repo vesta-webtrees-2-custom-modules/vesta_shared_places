@@ -84,5 +84,10 @@
 		"from": "2.0.12",
 		"to": "2.0.17",
 		"changelog": ["Support shared places in general search."]
+	},
+	{
+		"version": "2.0.16.4.0",
+		"from": "2.0.12",
+		"to": "2.0.17"
 	}
 ]
