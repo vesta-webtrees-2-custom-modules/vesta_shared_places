@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-07-24 09:48+0000\n"
-"Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
+"PO-Revision-Date: 2021-08-20 08:33+0000\n"
+"Last-Translator: Grzegorz Kociubowski <gkociubowski@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: HelpTexts.php:16
 msgid "Shared place summary"
@@ -78,9 +78,8 @@ msgid "Shared places"
 msgstr "Miejsca wspólne"
 
 #: SharedPlacesModule.php:189
-#, fuzzy
 msgid "View Shared places hierarchy"
-msgstr "Wyświetl hierarchię miejsc współdzielonych"
+msgstr "Wyświetl hierarchię miejsc wspólnych"
 
 #: SharedPlacesModule.php:191
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
@@ -122,7 +121,7 @@ msgstr "Identyfikator GOV dla rodzaju lokalizacji"
 
 #: SharedPlacesModule.php:557
 msgid "Shared place data"
-msgstr ""
+msgstr "Dane miejsca wspólnego"
 
 #: SharedPlacesModule.php:762
 #, fuzzy, php-format
