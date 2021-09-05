@@ -60,7 +60,6 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
       //check
       $cacheKey = __CLASS__ . $xref . '@' . $tree->id() . '#CHECK';
       $this->cache->remember($cacheKey, function () use ($cacheKey, $ret) {
-          
           //not cached: add 'dummy' cache entry first so that we won't loop endlessly in case of circularity
           $this->cache->remember($cacheKey, function () {
             return true;
@@ -71,7 +70,6 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
           
           return true;
       });
-      
       return $ret;
   }
     

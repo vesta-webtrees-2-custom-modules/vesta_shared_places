@@ -152,7 +152,17 @@ class SearchServiceExt {
   private function locationRowMapper(): Closure
     {
         return function (stdClass $row): Location {
+            /*
+            try {
+              $tree = $this->tree_service->find((int) $row->o_file);
+            } catch (Exception $ex) {
+              error_log("private tree? " . $row->o_file);
+              error_log(print_r($this->tree_service->all(), true));
+              throw new \Exception("private tree? " . $row->o_file);
+            }
+            */
             $tree = $this->tree_service->find((int) $row->o_file);
+          
             return Registry::locationFactory()->mapper($tree)($row);
         };
     }
