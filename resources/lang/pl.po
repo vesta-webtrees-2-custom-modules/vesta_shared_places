@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-08-20 08:33+0000\n"
-"Last-Translator: Grzegorz Kociubowski <gkociubowski@gmail.com>\n"
+"PO-Revision-Date: 2021-09-08 20:34+0000\n"
+"Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/pl/>\n"
 "Language: pl\n"
@@ -18,14 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: HelpTexts.php:16
 msgid "Shared place summary"
 msgstr "Posumowanie wspólnego miejsca"
 
 #: HelpTexts.php:18
-#, fuzzy
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
 "Podsumowanie pokazuje dane miejsca współdzielonego, sformatowane w taki sam "
@@ -38,27 +37,25 @@ msgstr ""
 "W związku z tym nazwa miejsca jest wyświetlana tutaj wraz z pełną hierarchią."
 
 #: HelpTexts.php:20
-#, fuzzy, php-format
+#, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
 "W konfiguracji modułu można ustawić rok referencyjny (który może być "
 "oceniany przez inne moduły, np. %1$s)."
 
 #: HelpTexts.php:26
-#, fuzzy
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
 "Nazwy miejscowości powinny być wpisane jako pojedyncza nazwa miejscowości ("
 "nie należy stosować listy rozdzielonej przecinkami)."
 
 #: HelpTexts.php:27
-#, fuzzy, php-format
+#, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr ""
 "Użyj oddzielnego znacznika \"%1$s\" w celu modelowania hierarchii miejsc."
 
 #: HelpTexts.php:31 HelpTexts.php:41
-#, fuzzy
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
 "Nazwy miejsc mogą zmieniać się z czasem. Możesz dodać wiele nazw do "
@@ -73,7 +70,6 @@ msgstr ""
 
 #: SharedPlacesListController.php:50 SharedPlacesModule.php:155
 #: resources/views/lists/shared-places-table.phtml:38
-#, fuzzy
 msgid "Shared places"
 msgstr "Miejsca wspólne"
 
@@ -89,29 +85,24 @@ msgstr ""
 
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:338
-#, fuzzy
 msgid "Location"
 msgstr "Lokalizacja"
 
 #: SharedPlacesModule.php:345 SharedPlacesModule.php:454
 #: SharedPlacesModule.php:485
 #: resources/views/lists/shared-places-table.phtml:43
-#, fuzzy
 msgid "Shared place"
 msgstr "Miejsce wspólne"
 
 #: SharedPlacesModule.php:346
-#, fuzzy
 msgid "Higher-level shared place"
 msgstr "Miejsce wspólne wyższego rzędu"
 
 #: SharedPlacesModule.php:347
-#, fuzzy
 msgid "Type of location"
 msgstr "Rodzaj lokalizacji"
 
 #: SharedPlacesModule.php:348
-#, fuzzy
 msgid "Type of hierarchical relationship"
 msgstr "Rodzaj relacji hierarchicznej"
 
@@ -124,22 +115,19 @@ msgid "Shared place data"
 msgstr "Dane miejsca wspólnego"
 
 #: SharedPlacesModule.php:762
-#, fuzzy, php-format
+#, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s oraz osoby i rodziny, które się do niego odwołują."
 
 #: SharedPlacesModule.php:954
-#, fuzzy
 msgid "shared places"
 msgstr "miejsca wspólne"
 
 #: SharedPlacesModuleTrait.php:26
-#, fuzzy
 msgid "A module providing support for shared places."
 msgstr "Moduł zapewniający obsługę miejsc wspólnych."
 
 #: SharedPlacesModuleTrait.php:27
-#, fuzzy
 msgid "Replacement for the original 'Locations' module."
 msgstr "Zastępuje oryginalny moduł „Miejsca”."
 
@@ -155,13 +143,11 @@ msgstr "Zastępuje oryginalny moduł „Miejsca”."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:65
-#, fuzzy
 msgid "Shared place structure"
 msgstr "Struktura miejsca wspólnego"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:67
-#, fuzzy
 msgid "Use hierarchical shared places"
 msgstr "Użyj hierarchicznych miejsc wspólnych"
 
@@ -182,7 +168,7 @@ msgstr ""
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:71
-#, fuzzy, php-format
+#, php-format
 msgid "See %1$s for details."
 msgstr "Zobacz %1$s aby uzyskać szczegółowe informacje."
 
