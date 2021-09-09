@@ -25,6 +25,7 @@ class LocGraph {
   }
   
   public function linkedIndividuals(Collection $locXrefs): Collection {
+    
     $ret = new Collection();
     $handled = new Collection();
     

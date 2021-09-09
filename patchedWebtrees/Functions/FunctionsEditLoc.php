@@ -560,7 +560,7 @@ class FunctionsEditLoc {
             case 'RELI':
                 /* I18N: Type of hierarchical relationship between locations */
                 return I18N::translate('religious');
-            case 'GEOG':
+            case 'GEOG':  
                 /* I18N: Type of hierarchical relationship between locations */
                 return I18N::translate('geographical');
             case 'CULT':

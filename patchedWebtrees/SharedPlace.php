@@ -73,24 +73,53 @@ class SharedPlace extends Location {
   }
 
   public function check(): void {
-    //$this->gedcom() is not a usable key: there may be a change in a parent!
-    $key = SharePlace::class . '_check_' . $this->xref() . '_' .json_encode($this->namesAsPlaceStringsAt(GedcomDateInterval::createEmpty()));    
+    //error_log("check?" . $this->xref());
+    
+    //have to use $this->gedcom() as additional key
+    //because any update orphans our places via FunctionsImport::updateRecord
+    //
+    //not sufficient as only key because parent names may have changed
+    $pending = $this->isPendingAddition()?'_P':'';
+    $key = SharePlace::class . '_check_' . $this->xref() . '_' . $this->gedcom() . $pending . '_' . json_encode($this->namesAsPlaceStringsAt(GedcomDateInterval::createEmpty()));    
 
-    $self = $this;
-    $seconds = 60 * 60 * 24 * 7; //do not cache indefinitely though
     //Issue #54
     //very expensive and called often, therefore cached to file
     //better solution would be to do this after import/update only, but that's intrusive (no hooks in webtrees core code for this)
-    Registry::cache()->file()->remember($key, static function () use ($self): bool {
-      $self->doCheck();
-      return true;
-    }, $seconds);
+    
+    //do not use $key as cache key 
+    //(wouldn't work for changes back to some previous gedcom that is still cached)
+    //rather compare with previous state
+    $doCheck = false;
+    
+    $previousKey = Registry::cache()->file()->remember($this->xref(), static function () use ($key, &$doCheck): string {
+      //error_log("cache miss");
+      $doCheck = true; //due to cache miss
+      return $key;
+    });
+    
+    if ($key != $previousKey) {
+      //error_log("key change");
+      $doCheck = true; //due to change
+      
+      //must forget and then re-cache
+      Registry::cache()->file()->forget($this->xref());
+      Registry::cache()->file()->remember($this->xref(), static function () use ($key): string {
+        return $key;
+      });
+    }
+    
+    if ($doCheck) {
+      $this->doCheck();
+    }
   }
   
   protected function doCheck(): void { 
+    
+    //error_log("doCheck");
+    
     /*
     foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
-      error_log("placename for ".$this->xref(). ": " . $place->gedcomName());
+      error_log("doCheck placename for ".$this->xref(). ": " . $place->gedcomName());
     }
     */
 
@@ -253,8 +282,8 @@ class SharedPlace extends Location {
     if ($link !== '_LOC') {
       throw new Exception("unexpected link!");
     }
-
-    return SharedPlace::linkedIndividualsRecords(new Collection([$this]));
+    $ret = SharedPlace::linkedIndividualsRecords(new Collection([$this]));
+    return $ret;
   }
   
   //more efficient than count(linkedIndividuals())
@@ -872,7 +901,6 @@ class SharedPlace extends Location {
           array /* of array with nameStructure fields */ $nextNames,
           Collection $transitiveParents): array {
 
-    /*
     $ret = SharedPlace::namesAsStringsAtA(
             $primaryOnly,
             $xref, 
@@ -880,12 +908,11 @@ class SharedPlace extends Location {
             $nextNames,
             $transitiveParents,
             []);
-    */
     
-    //looking good
     //error_log(print_r($ret, true));
-    //return $ret;
+    return $ret;
     
+    /*
     return SharedPlace::namesAsStringsAtOrig(
             $date,
             $primaryOnly,
@@ -894,6 +921,7 @@ class SharedPlace extends Location {
             $nextNames,
             $transitiveParents,
             []);
+     */
   }
       
   private static function namesAsStringsAtOrig(
@@ -1075,14 +1103,14 @@ class SharedPlace extends Location {
         }
         
         $nextName = $nameStructure['fullNN'];
-        $nextNames[$nameLang][$nextName] = $nextName; //use key  to avoid duplicates
+        $nextNames[$nameLang][$nextName] = $nextName; //use key to avoid duplicates
       }
       
       if ($firstLang !== '') {
         //make sure to always add 'any-language', if necessary by duplicating entries
         $nextNames[''] = [];
         foreach ($nextNames[$firstLang] as $nextName) {
-          $nextNames[''][$nextName] = $nextName; //use key  to avoid duplicates
+          $nextNames[''][$nextName] = $nextName; //use key to avoid duplicates
         }        
       }
     } else {
@@ -1107,15 +1135,19 @@ class SharedPlace extends Location {
         $languages[$nameLang] = $sourceLang;
       }
       
+      //error_log("languages: ". print_r($languages, true));
+      
       //also:
       //any language not seen in batch but present in current names:
-      //use the first entry/entries with the same language from batch
+      //use the first entry (or entries with the same language) from batch
       $substituteLangs = [];
       foreach ($currentNames as $lang => $unused) {
         if (!array_key_exists($lang, $languages)) {
           $substituteLangs []= $lang;
         }
       }      
+      
+      //error_log("substituteLangs: ". print_r($substituteLangs, true));
       
       foreach ($nextBatch as $nameStructure) {
         /* @var $nameLang string */
@@ -1131,7 +1163,9 @@ class SharedPlace extends Location {
             foreach ($currentNames[$substituteLang] as $head) {
               //append          
               $headAndNextName = $head . Gedcom::PLACE_SEPARATOR . $nextName;          
-              $nextNames[$substituteLang][$headAndNextName] = $headAndNextName; //use key  to avoid duplicates
+              $nextNames[$substituteLang][$headAndNextName] = $headAndNextName; //use key to avoid duplicates
+              
+              //error_log("substitute: '".$substituteLang."' = ".$headAndNextName);
             }
           }
         }
@@ -1144,7 +1178,9 @@ class SharedPlace extends Location {
         foreach ($currentNames[$sourceLang] as $head) {
           //append          
           $headAndNextName = $head . Gedcom::PLACE_SEPARATOR . $nextName;          
-          $nextNames[$sourceLang][$headAndNextName] = $headAndNextName; //use key  to avoid duplicates
+          $nextNames[$nameLang][$headAndNextName] = $headAndNextName; //use key to avoid duplicates
+          
+          //error_log("regular: '".$nameLang."' = ".$headAndNextName);
         }
       }
     }
@@ -1197,7 +1233,8 @@ class SharedPlace extends Location {
       
       if ($parentSharedPlace === null) {
         //leaf, just add $currentNames, flattened
-        foreach ($currentNames as $currentNamesByLanguage) {
+        foreach ($currentNames as $lang => $currentNamesByLanguage) {
+          //error_log($lang . ":" . print_r($currentNamesByLanguage, true));
           $ret = array_merge($ret, $currentNamesByLanguage);
         }
       } else {
