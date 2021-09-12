@@ -480,118 +480,7 @@ class SharedPlacesModule extends AbstractModule implements
             $this->name() . '::icons/shared-place', 
             I18N::translate('Shared place'), 
             $sharedPlace->url());
-  }
-  
-  protected function getHtmlForSharedPlaceData(PlaceStructure $place) {
-    $html1 = '';
-    $html = '';
-    $sharedPlace = $this->plac2sharedPlace($place);
-    if ($sharedPlace === null) {
-      return array($html1, $html);
-    }
-    
-    //restrict to specific events?
-    $restricted = $this->getPreference('RESTRICTED', '0');
-
-    if ($restricted) {
-      $restricted_indi = $this->getPreference('RESTRICTED_INDI', 'BIRT,MARR,OCCU,RESI,DEAT');
-      $restrictedTo = preg_split("/[, ;:]+/", $restricted_indi, -1, PREG_SPLIT_NO_EMPTY);
-      if (!in_array($place->getEventType(), $restrictedTo, true)) {
-
-        $restricted_fam = $this->getPreference('RESTRICTED_FAM', 'MARR');
-        $restrictedTo = preg_split("/[, ;:]+/", $restricted_fam, -1, PREG_SPLIT_NO_EMPTY);
-        if (!in_array($place->getEventType(), $restrictedTo, true)) {
-          return array($this->getLinkForSharedPlace($sharedPlace), '');
-        }
-      }
-    }
-    
-    //add link
-    $html1 .= $this->linkIcon(
-            $this->name() . '::icons/shared-place', 
-            I18N::translate('Shared place'), 
-            $sharedPlace->url());
-            
-    //add name if different from PLAC name
-    $nameAt = $sharedPlace->primaryPlaceAt($place->getEventDateInterval())->gedcomName();
-    if ($nameAt !== $place->getGedcomName()) {
-      $html .= '<div class="indent">';
-      $html .= $nameAt;
-      $html .= '</div>';
-    }
-    
-    //add all (level 1) notes
-    if (preg_match('/1 NOTE (.*)/', $sharedPlace->gedcom(), $match)) {
-      //note may be restricted - in which case, do not add wrapper
-      //(and ultimately perhaps do not add entire 'shared place data', in case there is nothing else to display)
-      $note = FunctionsPrint::printFactNotes($place->getTree(), $sharedPlace->gedcom(), 1);
-      if ($note !== '') {
-        $html .= '<div class="indent">';
-        $html .= $note;
-        //$html .= '<br>';
-        $html .= '</div>';
-      }
-    }
-    //add all (level 1) media
-    if (preg_match_all("/1 OBJE @(.*)@/", $sharedPlace->gedcom(), $match)) {
-      ob_start();
-      FunctionsPrintFacts::printMediaLinks($place->getTree(), $sharedPlace->gedcom(), 1);
-      $media = ob_get_clean();
-      if ($media !== '') {
-        $html .= '<div class="indent">';
-        $html .= $media;
-        $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
-        $html .= '</div>';
-      }
-    }
-
-    //add all (level 1) sources
-    if (preg_match_all("/1 SOUR @(.*)@/", $sharedPlace->gedcom(), $match)) {
-      $sources = FunctionsPrintFacts::printFactSources($place->getTree(), $sharedPlace->gedcom(), 1);
-      if ($sources !== '') {
-        $html .= '<div class="indent">';
-        $html .= $sources;
-        $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
-        $html .= '</div>';
-      }
-    }
-      
-    if ($html !== '') {
-      //wrap in order to make expandable/collapsible
-      $data = '<br/>';
-
-      $expandSetting = $this->getPreference('EXPAND', '1');
-      if ($expandSetting == '0') {
-        $expanded = false;
-      } else if ($expandSetting == '1') {
-        if (in_array($sharedPlace->xref(), SharedPlacesModule::$seenSharedPlaces)) {
-          $expanded = false;
-        } else {
-          $expanded = true;
-        }
-        SharedPlacesModule::$seenSharedPlaces[] = $sharedPlace->xref();
-      } else {
-        $expanded = true;
-      }
-
-      $id = 'collapse-' . Uuid::uuid4()->toString();
-            
-      $data .= '<a href="#' . e($id) . '" role="button" data-toggle="collapse" aria-controls="' . e($id) . '" aria-expanded="' . ($expanded ? 'true' : 'false') . '">' .
-            view('icons/expand') .
-            view('icons/collapse') .
-            '</a> ';
-      
-      $data .= '<span class="label"><a href="' . $sharedPlace->url() . '">' . I18N::translate('Shared place data') . '</a></span>';
-      $data .= '<div id="' . e($id) . '" class="shared_place_data collapse ' . ($expanded ? 'show' : '') . '">' .
-            $html .
-            '</div>';
-      $data .= '</div>';
-
-
-      $html = $data;
-    } //else no shared place, or shared place without contents
-    return array($html1, $html);
-  }
+  }  
 
   public function linkIcon($view, $title, $url) {
     return '<a href="' . $url . '" rel="nofollow" title="' . $title . '">' .
@@ -771,13 +660,123 @@ class SharedPlacesModule extends AbstractModule implements
     return $ret;
   }
   
-  public function factPlaceAdditions(PlaceStructure $place): ?FactPlaceAdditions {
+  public function factPlaceAdditionsBeforePlace(PlaceStructure $place): ?string {
+    $sharedPlace = $this->plac2sharedPlace($place);
+    if ($sharedPlace === null) {
+      return null;
+    }
+    
+    return $this->getLinkForSharedPlace($sharedPlace);
+  }
+  
+  public function factPlaceAdditionsAfterMap(PlaceStructure $place): ?string {
+    return null;
+  }
+  
+  public function factPlaceAdditionsAfterNotes(PlaceStructure $place): ?string {
     //would be cleaner to use plac2loc here - in practice same result
-    $htmls = $this->getHtmlForSharedPlaceData($place);
-    return new FactPlaceAdditions(
-            GenericViewElement::create($htmls[0]), 
-            GenericViewElement::createEmpty(), 
-            GenericViewElement::create($htmls[1]));
+    $sharedPlace = $this->plac2sharedPlace($place);
+    if ($sharedPlace === null) {
+      return null;
+    }
+    
+    $html = '';
+            
+    //restrict to specific events?
+    $restricted = $this->getPreference('RESTRICTED', '0');
+
+    if ($restricted) {
+      $restricted_indi = $this->getPreference('RESTRICTED_INDI', 'BIRT,MARR,OCCU,RESI,DEAT');
+      $restrictedTo = preg_split("/[, ;:]+/", $restricted_indi, -1, PREG_SPLIT_NO_EMPTY);
+      if (!in_array($place->getEventType(), $restrictedTo, true)) {
+
+        $restricted_fam = $this->getPreference('RESTRICTED_FAM', 'MARR');
+        $restrictedTo = preg_split("/[, ;:]+/", $restricted_fam, -1, PREG_SPLIT_NO_EMPTY);
+        if (!in_array($place->getEventType(), $restrictedTo, true)) {
+          return null;
+        }
+      }
+    }
+            
+    //add name if different from PLAC name
+    $nameAt = $sharedPlace->primaryPlaceAt($place->getEventDateInterval())->gedcomName();
+    if ($nameAt !== $place->getGedcomName()) {
+      $html .= '<div class="indent">';
+      $html .= $nameAt;
+      $html .= '</div>';
+    }
+    
+    //add all (level 1) notes
+    if (preg_match('/1 NOTE (.*)/', $sharedPlace->gedcom(), $match)) {
+      //note may be restricted - in which case, do not add wrapper
+      //(and ultimately perhaps do not add entire 'shared place data', in case there is nothing else to display)
+      $note = FunctionsPrint::printFactNotes($place->getTree(), $sharedPlace->gedcom(), 1);
+      if ($note !== '') {
+        $html .= '<div class="indent">';
+        $html .= $note;
+        //$html .= '<br>';
+        $html .= '</div>';
+      }
+    }
+    //add all (level 1) media
+    if (preg_match_all("/1 OBJE @(.*)@/", $sharedPlace->gedcom(), $match)) {
+      ob_start();
+      FunctionsPrintFacts::printMediaLinks($place->getTree(), $sharedPlace->gedcom(), 1);
+      $media = ob_get_clean();
+      if ($media !== '') {
+        $html .= '<div class="indent">';
+        $html .= $media;
+        $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
+        $html .= '</div>';
+      }
+    }
+
+    //add all (level 1) sources
+    if (preg_match_all("/1 SOUR @(.*)@/", $sharedPlace->gedcom(), $match)) {
+      $sources = FunctionsPrintFacts::printFactSources($place->getTree(), $sharedPlace->gedcom(), 1);
+      if ($sources !== '') {
+        $html .= '<div class="indent">';
+        $html .= $sources;
+        $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
+        $html .= '</div>';
+      }
+    }
+      
+    if ($html == '') {
+      return null;
+    }
+    
+    //wrap in order to make expandable/collapsible
+    $data = '<br/>';
+
+    $expandSetting = $this->getPreference('EXPAND', '1');
+    if ($expandSetting == '0') {
+      $expanded = false;
+    } else if ($expandSetting == '1') {
+      if (in_array($sharedPlace->xref(), SharedPlacesModule::$seenSharedPlaces)) {
+        $expanded = false;
+      } else {
+        $expanded = true;
+      }
+      SharedPlacesModule::$seenSharedPlaces[] = $sharedPlace->xref();
+    } else {
+      $expanded = true;
+    }
+
+    $id = 'collapse-' . Uuid::uuid4()->toString();
+
+    $data .= '<a href="#' . e($id) . '" role="button" data-toggle="collapse" aria-controls="' . e($id) . '" aria-expanded="' . ($expanded ? 'true' : 'false') . '">' .
+          view('icons/expand') .
+          view('icons/collapse') .
+          '</a> ';
+
+    $data .= '<span class="label"><a href="' . $sharedPlace->url() . '">' . I18N::translate('Shared place data') . '</a></span>';
+    $data .= '<div id="' . e($id) . '" class="shared_place_data collapse ' . ($expanded ? 'show' : '') . '">' .
+          $html .
+          '</div>';
+    $data .= '</div>';
+    
+    return $data;
   }
   
   ////////////////////////////////////////////////////////////////////////////////
