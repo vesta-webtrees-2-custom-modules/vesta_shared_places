@@ -765,7 +765,12 @@ class SharedPlace extends Location {
     return $this->getAllNamesAt(null, I18N::locale()->code());
   }
   
-  //TODO issue #94: handle this better, for now required for proper Place handling
+  //see issue #94: there are no privacy restrictions!
+  public function canShow(int $access_level = null): bool {
+    return true;
+  }
+    
+  //see issue #94: there are no privacy restrictions!
   public function canShowName(int $access_level = null): bool {
     return true;
   }
@@ -791,7 +796,8 @@ class SharedPlace extends Location {
       }
 
       $getAllNames = [];
-      if ($self->canShowName()) {
+      //if ($self->canShowName()) {
+      
           // Ask the record to extract its names
           $getAllNames = $self->extractNamesAt($actualDate);
 
@@ -850,9 +856,10 @@ class SharedPlace extends Location {
                 return $x['indexOfFact'] <=> $y['indexOfFact'];
             });
           }
-          
+        
+      /*    
       } else {
-          //issue #94: this is bad for check(), and other call sites using Place functionality
+          //issue #94: this would be bad for check(), and other call sites using Place functionality
           //(i.e. basically everywhere)
           //for now canShowName() is always true
           $getAllNames []= $self->createName(
@@ -861,7 +868,8 @@ class SharedPlace extends Location {
                   '',
                   $actualDate,
                   $actualDate); //set proper language here?
-      }      
+      }
+      */
 
       if ($date === null) {
         //store
@@ -1415,24 +1423,7 @@ class SharedPlace extends Location {
 
     return $places->all();
 
-    //not safe wrt loops
-    /*
-    foreach ($allNames as $nameStructure) {
-      $head = $nameStructure['fullNN'];
-
-      $parents = $this->getParents();
-      if (empty($parents)) {
-        $places[] = new Place($head, $this->tree);
-      } else {
-        foreach ($this->getParents() as $parent) {
-          foreach ($parent->namesAsPlaces() as $parentPlace) {
-            $full = $head . Gedcom::PLACE_SEPARATOR . $parentPlace->gedcomName();
-            $places[] = new Place($full, $this->tree);
-          }
-        }      
-      }
-    }
-    */    
+    //note: impl via recursion would not be safe wrt loops   
   }
   
   //if shared places hierarchy is used, build returned place names via hierarchy!
@@ -1465,24 +1456,7 @@ class SharedPlace extends Location {
 
     return $places;
 
-    //not safe wrt loops
-    /*
-    foreach ($allNames as $nameStructure) {
-      $head = $nameStructure['fullNN'];
-
-      $parents = $this->getParents();
-      if (empty($parents)) {
-        $places[] = new Place($head, $this->tree);
-      } else {
-        foreach ($this->getParents() as $parent) {
-          foreach ($parent->namesAsPlaces() as $parentPlace) {
-            $full = $head . Gedcom::PLACE_SEPARATOR . $parentPlace->gedcomName();
-            $places[] = new Place($full, $this->tree);
-          }
-        }      
-      }
-    }
-    */    
+    //note: impl via recursion would not be safe wrt loops   
   }
   
   public function primaryPlace(): Place {

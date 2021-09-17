@@ -641,7 +641,12 @@ class SharedPlacesModule extends AbstractModule implements
     return null;
   }
   
-  public function locPloc(LocReference $locReference, GedcomDateInterval $dateInterval, Collection $typesOfLocation, int $maxLevels = PHP_INT_MAX): Collection {
+  public function locPloc(
+          LocReference $locReference, 
+          GedcomDateInterval $dateInterval, 
+          Collection $typesOfLocation, 
+          int $maxLevels = PHP_INT_MAX): Collection {
+    
     $sharedPlace = Registry::gedcomRecordFactory()->make($locReference->getXref(), $locReference->getTree());
     
     $currentLevel = 0;
@@ -821,147 +826,6 @@ class SharedPlacesModule extends AbstractModule implements
     
     return $ret;
   }  
-    
-  /*  
-  public function getDirectLinkTypes(): Collection {
-    return new Collection(["_LOC"]);
-  }
-  
-  public function getIndirectLinks(GedcomRecord $record): Collection {
-    $ret = new Collection();
-    
-    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
-    if ($indirect) {
-      $places = $record->getAllEventPlaces([]);
-      foreach ($places as $place) {
-        $sharedPlace = $this->placename2sharedPlace($place->gedcomName(), $record->tree());
-        if ($sharedPlace != null) {
-          $ret->push($sharedPlace->xref());
-        }
-      }
-    }    
-    
-    return $ret;
-  }
-  
-  public function getTransitiveLinks(GedcomRecord $record): Collection {
-    $ret = new Collection();
-    
-    $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
-    if ($useHierarchy) {
-      if ($record instanceof SharedPlace) {
-        //safer wrt loops (than to use getTransitiveLinks recursively)
-        $queue = new Collection();        
-        $queue->prepend($record);
-        
-        while ($queue->count() > 0) {
-          $current = $queue->pop();
-          $ret->add($current);
-          foreach ($current->getParents() as $parent) {
-            if (!$ret->contains($parent)) {
-              $queue->prepend($parent);
-            }
-          }
-        }
-      }
-    }    
-    
-    return $ret->map(function (GedcomRecord $record): string {
-              return $record->xref();
-            });
-  }
-  
-  public function getAddToClippingsCartRoute(Route $route, Tree $tree): ?string {
-    if ($route->name === SharedPlacePage::class) {
-      $xref = $route->attributes['xref'];
-      assert(is_string($xref));
-
-      $add_route = route('module', [
-          'module' => $this->name(),
-          'action' => 'AddToClippingsCart',
-          'xref'   => $xref,
-          'tree'    => $tree->name(),
-      ]);
-
-      return $add_route;
-    }
-    
-    return null;
-  }
-  
-  public function getAddToClippingsCartAction(ServerRequestInterface $request): ResponseInterface
-    {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $xref = $request->getQueryParams()['xref'];
-
-        $sharedPlace = Registry::locationFactory()->make($xref, $tree);
-
-        if ($sharedPlace === null) {
-            throw new SharedPlaceNotFoundException();
-        }
-
-        $options = $this->clippingsCartOptions($sharedPlace);
-
-        $title = I18N::translate('Add %s to the clippings cart', $sharedPlace->fullName());
-
-        return $this->viewResponse('modules/clippings/add-options', [
-            'options' => $options,
-            'default' => key($options),
-            'record'  => $sharedPlace,
-            'title'   => $title,
-            'tree'    => $tree,
-        ]);
-    }
-
-    protected function clippingsCartOptions(SharedPlace $sharedPlace): array
-    {
-        $name = strip_tags($sharedPlace->fullName());
-        
-        return [
-            'only'   => strip_tags($sharedPlace->fullName()),
-            'linked' => I18N::translate('%s and the individuals that reference it.', $name),
-        ];
-    }
-
-    public function postAddToClippingsCartAction(ServerRequestInterface $request): ResponseInterface
-    {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $params = (array) $request->getParsedBody();
-
-        $xref   = $params['xref'];
-        $option = $params['option'];
- 
-        $sharedPlace = Registry::locationFactory()->make($xref, $tree);
-
-        if ($sharedPlace === null) {
-            throw new SharedPlaceNotFoundException();
-        }
-
-        $target = app()
-            ->make(ModuleService::class)
-            ->findByComponent(ClippingsCartModule::class, $tree, Auth::user())
-            ->first();
-        
-        if ($target !== null) {
-          $target->addRecordToCart($sharedPlace);
-          
-          if ($option === 'linked') {
-              foreach ($sharedPlace->linkedIndividuals('_LOC') as $individual) {
-                  $target->addRecordToCart($individual);
-              }
-              foreach ($sharedPlace->linkedFamilies('_LOC') as $family) {
-                  $target->addRecordToCart($family);
-              }
-          }
-        }
-
-        return redirect($sharedPlace->url());
-    }
-  */
   
   ////////////////////////////////////////////////////////////////////////////////
   //PlaceHierarchyParticipant
