@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-10-03 09:09+0000\n"
+"PO-Revision-Date: 2021-10-12 08:26+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
@@ -124,7 +124,7 @@ msgstr "Filter op unieke gedeelde plaatsen"
 
 #: SharedPlacesModule.php:349
 msgid "GOV id for type of location"
-msgstr "GOV-id voor type locatie"
+msgstr "GOV-ID voor soort locatie"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
@@ -494,11 +494,11 @@ msgstr "Deze stamboom heeft gedeelde plaatsen met door komma's gescheiden naamde
 
 #: SharedPlacesModule.php:348
 msgid "Type of hierarchical relationship"
-msgstr "Type hiërarchische relatie"
+msgstr "Soort hiërarchische verwantschap"
 
 #: SharedPlacesModule.php:347
 msgid "Type of location"
-msgstr "Type locatie"
+msgstr "Soort locatie"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:107
@@ -558,7 +558,7 @@ msgstr "geografische"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:161
 msgid "no"
-msgstr "nee"
+msgstr "geen"
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:554
