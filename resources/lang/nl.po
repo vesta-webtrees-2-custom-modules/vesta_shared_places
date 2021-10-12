@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-10-12 10:05+0000\n"
+"PO-Revision-Date: 2021-10-12 12:05+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
@@ -45,7 +45,14 @@ msgstr "Een module die ondersteuning biedt voor gedeelde plaatsen."
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:36
 msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended 'Facts and events' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module."
-msgstr "Een module die gedeelde plaatsen ondersteunt als GEDCOM-objecten van niveau 0, op basis van het GEDCOM-L Addendum bij de GEDCOM 5.5.1-specificatie. Gedeelde plaatsen kunnen bijvoorbeeld kaartcoördinaten, notities en mediaobjecten bevatten. De module geeft deze gegevens voor alle overeenkomende plaatsen weer via het uitgebreide tabblad 'Feiten en gebeurtenissen'. Het kan ook worden gebruikt om GOV- id's te beheren, in combinatie met de Gov4Webtrees-module."
+msgstr ""
+"Een module die gedeelde plaatsen ondersteunt als GEDCOM-objecten van niveau "
+"0, op basis van het GEDCOM-L Addendum bij de GEDCOM 5.5.1-specificatie. "
+"Gedeelde plaatsen kunnen bijvoorbeeld kaartcoördinaten, notities en "
+"mediaobjecten bevatten. De module geeft deze gegevens voor alle "
+"overeenkomende plaatsen weer via het uitgebreide tabblad 'Feiten en "
+"gebeurtenissen'. Het kan ook worden gebruikt om GOV- ID's te beheren, in "
+"combinatie met de Gov4Webtrees-module."
 
 #: resources/views/modals/shared-place-fields.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
@@ -151,7 +158,10 @@ msgstr "Als deze optie is ingeschakeld, worden gegevens van gedeelde plaatsen al
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
-msgstr "Als er stamboomonafhankelijke gegevens beschikbaar zijn, worden kaartcoördinaten van webtrees 'Geografische gegevens' en GOV-id's van de Gov4Webtrees-module toegevoegd."
+msgstr ""
+"Als er stamboomonafhankelijke gegevens beschikbaar zijn, worden "
+"kaartcoördinaten van webtrees 'Geografische gegevens' en GOV-ID's van de "
+"Gov4Webtrees-module toegevoegd."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:86
@@ -171,7 +181,9 @@ msgstr "In het bijzonder hebben hiërarchische gedeelde plaatsen geen namen met 
 #: resources/views/data-fix-options.phtml:67
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
-msgstr "In het bijzonder worden kaartcoördinaten van webtrees 'Geografische data' en GOV-ids van de Gov4Webtrees-module toegevoegd."
+msgstr ""
+"In het bijzonder worden kaartcoördinaten van webtrees 'Geografische data' en "
+"GOV-ID's van de Gov4Webtrees-module toegevoegd."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:202
@@ -513,7 +525,8 @@ msgstr "Hiërarchische gedeelde plaatsen gebruiken"
 #: HelpTexts.php:27
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
-msgstr "Gebruik de scheidingstag '%1$s' om een plaatshiërarchie te modelleren."
+msgstr ""
+"Gebruik het scheidingslabel '%1$s' om een plaatshiërarchie te modelleren."
 
 #: SharedPlacesModule.php:189
 msgid "View Shared places hierarchy"
