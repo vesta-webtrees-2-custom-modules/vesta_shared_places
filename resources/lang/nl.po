@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-05-01 16:11+0200\n"
-"PO-Revision-Date: 2021-10-12 12:05+0000\n"
+"PO-Revision-Date: 2021-10-23 08:59+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
@@ -188,7 +188,12 @@ msgstr ""
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:202
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
-msgstr "In de lijst 'Hiërarchie van plaatsen' worden, bij gebruik van de optie 'beperken tot gedeelde plaatsen', gedeelde plaatsen met meerdere namen meerdere keren weergegeven als afzonderlijke items. Schakel deze optie in om elke gedeelde plaats in dit geval slechts één keer weer te geven, onder de primaire naam van de gedeelde plaats, en ook de extra namen weer te geven."
+msgstr ""
+"In de plaatshiërarchielijst worden, bij gebruik van de optie 'beperken tot "
+"gedeelde plaatsen', gedeelde plaatsen met meerdere namen meerdere keren "
+"weergegeven als afzonderlijke items. Schakel deze optie in om elke gedeelde "
+"plaats in dit geval slechts één keer weer te geven, onder de primaire naam "
+"van de gedeelde plaats, en ook de extra namen weer te geven."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:84
