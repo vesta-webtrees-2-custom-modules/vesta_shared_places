@@ -91,12 +91,12 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.17.0.1
+* Current version: 2.0.17.1.0
 * Based on and tested with webtrees 2.0.17. Requires webtrees 2.0.12 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
 * Provides location data to other custom modules.
-* Download the zipped module, including all related modules, [here](https://cissee.de/vesta.latest.zip).
+* Download the zip file, which includes all Vesta modules, [here](https://cissee.de/vesta.latest.zip).
 * Support, suggestions, feature requests: <ric@richard-cissee.de>
 * Issues also via <https://github.com/vesta-webtrees-2-custom-modules/vesta_shared_places/issues>
 * Translations may be contributed via weblate: <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/>

@@ -7,11 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-05-01 16:11+0200\n"
+"POT-Creation-Date: 2021-11-07 16:35+0100\n"
 "PO-Revision-Date: 2021-10-23 08:59+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +27,12 @@ msgstr " (Opmerking: %s bovenliggende gedeelde plaatsen zijn ook gecreëerd)"
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Opmerking: er is ook een bovenliggende gedeelde plaats gecreëerd)"
 
-#: SharedPlacesModule.php:762
+#: SharedPlacesModule.php:794
+#, php-format
+msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
+msgstr ""
+
+#: SharedPlacesModule.php:793
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s en de personen en gezinnen die ernaar verwijzen."
@@ -45,14 +49,7 @@ msgstr "Een module die ondersteuning biedt voor gedeelde plaatsen."
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:36
 msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended 'Facts and events' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module."
-msgstr ""
-"Een module die gedeelde plaatsen ondersteunt als GEDCOM-objecten van niveau "
-"0, op basis van het GEDCOM-L Addendum bij de GEDCOM 5.5.1-specificatie. "
-"Gedeelde plaatsen kunnen bijvoorbeeld kaartcoördinaten, notities en "
-"mediaobjecten bevatten. De module geeft deze gegevens voor alle "
-"overeenkomende plaatsen weer via het uitgebreide tabblad 'Feiten en "
-"gebeurtenissen'. Het kan ook worden gebruikt om GOV- ID's te beheren, in "
-"combinatie met de Gov4Webtrees-module."
+msgstr "Een module die gedeelde plaatsen ondersteunt als GEDCOM-objecten van niveau 0, op basis van het GEDCOM-L Addendum bij de GEDCOM 5.5.1-specificatie. Gedeelde plaatsen kunnen bijvoorbeeld kaartcoördinaten, notities en mediaobjecten bevatten. De module geeft deze gegevens voor alle overeenkomende plaatsen weer via het uitgebreide tabblad 'Feiten en gebeurtenissen'. Het kan ook worden gebruikt om GOV- ID's te beheren, in combinatie met de Gov4Webtrees-module."
 
 #: resources/views/modals/shared-place-fields.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
@@ -88,7 +85,7 @@ msgstr "Opgelet!"
 msgid "Automatically expand shared place data"
 msgstr "Gegevens over gedeelde plaats automatisch uitbreiden"
 
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:311
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:322
 #: resources/views/modals/create-shared-place.phtml:10
 #: resources/views/shared-places-list-page.phtml:41
 msgid "Create a shared place"
@@ -111,7 +108,7 @@ msgstr "Gegevens correcties"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Het bepalen van het aantal koppelingen (gekoppelde personen/gezinnen) is vergt veel bij het toewijzen van gedeelde plaatsen via naam, en veroorzaakt daarom vertragingen wanneer de lijst met gedeelde plaatsen wordt weergegeven. Het wordt aanbevolen om deze optie alleen te selecteren als plaatsen zijn toegewezen via XREF's."
 
-#: SharedPlacesModule.php:191
+#: SharedPlacesModule.php:197
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Schakel de module Vesta Plaatsen en Grafische kwartierstaat in om de hiërarchie van gedeelde plaatsen te bekijken."
 
@@ -129,15 +126,19 @@ msgstr "Feiten voor gedeeldeplaatsrecords"
 msgid "Filter to unique shared places"
 msgstr "Filter op unieke gedeelde plaatsen"
 
-#: SharedPlacesModule.php:349
+#: SharedPlacesModule.php:376
 msgid "GOV id for type of location"
 msgstr "GOV-ID voor soort locatie"
+
+#: patchedWebtrees/Http/RequestHandlers/SearchGeneralPageExt.php:172
+msgid "General search"
+msgstr ""
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
 msgstr "Hiërarchiseer gedeelde plaatsen"
 
-#: SharedPlacesModule.php:346
+#: SharedPlacesModule.php:373
 msgid "Higher-level shared place"
 msgstr "Bovenliggende gedeelde plaats"
 
@@ -158,10 +159,7 @@ msgstr "Als deze optie is ingeschakeld, worden gegevens van gedeelde plaatsen al
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
-msgstr ""
-"Als er stamboomonafhankelijke gegevens beschikbaar zijn, worden "
-"kaartcoördinaten van webtrees 'Geografische gegevens' en GOV-ID's van de "
-"Gov4Webtrees-module toegevoegd."
+msgstr "Als er stamboomonafhankelijke gegevens beschikbaar zijn, worden kaartcoördinaten van webtrees 'Geografische gegevens' en GOV-ID's van de Gov4Webtrees-module toegevoegd."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:86
@@ -181,19 +179,12 @@ msgstr "In het bijzonder hebben hiërarchische gedeelde plaatsen geen namen met 
 #: resources/views/data-fix-options.phtml:67
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
-msgstr ""
-"In het bijzonder worden kaartcoördinaten van webtrees 'Geografische data' en "
-"GOV-ID's van de Gov4Webtrees-module toegevoegd."
+msgstr "In het bijzonder worden kaartcoördinaten van webtrees 'Geografische data' en GOV-ID's van de Gov4Webtrees-module toegevoegd."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:202
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
-msgstr ""
-"In de plaatshiërarchielijst worden, bij gebruik van de optie 'beperken tot "
-"gedeelde plaatsen', gedeelde plaatsen met meerdere namen meerdere keren "
-"weergegeven als afzonderlijke items. Schakel deze optie in om elke gedeelde "
-"plaats in dit geval slechts één keer weer te geven, onder de primaire naam "
-"van de gedeelde plaats, en ook de extra namen weer te geven."
+msgstr "In de plaatshiërarchielijst worden, bij gebruik van de optie 'beperken tot gedeelde plaatsen', gedeelde plaatsen met meerdere namen meerdere keren weergegeven als afzonderlijke items. Schakel deze optie in om elke gedeelde plaats in dit geval slechts één keer weer te geven, onder de primaire naam van de gedeelde plaats, en ook de extra namen weer te geven."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:84
@@ -224,7 +215,7 @@ msgid "Linking of shared places to places"
 msgstr "Koppeling van gedeelde plaatsen naar plaatsen"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:338
+#: SharedPlacesModule.php:361
 msgid "Location"
 msgstr "Locatie"
 
@@ -282,10 +273,6 @@ msgstr "Plaatsnamen moeten worden ingevoerd als een komma-gescheiden lijst, begi
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr "Plaatsnamen moeten worden ingevoerd als enkele plaatsnaam (gebruik hier geen komma-gescheiden lijst)."
 
-#: patchedWebtrees/SharedPlace.php:632
-msgid "Private"
-msgstr "Privé"
-
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:128
 msgid "Quick shared place facts"
@@ -316,13 +303,12 @@ msgstr "Beperken tot specifieke feiten en gebeurtenissen"
 msgid "See %1$s for details."
 msgstr "Zie %1$s voor details."
 
-#: SharedPlacesModule.php:345 SharedPlacesModule.php:454
-#: SharedPlacesModule.php:485
+#: SharedPlacesModule.php:368 SharedPlacesModule.php:481
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
 msgstr "Gedeelde plaats"
 
-#: SharedPlacesModule.php:557
+#: SharedPlacesModule.php:778
 msgid "Shared place data"
 msgstr "Gegevens over gedeelde plaats"
 
@@ -356,8 +342,10 @@ msgstr "Structuur van gedeelde plaatsen"
 msgid "Shared place summary"
 msgstr "Samenvatting van gedeelde plaats"
 
-#: SharedPlacesListController.php:50 SharedPlacesModule.php:155
+#: SharedPlacesListController.php:50 SharedPlacesModule.php:161
 #: resources/views/lists/shared-places-table.phtml:38
+#: resources/views/search-general-page-ext.phtml:99
+#: resources/views/search-results-ext.phtml:88
 msgid "Shared places"
 msgstr "Gedeelde plaatsen"
 
@@ -412,10 +400,7 @@ msgstr "De samenvatting toont de gedeeldelocatiegegevens, op dezelfde manier opg
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:190
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
-msgstr ""
-"Het jaar dat hier is ingesteld, kan door andere modules worden gebruikt om "
-"de plaatsbeschrijving te verbeteren met aanvullende gegevens. Als het leeg "
-"blijft, wordt het huidige jaar gebruikt."
+msgstr "Het jaar dat hier is ingesteld, kan door andere modules worden gebruikt om de plaatsbeschrijving te verbeteren met aanvullende gegevens. Als het leeg blijft, wordt het huidige jaar gebruikt."
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
@@ -509,11 +494,11 @@ msgstr "Deze gedeelde plaats is bewerkt. U moet de wijzigingen bekijken en ze ve
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr "Deze stamboom heeft gedeelde plaatsen met door komma's gescheiden naamdelen, terwijl tegelijkertijd de optie 'Hiërarchische gedeelde plaatsen gebruiken' is geselecteerd."
 
-#: SharedPlacesModule.php:348
+#: SharedPlacesModule.php:375
 msgid "Type of hierarchical relationship"
 msgstr "Soort hiërarchische verwantschap"
 
-#: SharedPlacesModule.php:347
+#: SharedPlacesModule.php:374
 msgid "Type of location"
 msgstr "Soort locatie"
 
@@ -530,10 +515,9 @@ msgstr "Hiërarchische gedeelde plaatsen gebruiken"
 #: HelpTexts.php:27
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
-msgstr ""
-"Gebruik het scheidingslabel '%1$s' om een plaatshiërarchie te modelleren."
+msgstr "Gebruik het scheidingslabel '%1$s' om een plaatshiërarchie te modelleren."
 
-#: SharedPlacesModule.php:189
+#: SharedPlacesModule.php:195
 msgid "View Shared places hierarchy"
 msgstr "Hiërarchie van gedeelde plaatsen weergeven"
 
@@ -550,26 +534,24 @@ msgstr "Indien niet aangevinkt, wordt de eerste benadering gebruikt, waarbij hi�
 #: HelpTexts.php:20
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
-msgstr ""
-"U kunt een referentiejaar (dat kan worden geëvalueerd door andere modules, "
-"zoals %1$s) instellen in de moduleconfiguratie."
+msgstr "U kunt een referentiejaar (dat kan worden geëvalueerd door andere modules, zoals %1$s) instellen in de moduleconfiguratie."
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:542
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:559
 msgid "administrative"
 msgstr "administratieve"
 
-#: patchedWebtrees/SharedPlace.php:701
+#: patchedWebtrees/SharedPlace.php:958 patchedWebtrees/SharedPlace.php:1034
 msgid "circular shared place hierarchy"
 msgstr "cirkelhiërarchie van gedeelde plaatsen"
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:551
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:568
 msgid "cultural"
 msgstr "culturele"
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:548
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:565
 msgid "geographical"
 msgstr "geografische"
 
@@ -579,16 +561,16 @@ msgid "no"
 msgstr "nee"
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:554
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:571
 msgid "other"
 msgstr "andere"
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:545
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:562
 msgid "religious"
 msgstr "religieuze"
 
-#: SharedPlacesModule.php:954
+#: SharedPlacesModule.php:881
 msgid "shared places"
 msgstr "gedeelde plaatsen"
 
@@ -637,6 +619,9 @@ msgstr "ja, maar alleen de eerste keer dat de gedeelde plaats voorkomt"
 
 #~ msgid "Main Readme."
 #~ msgstr "Belangrijkste Leesmij."
+
+#~ msgid "Private"
+#~ msgstr "Privé"
 
 #~ msgid "Provides location data to other custom modules."
 #~ msgstr "Biedt locatiegegevens aan andere aangepaste modules."

@@ -7,11 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-05-01 16:11+0200\n"
+"POT-Creation-Date: 2021-11-07 16:35+0100\n"
 "PO-Revision-Date: 2021-05-21 12:32+0000\n"
 "Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-shared-places/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +27,12 @@ msgstr " (Obs! %s delade platser på högre nivå har också skapats)"
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Obs! En delad plats på högre nivå har också skapats)"
 
-#: SharedPlacesModule.php:762
+#: SharedPlacesModule.php:794
+#, php-format
+msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
+msgstr ""
+
+#: SharedPlacesModule.php:793
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s och individerna och familjerna som refererar till den."
@@ -81,7 +85,7 @@ msgstr "Var uppmärksam!"
 msgid "Automatically expand shared place data"
 msgstr "Expandera automatiskt delad platsdata"
 
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:311
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:322
 #: resources/views/modals/create-shared-place.phtml:10
 #: resources/views/shared-places-list-page.phtml:41
 msgid "Create a shared place"
@@ -104,7 +108,7 @@ msgstr "Datafix"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Att bestämma antalet länkar (länkad individ / familjer) är dyrt när man tilldelar delade platser via namn och orsakar därför förseningar när listan över delade platser visas. Vi rekommenderar att du bara väljer det här alternativet om platser tilldelas via XREF."
 
-#: SharedPlacesModule.php:191
+#: SharedPlacesModule.php:197
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Tillåt Vesta Places and Pedigree map modulen att visa delade platser hierarki."
 
@@ -122,15 +126,19 @@ msgstr "Fakta för delade platsrekord"
 msgid "Filter to unique shared places"
 msgstr "Filtrera till unika delade platser"
 
-#: SharedPlacesModule.php:349
+#: SharedPlacesModule.php:376
 msgid "GOV id for type of location"
 msgstr "GOV id för typ av lokalisering"
+
+#: patchedWebtrees/Http/RequestHandlers/SearchGeneralPageExt.php:172
+msgid "General search"
+msgstr ""
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
 msgstr "Hierarkisera delade platser"
 
-#: SharedPlacesModule.php:346
+#: SharedPlacesModule.php:373
 msgid "Higher-level shared place"
 msgstr "Delad plats på högre nivå"
 
@@ -207,7 +215,7 @@ msgid "Linking of shared places to places"
 msgstr "Länkning av delade platser till platser"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:338
+#: SharedPlacesModule.php:361
 msgid "Location"
 msgstr "Lokalisering"
 
@@ -265,10 +273,6 @@ msgstr "Platsnamn bör skrivas in som en komma-separerad lista, och starta med d
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr "Platsnamn bör skrivas in som ett enda platsnamn (använd inte komma-separerad lista här)."
 
-#: patchedWebtrees/SharedPlace.php:632
-msgid "Private"
-msgstr "Privat"
-
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:128
 msgid "Quick shared place facts"
@@ -299,13 +303,12 @@ msgstr "Begränsa till specifika fakta och händelser"
 msgid "See %1$s for details."
 msgstr "Se %1$s för detaljer."
 
-#: SharedPlacesModule.php:345 SharedPlacesModule.php:454
-#: SharedPlacesModule.php:485
+#: SharedPlacesModule.php:368 SharedPlacesModule.php:481
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
 msgstr "Delad plats"
 
-#: SharedPlacesModule.php:557
+#: SharedPlacesModule.php:778
 msgid "Shared place data"
 msgstr "Delad plats data"
 
@@ -339,8 +342,10 @@ msgstr "Delad platsstruktur"
 msgid "Shared place summary"
 msgstr "Delad plats sammanfattning"
 
-#: SharedPlacesListController.php:50 SharedPlacesModule.php:155
+#: SharedPlacesListController.php:50 SharedPlacesModule.php:161
 #: resources/views/lists/shared-places-table.phtml:38
+#: resources/views/search-general-page-ext.phtml:99
+#: resources/views/search-results-ext.phtml:88
 msgid "Shared places"
 msgstr "Delade platser"
 
@@ -489,11 +494,11 @@ msgstr "Denna delade plats har redigerats. Du bör granska ändringarna och seda
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr "Det här trädet har delade platser med kommaseparerade namndelar, samtidigt som alternativet \"Använd hierarkiska delade platser\" är valt."
 
-#: SharedPlacesModule.php:348
+#: SharedPlacesModule.php:375
 msgid "Type of hierarchical relationship"
 msgstr "Type av hierarkisk relation"
 
-#: SharedPlacesModule.php:347
+#: SharedPlacesModule.php:374
 msgid "Type of location"
 msgstr "Typ av lokalisering"
 
@@ -512,7 +517,7 @@ msgstr "Använd hierarkiska delade platser"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Använd taggen '%1$s' för att modellera en platshierarki."
 
-#: SharedPlacesModule.php:189
+#: SharedPlacesModule.php:195
 msgid "View Shared places hierarchy"
 msgstr "Visa Delade platser hierarki"
 
@@ -532,21 +537,21 @@ msgid "You can set a reference year (which may be evaluated by other modules, su
 msgstr ""
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:542
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:559
 msgid "administrative"
 msgstr "administrativ"
 
-#: patchedWebtrees/SharedPlace.php:701
+#: patchedWebtrees/SharedPlace.php:958 patchedWebtrees/SharedPlace.php:1034
 msgid "circular shared place hierarchy"
 msgstr "cirkulär delad platshierarki"
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:551
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:568
 msgid "cultural"
 msgstr "kulturell"
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:548
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:565
 msgid "geographical"
 msgstr "geografisk"
 
@@ -556,16 +561,16 @@ msgid "no"
 msgstr "nej"
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:554
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:571
 msgid "other"
 msgstr "annan"
 
 #. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:545
+#: patchedWebtrees/Functions/FunctionsEditLoc.php:562
 msgid "religious"
 msgstr "religiös"
 
-#: SharedPlacesModule.php:954
+#: SharedPlacesModule.php:881
 msgid "shared places"
 msgstr "delade platser"
 
@@ -578,3 +583,6 @@ msgstr "ja"
 #: SharedPlacesModuleTrait.php:165
 msgid "yes, but only the first occurrence of the shared place"
 msgstr "ja, men bara den första förekomsten av den delade platsen"
+
+#~ msgid "Private"
+#~ msgstr "Privat"

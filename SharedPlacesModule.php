@@ -6,7 +6,6 @@ use Aura\Router\RouterContainer;
 use Cissee\Webtrees\Module\SharedPlaces\HelpTexts;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
-use Cissee\WebtreesExt\FactPlaceAdditions;
 use Cissee\WebtreesExt\Functions\ExtendedFunctionsEditPlacHandler;
 use Cissee\WebtreesExt\Functions\FunctionsEditPlacHandler;
 use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
@@ -47,6 +46,7 @@ use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
 use Fisharebest\Webtrees\Http\RequestHandlers\SearchGeneralAction;
 use Fisharebest\Webtrees\Http\RequestHandlers\SearchGeneralPage;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
@@ -791,10 +791,15 @@ class SharedPlacesModule extends AbstractModule implements
     $name = strip_tags($location->fullName());
     return [
       'linked' => I18N::translate('%s and the individuals and families that reference it.', $name),
+      'linkedPlus' => I18N::translate('%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual.', $name),
     ];
   }
   
-  public function postAddLocationActionHandleOption(ClippingsCartAddToCartInterface $target, Location $location, string $option): bool {
+  public function postAddLocationActionHandleOption(
+          ClippingsCartAddToCartInterface $target, 
+          Location $location, 
+          string $option): bool {
+    
     switch ($option) {
       case 'linked':
         foreach ($location->linkedIndividuals('_LOC') as $individual) {
@@ -805,9 +810,41 @@ class SharedPlacesModule extends AbstractModule implements
         }
               
         return true;
+        
+      case 'linkedPlus':
+        foreach ($location->linkedIndividuals('_LOC') as $individual) {
+            $this->addCloseRelativesToCart($target, $individual);
+        }
+        
+        foreach ($location->linkedFamilies('_LOC') as $family) {            
+            foreach ($family->spouses() as $spouse) {
+                $this->addCloseRelativesToCart($target, $spouse);
+            }
+            
+            foreach ($family->children() as $child) {
+                $this->addCloseRelativesToCart($target, $child);
+            }
+        }
+              
+        return true;
     }
     
     return false;
+  }
+  
+  protected function addCloseRelativesToCart(
+          ClippingsCartAddToCartInterface $target, 
+          Individual $individual): void {
+    
+    $target->doAddIndividualToCart($individual);
+            
+    foreach ($individual->spouseFamilies() as $family) {
+      $target->doAddFamilyAndChildrenToCart($family);
+    }
+
+    foreach ($individual->childFamilies() as $family) {
+      $target->doAddFamilyAndChildrenToCart($family);
+    }
   }
   
   public function getIndirectLocations(GedcomRecord $record): Collection {
