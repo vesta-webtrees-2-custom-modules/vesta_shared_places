@@ -8,9 +8,10 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-11-07 16:35+0100\n"
-"PO-Revision-Date: 2021-10-23 08:59+0000\n"
+"PO-Revision-Date: 2021-11-09 06:17+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,6 +32,8 @@ msgstr " (Opmerking: er is ook een bovenliggende gedeelde plaats gecreëerd)"
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
+"%s en de personen en gezinnen die ernaar verwijzen, met inbegrip van ouders, "
+"broers en zussen, echtgenoten en kinderen van elk persoon."
 
 #: SharedPlacesModule.php:793
 #, php-format
@@ -132,7 +135,7 @@ msgstr "GOV-ID voor soort locatie"
 
 #: patchedWebtrees/Http/RequestHandlers/SearchGeneralPageExt.php:172
 msgid "General search"
-msgstr ""
+msgstr "Algemeen zoeken"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
