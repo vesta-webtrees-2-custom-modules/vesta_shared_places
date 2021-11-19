@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-11-07 16:35+0100\n"
-"PO-Revision-Date: 2021-07-10 15:32+0000\n"
-"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
+"PO-Revision-Date: 2021-11-19 21:50+0000\n"
+"Last-Translator: Bernd Schwendinger <b0ernie@gmx.net>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
 #, php-format
@@ -31,6 +32,9 @@ msgstr " (Hinweis: Es wurde außerdem ein gemeinsamer Ort auf einer höheren Ebe
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
+"%s und die Einzelpersonen und Familien, die sich darauf beziehen, "
+"einschließlich der Eltern, Geschwister, Ehegatten und Kinder der einzelnen "
+"Personen."
 
 #: SharedPlacesModule.php:793
 #, php-format
@@ -132,7 +136,7 @@ msgstr "GOV-Kennung für die Art des Ortes"
 
 #: patchedWebtrees/Http/RequestHandlers/SearchGeneralPageExt.php:172
 msgid "General search"
-msgstr ""
+msgstr "Allgemeine Suche"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
@@ -259,7 +263,7 @@ msgstr "Hinweis:"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:228
 msgid "Place hierarchy"
-msgstr "Hierarchie der Orte"
+msgstr "Ortshierarchie"
 
 #: HelpTexts.php:31 HelpTexts.php:41
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
@@ -281,7 +285,7 @@ msgstr "Schnelle Tatsachen von gemeinsamen Orten"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:189
 msgid "Reference year"
-msgstr ""
+msgstr "Bezugsjahr"
 
 #: SharedPlacesModuleTrait.php:27
 msgid "Replacement for the original 'Locations' module."
@@ -331,7 +335,7 @@ msgstr "Name des gemeinsamen Ortes (vollständige Hierarchie)"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:224
 msgid "Shared place page"
-msgstr ""
+msgstr "Seite des gemeinsamen Ortes"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:65
@@ -401,6 +405,9 @@ msgstr "Die Zusammenfassung zeigt die Daten gemeinsamer Orte, die auf die gleich
 #: SharedPlacesModuleTrait.php:190
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
 msgstr ""
+"Die hier eingestellte Jahreszahl kann von anderen Modulen verwendet werden, "
+"um die Ortsbeschreibung mit zusätzlichen Daten zu ergänzen. Ohne Eingabe "
+"wird das aktuelle Jahr verwendet."
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
@@ -535,6 +542,8 @@ msgstr "Wenn diese Option deaktiviert ist, wird der erstere Ansatz genutzt, bei 
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"Sie können in der Modul-Konfiguration ein Bezugsjahr festlegen (das von "
+"anderen Modulen ausgewertet werden kann, z. B. %1$s)."
 
 #. I18N: Type of hierarchical relationship between locations
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:559
