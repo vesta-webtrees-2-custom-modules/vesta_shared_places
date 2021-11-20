@@ -313,6 +313,9 @@ class SharedPlacesModule extends AbstractModule implements
 
       // Replace an existing view with our own version.
       View::registerCustomView('::note-page', $this->name() . '::note-page');
+      
+      // Replace an existing view with our own version.
+      View::registerCustomView('::source-page', $this->name() . '::source-page');
 
       // Replace an existing view with our own version.
       // (adjustments for _LOC.NAME, _LOC.MAP, _LOC._GOV, _LOC.TYPE, , _LOC._LOC)

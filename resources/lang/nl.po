@@ -7,11 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-11-07 16:35+0100\n"
+"POT-Creation-Date: 2021-11-20 13:26+0100\n"
 "PO-Revision-Date: 2021-11-09 06:17+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,14 +27,12 @@ msgstr " (Opmerking: %s bovenliggende gedeelde plaatsen zijn ook gecreëerd)"
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Opmerking: er is ook een bovenliggende gedeelde plaats gecreëerd)"
 
-#: SharedPlacesModule.php:794
+#: SharedPlacesModule.php:797
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
-msgstr ""
-"%s en de personen en gezinnen die ernaar verwijzen, met inbegrip van ouders, "
-"broers en zussen, echtgenoten en kinderen van elk persoon."
+msgstr "%s en de personen en gezinnen die ernaar verwijzen, met inbegrip van ouders, broers en zussen, echtgenoten en kinderen van elk persoon."
 
-#: SharedPlacesModule.php:793
+#: SharedPlacesModule.php:796
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s en de personen en gezinnen die ernaar verwijzen."
@@ -129,7 +126,7 @@ msgstr "Feiten voor gedeeldeplaatsrecords"
 msgid "Filter to unique shared places"
 msgstr "Filter op unieke gedeelde plaatsen"
 
-#: SharedPlacesModule.php:376
+#: SharedPlacesModule.php:379
 msgid "GOV id for type of location"
 msgstr "GOV-ID voor soort locatie"
 
@@ -141,7 +138,7 @@ msgstr "Algemeen zoeken"
 msgid "Hierarchize Shared Places"
 msgstr "Hiërarchiseer gedeelde plaatsen"
 
-#: SharedPlacesModule.php:373
+#: SharedPlacesModule.php:376
 msgid "Higher-level shared place"
 msgstr "Bovenliggende gedeelde plaats"
 
@@ -218,7 +215,7 @@ msgid "Linking of shared places to places"
 msgstr "Koppeling van gedeelde plaatsen naar plaatsen"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:361
+#: SharedPlacesModule.php:364
 msgid "Location"
 msgstr "Locatie"
 
@@ -306,12 +303,16 @@ msgstr "Beperken tot specifieke feiten en gebeurtenissen"
 msgid "See %1$s for details."
 msgstr "Zie %1$s voor details."
 
-#: SharedPlacesModule.php:368 SharedPlacesModule.php:481
+#: resources/views/media-page.phtml:96 resources/views/note-page.phtml:93
+msgid "Shared Places"
+msgstr ""
+
+#: SharedPlacesModule.php:371 SharedPlacesModule.php:484
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
 msgstr "Gedeelde plaats"
 
-#: SharedPlacesModule.php:778
+#: SharedPlacesModule.php:781
 msgid "Shared place data"
 msgstr "Gegevens over gedeelde plaats"
 
@@ -497,11 +498,11 @@ msgstr "Deze gedeelde plaats is bewerkt. U moet de wijzigingen bekijken en ze ve
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr "Deze stamboom heeft gedeelde plaatsen met door komma's gescheiden naamdelen, terwijl tegelijkertijd de optie 'Hiërarchische gedeelde plaatsen gebruiken' is geselecteerd."
 
-#: SharedPlacesModule.php:375
+#: SharedPlacesModule.php:378
 msgid "Type of hierarchical relationship"
 msgstr "Soort hiërarchische verwantschap"
 
-#: SharedPlacesModule.php:374
+#: SharedPlacesModule.php:377
 msgid "Type of location"
 msgstr "Soort locatie"
 
@@ -573,7 +574,7 @@ msgstr "andere"
 msgid "religious"
 msgstr "religieuze"
 
-#: SharedPlacesModule.php:881
+#: SharedPlacesModule.php:884
 msgid "shared places"
 msgstr "gedeelde plaatsen"
 

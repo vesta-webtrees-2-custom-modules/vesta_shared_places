@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-11-07 16:35+0100\n"
+"POT-Creation-Date: 2021-11-20 13:26+0100\n"
 "PO-Revision-Date: 2021-05-13 11:53+0000\n"
 "Last-Translator: Продай Своё <ol810car@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/ru/>\n"
@@ -27,12 +27,12 @@ msgstr " (Примечание: были также созданы %s общих
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Примечание: также было создано общее место более высокого уровня)"
 
-#: SharedPlacesModule.php:794
+#: SharedPlacesModule.php:797
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
 
-#: SharedPlacesModule.php:793
+#: SharedPlacesModule.php:796
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s, а также лица и семьи, которые на него ссылаются."
@@ -126,7 +126,7 @@ msgstr "Факты для общих записей мест"
 msgid "Filter to unique shared places"
 msgstr "Фильтр по уникальным общим местам"
 
-#: SharedPlacesModule.php:376
+#: SharedPlacesModule.php:379
 msgid "GOV id for type of location"
 msgstr "Идентификатор GOV для типа местоположения"
 
@@ -138,7 +138,7 @@ msgstr ""
 msgid "Hierarchize Shared Places"
 msgstr "Иерархия общих мест"
 
-#: SharedPlacesModule.php:373
+#: SharedPlacesModule.php:376
 msgid "Higher-level shared place"
 msgstr "Общее место более высокого уровня"
 
@@ -215,7 +215,7 @@ msgid "Linking of shared places to places"
 msgstr "Связывание общих мест с местами"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:361
+#: SharedPlacesModule.php:364
 msgid "Location"
 msgstr "Место расположения"
 
@@ -303,12 +303,16 @@ msgstr "Ограничение конкретными фактами и собы
 msgid "See %1$s for details."
 msgstr "Подробнее см. %1$s."
 
-#: SharedPlacesModule.php:368 SharedPlacesModule.php:481
+#: resources/views/media-page.phtml:96 resources/views/note-page.phtml:93
+msgid "Shared Places"
+msgstr ""
+
+#: SharedPlacesModule.php:371 SharedPlacesModule.php:484
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
 msgstr "Общее место"
 
-#: SharedPlacesModule.php:778
+#: SharedPlacesModule.php:781
 msgid "Shared place data"
 msgstr "Общие данные о месте"
 
@@ -494,11 +498,11 @@ msgstr "Это общее место было отредактировано. В
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr "В этом дереве есть общие места с частями имени, разделенными запятыми, и в то же время выбрана опция «Использовать иерархические общие места»."
 
-#: SharedPlacesModule.php:375
+#: SharedPlacesModule.php:378
 msgid "Type of hierarchical relationship"
 msgstr "Тип иерархических отношений"
 
-#: SharedPlacesModule.php:374
+#: SharedPlacesModule.php:377
 msgid "Type of location"
 msgstr "Тип местоположения"
 
@@ -570,7 +574,7 @@ msgstr "Другие"
 msgid "religious"
 msgstr "религия"
 
-#: SharedPlacesModule.php:881
+#: SharedPlacesModule.php:884
 msgid "shared places"
 msgstr "общие места"
 

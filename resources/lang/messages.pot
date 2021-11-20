@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-11-07 16:35+0100\n"
+"POT-Creation-Date: 2021-11-20 13:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,46 +67,46 @@ msgid "Enable the Vesta Places and Pedigree map module to view the shared places
 msgstr ""
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:361
+#: SharedPlacesModule.php:364
 msgid "Location"
 msgstr ""
 
-#: SharedPlacesModule.php:368 SharedPlacesModule.php:481
+#: SharedPlacesModule.php:371 SharedPlacesModule.php:484
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
 msgstr ""
 
-#: SharedPlacesModule.php:373
+#: SharedPlacesModule.php:376
 msgid "Higher-level shared place"
 msgstr ""
 
-#: SharedPlacesModule.php:374
+#: SharedPlacesModule.php:377
 msgid "Type of location"
 msgstr ""
 
-#: SharedPlacesModule.php:375
+#: SharedPlacesModule.php:378
 msgid "Type of hierarchical relationship"
 msgstr ""
 
-#: SharedPlacesModule.php:376
+#: SharedPlacesModule.php:379
 msgid "GOV id for type of location"
 msgstr ""
 
-#: SharedPlacesModule.php:778
+#: SharedPlacesModule.php:781
 msgid "Shared place data"
 msgstr ""
 
-#: SharedPlacesModule.php:793
+#: SharedPlacesModule.php:796
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr ""
 
-#: SharedPlacesModule.php:794
+#: SharedPlacesModule.php:797
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
 
-#: SharedPlacesModule.php:881
+#: SharedPlacesModule.php:884
 msgid "shared places"
 msgstr ""
 
@@ -513,6 +513,10 @@ msgstr ""
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
+msgstr ""
+
+#: resources/views/media-page.phtml:96 resources/views/note-page.phtml:93
+msgid "Shared Places"
 msgstr ""
 
 #: resources/views/modals/shared-place-fields.phtml:12

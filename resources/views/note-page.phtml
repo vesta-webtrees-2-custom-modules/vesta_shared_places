@@ -1,20 +1,15 @@
 <?php
 
+use Cissee\WebtreesExt\MoreI18N;
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Functions\FunctionsPrint;
 use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
 use Fisharebest\Webtrees\Http\RequestHandlers\EditNotePage;
 use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesAcceptRecord;
 use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesRejectRecord;
-use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Individual;
-use Fisharebest\Webtrees\Media;
 use Fisharebest\Webtrees\Note;
-use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\Tree;
-use Illuminate\Support\Collection;
+use Fisharebest\Webtrees\I18N;
 
 /**
  * @var Note                   $note
@@ -32,15 +27,15 @@ use Illuminate\Support\Collection;
 
 <?php if ($note->isPendingDeletion()) : ?>
     <?php if (Auth::isModerator($note->tree())) : ?>
-        <?= view('components/alert-warning-dismissible', ['alert' => /* I18N: %1$s is “accept”, %2$s is “reject”. These are links. */ I18N::translate('This note has been deleted. You should review the deletion and then %1$s or %2$s it.', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesAcceptRecord::class, ['tree' => $note->tree()->name(), 'xref' => $note->xref()])) . '">' . I18N::translateContext('You should review the deletion and then accept or reject it.', 'accept') . '</a>', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesRejectRecord::class, ['tree' => $note->tree()->name(), 'xref' => $note->xref()])) . '">' . I18N::translateContext('You should review the deletion and then accept or reject it.', 'reject') . '</a>') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => /* I18N: %1$s is “accept”, %2$s is “reject”. These are links. */ MoreI18N::xlate('This note has been deleted. You should review the deletion and then %1$s or %2$s it.', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesAcceptRecord::class, ['tree' => $note->tree()->name(), 'xref' => $note->xref()])) . '">' . MoreI18N::xlateContext('You should review the deletion and then accept or reject it.', 'accept') . '</a>', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesRejectRecord::class, ['tree' => $note->tree()->name(), 'xref' => $note->xref()])) . '">' . MoreI18N::xlateContext('You should review the deletion and then accept or reject it.', 'reject') . '</a>') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
     <?php elseif (Auth::isEditor($note->tree())) : ?>
-        <?= view('components/alert-warning-dismissible', ['alert' => I18N::translate('This note has been deleted. The deletion will need to be reviewed by a moderator.') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => MoreI18N::xlate('This note has been deleted. The deletion will need to be reviewed by a moderator.') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
     <?php endif ?>
 <?php elseif ($note->isPendingAddition()) : ?>
     <?php if (Auth::isModerator($note->tree())) : ?>
-        <?= view('components/alert-warning-dismissible', ['alert' => /* I18N: %1$s is “accept”, %2$s is “reject”. These are links. */ I18N::translate('This note has been edited. You should review the changes and then %1$s or %2$s them.', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesAcceptRecord::class, ['tree' => $note->tree()->name(), 'xref' => $note->xref()])) . '">' . I18N::translateContext('You should review the changes and then accept or reject them.', 'accept') . '</a>', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesRejectRecord::class, ['tree' => $note->tree()->name(), 'xref' => $note->xref()])) . '">' . I18N::translateContext('You should review the changes and then accept or reject them.', 'reject') . '</a>') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => /* I18N: %1$s is “accept”, %2$s is “reject”. These are links. */ MoreI18N::xlate('This note has been edited. You should review the changes and then %1$s or %2$s them.', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesAcceptRecord::class, ['tree' => $note->tree()->name(), 'xref' => $note->xref()])) . '">' . MoreI18N::xlateContext('You should review the changes and then accept or reject them.', 'accept') . '</a>', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesRejectRecord::class, ['tree' => $note->tree()->name(), 'xref' => $note->xref()])) . '">' . MoreI18N::xlateContext('You should review the changes and then accept or reject them.', 'reject') . '</a>') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
     <?php elseif (Auth::isEditor($note->tree())) : ?>
-        <?= view('components/alert-warning-dismissible', ['alert' => I18N::translate('This note has been edited. The changes need to be reviewed by a moderator.') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => MoreI18N::xlate('This note has been edited. The changes need to be reviewed by a moderator.') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
     <?php endif ?>
 <?php endif ?>
 
@@ -57,34 +52,34 @@ use Illuminate\Support\Collection;
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item" role="presentation">
             <a class="nav-link active" data-toggle="tab" role="tab" href="#details">
-                <?= I18N::translate('Details') ?>
+                <?= MoreI18N::xlate('Details') ?>
             </a>
         </li>
 
         <li class="nav-item" role="presentation">
             <a class="nav-link<?= $individuals->isEmpty() ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#individuals">
-                <?= I18N::translate('Individuals') ?>
+                <?= MoreI18N::xlate('Individuals') ?>
                 <?= view('components/badge', ['count' => count($individuals)]) ?>
             </a>
         </li>
 
         <li class="nav-item" role="presentation">
             <a class="nav-link<?= $families->isEmpty() ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#families">
-                <?= I18N::translate('Families') ?>
+                <?= MoreI18N::xlate('Families') ?>
                 <?= view('components/badge', ['count' => count($families)]) ?>
             </a>
         </li>
 
         <li class="nav-item" role="presentation">
             <a class="nav-link<?= $media_objects->isEmpty() ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#media">
-                <?= I18N::translate('Media objects') ?>
+                <?= MoreI18N::xlate('Media objects') ?>
                 <?= view('components/badge', ['count' => count($media_objects)]) ?>
             </a>
         </li>
 
         <li class="nav-item" role="presentation">
             <a class="nav-link<?= $sources->isEmpty() ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#sources">
-                <?= I18N::translate('Sources') ?>
+                <?= MoreI18N::xlate('Sources') ?>
                 <?= view('components/badge', ['count' => count($sources)]) ?>
             </a>
         </li>
@@ -106,13 +101,13 @@ use Illuminate\Support\Collection;
             <table class="table wt-facts-table">
                 <tr>
                     <th scope="row">
-                        <?= I18N::translate('Shared note') ?>
+                        <?= MoreI18N::xlate('Shared note') ?>
                         <?php if (Auth::isEditor($note->tree())) : ?>
                             <div class="editfacts nowrap">
-                                <a class="btn btn-link" href="<?= e(route(EditNotePage::class, ['xref' => $note->xref(), 'tree' => $note->tree()->name()])) ?>" title="<?= I18N::translate('Edit') ?>">
+                                <a class="btn btn-link" href="<?= e(route(EditNotePage::class, ['xref' => $note->xref(), 'tree' => $note->tree()->name()])) ?>" title="<?= MoreI18N::xlate('Edit') ?>">
                                     <?= view('icons/edit') ?>
                                     <span class="sr-only">
-                                        <?= I18N::translate('Edit') ?>
+                                        <?= MoreI18N::xlate('Edit') ?>
                                     </span>
                                 </a>
                             </div>
