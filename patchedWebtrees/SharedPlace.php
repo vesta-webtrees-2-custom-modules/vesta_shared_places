@@ -4,23 +4,25 @@ namespace Cissee\WebtreesExt;
 
 use Cissee\WebtreesExt\Elements\LanguageIdExt;
 use Exception;
+use Fisharebest\Webtrees\Cache;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Registry;
+use Fisharebest\Webtrees\Services\GedcomService;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use stdClass;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Vesta\Model\GedcomDateInterval;
+use function GuzzleHttp\json_encode;
 use function mb_strtolower;
 use function str_contains;
-use Fisharebest\Webtrees\Cache;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * A GEDCOM level 0 shared place aka location (_LOC) object (complete structure)
@@ -212,21 +214,23 @@ class SharedPlace extends Location {
   }
   
   public function getLati() {
-    //cf FunctionsPrint
+    //cf Fact
     $map_lati = null;
     $cts = preg_match('/\d LATI (.*)/', $this->gedcom(), $match);
     if ($cts > 0) {
       $map_lati = $match[1];
     }
     if ($map_lati) {
-      $map_lati = trim(strtr($map_lati, "NSEW,�", " - -. ")); // S5,6789 ==> -5.6789
-      return $map_lati;
+      $gedcom_service = new GedcomService();
+      return $gedcom_service->readLatitude($map_lati);
+      //$map_lati = trim(strtr($map_lati, "NSEW,�", " - -. ")); // S5,6789 ==> -5.6789
+      //return $map_lati;
     }
     return null;
   }
 
   public function printLati(): string {
-    //cf FunctionsPrint
+    //cf Fact
     $cts = preg_match('/\d LATI (.*)/', $this->gedcom(), $match);
     if ($cts > 0) {
       return $match[1];
@@ -235,21 +239,23 @@ class SharedPlace extends Location {
   }
   
   public function getLong() {
-    //cf FunctionsPrint
+    //cf Fact
     $map_long = null;
     $cts = preg_match('/\d LONG (.*)/', $this->gedcom(), $match);
     if ($cts > 0) {
       $map_long = $match[1];
     }
     if ($map_long) {
-      $map_long = trim(strtr($map_long, "NSEW,�", " - -. ")); // E3.456� ==> 3.456
-      return $map_long;
+      $gedcom_service = new GedcomService();
+      return $gedcom_service->readLongitude($map_long);
+      //$map_long = trim(strtr($map_long, "NSEW,�", " - -. ")); // E3.456� ==> 3.456
+      //return $map_long;
     }
     return null;
   }
 
   public function printLong(): string {
-    //cf FunctionsPrint
+    //cf Fact
     $cts = preg_match('/\d LONG (.*)/', $this->gedcom(), $match);
     if ($cts > 0) {
       return $match[1];

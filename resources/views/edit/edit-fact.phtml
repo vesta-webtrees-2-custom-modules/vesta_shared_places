@@ -39,6 +39,14 @@ use Ramsey\Uuid\Uuid;
     $locationName = $fact->record()->primaryPlace()->gedcomName();
     $latitude = $fact->record()->getLati();
     $longitude = $fact->record()->getLong();
+    
+    if ($latitude === null) {
+      $latitude = 0;
+    }
+    if ($longitude === null) {
+      $longitude = 0;
+    }
+    
     $marker_position = [$latitude, $longitude];
     
     //$map_bounds = (new PlaceLocation($locationName))->boundingRectangle();

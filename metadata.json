@@ -124,5 +124,11 @@
 		"version": "2.0.17.1.0",
 		"from": "2.0.12",
 		"to": "2.0.18"
+	},
+	{
+		"version": "2.0.17.1.1",
+		"from": "2.0.12",
+		"to": "2.0.18",
+		"changelog": ["Fix minor bugs related to map coordinates.","Show linked shared events on source page."]
 	}
 ]

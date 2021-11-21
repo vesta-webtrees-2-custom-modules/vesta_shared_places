@@ -350,12 +350,12 @@ class FunctionsEditLoc {
       case 'LATI':
         //same as original FunctionsEdit
         //(but for LATI/LONG under PLAC, note the $previous_ids hack!)
-        $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" oninput="valid_lati_long(this, \'N\', \'S\')">';
+        $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" oninput="webtrees.reformatLatitude(this, \'N\', \'S\')">';
         break;
       case 'LONG':
         //same as original FunctionsEdit
         //(but for LATI/LONG under PLAC, note the $previous_ids hack!)
-        $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" oninput="valid_lati_long(this, \'E\', \'W\')">';
+        $html .= '<input class="form-control" type="text" id="' . $id . '" name="' . $name . '" value="' . e($value) . '" oninput="webtrees.reformatLongitude(this, \'E\', \'W\')">';
         break;
       //_LOC.TYPE
       case 'TYPE':

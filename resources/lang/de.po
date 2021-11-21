@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-11-20 13:26+0100\n"
+"POT-Creation-Date: 2021-11-20 13:28+0100\n"
 "PO-Revision-Date: 2021-11-19 21:50+0000\n"
 "Last-Translator: Bernd Schwendinger <b0ernie@gmx.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
@@ -304,8 +304,9 @@ msgid "See %1$s for details."
 msgstr "Siehe %1$s für weitere Details."
 
 #: resources/views/media-page.phtml:96 resources/views/note-page.phtml:93
+#: resources/views/source-page.phtml:93
 msgid "Shared Places"
-msgstr ""
+msgstr "Gemeinsame Orte"
 
 #: SharedPlacesModule.php:371 SharedPlacesModule.php:484
 #: resources/views/lists/shared-places-table.phtml:43

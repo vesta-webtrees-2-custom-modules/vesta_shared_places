@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-11-20 13:26+0100\n"
+"POT-Creation-Date: 2021-11-20 13:28+0100\n"
 "PO-Revision-Date: 2021-07-15 15:33+0000\n"
 "Last-Translator: ngohuuthuanfc9865b89dde4baf <ngohuuthuan@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/vi/>\n"
@@ -304,6 +304,7 @@ msgid "See %1$s for details."
 msgstr "Xem %1$s để biết chi tiết."
 
 #: resources/views/media-page.phtml:96 resources/views/note-page.phtml:93
+#: resources/views/source-page.phtml:93
 msgid "Shared Places"
 msgstr ""
 

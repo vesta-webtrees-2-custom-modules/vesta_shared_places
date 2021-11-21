@@ -46,7 +46,11 @@ use Fisharebest\Webtrees\View;
       txt = txt.replace(/S/g, '-');
       txt = txt.replace(/E/g, '');
       txt = txt.replace(/W/g, '-');
-      return Number(txt);
+      var ret = Number(txt);
+      if (isNaN(ret)) {
+        return 0;
+      }
+      return ret;
     }
     
     window.WT_OSM_ADMIN = (function () {
