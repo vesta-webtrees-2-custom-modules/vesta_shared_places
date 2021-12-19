@@ -56,6 +56,7 @@ $(document).ready(function() {
           var query = {
             term: params.term,
             q: params.term,
+            page: params.page || 1,
             type: '_query',
             dateStr: DATE.val()
           }

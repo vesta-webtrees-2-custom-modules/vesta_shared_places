@@ -50,6 +50,23 @@ class SearchServiceExt {
               });
     }
     
+  public function searchLocationsInPlaces(Tree $tree, Collection $places): Collection 
+    {
+      //it may seem more efficient to filter to roots via LocGraph,
+      //but there are edge cases where that isn't correct (if a shared places maps to "A, B" as well as "B")
+    
+      return $this->searchLocationHierarchiesInPlaces($tree, $places)
+              ->filter(function (SharedPlace $sharedPlace) use ($places): bool {
+                //include only if name matches!
+                $names = new Collection($sharedPlace->namesAsPlacesAt(GedcomDateInterval::createEmpty()));
+                
+                $anyHas = $places->first(static function ($place) use($names) {
+                    return $names->has($place->id());
+                });
+                return ($anyHas != null);
+              });
+    }
+    
   //[2021/03] now that placelinks includes all child LOCs as well (placelinks requires these to prevent orphaning),
   //this function returns more than usually intended: cf searchLocationsInPlace
   public function searchLocationHierarchiesInPlace(Place $place): Collection
@@ -63,6 +80,26 @@ class SearchServiceExt {
             ->where('o_type', '=', '_LOC')
             ->where('o_file', '=', $place->tree()->id())
             ->where('pl_p_id', '=', $place->id())
+            ->select(['other.*'])
+            ->get()
+            //->each($this->rowLimiter()) //unlikely to be relevant anyway
+            ->map($this->locationRowMapper())
+            ->filter(GedcomRecord::accessFilter());
+    }
+    
+  public function searchLocationHierarchiesInPlaces(Tree $tree, Collection $places): Collection
+    {
+        return DB::table('other')
+            ->join('placelinks', static function (JoinClause $query) {
+                $query
+                    ->on('other.o_file', '=', 'placelinks.pl_file')
+                    ->on('other.o_id', '=', 'placelinks.pl_gid');
+            })
+            ->where('o_type', '=', '_LOC')
+            ->where('o_file', '=', $tree->id())
+            ->whereIn('pl_p_id', $places->map(static function (Place $place): int {
+                return $place->id();
+            })->all())
             ->select(['other.*'])
             ->get()
             //->each($this->rowLimiter()) //unlikely to be relevant anyway
@@ -245,4 +282,69 @@ class SearchServiceExt {
 
     $query->whereIn($tree_id_field, $tree_ids);
   }
+  
+  
+
+  //same as main, but handle search strings 'A, B' (main only handles 'A,B')
+  
+    /**
+     * Search for places.
+     *
+     * @param Tree   $tree
+     * @param string $search
+     * @param int    $offset
+     * @param int    $limit
+     *
+     * @return Collection<Place>
+     */
+    public function searchPlaces(Tree $tree, string $search, int $offset = 0, int $limit = PHP_INT_MAX): Collection
+    {
+        $query = DB::table('places AS p0')
+            ->where('p0.p_file', '=', $tree->id())
+            ->leftJoin('places AS p1', 'p1.p_id', '=', 'p0.p_parent_id')
+            ->leftJoin('places AS p2', 'p2.p_id', '=', 'p1.p_parent_id')
+            ->leftJoin('places AS p3', 'p3.p_id', '=', 'p2.p_parent_id')
+            ->leftJoin('places AS p4', 'p4.p_id', '=', 'p3.p_parent_id')
+            ->leftJoin('places AS p5', 'p5.p_id', '=', 'p4.p_parent_id')
+            ->leftJoin('places AS p6', 'p6.p_id', '=', 'p5.p_parent_id')
+            ->leftJoin('places AS p7', 'p7.p_id', '=', 'p6.p_parent_id')
+            ->leftJoin('places AS p8', 'p8.p_id', '=', 'p7.p_parent_id')
+            ->orderBy('p0.p_place')
+            ->orderBy('p1.p_place')
+            ->orderBy('p2.p_place')
+            ->orderBy('p3.p_place')
+            ->orderBy('p4.p_place')
+            ->orderBy('p5.p_place')
+            ->orderBy('p6.p_place')
+            ->orderBy('p7.p_place')
+            ->orderBy('p8.p_place')
+            ->select([
+                'p0.p_place AS place0',
+                'p1.p_place AS place1',
+                'p2.p_place AS place2',
+                'p3.p_place AS place3',
+                'p4.p_place AS place4',
+                'p5.p_place AS place5',
+                'p6.p_place AS place6',
+                'p7.p_place AS place7',
+                'p8.p_place AS place8',
+            ]);
+
+        // Filter each level of the hierarchy.
+        foreach (explode(',', $search, 9) as $level => $string) {
+            $query->where('p' . $level . '.p_place', 'LIKE', '%' . addcslashes(trim($string), '\\%_') . '%');
+        }
+
+        $row_mapper = static function (stdClass $row) use ($tree): Place {
+            $place = implode(', ', array_filter((array) $row));
+
+            return new Place($place, $tree);
+        };
+
+        $filter = static function (): bool {
+            return true;
+        };
+
+        return $this->paginateQuery($query, $row_mapper, $filter, $offset, $limit);
+    }
 }

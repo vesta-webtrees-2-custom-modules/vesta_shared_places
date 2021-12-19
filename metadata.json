@@ -140,5 +140,11 @@
 		"version": "2.0.19.0.3",
 		"from": "2.0.12",
 		"to": "2.0.20"
+	},
+	{
+		"version": "2.0.19.0.5",
+		"from": "2.0.12",
+		"to": "2.0.20",
+		"changelog": ["Handle hierarchical places when searching for shared places."]
 	}
 ]
