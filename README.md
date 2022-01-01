@@ -91,7 +91,7 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.19.0.5
+* Current version: 2.0.19.1.0
 * Based on and tested with webtrees 2.0.19. Requires webtrees 2.0.12 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
@@ -112,7 +112,7 @@ Note that currently only selected parts of this structure are displayed and supp
 ### License<a name="license"/>
 
 * **vesta_shared_places: a webtrees custom module**
-* Copyright (C) 2019 – 2021 Richard Cissée
+* Copyright (C) 2019 – 2022 Richard Cissée
 * Derived from **webtrees** - Copyright 2021 webtrees development team.
 * French translations provided by Pierre Dousselin.
 * Dutch translations provided by TheDutchJewel.

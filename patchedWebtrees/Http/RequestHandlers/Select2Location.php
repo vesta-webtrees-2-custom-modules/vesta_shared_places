@@ -59,11 +59,13 @@ class Select2Location extends AbstractSelect2WithDateHandler
             $results = new Collection([$location]);
         } else {
           
-            //[PATCHED]
-            //extended in order to find hierarchical shared places
-            //overall not very efficient
             
             if (str_contains($query,',')) {
+              //[PATCHED]
+              //extended in order to find hierarchical shared places
+              //overall not very efficient
+              //TODO strictly only required if hierarchical shared places are enabled!
+              
               $places = $this->search_service->searchPlaces($tree, $query);
               
               $results1 = $this->search_service->searchLocationsInPlaces($tree, $places);
