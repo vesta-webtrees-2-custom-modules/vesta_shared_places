@@ -217,8 +217,8 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
         $ll = $enhanceWithGlobalData->getLatLon($placeGedcomName);
         
         if ($ll !== null) {
-          $map_lati = ($ll[0] < 0)?"S".str_replace('-', '', $ll[0]):"N".$ll[0];
-          $map_long = ($ll[1] < 0)?"W".str_replace('-', '', $ll[1]):"E".$ll[1];
+          $map_lati = ($ll[0] < 0)?"S".str_replace('-', '', (string)$ll[0]):"N".$ll[0];
+          $map_long = ($ll[1] < 0)?"W".str_replace('-', '', (string)$ll[1]):"E".$ll[1];
           $gedcom .= "\n1 MAP\n2 LATI ".$map_lati."\n2 LONG ".$map_long;
           $enhancedWithGlobalData = true;
         }

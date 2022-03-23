@@ -219,7 +219,7 @@ class SharedPlacesModule extends AbstractModule implements
       app()->instance(FunctionsEditPlacHandler::class, new ExtendedFunctionsEditPlacHandler());
       
       $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
-      $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+      $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '0'));
       
       $addfactsStr = $this->getPreference('_LOC_FACTS_ADD', 'NAME,_LOC:TYPE,NOTE,SHARED_NOTE,SOUR,_LOC:_LOC');
       $addfacts = FunctionsPrintExt::adjust(preg_split("/[, ]+/", $addfactsStr, -1, PREG_SPLIT_NO_EMPTY));
@@ -445,7 +445,7 @@ class SharedPlacesModule extends AbstractModule implements
       return new GenericViewElement('', '');
     }
     
-    $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '0'));
     
     if (!$useIndirectLinks) {
       //doesn't make sense to edit here
@@ -547,7 +547,7 @@ class SharedPlacesModule extends AbstractModule implements
       return Registry::gedcomRecordFactory()->make($loc, $ps->getTree());
     }
     
-    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '0'));
     if ($indirect) {
       return $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree());
     }
@@ -562,7 +562,7 @@ class SharedPlacesModule extends AbstractModule implements
       return new LocReference($loc, $ps->getTree(), $trace, $ps->getLevel());
     }
     
-    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '0'));
     if ($indirect) {
       $sharedPlace = $this->placename2sharedPlace($ps->getGedcomName(), $ps->getTree());
       if ($sharedPlace !== null) {
@@ -853,7 +853,7 @@ class SharedPlacesModule extends AbstractModule implements
   public function getIndirectLocations(GedcomRecord $record): Collection {
     $ret = new Collection();
     
-    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '1'));
+    $indirect = boolval($this->getPreference('INDIRECT_LINKS', '0'));
     if ($indirect) {
       $places = $record->getAllEventPlaces([]);
       foreach ($places as $place) {
@@ -1587,8 +1587,8 @@ class SharedPlacesModule extends AbstractModule implements
         $ll = $this->getLatLon($place->gedcomName());
         
         if ($ll !== null) {
-          $map_lati = ($ll[0] < 0)?"S".str_replace('-', '', $ll[0]):"N".$ll[0];
-          $map_long = ($ll[1] < 0)?"W".str_replace('-', '', $ll[1]):"E".$ll[1];
+          $map_lati = ($ll[0] < 0)?"S".str_replace('-', '', (string)$ll[0]):"N".$ll[0];
+          $map_long = ($ll[1] < 0)?"W".str_replace('-', '', (string)$ll[1]):"E".$ll[1];
           $gedcom .= "\n1 MAP\n2 LATI ".$map_lati."\n2 LONG ".$map_long;
           break;
         }
