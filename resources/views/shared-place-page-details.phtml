@@ -1,0 +1,21 @@
+<?php
+
+use Fisharebest\Webtrees\GedcomRecord;
+
+/**
+ * @var GedcomRecord $record
+ * @var string $hierarchyHtml
+ * @var string $summaryHtml
+ */
+
+?>
+
+<table class="table wt-facts-table">
+    <?php 
+        echo $hierarchyHtml;
+        echo $summaryHtml;
+    ?>
+    <?php foreach ($record->facts([], true) as $fact) : ?>
+        <?= view('fact', ['fact' => $fact, 'record' => $record]) ?>
+    <?php endforeach ?>
+</table>

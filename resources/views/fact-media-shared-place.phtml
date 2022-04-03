@@ -1,0 +1,19 @@
+<?php
+
+use Cissee\WebtreesExt\SharedPlace;
+
+/**
+ * @var SharedPlace $fact
+ */
+
+//[RC] adapted from fact-media.phtml
+
+?>
+
+<?php if (preg_match_all('/\n(1 OBJE\b.*(?:\n[^1].*)*)/', $fact->gedcom(), $matches, PREG_SET_ORDER) > 0) : ?>
+    <div class="wt-fact-media mt-2">
+        <?php foreach ($matches as $match) : ?>
+            <?= view('fact-gedcom-fields', ['gedcom' => $match[1], 'parent' => '_LOC', 'tree' => $fact->tree()]) ?>
+        <?php endforeach ?>
+    </div>
+<?php endif ?>

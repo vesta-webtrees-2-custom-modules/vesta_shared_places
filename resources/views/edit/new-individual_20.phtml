@@ -1,0 +1,33 @@
+<?php
+
+use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\Individual;
+
+/**
+ * @var Family|null     $family
+ * @var string          $famtag
+ * @var string          $gender
+ * @var Individual|null $individual
+ * @var Fact|null       $name_fact
+ * @var string          $next_action
+ * @var string          $title
+ * @var Tree            $tree
+ */
+
+?>
+
+<!-- The "::" allows us to use the original view, without being redirected to this file. -->
+<?= view('::edit/new-individual', [
+                'next_action' => $next_action,
+                'tree'        => $tree,
+                'title'       => $title,
+                'individual'  => $individual,
+                'family'      => $family,
+                'name_fact'   => $name_fact,
+                'famtag'      => $famtag,
+                'gender'      => $gender,
+            ]) ?>
+
+<?= view('edit/plac_20', ['tree' => $tree]) ?>
+
+

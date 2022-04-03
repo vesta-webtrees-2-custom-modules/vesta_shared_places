@@ -1,0 +1,107 @@
+<?php
+//adapted from webtrees.js: webtrees.initializeTomSelect 
+?>
+
+<script>
+webtrees.initializeTomSelectLocation = function (element) {
+    if (element.tomselect) {
+      return element.tomselect;
+    }
+    
+    <?php
+    //prepare to sync PLAC value with _LOC title (for the respective DATE)
+    //(but only if both were set initially, or if PLAC isn't set initially (or reset during edit))
+    ?>           
+    var firstPlacInput = document.querySelector('[id$=PLAC]');
+    if (firstPlacInput) {
+        if ((firstPlacInput.value !== '') && (element.value === '')) {
+            firstPlacInput.setAttribute('data-vesta-lock-plac', true);
+            firstPlacInput.addEventListener('input',function() {
+                if (firstPlacInput.value === '') {
+                    firstPlacInput.removeAttribute('data-vesta-lock-plac');
+                }                
+            });
+        }        
+    }
+
+    let options = {};
+
+    if (element.dataset.url) {
+      let plugins = ['dropdown_input', 'virtual_scroll'];
+
+      if (element.multiple) {
+        plugins.push('remove_button');
+      } else if (!element.required) {
+        plugins.push('clear_button');
+      }
+
+      options = {
+        <?php
+        //[RC] disable standard scoring function which apparently matches input string with results
+        //this TomSelect feature isn't useful here (any name of a shared place matches)
+        ?>
+        // custom scoring
+	score: function() {
+            return function() {
+                return 1;
+            }
+        },
+        plugins: plugins,
+        maxOptions: false,
+        render: {
+          item: (data, escape) => '<div>' + data.text + '</div>',
+          option: (data, escape) => '<div>' + data.text + '</div>',
+        },        
+        firstUrl: query => element.dataset.url + '&query=' + encodeURIComponent(query),
+        load: function (query, callback) {
+            var baseQuery = this.getUrl(query);
+            <?php
+            //TODO: improve this: there may be additional DATE?
+            //also cf impl in ResearchSuggestions
+            ?>
+            var firstDateInput = document.querySelector('[id$=DATE]');
+            if (firstDateInput) {
+                var dateValue = firstDateInput.value;
+                baseQuery += '&dateStr='+dateValue;
+            }
+            fetch(baseQuery)
+                .then(response => response.json())
+                .then(json => {
+                    if (json.nextUrl !== null) {
+                        this.setNextUrl(query, json.nextUrl + '&query=' + encodeURIComponent(query));
+                    }
+                    
+                    callback(json.data);
+                })
+                .catch(callback);
+        },
+        onItemAdd: function(id) {
+            <?php
+            //actually sync PLAC value with _LOC title (for the respective DATE)
+            ?>
+            var firstPlacInput = document.querySelector('[id$=PLAC]');
+            if (firstPlacInput) {
+                if (!("vestaLockPlac" in firstPlacInput.dataset)) {
+                    <?php
+                    //see https://github.com/orchidjs/tom-select/discussions/143
+                    ?>
+                    data = this.options[id];
+                    firstPlacInput.value = data.title;
+                } else {
+                    console.log("PLAC is locked. Reset manually to unlock.");
+                }
+            }
+        }
+      };
+    }
+
+    return new TomSelect(element, options);
+}
+
+$(function () {
+    document.querySelectorAll('.tom-select-location').forEach(element => webtrees.initializeTomSelectLocation(element));
+});
+</script>
+
+
+

@@ -13,6 +13,7 @@ use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\GedcomService;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Webtrees;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -54,6 +55,7 @@ class SharedPlace extends Location {
   private $array_adapter;
   
   //use private cache so we can unmake() the cache entries
+  //[2022/02] CHECK: this unmake doesn't seem to happen anywhere though?
   protected function array(): Cache {
     return new Cache($this->array_adapter);
   }
@@ -788,14 +790,23 @@ class SharedPlace extends Location {
     
     $self = $this;
     
+    $cacheKey = SharedPlace::class . 'getAllNamesAt_' . $this->xref() . '_' . (($date === null)?'null':json_encode($date)) . '_' . $preferredLangCodeForSort;
+    
     //Issue #54
     //somewhat expensive and called often, therefore cached
-    return $this->array()->remember(SharedPlace::class . 'getAllNamesAt_' . $this->xref() . '_' . (($date === null)?'null':json_encode($date)) . '_' . $preferredLangCodeForSort, static function () use ($self, $date, $preferredLangCodeForSort): array {
+    $ret = $this->array()->remember($cacheKey, static function () use ($self, $date, $preferredLangCodeForSort): array {
+      
       $actualDate = $date;
       if ($date === null) {
-        if ($self->getAllNames !== null) {
-          return $self->getAllNames;
-        }
+        if (str_starts_with(Webtrees::VERSION, '2.1')) {
+            if (sizeof($self->getAllNames) > 0) {
+                return $self->getAllNames;
+            }
+        } else {
+            if ($self->getAllNames !== null) {
+                return $self->getAllNames;
+            }
+        }        
 
         //null was just for caching
         $actualDate = GedcomDateInterval::createNow();
@@ -881,9 +892,11 @@ class SharedPlace extends Location {
         //store
         $self->getAllNames = $getAllNames;
       }
-
+      
       return $getAllNames;
     });  
+    
+    return $ret;
   }
   
   protected function getScore(
@@ -1538,7 +1551,12 @@ class SharedPlace extends Location {
     parent::updateFact($fact_id, $gedcom, $update_chan);
     
     //reset cached data (buggy in webtrees, which leads to 'undefined offset' errors wrt names)
-    $this->getAllNames = null;
+    if (str_starts_with(Webtrees::VERSION, '2.1')) {
+        $this->getAllNames = [];
+    } else {
+        $this->getAllNames = null;
+    }
+    
     $this->getPrimaryName = null;
     $this->getSecondaryName = null;
   }
@@ -1547,7 +1565,11 @@ class SharedPlace extends Location {
     parent::updateRecord($gedcom, $update_chan);
     
     //reset cached data (buggy in webtrees, which leads to 'undefined offset' errors wrt names)
-    $this->getAllNames = null;
+    if (str_starts_with(Webtrees::VERSION, '2.1')) {
+        $this->getAllNames = [];
+    } else {
+        $this->getAllNames = null;
+    }
     $this->getPrimaryName = null;
     $this->getSecondaryName = null;
   }

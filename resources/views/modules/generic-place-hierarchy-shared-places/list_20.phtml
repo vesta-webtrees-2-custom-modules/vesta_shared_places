@@ -1,0 +1,30 @@
+<?php
+
+use Fisharebest\Webtrees\I18N;
+
+?>
+
+<div class="row">
+            <span class="col list_label mr-1">
+                <?php
+                  //[RC] adjusted
+                ?>
+                <?= I18N::translate('Shared place list') ?>
+            </span>
+</div>
+<div class="row">
+    <?php foreach ($columns as $column) : ?>
+        <ul class="col list_value_wrap mr-1 list-unstyled">
+            <?php foreach ($column as $item) : ?>
+                <li>
+                    <?php
+                      //[RC] adjusted
+                    ?>
+                    <?= $item->additionalLinksHtmlBeforeName() ?>
+                    <a href="<?= e($item->url()) ?>"><?= $item->fullName() ?></a>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    <?php endforeach ?>
+</div>
+

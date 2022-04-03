@@ -1,0 +1,68 @@
+<?php
+
+use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\I18N;
+use Illuminate\Support\Collection;
+
+?>
+
+<div class="form-group">
+    <?php if ($useHierarchy) : ?>
+      <label class="col-form-label" for="shared-place-name">
+          <?= I18N::translate('Shared place name (complete hierarchy)') ?>        
+      </label>
+      <div><?= I18N::translate('A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well.') ?></div>
+    <?php else : ?>
+      <label class="col-form-label" for="shared-place-name">
+          <?= I18N::translate('Shared place name') ?>        
+      </label>
+    <?php endif ?>
+    <input class="form-control" type="text" id="shared-place-name" name="shared-place-name" value="<?= $sharedPlaceName ?>" required>
+    <input type="hidden" name="useHierarchy" value="<?=  $useHierarchy ?>">
+    <?php
+    foreach ($additionalControls as $gve) {
+      echo $gve->getMain();
+    }
+
+    //TODO integrate $additionalControls better with the following!
+
+    //cf new-individual.phtml
+    $tags = new Collection($requiredfacts);
+
+    foreach (Fact::sortFactTags($tags) as $tag) {
+      if ('NOTE' === $tag) {
+        echo view('cards/add-note', [
+            'level' => 1,
+            'tree'  => $tree,
+        ]);
+      } else if ('SHARED_NOTE' === $tag) {
+        echo view('cards/add-shared-note', [
+            'level' => 1,
+            'tree'  => $tree,
+        ]);
+      } //else skip        
+    }
+  
+    ?>
+</div>
+
+<?php if (!$useHierarchy) : ?>
+  <?php
+    //these may be confusing if shared places hierarchy is created,
+    //not really sure if we should show them at all
+  ?>
+  <?= view('modals/restriction-fields') ?>
+<?php endif ?>
+
+<?php
+if ($selector !== '') {
+  //View::push('javascript'); no need - this is within a modal!
+  $script = '<script>' .
+      'var REF = $(\'' . $selector . '\');' .
+      '$(\'#shared-place-name\').val(REF.val());' . 
+      '</script>';
+  echo $script;
+  //View::endpush();
+}
+?>
+

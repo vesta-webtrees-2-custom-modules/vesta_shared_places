@@ -3,7 +3,6 @@
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
 use Fisharebest\Webtrees\FlashMessages;
-use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Webtrees;
 use Illuminate\Support\Collection;
 use function app;
@@ -50,4 +49,8 @@ if (!$ok) {
   return;
 }
 
-return new SharedPlacesModule(app(ModuleService::class));
+if (str_starts_with(Webtrees::VERSION, '2.1')) {
+    return app(SharedPlacesModule::class);
+}
+
+return app(SharedPlacesModule_20::class);

@@ -1,0 +1,225 @@
+<?php
+
+use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
+use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderUtils;
+use Cissee\WebtreesExt\Functions\FunctionsEditLoc;
+use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
+use Cissee\WebtreesExt\MoreI18N;
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
+use Fisharebest\Webtrees\GedcomTag;
+use Fisharebest\Webtrees\Http\RequestHandlers\AddNewFact;
+use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesAcceptRecord;
+use Fisharebest\Webtrees\Http\RequestHandlers\PendingChangesRejectRecord;
+use Fisharebest\Webtrees\I18N;
+use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
+use Vesta\Model\GenericViewElement;
+use Vesta\Model\GovReference;
+use Vesta\Model\MapCoordinates;
+use Vesta\Model\Trace;
+
+?>
+
+<?php
+//cf gedcom-record-page.phtml
+?>
+
+<?php if ($sharedPlace->isPendingDeletion()) : ?>
+    <?php if (Auth::isModerator($sharedPlace->tree())) : ?>
+        <?= view('components/alert-warning-dismissible', [
+            'alert' => /* I18N: %1$s is “accept”, %2$s is “reject”. These are links. */
+                I18N::translate('This shared place has been deleted. You should review the deletion and then %1$s or %2$s it.', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesAcceptRecord::class, ['tree' => $sharedPlace->tree()->name(), 'xref' => $sharedPlace->xref()])) . '">' . MoreI18N::xlateContext('You should review the deletion and then accept or reject it.', 'accept') . '</a>', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesRejectRecord::class, ['tree' => $sharedPlace->tree()->name(), 'xref' => $sharedPlace->xref()])) . '">' . MoreI18N::xlateContext('You should review the deletion and then accept or reject it.', 'reject') . '</a>') . ' ' . view('help/link', ['topic' => 'pending_changes']),
+        ]) ?>
+    <?php elseif (Auth::isEditor($sharedPlace->tree())) : ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => I18N::translate('This shared place has been deleted. The deletion will need to be reviewed by a moderator.') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
+    <?php endif ?>
+<?php elseif ($sharedPlace->isPendingAddition()) : ?>
+    <?php if (Auth::isModerator($sharedPlace->tree())) : ?>
+        <?= view('components/alert-warning-dismissible', [
+            'alert' => /* I18N: %1$s is “accept”, %2$s is “reject”. These are links. */
+                I18N::translate('This shared place has been edited. You should review the changes and then %1$s or %2$s them.', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesAcceptRecord::class, ['tree' => $sharedPlace->tree()->name(), 'xref' => $sharedPlace->xref()])) . '">' . MoreI18N::xlateContext('You should review the changes and then accept or reject them.', 'accept') . '</a>', '<a href="#" class="alert-link" data-post-url="' . e(route(PendingChangesRejectRecord::class, ['tree' => $sharedPlace->tree()->name(), 'xref' => $sharedPlace->xref()])) . '">' . MoreI18N::xlateContext('You should review the changes and then accept or reject them.', 'reject') . '</a>') . ' ' . view('help/link', ['topic' => 'pending_changes']),
+        ]) ?>
+    <?php elseif (Auth::isEditor($sharedPlace->tree())) : ?>
+        <?= view('components/alert-warning-dismissible', ['alert' => I18N::translate('This shared place has been edited. The changes need to be reviewed by a moderator.') . ' ' . view('help/link', ['topic' => 'pending_changes'])]) ?>
+    <?php endif ?>
+<?php endif ?>
+
+<div class="d-flex mb-4">
+    <h2 class="wt-page-title mx-auto">
+        <?= $sharedPlace->fullName() ?>
+    </h2>
+    <?php if ($sharedPlace->canEdit() && !$sharedPlace->isPendingDeletion()) : ?>
+      <?= view($moduleName . '::shared-place-page-menu_20', ['record' => $sharedPlace]) ?>
+    <?php endif ?>
+</div>
+
+<div class="wt-page-content">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" role="tab" href="#details">
+                <?= MoreI18N::xlate('Details') ?>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link<?= empty($individuals) ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#individuals">
+                <?= MoreI18N::xlate('Individuals') ?>
+                <?= view('components/badge', ['count' => count($individuals)]) ?>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link<?= empty($families) ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#families">
+                <?= MoreI18N::xlate('Families') ?>
+                <?= view('components/badge', ['count' => count($families)]) ?>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link<?= empty($llSharedPlaces) ? ' text-muted' : '' ?>" data-toggle="tab" role="tab" href="#locations">
+                <?= I18N::translate('Next lower-level shared places') ?>
+                <?= view('components/badge', ['count' => count($llSharedPlaces)]) ?>
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active fade show" role="tabpanel" id="details">
+            <table class="table wt-facts-table">
+                <?php 
+                echo $hierarchyHtml;
+                echo $summaryHtml;
+                foreach ($facts->toArray() as $fact) {
+                  switch ($fact->getTag()) {
+                    case '_GOV':
+                      //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
+                      ob_start();
+                      FunctionsPrintFacts::printFact($fact, $sharedPlace);
+                      //fact is now (2.0.4) handled in webtrees itself, must replace this:
+                      $printed = '<a href="https://gov.genealogy.net/item/show/' . e($fact->value()) . '">' . e($fact->value()) . '</a>';
+                      $replacement = '<a href="http://gov.genealogy.net/item/show/' . e($fact->value()) . '" target="_blank">' . e($fact->value()) . '</a>';
+                      $replacement .= FunctionsPlaceUtils::gov2html($module, $tree, new GovReference($fact->value(), new Trace("")))->getMain();
+                      //TODO: handle getScript()!
+                      $html = ob_get_clean();
+                      
+                      $html = str_replace($printed, $replacement, $html);
+                      
+                      //very hacky , should handle this better!        
+                      $additions = IndividualFactsTabExtenderUtils::accessibleModules($module, $fact->record()->tree(), Auth::user())
+                              ->map(function (IndividualFactsTabExtenderInterface $otherModule) use ($fact) {
+                                return $otherModule->hFactsTabGetAdditionalEditControls($fact);
+                              })
+                              ->toArray();
+
+                      $aec = GenericViewElement::implode($additions);
+                      $aecMain = $aec->getMain();
+                      //$aecScript = $aec->getScript();
+                      
+                      //TODO should be added even when not in edit mode!
+                      //s = DOTALL, U = non-greedy
+                      $html = preg_replace("~<div class=\"editfacts nowrap\">(.*)</div>~sU", "<div class=\"editfacts nowrap\">$1". $aecMain ."</div>", $html);
+                      
+                      echo $html;
+                      break;
+                    case 'MAP':
+                      //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
+                      ob_start();
+                      FunctionsPrintFacts::printFact($fact, $sharedPlace);
+                      $lati = $fact->attribute('LATI');
+                      $long = $fact->attribute('LONG');
+                      
+                      $lati = trim(strtr($lati, "NSEW,�", " - -. ")); // S5,6789 ==> -5.6789
+                      $long = trim(strtr($long, 'NSEW,�', ' - -. ')); // E3.456� ==> 3.456
+                      
+                      $replacement = FunctionsPlaceUtils::map2html($module, $tree, new MapCoordinates($lati, $long, new Trace("")))->getMain();
+                      //TODO: handle getScript()!
+                      $html = ob_get_clean();
+                      echo str_replace('<div class="place"></div><br>', $replacement, $html);
+                      break;
+                    case '_LOC':
+                      //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
+                      ob_start();
+                      FunctionsPrintFacts::printFact($fact, $sharedPlace);
+                      $type = $fact->attribute('TYPE');
+                      $value = FunctionsEditLoc::getLocationRelationshipTypeValue($type);
+                      $html = ob_get_clean();
+                      
+                      $html = str_replace(
+                                '<span class="label">'.MoreI18n::xlate(GedcomTag::getLabel('TYPE')).':</span>', 
+                                '<span class="label">'.MoreI18n::xlate(GedcomTag::getLabel('_LOC:_LOC:TYPE')).':</span>', 
+                                $html);
+                      
+                      //uargh ugly
+                      $html = str_replace(
+                                '<span class="field" dir="auto">POLI</span>', 
+                                '<span class="field" dir="auto">'.$value.'</span>', 
+                                $html);
+                      $html = str_replace(
+                                '<span class="field" dir="auto">RELI</span>', 
+                                '<span class="field" dir="auto">'.$value.'</span>', 
+                                $html);
+                      $html = str_replace(
+                                '<span class="field" dir="auto">GEOG</span>', 
+                                '<span class="field" dir="auto">'.$value.'</span>', 
+                                $html);
+                      $html = str_replace(
+                                '<span class="field" dir="auto">CULT</span>', 
+                                '<span class="field" dir="auto">'.$value.'</span>', 
+                                $html);
+                      
+                      echo $html;
+                      break;
+                    /*
+                    case 'TYPE':
+                      //easier to patch here than to adjust entire FunctionsPrintFacts::printFact.
+                      //TODO pretty-print _GOVTYPE
+                      break;                     
+                     */
+                    default:
+                      FunctionsPrintFacts::printFact($fact, $sharedPlace);
+                      break;
+                  }                  
+                }
+                ?>
+
+                <?php
+                //cf source-page.phtml
+                ?>
+
+                <?php if ($sharedPlace->canEdit()) : ?>
+                  <?= view('edit/paste-fact-row', ['record' => $sharedPlace, 'facts' => $clipboard_facts]) ?>
+                  <?php FunctionsPrintExt::printAddNewFact_LOC($sharedPlace, $facts) ?>
+                  <?php if ($sharedPlace->tree()->getPreference('MEDIA_UPLOAD') >= Auth::accessLevel($sharedPlace->tree())) : ?>
+                    <tr>
+                        <th scope="row">
+                            <?= MoreI18N::xlate('Media object') ?>
+                        </th>
+                        <td>
+                            <a href="<?= e(route(AddNewFact::class, ['tree' => $sharedPlace->tree()->name(), 'xref' => $sharedPlace->xref(), 'fact' => 'OBJE'])) ?>">
+                                <?= MoreI18N::xlate('Add a media object') ?>
+                            </a>
+                        </td>
+                    </tr>
+                  <?php endif ?>
+                <?php endif ?>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" role="tabpanel" id="individuals">
+            <?= view('lists/individuals-table', ['individuals' => $individuals, 'sosa' => false, 'tree' => $tree]) ?>
+        </div>
+
+        <div class="tab-pane fade" role="tabpanel" id="families">
+            <?= view('lists/families-table', ['families' => $families, 'tree' => $tree]) ?>
+        </div>
+        
+        <div class="tab-pane fade" role="tabpanel" id="locations">
+            <?= view('lists/shared-places-table', [
+                'sharedPlaces' => $llSharedPlaces, 
+                'tree' => $tree, 
+                'showLinkCounts' => true]) ?>
+        </div>
+    </div>
+</div>
+
+<?php
+  //this may not be required - we're not using any modals, or are we?
+?>
+<?= view('modals/ajax') ?>

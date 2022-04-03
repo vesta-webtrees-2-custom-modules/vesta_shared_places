@@ -1,0 +1,90 @@
+<?php
+
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\View;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
+use Vesta\VestaUtils;
+
+?>
+
+<?php
+  //select initializers for modal placeholder ajax-modal-vesta.phtml used via CreateSharedPlaceModal, urgh
+  $select2Initializers = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
+              ->map(function (GovIdEditControlsInterface $module) {
+                return $module->govIdEditControlSelectScriptSnippet();
+              })
+              ->toArray();
+            
+  //we may have to support specific select edit controls!
+  echo view(VestaUtils::vestaViewsNamespace() . '::modals/ajax-modal-vesta_20', [
+                'ajax' => false,
+                'select2Initializers' => $select2Initializers
+  ]);
+?>
+
+<?php View::push('javascript') ?>
+<script>
+    
+    //obsolete! buggy and too complicated
+    // Update the PLAC from the _LOC
+    function updatewholenamePLAC(prevText, text, selector) {
+        var NAME = $(selector);
+        
+        console.log("updatewholenamePLAC; prevText="+prevText+"; text=" + text + "; value=" + NAME.val() + "; unchanged=" + NAME.attr("data-vesta-unchanged"));
+        
+        //empty name is always updatable
+        if (NAME.val() !== '') {
+          // Don't update the name if the user manually changed it
+          if (NAME.attr("data-vesta-unchanged") === undefined) {
+            return;
+          }
+
+          // Don't update the name if we were already out of sync before,
+          //unless we have deleted the name
+          if ((NAME.val() !== prevText) && (NAME.val() !== '') && (prevText !== '')) {
+            return;
+          }
+        }
+        
+        NAME.val(text);
+    }
+
+    //obsolete!
+    // if the user manually changed the PLAC field, then update the textual
+    // HTML representation of it
+    function updateTextNamePLAC(eid) {
+        var element = document.getElementById(eid);
+        if (element) {
+            $("#" + eid).removeAttr("data-vesta-unchanged");
+        }
+    }
+    
+    // Update the PLAC from the _LOC
+    function updatewholenamePLAC2(locWasSet, curText, selector) {
+        var NAME = $(selector);
+        
+        var placWasSet = (NAME.attr("data-vesta-plac-was-set") !== undefined);
+        
+        console.log("updatewholenamePLAC2; locWasSet="+locWasSet+"; curText=" + curText + "; value=" + NAME.val() + "; placWasSet=" + placWasSet);
+        
+        // Don't update the name if we were already out of sync before (plac set but no loc set)
+        if (placWasSet && !locWasSet) {
+          return;
+        }
+        
+        NAME.val(curText);
+    }
+    
+    // if the user manually resets the PLAC field, then treat as if it wasn't set in the first place
+    function updateTextNamePLAC2(eid) {
+        var element = document.getElementById(eid);
+        if (element) {
+          if ($("#" + eid).val() === '') {
+            $("#" + eid).removeAttr("data-vesta-plac-was-set");
+          }            
+        }
+    }
+</script>
+<?php View::endpush() ?>
+

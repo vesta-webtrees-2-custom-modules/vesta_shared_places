@@ -2,8 +2,8 @@
 
 namespace Cissee\WebtreesExt\Functions;
 
-use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
-use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
+use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule_20;
+use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal_20;
 use Cissee\WebtreesExt\SharedPlace;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Date;
@@ -272,7 +272,7 @@ class FunctionsEditLoc {
         
         //and with non-standard help text
         //$html .= view('edit/input-addon-help', ['fact' => 'PLAC']);
-        $module = app(SharedPlacesModule::class);
+        $module = app(SharedPlacesModule_20::class);
         $useHierarchy = boolval($module->getPreference('USE_HIERARCHY', '1'));
         if ($useHierarchy) {
           $html .= FunctionsPrintExtHelpLink::inputAddonHelp($module->name(), 'PLAC');
@@ -319,7 +319,7 @@ class FunctionsEditLoc {
               
                 //TODO we'd like to use dynamic PLAC input as 'shared-place-name' here (requires script to read value, but how to update data-href?)
                 //(for _LOC under PLAC)
-                '<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#wt-ajax-modal-vesta" data-href="' . e(route(CreateSharedPlaceModal::class, ['tree' => $tree->name(), 'selector' => $selector])) . '" data-select-id="' . $id . '" title="' . I18N::translate('Create a shared place') . '">' .
+                '<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#wt-ajax-modal-vesta" data-href="' . e(route(CreateSharedPlaceModal_20::class, ['tree' => $tree->name(), 'selector' => $selector])) . '" data-select-id="' . $id . '" title="' . I18N::translate('Create a shared place') . '">' .
               
                 '' . view('icons/add') . '<' .
                 '/button>' .

@@ -1,0 +1,66 @@
+<?php
+
+use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction_20;
+use Fisharebest\Webtrees\I18N;
+use Ramsey\Uuid\Uuid;
+use Vesta\VestaUtils;
+?>
+
+<h2 class="wt-page-title">
+    <?= $title ?>
+</h2>
+
+<div class="wt-page-content">
+    <?php if ($hasLocationsToFix) : ?>
+      <h3>
+          <?= I18N::translate('Important note:') ?>
+      </h3>
+      <p>
+          <?= I18N::translate('This tree has shared places with comma-separated name parts, while at the same time the option to \'Use hierarchical shared places\' is selected.') ?>
+          <?= I18N::translate('This leads to inconsistencies when mapping places to shared places, and in general doesn\'t match the specification for shared places (which earlier versions of this custom module didn\'t follow strictly).') ?>
+      </p>
+      <p>
+          <?= I18N::translate('It is recommended to run the data fix for this custom module to resolve this issue.') ?>
+      </p>
+    <?php endif ?>          
+
+    <?php
+    //create new shared place
+    $id = /* $fact . */ Uuid::uuid4()->toString();
+    ?>
+
+    <div class="input-group d-flex justify-content-between">
+        <span class="input-group-btn">
+            <button 
+                class="btn btn-secondary" 
+                type="button" 
+                data-toggle="modal" 
+                data-target="#wt-ajax-modal-vesta" 
+                data-href="<?= e(route(CreateSharedPlaceAction_20::class, ['tree' => $tree->name()])) ?>" 
+                data-select-id="<?= $id ?>" 
+                title="<?= I18N::translate('Create a shared place'); ?>">
+                    <?= view('icons/add') ?>
+            </button>
+        </span>
+        <?php if ($link !== null) : ?>
+          <p>
+              <?= $link->format() ?>
+          </p>
+        <?php endif ?>
+    </div>
+</div>
+
+<?= view('lists/shared-places-table', [
+                'sharedPlaces' => $sharedPlaces, 
+                'tree' => $tree, 
+                'showLinkCounts' => $showLinkCounts]) ?>
+
+<?php
+  //do not use standard modal placeholder (ajax.phtml): we may have to support specific select2 edit controls!
+  //cf data-target="#wt-ajax-modal-vesta" above!
+
+  echo view(VestaUtils::vestaViewsNamespace() . '::modals/ajax-modal-vesta_20', [
+                'ajax' => false,
+                'select2Initializers' => $select2Initializers
+    ]);
+?>

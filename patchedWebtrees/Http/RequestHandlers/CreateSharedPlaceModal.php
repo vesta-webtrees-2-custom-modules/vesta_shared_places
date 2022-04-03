@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
 use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
-use Cissee\WebtreesExt\Requests;
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
-use function assert;
 use function response;
 use function view;
 
@@ -40,11 +38,9 @@ class CreateSharedPlaceModal implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $sharedPlaceName = Requests::getString($request, 'shared-place-name');
-        $selector = Requests::getString($request, 'selector');
+        $tree = Validator::attributes($request)->tree();
+        $sharedPlaceName = Validator::attributes($request)->string('shared', '');
+        $selector = Validator::attributes($request)->string('selector', '');
         
         //requires modal placeholder in SharedPlacesListController.sharedPlacesList(), uargh
         //also requires modal placeholder in edit fact!

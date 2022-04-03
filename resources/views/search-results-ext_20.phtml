@@ -1,0 +1,150 @@
+<?php
+
+use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
+use Cissee\WebtreesExt\MoreI18N;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Services\ModuleService;
+use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\View;
+
+/**
+ * @var Collection<Family>     $families
+ * @var Collection<Individual> $individuals
+ * @var Collection<Location>   $locations
+ * @var Collection<Note>       $notes
+ * @var Collection<Repository> $repositories
+ * @var Collection<Source>     $sources
+ * @var bool                   $search_families
+ * @var bool                   $search_individuals
+ * @var bool                   $search_locations
+ * @var bool                   $search_notes
+ * @var bool                   $search_repositories
+ * @var bool                   $search_sources
+ * @var Tree                   $tree
+ */
+
+?>
+
+<div class="wt-search-results">
+    <ul class="nav nav-tabs wt-search-results-tabs" role="tablist">
+        <?php if ($search_individuals) : ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link <?= $individuals->isEmpty() ? 'text-muted' : '' ?>" id="individuals-tab" data-toggle="tab" href="#individuals" role="tab" aria-controls="individuals">
+                    <?= MoreI18N::xlate('Individuals') ?>
+                    <span class="badge badge-secondary">
+                        <?= I18N::number(count($individuals)) ?>
+                    </span>
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ($search_families) : ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link <?= $families->isEmpty() ? 'text-muted' : '' ?>" id="families-tab" data-toggle="tab" href="#families" role="tab" aria-controls="families">
+                    <?= MoreI18N::xlate('Families') ?>
+                    <span class="badge badge-secondary">
+                        <?= I18N::number(count($families)) ?>
+                    </span>
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ($search_sources) : ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link <?= $sources->isEmpty() ? 'text-muted' : '' ?>" id="sources-tab" data-toggle="tab" href="#sources" role="tab" aria-controls="sources">
+                    <?= MoreI18N::xlate('Sources') ?>
+                    <span class="badge badge-secondary">
+                        <?= I18N::number(count($sources)) ?>
+                    </span>
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ($search_repositories) : ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link <?= $repositories->isEmpty() ? 'text-muted' : '' ?>" id="repositories-tab" data-toggle="tab" href="#repositories" role="tab" aria-controls="repositories">
+                    <?= MoreI18N::xlate('Repositories') ?>
+                    <span class="badge badge-secondary">
+                        <?= I18N::number(count($repositories)) ?>
+                    </span>
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ($search_notes) : ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link <?= $notes->isEmpty() ? 'text-muted' : '' ?>" id="notes-tab" data-toggle="tab" href="#notes" role="tab" aria-controls="notes">
+                    <?= MoreI18N::xlate('Notes') ?>
+                    <span class="badge badge-secondary">
+                        <?= I18N::number(count($notes)) ?>
+                    </span>
+                </a>
+            </li>
+        <?php endif ?>
+            
+        <?php if ($search_locations) : ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link <?= $locations->isEmpty() ? 'text-muted' : '' ?>" id="locations-tab" data-toggle="tab" href="#locations" role="tab" aria-controls="locations">
+                    <?= I18N::translate('Shared places') ?>
+                    <span class="badge badge-secondary">
+                        <?= I18N::number(count($locations)) ?>
+                    </span>
+                </a>
+            </li>
+        <?php endif ?>
+    </ul>
+
+    <div class="tab-content wt-search-results-content">
+        <?php if ($search_individuals) : ?>
+            <div class="tab-pane fade" id="individuals" role="tabpanel" aria-labelledby="individuals-tab">
+                <?= view('lists/individuals-table', ['individuals' => $individuals, 'sosa' => false, 'tree' => $tree]) ?>
+            </div>
+        <?php endif ?>
+
+        <?php if ($search_families) : ?>
+            <div class="tab-pane fade" id="families" role="tabpanel" aria-labelledby="families-tab">
+                <?= view('lists/families-table', ['families' => $families, 'tree' => $tree]) ?>
+            </div>
+        <?php endif ?>
+
+        <?php if ($search_sources) : ?>
+            <div class="tab-pane fade" id="sources" role="tabpanel" aria-labelledby="sources-tab">
+                <?= view('lists/sources-table', ['sources' => $sources, 'tree' => $tree]) ?>
+            </div>
+        <?php endif ?>
+
+        <?php if ($search_repositories) : ?>
+            <div class="tab-pane fade" id="repositories" role="tabpanel" aria-labelledby="repositories-tab">
+                <?= view('lists/repositories-table', ['repositories' => $repositories, 'tree' => $tree]) ?>
+            </div>
+        <?php endif ?>
+
+        <?php if ($search_notes) : ?>
+            <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+                <?= view('lists/notes-table', ['notes' => $notes, 'tree' => $tree]) ?>
+            </div>
+        <?php endif ?>
+        
+        <?php if ($search_locations) : ?>
+            <div class="tab-pane fade" id="locations" role="tabpanel" aria-labelledby="locations-tab">                
+                <?php
+                  //access level irrelevant here: there is no way to configure an access level for this specific functionality
+                  //(it's not a list, chart, etc. - we'd have to define it specifically)
+                  $module = app(ModuleService::class)->findByInterface(SharedPlacesModule_20::class, false)->first();
+
+                  //otherwise we wouldn't even get here (router redirects)
+                  assert ($module instanceof SharedPlacesModule_20);
+                
+                  $showLinkCounts = boolval($module->getPreference('LINK_COUNTS', '0'));
+                ?>
+                <?= view('lists/shared-places-table', ['sharedPlaces' => $locations, 'tree' => $tree, 'showLinkCounts' => $showLinkCounts]) ?>
+            </div>
+        <?php endif ?>
+    </div>
+</div>
+
+<?php View::push('javascript') ?>
+<script>
+  $('.wt-search-results-tabs li:first-child a').tab('show');
+</script>
+<?php View::endpush() ?>

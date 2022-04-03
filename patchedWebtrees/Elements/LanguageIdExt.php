@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Fisharebest\Webtrees\Elements;
 namespace Cissee\WebtreesExt\Elements;
 
 use Fisharebest\Localization\Locale\LocaleAf;

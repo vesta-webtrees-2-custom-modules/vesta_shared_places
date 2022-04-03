@@ -1,0 +1,80 @@
+<?php
+
+use Cissee\WebtreesExt\MoreI18N;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Place;
+use Fisharebest\Webtrees\Tree;
+
+/**
+ * @var string $module
+ * @var Tree $tree
+ * @var string $action
+ * @var string $title
+ * @var Place|null $current
+ * @var array<PlaceWithinHierarchy> $breadcrumbs
+ * @var bool $note
+ * @var string $content
+ * @var bool $showeventslink
+ * @var Place $place
+ * @var array $nextaction
+ */
+
+?>
+
+<div id="place-hierarchy">
+    <div class="container">
+        <h4><?= $title ?></h4>
+        <?php 
+        //[RC] extended 
+        ?>
+        <?php if ($utils->hasLocationsToFix($tree)) : ?>
+          <h3>
+              <?= I18N::translate('Important note:') ?>
+          </h3>
+          <p>
+              <?= I18N::translate('This tree has shared places with comma-separated name parts, while at the same time the option to \'Use hierarchical shared places\' is selected.') ?>
+              <?= I18N::translate('This leads to inconsistencies when mapping places to shared places, and in general doesn\'t match the specification for shared places (which earlier versions of this custom module didn\'t follow strictly).') ?>
+          </p>
+          <p>
+              <?= I18N::translate('It is recommended to run the data fix for this custom module to resolve this issue.') ?>
+          </p>
+        <?php endif ?>
+        <h5 class="text-center">
+            <?php if ($current) : ?>
+                <a href="<?= e(route('module', ['module' => $module, 'action' => $action, 'tree' => $tree->name()])) ?>">
+                    <?= MoreI18N::xlate('World') ?>
+                </a>
+            <?php else : ?>
+                <?= MoreI18N::xlate('World') ?>
+            <?php endif ?>
+
+            <?php foreach ($breadcrumbs as $item) : ?>
+                - 
+                <?= $item->additionalLinksHtmlBeforeName() ?>
+                <a href="<?= e($item->url()) ?>" dir="auto"><?= $item->placeName() ?></a>
+            <?php endforeach ?>
+
+            <?php if ($current) : ?>
+                - 
+                <?= $current->additionalLinksHtmlBeforeName() ?>
+                <?= $current->placeName() ?>
+            <?php endif ?>
+        </h5>
+
+        <?= $content ?>
+
+        <div class="text-center">
+            <?php if ($showeventslink) : ?>
+                <a class="formField" href= <?= e(route('module', ['module' => $module, 'action' => $action, 'tree' => $tree->name(), 'place_id' => $place->id(), 'action2' => 'hierarchy-e'])) ?>>
+                    <?= MoreI18N::xlate('View table of events occurring in %s', $place->fullName()) ?>
+                </a>
+                |
+            <?php endif ?>
+
+            <a href="<?= e(route('module', ['module' => $module, 'action' => $action, 'tree' => $tree->name(), 'action2' => key($nextaction)])) ?>">
+                <?= current($nextaction) ?>
+            </a>
+        </div>
+    </div>
+</div>
+

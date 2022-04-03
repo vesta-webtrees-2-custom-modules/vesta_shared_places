@@ -1,28 +1,124 @@
 <?php
 
-use Fisharebest\Webtrees\I18N;
+use Cissee\WebtreesExt\MoreI18N;
 use Fisharebest\Webtrees\View;
 
 //adapted from location-edit.phtml
 
 /**
- * @var float                $latitude
- * @var float                $longitude
+ * @var string               $latitude
+ * @var string               $longitude
  * @var array<array<float>>  $map_bounds
  * @var <array<float>        $marker_position
- * @var mixed                $provider
- * @var string               $locationName
+ * @var object               $leaflet_config
  */
 
+//[RC] adjusted
+$name = 'TODO'; //$location->locationName();
+    
 ?>
+
+<div class="row gchart wt-place-location-edit-wrapper">
+    <div id="wt-map" class="col-sm-9 wt-ajax-load wt-map wt-place-location-edit" dir="ltr"></div>
+    <ul class="col-sm-3 wt-place-ocation-edit-sidebar wt-page-options-value list-unstyled px-md-1"></ul>
+</div>
 
 <?php View::push('styles') ?>
 <style>
     .osm-admin-map {
-        height: 55vh;
+        height: 200px;
         border: 1px solid darkGrey
     }
 </style>
+<?php View::endpush() ?>
+
+<?php View::push('javascript') ?>
+<script>
+  'use strict';
+
+  (function () {
+    const config = <?= json_encode($leaflet_config, JSON_THROW_ON_ERROR) ?>;
+    <?php
+    //[RC] adjusted
+    //const add_place = <?= json_encode($location->id() === null, JSON_THROW_ON_ERROR) _?_>;
+    ?>
+    const add_place = false;
+
+    let new_place_lati = document.getElementById('new_place_lati');
+    let new_place_long = document.getElementById('new_place_long');
+
+    // postcss_image_inliner breaks the autodetection of image paths.
+    L.Icon.Default.imagePath = <?= json_encode(asset('css/images/'), JSON_THROW_ON_ERROR) ?>;
+
+    // draggable marker
+    let marker = L.marker(<?= json_encode($marker_position, JSON_THROW_ON_ERROR) ?>, {
+      draggable: true,
+    })
+    .on('dragend', function () {
+      let coords = marker.getLatLng();
+      map.panTo(coords);
+      new_place_lati.value = Number(coords.lat).toFixed(5);
+      new_place_long.value = Number(coords.lng).toFixed(5);
+    });
+
+    /**
+     * Passed to resetControl to
+     * perform necessary reset actions on map
+     */
+     let resetCallback = function () {
+      map.fitBounds(<?= json_encode($map_bounds, JSON_THROW_ON_ERROR) ?>, {padding: [50, 30]});
+      marker.setLatLng(<?= json_encode($marker_position, JSON_THROW_ON_ERROR) ?>);
+      document.querySelector('form').reset();
+    }
+
+    // Geocoder (place lookup)
+    let geocoder = new L.Control.geocoder({
+      position: 'bottomleft',
+      defaultMarkGeocode: false,
+      expand: 'click',
+      showResultIcons: true,
+      query: <?= json_encode($name, JSON_THROW_ON_ERROR) ?>,
+      placeholder: <?= json_encode(MoreI18N::xlate('Place'), JSON_THROW_ON_ERROR) ?>,
+      errorMessage: <?= json_encode(MoreI18N::xlate('Nothing found.'), JSON_THROW_ON_ERROR) ?>,
+      iconLabel: <?= json_encode(MoreI18N::xlate('Search'), JSON_THROW_ON_ERROR) ?>
+    })
+    .on('markgeocode', function (result) {
+      let coords = result.geocode.center;
+      let place = result.geocode.name.split(',', 1).toString();
+      marker.setLatLng(coords);
+      map.panTo(coords);
+      if (add_place) {
+        document.getElementById('new_place_name').value = place
+      }
+      new_place_lati.value = Number(coords.lat).toFixed(5);
+      new_place_long.value = Number(coords.lng).toFixed(5);
+    });
+
+    const map = webtrees.buildLeafletJsMap('wt-map', config, resetCallback)
+      .addControl(geocoder)
+      .addLayer(marker)
+      .fitBounds(<?= json_encode($map_bounds, JSON_THROW_ON_ERROR) ?>, {padding: [50, 30]})
+      .on('zoomend', function () {
+        if (!map.getBounds().contains(marker.getLatLng())) {
+          map.panTo(marker.getLatLng());
+        }
+    });
+
+    document.querySelectorAll('.editable').forEach((element) => {
+      element.addEventListener('change', () => {
+        let lat = new_place_lati.value;
+        let lng = new_place_long.value;
+        marker.setLatLng([lat, lng]);
+        map.panTo([lat, lng]);
+      });
+    });
+
+    window.onload = function() {
+      let icon = document.querySelector('.leaflet-control-geocoder-icon');
+      icon.setAttribute('title', <?= json_encode(MoreI18N::xlate('Search'), JSON_THROW_ON_ERROR) ?>);
+    }
+  })();
+</script>
 <?php View::endpush() ?>
 
 <?php View::push('javascript') ?>
@@ -52,126 +148,5 @@ use Fisharebest\Webtrees\View;
       }
       return ret;
     }
-    
-    window.WT_OSM_ADMIN = (function () {
-        const minZoom = 2;
-
-        let provider = <?= json_encode($provider) ?>;
-        let map = null;
-        let add_place = <?= 'false' ?>;
-
-        // map components
-
-        // postcss_image_inliner breaks the autodetection of image paths.
-        L.Icon.Default.imagePath = <?= json_encode(asset('css/images/')) ?>;
-
-        // draggable marker
-        let marker = L.marker(<?= json_encode($marker_position) ?>, {
-            draggable: true,
-        })
-            .on('dragend', function () {
-                let coords = marker.getLatLng();
-                map.panTo(coords);
-                $('[id^=LATI]').val(osm2webtrees(Number(coords.lat).toFixed(5), 'N', 'S'));
-                $('[id^=LONG]').val(osm2webtrees(Number(coords.lng).toFixed(5), 'E', 'W'));
-                $('#new_zoom_factor').val(Number(map.getZoom()));
-            });
-
-        //reset map to initial state
-        let resetControl = L.Control.extend({
-            options: {
-                position: 'topleft'
-            },
-            onAdd: function (map) {
-                let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-                container.onclick = function () {
-                    map.fitBounds(<?= json_encode($map_bounds) ?>, {padding: [50, 30]});
-                    marker.setLatLng(<?= json_encode([$latitude, $longitude]) ?>);
-                    $('form').trigger('reset');
-                    return false;
-                };
-                let reset = <?= json_encode(I18N::translate('Reset to initial map state')) ?>;
-                let anchor = L.DomUtil.create('a', 'leaflet-control-reset', container);
-                anchor.setAttribute('aria-label', reset);
-                anchor.href = '#';
-                anchor.title = reset;
-                anchor.role = 'button';
-                let image = L.DomUtil.create('i', 'fas fa-redo', anchor);
-                image.alt = reset;
-
-                return container;
-            }
-        });
-
-        // zoom control with localised text
-        let zoomCtl = new L.control.zoom({
-            zoomInTitle:  <?= json_encode(I18N::translate('Zoom in')) ?>,
-            zoomOutTitle: <?= json_encode(I18N::translate('Zoom out')) ?>,
-        });
-
-        // Geocoder (place lookup)
-        let geocoder = new L.Control.geocoder({
-            defaultMarkGeocode: false,
-            expand: 'click',
-            showResultIcons: true,
-            query: <?= json_encode($locationName) ?>,
-            placeholder: <?= json_encode(I18N::translate('Place')) ?>,
-            errorMessage: <?= json_encode(I18N::translate('Nothing found.')) ?>,
-            iconLabel: <?= json_encode(I18N::translate('Search')) ?>
-        })
-            .on('markgeocode', function (result) {
-                let coords = result.geocode.center;
-                let place = result.geocode.name.split(',', 1);
-                marker.setLatLng(coords);
-                map.panTo(coords);
-                if (add_place) {
-                    $('#new_place_name').val(place.shift());
-                }
-                $('[id^=LATI]').val(osm2webtrees(Number(coords.lat).toFixed(5), 'N', 'S'));
-                $('[id^=LONG]').val(osm2webtrees(Number(coords.lng).toFixed(5), 'E', 'W'));
-                $('#new_zoom_factor').val(Number(map.getZoom()));
-            });
-
-        /**
-         *
-         * @private
-         */
-        $(function () {
-            // geocoder button tooltip
-            $('.leaflet-control-geocoder-icon')
-                .attr('title', <?= json_encode(I18N::translate('Search')) ?>);
-
-            $('[id^=LATI]').on('change', function () {
-                let lat = webtrees2osm($('[id^=LATI]').val());
-                let lng = webtrees2osm($('[id^=LONG]').val());
-                marker.setLatLng([lat, lng]);
-                map.panTo([lat, lng]);
-            });
-            
-            $('[id^=LONG]').on('change', function () {
-                let lat = webtrees2osm($('[id^=LATI]').val());
-                let lng = webtrees2osm($('[id^=LONG]').val());
-                marker.setLatLng([lat, lng]);
-                map.panTo([lat, lng]);
-            });
-        });
-
-        // Create the map with all controls and layers
-        map = L.map('osm-map', {
-            minZoom: minZoom, // maxZoom set by leaflet-providers.js
-            zoomControl: false,   // remove default
-        })
-            .addControl(new resetControl())
-            .addControl(zoomCtl)
-            .addControl(geocoder)
-            .addLayer(marker)
-            .addLayer(L.tileLayer(provider.url, provider.options))
-            .fitBounds(<?= json_encode($map_bounds) ?>, {padding: [50, 30]})
-            .on('zoomend', function () {
-                $('#new_zoom_factor').val(map.getZoom());
-            });
-
-        return 'Leaflet map interface for webtrees-2';
-    })();
 </script>
 <?php View::endpush() ?>

@@ -3,7 +3,7 @@
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
 use Fisharebest\Webtrees\I18N;
 use Ramsey\Uuid\Uuid;
-use Vesta\VestaAdminController;
+use Vesta\VestaUtils;
 ?>
 
 <h2 class="wt-page-title">
@@ -28,16 +28,17 @@ use Vesta\VestaAdminController;
     //create new shared place
     $id = /* $fact . */ Uuid::uuid4()->toString();
     ?>
-
+          
     <div class="input-group d-flex justify-content-between">
         <span class="input-group-btn">
             <button 
                 class="btn btn-secondary" 
                 type="button" 
-                data-toggle="modal" 
-                data-target="#wt-ajax-modal-vesta" 
-                data-href="<?= e(route(CreateSharedPlaceAction::class, ['tree' => $tree->name()])) ?>" 
-                data-select-id="<?= $id ?>" 
+                data-bs-toggle="modal"
+                data-bs-backdrop="static"
+                data-bs-target="#wt-ajax-modal-vesta" 
+                data-wt-href="<?= e(route(CreateSharedPlaceAction::class, ['tree' => $tree->name()])) ?>" 
+                data-wt-select-id="<?= $id ?>" 
                 title="<?= I18N::translate('Create a shared place'); ?>">
                     <?= view('icons/add') ?>
             </button>
@@ -50,16 +51,15 @@ use Vesta\VestaAdminController;
     </div>
 </div>
 
-<?= view('lists/shared-places-table', [
-                'sharedPlaces' => $sharedPlaces, 
-                'tree' => $tree, 
-                'showLinkCounts' => $showLinkCounts]) ?>
+<?= view('lists/locations-table', [
+                'locations' => $sharedPlaces, 
+                'tree' => $tree]) ?>
 
 <?php
   //do not use standard modal placeholder (ajax.phtml): we may have to support specific select2 edit controls!
   //cf data-target="#wt-ajax-modal-vesta" above!
 
-  echo view(VestaAdminController::vestaViewsNamespace() . '::modals/ajax-modal-vesta', [
+  echo view(VestaUtils::vestaViewsNamespace() . '::modals/ajax-modal-vesta', [
                 'ajax' => false,
                 'select2Initializers' => $select2Initializers
     ]);

@@ -1,0 +1,180 @@
+<?php
+
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Functions\FunctionsPrint;
+use Fisharebest\Webtrees\Functions\FunctionsPrintFacts;
+use Fisharebest\Webtrees\GedcomTag;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Media;
+use Fisharebest\Webtrees\MediaFile;
+use Fisharebest\Webtrees\Module\ModuleListInterface;
+use Fisharebest\Webtrees\Registry;
+use Fisharebest\Webtrees\Tree;
+use Illuminate\Support\Collection;
+use League\Flysystem\FilesystemInterface;
+
+/**
+ * @var int                 $count
+ * @var FilesystemInterface $data_filesystem
+ * @var string              $filter
+ * @var string              $folder
+ * @var array<string>       $folders
+ * @var string              $format
+ * @var array<string>       $formats
+ * @var int                 $max
+ * @var Collection<Media>   $media_objects
+ * @var ModuleListInterface $module
+ * @var int                 $page
+ * @var int                 $pages
+ * @var string              $subdirs
+ * @var string              $title
+ * @var Tree                $tree
+ */
+
+?>
+
+<h2 class="wt-page-title">
+    <?= $title ?>
+</h2>
+
+<form method="post" class="wt-page-options wt-page-options-media-list d-print-none">
+    <?= csrf_field() ?>
+
+    <div class="row form-group">
+        <label class="col-sm-3 col-form-label wt-page-options-label" for="folder">
+            <?= I18N::translate('Folder') ?>
+        </label>
+        <div class="col-sm-3 wt-page-options-value">
+            <?= view('components/select', ['name' => 'folder', 'selected' => $folder, 'options' => $folders]) ?>
+            <?= view('components/checkbox-inline', ['label' => /* I18N: Label for check-box */ I18N::translate('Include subfolders'), 'name' => 'subdirs', 'checked' => $subdirs === '1']) ?>
+        </div>
+
+        <label class="col-sm-3 col-form-label wt-page-options-label" for="max">
+            <?= I18N::translate('Media objects per page') ?>
+        </label>
+        <div class="col-sm-3 wt-page-options-value">
+            <?= view('components/select-number', ['name' => 'max', 'selected' => $max, 'options' => [10, 20, 30, 40, 50, 75, 100, 150, 200]]) ?>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-sm-3 col-form-label wt-page-options-label" for="format">
+            <?= I18N::translate('Type') ?>
+        </label>
+
+        <div class="col-sm-3 wt-page-options-value">
+            <?= view('components/select', ['name' => 'format', 'id' => 'format', 'selected' => $format, 'options' => ['' => ''] + $formats]) ?>
+        </div>
+
+        <div class="col-sm-3 col-form-label wt-page-options-label"></div>
+
+        <div class="col-sm-3 wt-page-options-value"></div>
+        </div>
+
+    <div class="row form-group">
+        <label class="col-sm-3 col-form-label wt-page-options-label" for="filter">
+            <?= I18N::translate('Search filters') ?>
+        </label>
+        <div class="col-sm-3 wt-page-options-value">
+            <input type="text" class="form-control" name="filter" id="filter" value="<?= e($filter) ?>">
+        </div>
+
+        <div class="col-sm-3 col-form-label wt-page-options-label"></div>
+
+        <div class="col-sm-3 wt-page-options-value">
+            <button type="submit" name="go" value="1" class="btn btn-primary">
+                <?= /* I18N: A button label. */ I18N::translate('search') ?>
+            </button>
+            <a class="btn btn-secondary" href="<?= e($module->listUrl($tree)) ?>">
+                <?= /* I18N: A button label. */ I18N::translate('reset') ?>
+            </a>
+        </div>
+    </div>
+</form>
+
+<div class="wt-page-content">
+    <p class="text-center mt-4"><?= I18N::translate('Media objects found') ?> <?= I18N::number($count) ?></p>
+    <?php if ($media_objects->isNotEmpty()) : ?>
+
+        <?= view('modules/media-list/pagination', ['module' => $module, 'page' => $page, 'pages' => $pages, 'folder' => $folder, 'subdirs' => $subdirs, 'filter' => $filter, 'format' => $format, 'max' => $max, 'tree' => $tree]) ?>
+
+        <div class="card-deck row mb-4 mt-4">
+            <?php foreach ($media_objects as $n => $media_object) : ?>
+                <div class="col-12 col-sm-6 col-lg-4 d-flex">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <a href="<?= e($media_object->url()) ?>"><?= $media_object->fullName() ?></a>
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <?php foreach ($media_object->mediaFiles() as $media_file) : ?>
+                                <?= $media_file->displayImage(300, 200, 'contain', ['class' => 'img-fluid']) ?>
+                            <?php endforeach ?>
+
+                            <?php $media_file = $media_object->mediaFiles()->first() ?>
+                            <?php if ($media_file instanceof MediaFile): ?>
+                            <p class="card-text">
+                                <?php
+                                // Show file details
+                                $mediatype = $media_file->type();
+                                    if ($media_file->type() !== '') {
+                                        $element = Registry::elementFactory()->make('OBJE:FILE:FORM:TYPE');
+                                        echo $element->labelValue($media_file->type(), $media_object->tree());
+                                }
+                                echo FunctionsPrintFacts::printFactSources($tree, $media_object->gedcom(), 1);
+                                echo FunctionsPrint::printFactNotes($tree, $media_object->gedcom(), 1);
+                                if ($media_file->isExternal()) {
+                                        echo Registry::elementFactory()->make('OBJE:FILE')->labelValue($media_file->filename(), $media_object->tree());
+                                } elseif ($media_file->fileExists($data_filesystem)) {
+                                        echo Registry::elementFactory()->make('OBJE:FILE:FORM')->labelValue($media_file->mimeType(), $media_object->tree());
+                                    if (Auth::isEditor($tree)) {
+                                            echo Registry::elementFactory()->make('OBJE:FILE')->labelValue($media_file->filename(), $media_object->tree());
+                                    }
+                                    if (Auth::isEditor($tree)) {
+                                        foreach ($media_file->attributes($data_filesystem) as $tag => $value) {
+                                            echo GedcomTag::getLabelValue($tag, $value);
+                                        }
+                                    }
+                                } else {
+                                    echo '<p class="alert alert-danger">', /* I18N: %s is a filename */ I18N::translate('The file “%s” does not exist.', e($media_file->filename())), '</p>';
+                                }
+                                ?>
+                            </p>
+                            <?php endif ?>
+                        </div>
+                        <div class="card-footer">
+                            <?php foreach ($media_object->linkedIndividuals('OBJE') as $record) : ?>
+                                <?= view('icons/individual') ?>
+                                <a href="<?= e($record->url()) ?>"><?= $record->fullName() ?></a>
+                                <br>
+                            <?php endforeach ?>
+
+                            <?php foreach ($media_object->linkedFamilies('OBJE') as $record) : ?>
+                                <?= view('icons/family') ?>
+                                <a href="<?= e($record->url()) ?>"><?= $record->fullName() ?></a>
+                                <br>
+                            <?php endforeach ?>
+
+                            <?php foreach ($media_object->linkedSources('OBJE') as $record) : ?>
+                                <?= view('icons/source') ?>
+                                <a href="<?= e($record->url()) ?>"><?= $record->fullName() ?></a>
+                                <br>
+                            <?php endforeach ?>
+                                
+                            <?php 
+                            //[RC] extended
+                            foreach ($media_object->linkedLocations('OBJE') as $record) : ?>
+                                <?= view('icons/shared-place') ?>
+                                <a href="<?= e($record->url()) ?>"><?= $record->fullName() ?></a>
+                                <br>
+                            <?php endforeach ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach ?>
+        </div>
+
+        <?= view('modules/media-list/pagination', ['module' => $module, 'page' => $page, 'pages' => $pages, 'folder' => $folder, 'subdirs' => $subdirs, 'filter' => $filter, 'format' => $format, 'max' => $max, 'tree' => $tree]) ?>
+    <?php endif ?>
+</div>

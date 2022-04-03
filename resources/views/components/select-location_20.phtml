@@ -1,0 +1,75 @@
+<?php
+
+use Cissee\WebtreesExt\Http\RequestHandlers\Select2Location_20;
+use Fisharebest\Webtrees\Location;
+use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\View;
+
+/**
+ * @var string          $at     "@" or "" (or unset).
+ * @var Location|null   $location
+ * @var string|null     $class
+ * @var string|null     $id
+ * @var string          $name
+ * @var Tree            $tree
+ * 
+ * @var string          $selectorForDate not set when called directly from webtrees (merging records)
+ */
+
+$at = $at ?? '';
+
+?>
+
+<select
+    autocomplete="off"
+    class="form-control select2 <?= $class ?? '' ?>"
+    data-ajax--delay="<?= e(Select2Location_20::AJAX_DELAY) ?>"
+    data-minimum-input-length="<?= e(Select2Location_20::MINIMUM_INPUT_LENGTH) ?>"
+    data-ajax--type="POST"
+    data-ajax--url="<?= e(route(Select2Location_20::class, ['tree' => $tree->name(), 'at' => $at])) ?>"
+    data-allow-clear="true"
+    data-placeholder=""
+    id="<?= e($id ?? $name) ?>"
+    name="<?= e($name) ?>"
+    <?= ($disabled ?? false) ? 'disabled' : '' ?>
+    <?= ($required ?? false) ? 'required' : '' ?>
+    style="width:100%"
+>
+    <?php if (($location ?? null) instanceof Location) : ?>
+        <option value="<?= e($at . $location->xref() . $at) ?>">
+            <?= view('selects/location', ['location' => $location]) ?>
+        </option>
+    <?php else : ?>
+        <option value="">&nbsp;</option>
+    <?php endif ?>
+</select>
+
+<?php View::push('javascript') ?>
+<?php if (isset($selectorForDate) && ($selectorForDate !== '')): ?>
+<script>
+$(document).ready(function() {
+  $('#<?= e($id ?? $name) ?>').select2({
+      ajax: {
+        data: function (params) {
+          var DATE = $('<?= $selectorForDate ?>');
+
+          var query = {
+            term: params.term,
+            q: params.term,
+            page: params.page || 1,
+            type: '_query',
+            dateStr: DATE.val()
+          }
+
+          return query;
+        }
+      },
+      // Do not escape - we do it on the server.
+      escapeMarkup: function (x) {
+        return x;
+      }
+  });
+});
+</script>
+<?php endif ?>
+<?php View::endpush() ?>

@@ -12,50 +12,14 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Vesta\Model\PlaceStructure;
 use function app;
-use function assert;
 use function response;
 use function view;
-      
-class SharedPlaceRef {
-      
-  private $record;
-  private $existed;
-  private $created;
-  private $parent;
-
-  public function record(): SharedPlace {
-    return $this->record;
-  }
-
-  public function existed(): bool {
-    return $this->existed;
-  }
-  
-  public function created(): int {
-    return $this->created;
-  }
-
-  public function parent(): ?SharedPlaceRef {
-    return $this->parent;
-  }
-  
-  public function __construct(
-          SharedPlace $record, 
-          bool $existed, 
-          int $created, 
-          ?SharedPlaceRef $parent) {
-    
-    $this->record = $record;
-    $this->existed = $existed;
-    $this->created = $created;
-    $this->parent = $parent;
-  }
-}
     
 /**
  * Process a form to create a new shared place object, and (if necessary) parent objects.
@@ -71,12 +35,12 @@ class CreateSharedPlaceAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $useHierarchy = Requests::getBool($request, 'useHierarchy');
-        $name = Requests::getString($request, 'shared-place-name');
-        $govId = Requests::getString($request, 'shared-place-govId'); //cf parameter 'label' in hook in CreateSharedPlaceModal
+        $tree = Validator::attributes($request)->tree();
+        
+        $params = (array) $request->getParsedBody();
+        $useHierarchy = (bool) ($params['useHierarchy'] ?? false);
+        $name = $params['shared-place-name'];
+        $govId = $params['shared-place-govId'] ?? '';
 
         // Fix whitespace
         $name = trim(preg_replace('/\s+/', ' ', $name));

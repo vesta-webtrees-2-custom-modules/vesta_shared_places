@@ -2,12 +2,12 @@
 
 namespace Cissee\WebtreesExt;
 
-use Cissee\Webtrees\Module\SharedPlaces\SharedPlacesModule;
 use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Exception;
 use Fisharebest\Webtrees\Gedcom;
+use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\GedcomService;
@@ -51,7 +51,7 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
           bool $asAdditionalParticipant,
           PlaceUrls $urls,
           Collection $sharedPlaces,
-          SharedPlacesModule $module,
+          ModuleInterface $module,
           SearchServiceExt $search_service_ext) {
 
     $this->actual = $actual;

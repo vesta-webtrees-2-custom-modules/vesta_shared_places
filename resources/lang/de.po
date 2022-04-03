@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-11-20 13:28+0100\n"
+"POT-Creation-Date: 2022-04-03 20:23+0200\n"
 "PO-Revision-Date: 2021-11-19 21:50+0000\n"
 "Last-Translator: Bernd Schwendinger <b0ernie@gmx.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
@@ -18,36 +18,36 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.9.1\n"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:101
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:65
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
 msgstr " (Hinweis: Es wurden außerdem %s gemeinsame Orte auf höheren Ebenen erstellt)"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:99
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:63
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Hinweis: Es wurde außerdem ein gemeinsamer Ort auf einer höheren Ebene angelegt)"
 
-#: SharedPlacesModule.php:797
+#: SharedPlacesModule.php:863
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr "%s und die Einzelpersonen und Familien, die sich darauf beziehen, einschließlich der Eltern, Geschwister, Ehegatten und Kinder der einzelnen Personen."
 
-#: SharedPlacesModule.php:796
+#: SharedPlacesModule.php:862
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s und die Personen und Familien, die darauf verweisen."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:90
+#: SharedPlacesModuleTrait.php:91
 msgid "... and fall back to n parent levels"
 msgstr "... und berücksichtige n übergeordnete Hierarchieebenen"
 
-#: SharedPlacesModuleTrait.php:26
+#: SharedPlacesModuleTrait.php:27
 msgid "A module providing support for shared places."
 msgstr "Ein Modul, welches gemeinsame Orte unterstützt."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:36
+#: SharedPlacesModuleTrait.php:37
 msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended 'Facts and events' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module."
 msgstr "Ein Modul, welches gemeinsame Orte als GEDCOM-Objekte der Stufe 0 auf der Grundlage des GEDCOM-L-Nachtrags zur GEDCOM 5.5.1-Spezifikation unterstützt. Gemeinsame Orte können z.B. Koordinaten, Notizen und Medienobjekte enthalten. Das Modul zeigt diese Daten für alle übereinstimmenden Orte über den erweiterten Reiter \"Tatsachen und Ereignisse\" an. Es kann auch zur Verwaltung von GOV-IDs in Kombination mit dem Gov4Webtrees-Modul verwendet werden."
 
@@ -56,7 +56,7 @@ msgid "A place name with comma-separated name parts will be resolved to a hierar
 msgstr "Ein Ortsname mit durch Kommata getrennten Namensteilen wird in eine Hierarchie gemeinsamer Orte aufgelöst. Fehlende übergeordnete gemeinsamer Orte werden ebenfalls erstellt."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:83
+#: SharedPlacesModuleTrait.php:84
 msgid "According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. "
 msgstr "Gemäß den GEDCOM-L-Vereinbarungen werden gemeinsame Orte über XREFs referenziert, genau wie gemeinsame Notizen usw. "
 
@@ -65,12 +65,12 @@ msgid "Add missing XREFs"
 msgstr "Fehlende XREFs hinzufügen"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:82
+#: SharedPlacesModuleTrait.php:83
 msgid "Additionally link shared places via name"
 msgstr "Gemeinsame Orte zusätzlich über Namen verbinden"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:99
+#: SharedPlacesModuleTrait.php:104
 msgid "All shared place facts"
 msgstr "Alle Tatsachen zu gemeinsamen Orten"
 
@@ -81,13 +81,13 @@ msgid "Attention!"
 msgstr "Achtung!"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:156
+#: SharedPlacesModuleTrait.php:162
 msgid "Automatically expand shared place data"
 msgstr "Daten von gemeinsamen Orten automatisch aufklappen"
 
 #: patchedWebtrees/Functions/FunctionsEditLoc.php:322
 #: resources/views/modals/create-shared-place.phtml:10
-#: resources/views/shared-places-list-page.phtml:41
+#: resources/views/shared-places-list-page.phtml:42
 msgid "Create a shared place"
 msgstr "Gemeinsamen Ort erstellen"
 
@@ -104,11 +104,11 @@ msgid "Data Fix"
 msgstr "Datenkorrektur"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:181
+#: SharedPlacesModuleTrait.php:187
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Ermittlung der Anzahl der Verknüpfungen (verknüpfte Person/Familien) ist aufwendig, wenn die Zuweisung der gemeinsamen Orte über den Namen erfolgt. Dies verursacht Verzögerungen bei der Anzeige der Liste gemeinsamer Orte. Es wird empfohlen diese Option nur zu aktivieren, wenn die Orte mittels XREFs zugewiesen wurden."
 
-#: SharedPlacesModule.php:197
+#: SharedPlacesModule.php:188
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Aktiviere das 'Vesta Places and Pedigree map'-Modul, um die Hierarchie der gemeinsamen Orte zu sehen."
 
@@ -117,16 +117,16 @@ msgid "Enhance existing shared places with tree-independent data"
 msgstr "Verbessere vorhandene gemeinsame Orte mit vom Stammbaum unabhängigen Daten"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:212
+#: SharedPlacesModuleTrait.php:222
 msgid "Facts for shared place records"
 msgstr "Tatsachen für gemeinsame Orte-Datensätze"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:201
+#: SharedPlacesModuleTrait.php:207
 msgid "Filter to unique shared places"
 msgstr "Nach eindeutigen gemeinsamen Orten filtern"
 
-#: SharedPlacesModule.php:379
+#: SharedPlacesModule.php:396
 msgid "GOV id for type of location"
 msgstr "GOV-Kennung für die Art des Ortes"
 
@@ -138,22 +138,22 @@ msgstr "Allgemeine Suche"
 msgid "Hierarchize Shared Places"
 msgstr "Gemeinsamen Orte hierarchisieren"
 
-#: SharedPlacesModule.php:376
+#: SharedPlacesModule.php:393
 msgid "Higher-level shared place"
 msgstr "Gemeinsamer Ort höherer Ebene"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:85
+#: SharedPlacesModuleTrait.php:86
 msgid "However, you can still check this option and link shared places via the place name itself. In this case, links are established internally by searching for a shared place with any name matching case-insensitively."
 msgstr "Sie können diese Option aktivieren und gemeinsame Orte über den Ortsnamen selbst verknüpfen. In diesem Fall werden Links intern hergestellt, indem nach einem gemeinsamen Ort gesucht wird, dessen Name ohne Berücksichtigung der Groß- und Kleinschreibung übereinstimmt."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:68
+#: SharedPlacesModuleTrait.php:69
 msgid "If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to higher-level shared places, as described in the specification."
 msgstr "Wenn diese Option aktiviert ist, werden Beziehungen zwischen gemeinsamen Orten über eine explizite Hierarchie modelliert, in der gemeinsame Orte XREFs zu gemeinsamen Orten höherer Ebene aufweisen, wie in der Spezifikation beschrieben."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:142
+#: SharedPlacesModuleTrait.php:148
 msgid "If this option is checked, shared place data is only displayed for the following facts and events. "
 msgstr "Wenn diese Option aktiviert ist, werden Daten gemeinsamer Orte nur für die folgenden Tatsachen und Ereignisse angezeigt. "
 
@@ -162,7 +162,7 @@ msgid "If tree-independent data is available, map coordinates from webtrees 'Geo
 msgstr "Wenn Stammbaum-unabhängige Daten verfügbar sind, werden Kartenkoordinaten aus den geografischen Daten von Webtrees und die GOV-IDs aus dem Gov4Webtrees-Modul hinzugefügt."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:86
+#: SharedPlacesModuleTrait.php:87
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
 msgstr "Wenn Sie hierarchische gemeinsame Orte verwenden, wird ein Ort mit dem Namen \"A, B, C\" einem gemeinsamen Ort \"A\" mit einem übergeordneten gemeinsamen Ort zugeordnet, der \"B, C\" zugeordnet ist."
 
@@ -172,7 +172,7 @@ msgid "Important note:"
 msgstr "Wichtiger Hinweis:"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:70
+#: SharedPlacesModuleTrait.php:71
 msgid "In particular, hierarchical shared places do not have names with comma-separated name parts."
 msgstr "Vornehmlich haben hierarchische gemeinsame Orte keine Namen mit durch Kommas getrennten Namensteilen."
 
@@ -182,12 +182,12 @@ msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV id
 msgstr "Insbesondere werden Kartenkoordinaten aus den geografischen Daten von Webtrees ('Geographic Data') und GOV-IDs aus dem Gov4Webtrees-Modul ergänzt."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:202
+#: SharedPlacesModuleTrait.php:208
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr "In der Hierarchieliste der Orte werden bei Verwendung der Option 'Auf gemeinsame Orte beschränken' Gemeinsame Orte mit mehreren Namen mehrfach als separate Einträge angezeigt. Aktivieren Sie diese Option, um in diesem Fall jeden gemeinsamen Ort nur einmal unter seinem Hauptnamen inklusive der weiteren Namen anzuzeigen."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:84
+#: SharedPlacesModuleTrait.php:85
 msgid "It is now recommended to use XREFs, as this improves performance and flexibility. There is a data fix available which may be used to add XREFs. "
 msgstr "Es wird jetzt empfohlen XREFs zu verwenden, da dies die Leistung und Flexibilität verbessert. Es ist eine Datenkorrektur verfügbar, die genutzt werden kann, um XREFs hinzufügen zu können. "
 
@@ -201,7 +201,7 @@ msgid "It is strongly recommended to backup your tree first."
 msgstr "Es wird dringend empfohlen zunächst eine Sicherungskopie des Stammbaums zu erstellen."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:74
+#: SharedPlacesModuleTrait.php:75
 msgid "It is strongly recommended to switch to hierarchical shared places."
 msgstr "Es wird dringend empfohlen zu hierarchischen gemeinsamen Orten zu wechseln."
 
@@ -210,14 +210,19 @@ msgid "It usually will have to be carried out once only, as a migration when swi
 msgstr "Als Migration muss dies normalerweise nur einmal durchgeführt werden, wenn über die entsprechende Konfigurationsoption zu hierarchischen gemeinsamen Orten gewechselt wird."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:79
+#: SharedPlacesModuleTrait.php:80
 msgid "Linking of shared places to places"
 msgstr "Verknüpfung von gemeinsamen Orten mit Orten"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:364
+#: SharedPlacesModule.php:345
 msgid "Location"
 msgstr "Gemeinsamer Ort"
+
+#. I18N: translate just like 'Shared Places' for consistency
+#: SharedPlacesModule.php:346
+msgid "Locations"
+msgstr ""
 
 #: resources/views/data-fix-options.phtml:83
 #: resources/views/data-fix-options.phtml:102
@@ -238,17 +243,13 @@ msgstr "Fehlende übergeordnete gemeinsame Orte werden bei Bedarf erstellt. Dami
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "Fehlende gemeinsame Orte werden bei Bedarf erstellt. Damit dies funktioniert, ohne dass möglicherweise Duplikate erstellt werden, müssen Sie in der Benutzerverwaltung zumindest für die Dauer dieser Datenkorrektur die Option 'Durch diesen Benutzer vorgenommene Änderungen automatisch genehmigen' aktivieren."
 
-#: resources/views/shared-place-page.phtml:77
-msgid "Next lower-level shared places"
-msgstr "Nächste untergeordnete gemeinsame Orte"
-
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:166
+#: SharedPlacesModuleTrait.php:172
 msgid "Note that the first occurrence may be within a toggleable, currently hidden fact or event (such as an event of a close relative). This will probably be improved in future versions of the module."
 msgstr "Beachten Sie, dass sich das erste Auftreten möglicherweise innerhalb eines umschaltbaren, derzeit verborgenen Fakts oder Ereignisses befindet (z. B. eines Ereignisses eines nahen Verwandten). Dies wird wahrscheinlich in zukünftigen Versionen des Moduls verbessert."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:69
+#: SharedPlacesModuleTrait.php:70
 msgid "Note that this also affects the way shared places are created, and the way they are mapped to places."
 msgstr "Beachten Sie, dass dies auch die Art und Weise beeinflusst, wie gemeinsame Orte erstellt und wie sie anderen Orten zugeordnet werden."
 
@@ -257,7 +258,7 @@ msgid "Note:"
 msgstr "Hinweis:"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:228
+#: SharedPlacesModuleTrait.php:240
 msgid "Place hierarchy"
 msgstr "Ortshierarchie"
 
@@ -274,31 +275,31 @@ msgid "Place names should be entered as single place name (do not use a comma-se
 msgstr "Ortsnamen sollten als einzelner Ortsname eingegeben werden (verwenden Sie hier keine durch Kommas getrennte Liste)."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:128
+#: SharedPlacesModuleTrait.php:133
 msgid "Quick shared place facts"
 msgstr "Schnelle Tatsachen von gemeinsamen Orten"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:189
+#: SharedPlacesModuleTrait.php:195
 msgid "Reference year"
 msgstr "Bezugsjahr"
 
-#: SharedPlacesModuleTrait.php:27
+#: SharedPlacesModuleTrait.php:28
 msgid "Replacement for the original 'Locations' module."
 msgstr "Ersatz für das ursprüngliche Modul \"Orte\"."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:37
+#: SharedPlacesModuleTrait.php:38
 msgid "Replaces the original 'Locations' module."
 msgstr "Ersetzt das ursprüngliche Modul \"Orte\"."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:141
+#: SharedPlacesModuleTrait.php:147
 msgid "Restrict to specific facts and events"
 msgstr "Beschränkung auf bestimmte Tatsachen und Ereignisse"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:71
+#: SharedPlacesModuleTrait.php:72
 #, php-format
 msgid "See %1$s for details."
 msgstr "Siehe %1$s für weitere Details."
@@ -308,12 +309,13 @@ msgstr "Siehe %1$s für weitere Details."
 msgid "Shared Places"
 msgstr "Gemeinsame Orte"
 
-#: SharedPlacesModule.php:371 SharedPlacesModule.php:484
+#: SharedPlacesModule.php:385 SharedPlacesModule.php:386
+#: SharedPlacesModule.php:388 SharedPlacesModule.php:551
 #: resources/views/lists/shared-places-table.phtml:43
 msgid "Shared place"
 msgstr "Gemeinsamer Ort"
 
-#: SharedPlacesModule.php:781
+#: SharedPlacesModule.php:847
 msgid "Shared place data"
 msgstr "Daten des gemeinsamen Ortes"
 
@@ -334,12 +336,12 @@ msgid "Shared place name (complete hierarchy)"
 msgstr "Name des gemeinsamen Ortes (vollständige Hierarchie)"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:224
+#: SharedPlacesModuleTrait.php:236
 msgid "Shared place page"
 msgstr "Seite des gemeinsamen Ortes"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:65
+#: SharedPlacesModuleTrait.php:66
 msgid "Shared place structure"
 msgstr "Struktur des gemeinsamen Ortes"
 
@@ -347,7 +349,8 @@ msgstr "Struktur des gemeinsamen Ortes"
 msgid "Shared place summary"
 msgstr "Zusammenfassung des gemeinsamen Ortes"
 
-#: SharedPlacesListController.php:50 SharedPlacesModule.php:161
+#: SharedPlacesListController.php:54 SharedPlacesListController.php:66
+#: SharedPlacesModule.php:152
 #: resources/views/lists/shared-places-table.phtml:38
 #: resources/views/search-general-page-ext.phtml:99
 #: resources/views/search-results-ext.phtml:88
@@ -355,18 +358,18 @@ msgid "Shared places"
 msgstr "Gemeinsame Orte"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:220
+#: SharedPlacesModuleTrait.php:232
 msgid "Shared places list"
 msgstr "Liste der gemeinsamen Orte"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:180
+#: SharedPlacesModuleTrait.php:186
 msgid "Show link counts for shared places list"
 msgstr "Zeige Anzahl der Verknüpfungen zur Liste der gemeinsamen Orte"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:187
-#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:124
+#: SharedPlacesModuleTrait.php:193
+#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:129
 msgid "Summary"
 msgstr "Zusammenfassung"
 
@@ -387,13 +390,13 @@ msgstr "Die Suche kann nicht effizient implementiert werden und kann insbesonder
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
 msgstr "Die Suche nach diesem Datenfix stimmt derzeit nicht mit Datensätzen überein, da die Konfigurationsoption 'Hierarchische gemeinsame Orte verwenden' nicht festgelegt ist."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:91
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:55
 #, php-format
 msgid "The shared place %s already exists."
 msgstr "Der gemeinsame Ort %s existiert bereits."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:112
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:156
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:76
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:120
 #, php-format
 msgid "The shared place %s has been created."
 msgstr "Der gemeinsame Ort %s wurde erstellt."
@@ -403,7 +406,7 @@ msgid "The summary shows the shared place data, formatted in the same way as for
 msgstr "Die Zusammenfassung zeigt die Daten gemeinsamer Orte, die auf die gleiche Weise formatiert sind wie für Ereignisse, bei denen ein Ort dem jeweiligen gemeinsamen Ort zugeordnet ist."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:190
+#: SharedPlacesModuleTrait.php:196
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
 msgstr "Die hier eingestellte Jahreszahl kann von anderen Modulen verwendet werden, um die Ortsbeschreibung mit zusätzlichen Daten zu ergänzen. Ohne Eingabe wird das aktuelle Jahr verwendet."
 
@@ -412,7 +415,7 @@ msgid "There are various data fixes available."
 msgstr "Es sind verschiedene Datenkorrekturen verfügbar."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:72
+#: SharedPlacesModuleTrait.php:73
 msgid "There is a data fix available which may be used to convert existing shared places."
 msgstr "Es ist eine Datenkorrektur verfügbar, die genutzt werden kann zur Konvertierung vorhandener gemeinsamer Orte."
 
@@ -451,17 +454,17 @@ msgid "This data fix turns shared places with comma-separated name parts into hi
 msgstr "Diese Datenkorrektur wandelt gemeinsame Orte mit durch Kommas getrennten Namensteilen in hierarchische gemeinsame Orte (die über XREFs mit gemeinsamen Orten auf höherer Ebene verknüpft sind)."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:103
+#: SharedPlacesModuleTrait.php:108
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list."
 msgstr "Dies ist die Liste der GEDCOM-Tatsachen, die Ihre Benutzer zu gemeinsamen Orten hinzufügen können. Sie können diese Liste ändern, indem Sie nach Bedarf Tatsachennamen entfernen oder hinzufügen. Tatsachennamen, die in dieser Liste angezeigt werden, dürfen nicht auch in der Liste \"Einzigartige Tatsachen zu gemeinsamen Orten\" enthalten sein."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:132
+#: SharedPlacesModuleTrait.php:137
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list. "
 msgstr "Dies ist die Liste der GEDCOM-Tatsachen, die Ihre Benutzer zu gemeinsamen Orten hinzufügen können. Sie können diese Liste ändern, indem Sie nach Bedarf Tatsachennamen entfernen oder hinzufügen. Tatsachennamen, die in dieser Liste angezeigt werden, dürfen nicht auch in der Liste \"Einzigartige Tatsachen zu gemeinsamen Orten\" enthalten sein. "
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:111
+#: SharedPlacesModuleTrait.php:116
 msgid "This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list."
 msgstr "Dies ist die Liste der GEDCOM-Tatsachen, die Ihre Benutzer nur einmal zu gemeinsamen Orten hinzufügen können. Wenn sich beispielsweise NAME in dieser Liste befindet, können Benutzer einem gemeinsamen Ort nicht mehr als einen NAME-Datensatz hinzufügen. Tatsachennamen, die in dieser Liste angezeigt werden, dürfen nicht auch in der Liste \"Alle Tatsachen zu gemeinsamen Orten\" enthalten sein."
 
@@ -474,46 +477,23 @@ msgstr "Dies führt zu Inkonsistenzen beim Zuordnen von Orten zu gemeinsamen Ort
 msgid "This shared place does not exist or you do not have permission to view it."
 msgstr "Dieser gemeinsame Ort existiert nicht oder Sie haben keine Berechtigung ihn anzuzeigen."
 
-#: resources/views/shared-place-page.phtml:34
-msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
-msgstr "Dieser gemeinsame Ort wurde gelöscht. Die Löschung muss von einem Moderator geprüft werden."
-
-#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
-#: resources/views/shared-place-page.phtml:31
-#, php-format
-msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
-msgstr "Dieser gemeinsame Ort wurde gelöscht. Sie sollten die Löschung prüfen und sie dann entweder %1$s oder %2$s."
-
-#: resources/views/shared-place-page.phtml:43
-msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
-msgstr "Dieser gemeinsame Ort wurde bearbeitet. Die Änderung muss von einem Moderator geprüft werden."
-
-#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
-#: resources/views/shared-place-page.phtml:40
-#, php-format
-msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
-msgstr "Dieser gemeinsame Ort wurde bearbeitet. Sie sollten die Änderungen prüfen und sie dann entweder %1$s oder %2$s."
-
 #: resources/views/modules/generic-place-hierarchy-shared-places/page.phtml:35
 #: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr "Dieser Stammbaum verfügt über gemeinsame Orte mit durch Kommas getrennten Namensteilen, während gleichzeitig die Option „Hierarchische gemeinsame Orte verwenden“ ausgewählt ist."
 
-#: SharedPlacesModule.php:378
+#. I18N::translate('Type of location')), //anyway requires subtags!
+#: SharedPlacesModule.php:395
 msgid "Type of hierarchical relationship"
 msgstr "Art der hierarchischen Beziehung"
 
-#: SharedPlacesModule.php:377
-msgid "Type of location"
-msgstr "Objekttyp"
-
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:107
+#: SharedPlacesModuleTrait.php:112
 msgid "Unique shared place facts"
 msgstr "Einzigartige Tatsachen zu gemeinsamen Orten"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:67
+#: SharedPlacesModuleTrait.php:68
 msgid "Use hierarchical shared places"
 msgstr "Hierarchische gemeinsame Orte verwenden"
 
@@ -522,17 +502,17 @@ msgstr "Hierarchische gemeinsame Orte verwenden"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Verwenden Sie die gesonderte Markierung „%1$s“, um eine Ortshierarchie zu modellieren."
 
-#: SharedPlacesModule.php:195
+#: SharedPlacesModule.php:186
 msgid "View Shared places hierarchy"
 msgstr "Hierarchie der gemeinsamen Orte anzeigen"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:91
+#: SharedPlacesModuleTrait.php:92
 msgid "When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would also match shared places that match \"B, C\" and \"C\")"
 msgstr "Wenn die vorhergehende Option aktiviert ist und kein übereinstimmender gemeinsamer Ort gefunden wird, erfolgt ein Rückfall auf n übergeordnete Orte (so dass z. B. für n = 2 ein Ort \"A, B, C\" auch mit gemeinsamen Orten übereinstimmt, die zu \"B, C\" und \"C\" passen)"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:73
+#: SharedPlacesModuleTrait.php:74
 msgid "When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated name parts."
 msgstr "Wenn diese Option deaktiviert ist, wird der erstere Ansatz genutzt, bei dem Hierarchien nur durch die Verwendung gemeinsamer Ortsnamen mit durch Kommas getrennten Namensteilen angedeutet werden."
 
@@ -546,7 +526,7 @@ msgstr "Sie können in der Modul-Konfiguration ein Bezugsjahr festlegen (das von
 msgid "administrative"
 msgstr "administrativ"
 
-#: patchedWebtrees/SharedPlace.php:958 patchedWebtrees/SharedPlace.php:1034
+#: patchedWebtrees/SharedPlace.php:977 patchedWebtrees/SharedPlace.php:1053
 msgid "circular shared place hierarchy"
 msgstr "zirkuläre Hierarchie gemeinsamer Orte"
 
@@ -561,7 +541,7 @@ msgid "geographical"
 msgstr "geografisch"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:161
+#: SharedPlacesModuleTrait.php:167
 msgid "no"
 msgstr "nein"
 
@@ -575,17 +555,17 @@ msgstr "andere"
 msgid "religious"
 msgstr "religiös"
 
-#: SharedPlacesModule.php:884
+#: SharedPlacesModule.php:950
 msgid "shared places"
 msgstr "Gemeinsame Orte"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:169
+#: SharedPlacesModuleTrait.php:175
 msgid "yes"
 msgstr "ja"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:165
+#: SharedPlacesModuleTrait.php:171
 msgid "yes, but only the first occurrence of the shared place"
 msgstr "ja, aber nur das ersten Auftreten des gemeinsamen Ortes"
 
@@ -598,5 +578,23 @@ msgstr "ja, aber nur das ersten Auftreten des gemeinsamen Ortes"
 #~ msgid "GOV-Id for type of location"
 #~ msgstr "GOV-ID für den Siedlungs-Typ"
 
+#~ msgid "Next lower-level shared places"
+#~ msgstr "Nächste untergeordnete gemeinsame Orte"
+
 #~ msgid "Private"
 #~ msgstr "Privat"
+
+#~ msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
+#~ msgstr "Dieser gemeinsame Ort wurde gelöscht. Die Löschung muss von einem Moderator geprüft werden."
+
+#~ msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
+#~ msgstr "Dieser gemeinsame Ort wurde gelöscht. Sie sollten die Löschung prüfen und sie dann entweder %1$s oder %2$s."
+
+#~ msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
+#~ msgstr "Dieser gemeinsame Ort wurde bearbeitet. Die Änderung muss von einem Moderator geprüft werden."
+
+#~ msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
+#~ msgstr "Dieser gemeinsame Ort wurde bearbeitet. Sie sollten die Änderungen prüfen und sie dann entweder %1$s oder %2$s."
+
+#~ msgid "Type of location"
+#~ msgstr "Objekttyp"

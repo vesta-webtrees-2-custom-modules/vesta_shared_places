@@ -1,0 +1,79 @@
+<?php
+
+use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction_20;
+use Fisharebest\Webtrees\I18N;
+?>
+
+<form action="<?= e(route(CreateSharedPlaceAction_20::class, ['tree' => $tree->name()])) ?>" id="wt-modal-form" method="POST">
+      <?= csrf_field() ?>
+
+    <?= view('modals/header', ['title' => I18N::translate('Create a shared place')]) ?>
+
+    <div class="modal-body">
+        <?= view($moduleName . '::modals/shared-place-fields_20', [
+            'useHierarchy' => $useHierarchy,
+            'sharedPlaceName' => $sharedPlaceName, 
+            'selector' => $selector,
+            'additionalControls' => $additionalControls,
+            'requiredfacts' => $requiredfacts,
+            'tree' => $tree,
+            ]) ?>
+    </div>
+
+    <?= view('modals/footer-save-cancel') ?>
+</form>
+
+<?php /*View::push('javascript') no need - this is a modal!*/ ?>
+<?php
+  foreach ($additionalControls as $gve) {
+    echo $gve->getScript();
+  }
+?>
+
+<script>
+  // Submit the modal form using AJAX
+  //[RC] was different from other modals, if not within a select component, streamlined now
+  document.getElementById('wt-modal-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      let form = event.target;
+      let modal_content = document.querySelector('#wt-ajax-modal-vesta .modal-content');
+      let select = document.getElementById(modal_content.dataset.selectId);
+      $.ajax({
+          url: form.action,
+          type: form.method,
+          data: new FormData(form),
+          async: false,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+              if (select) {
+                  // If this modal was activated by the "new" button in a select2
+                  // edit control, then insert the result and select it.
+                  let option       = new Option(data.text, data.id, true, true);
+                  option.innerHTML = option.innerText;
+
+                  $(select)
+                      .select2()
+                      .empty()
+                      .append(option)
+                      .trigger("change");
+
+                  $('#wt-ajax-modal-vesta').modal('hide');
+              } else {
+                  modal_content.innerHTML = data.html;
+                  //just hide the modal
+                  //$('#wt-ajax-modal-vesta').modal('hide');
+                  //additionally scroll to top in order to show the flash message
+                  //window.onbeforeunload = function () {
+                  //  window.scrollTo(0, 0);
+                  //};
+                  //document.location.reload();
+              }
+          },
+          failure: function (data) {
+              modal_content.innerHTML = data.html;
+          }
+      });
+  });
+</script>

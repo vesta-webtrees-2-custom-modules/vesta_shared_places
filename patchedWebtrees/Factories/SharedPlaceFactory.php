@@ -8,6 +8,7 @@ use Closure;
 use Fisharebest\Webtrees\Contracts\LocationFactoryInterface;
 use Fisharebest\Webtrees\Factories\AbstractGedcomRecordFactory;
 use Fisharebest\Webtrees\Location;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use stdClass;
@@ -20,13 +21,12 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
 
   public function __construct(
           SharedPlacePreferences $preferences) {
-    
-    parent::__construct(); 
+
     $this->preferences = $preferences;
   }
 
   public function unmake(string $xref, Tree $tree) {
-    $this->cache->forget(__CLASS__ . $xref . '@' . $tree->id());
+    Registry::cache()->array()->forget(__CLASS__ . $xref . '@' . $tree->id());
   }
     
   /**
@@ -40,7 +40,7 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
    */
   public function make(string $xref, Tree $tree, string $gedcom = null): ?Location
   {
-      $ret = $this->cache->remember(__CLASS__ . $xref . '@' . $tree->id(), function () use ($xref, $tree, $gedcom) {
+      $ret = Registry::cache()->array()->remember(__CLASS__ . $xref . '@' . $tree->id(), function () use ($xref, $tree, $gedcom) {
           $gedcom  = $gedcom ?? $this->gedcom($xref, $tree);
           $pending = $this->pendingChanges($tree)->get($xref);
 
@@ -59,9 +59,9 @@ class SharedPlaceFactory extends AbstractGedcomRecordFactory implements Location
       
       //check
       $cacheKey = __CLASS__ . $xref . '@' . $tree->id() . '#CHECK';
-      $this->cache->remember($cacheKey, function () use ($cacheKey, $ret) {
+      Registry::cache()->array()->remember($cacheKey, function () use ($cacheKey, $ret) {
           //not cached: add 'dummy' cache entry first so that we won't loop endlessly in case of circularity
-          $this->cache->remember($cacheKey, function () {
+          Registry::cache()->array()->remember($cacheKey, function () {
             return true;
           });
           

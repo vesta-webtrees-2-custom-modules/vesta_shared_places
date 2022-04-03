@@ -91,8 +91,8 @@ Note that currently only selected parts of this structure are displayed and supp
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.22.0.0
-* Based on and tested with webtrees 2.0.22. Requires webtrees 2.0.12 or later.
+* Current version: 2.0.23+2.1.0-beta.2.0.0
+* Based on and tested with webtrees 2.0.23. Requires webtrees 2.0.12 or later. Should also work with webtrees 2.1.0-beta.2.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
 * Provides location data to other custom modules.
