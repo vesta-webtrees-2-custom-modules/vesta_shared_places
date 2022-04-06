@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
+use Cissee\WebtreesExt\MoreI18N;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
-use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Site;
@@ -169,7 +169,7 @@ class SearchGeneralPageExt_20 implements RequestHandlerInterface
             return redirect($locations->first()->url());
         }
         
-        $title = I18N::translate('General search');
+        $title = MoreI18N::xlate('General search');
 
         return $this->viewResponse('search-general-page-ext', [
             'all_trees'           => $all_trees,

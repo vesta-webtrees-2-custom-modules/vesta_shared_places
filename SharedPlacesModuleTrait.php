@@ -2,6 +2,7 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
+use Cissee\WebtreesExt\MoreI18N;
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Webtrees;
@@ -164,7 +165,7 @@ trait SharedPlacesModuleTrait {
                 false,
                 array(
             new ControlPanelRadioButton(
-                    ' './* I18N: Module Configuration */I18N::translate('no'),
+                    ' './* I18N: Module Configuration */MoreI18N::xlate('no'),
                     null,
                     '0'),
             new ControlPanelRadioButton(
@@ -172,7 +173,7 @@ trait SharedPlacesModuleTrait {
                     /* I18N: Module Configuration */I18N::translate('Note that the first occurrence may be within a toggleable, currently hidden fact or event (such as an event of a close relative). This will probably be improved in future versions of the module.'),
                     '1'),
             new ControlPanelRadioButton(
-                    /* I18N: Module Configuration */I18N::translate('yes'),
+                    /* I18N: Module Configuration */MoreI18N::xlate('yes'),
                     null,
                     '2')),
                 null,
@@ -237,7 +238,7 @@ trait SharedPlacesModuleTrait {
             null,
             $pageSub);
     $sections[] = new ControlPanelSection(
-            /* I18N: Module Configuration */I18N::translate('Place hierarchy'),
+            /* I18N: Module Configuration */MoreI18N::xlate('Place hierarchy'),
             null,
             $hierarchySub);
 
