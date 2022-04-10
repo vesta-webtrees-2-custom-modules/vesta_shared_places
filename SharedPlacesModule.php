@@ -39,7 +39,6 @@ use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Location;
-use Fisharebest\Webtrees\Module\CustomTagsGedcomL;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
@@ -59,12 +58,14 @@ use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\View;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
 use Throwable;
 use Vesta\Hook\HookInterfaces\ClippingsCartAddToCartInterface;
@@ -88,6 +89,7 @@ use Vesta\Model\Trace;
 use Vesta\VestaModuleTrait;
 use function app;
 use function response;
+use function route;
 use function str_contains;
 use function str_starts_with;
 use function view;
@@ -104,7 +106,8 @@ class SharedPlacesModule extends AbstractModule implements
     FunctionsPlaceInterface,
     PrintFunctionsPlaceInterface,
     FunctionsClippingsCartInterface,
-    PlaceHierarchyParticipant {
+    PlaceHierarchyParticipant, 
+    RequestHandlerInterface {
 
     use ModuleCustomTrait, ModuleMetaTrait, ModuleListTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait, ModuleDataFixTrait {
         VestaModuleTrait::customTranslations insteadof ModuleCustomTrait;
@@ -121,6 +124,9 @@ class SharedPlacesModule extends AbstractModule implements
     use EmptyPrintFunctionsPlace;
 
     protected $module_service;  
+  
+    //list
+    protected const ROUTE_URL = '/tree/{tree}/shared-place-list';
   
     public function __construct(
         ModuleService $module_service) {
@@ -156,12 +162,18 @@ class SharedPlacesModule extends AbstractModule implements
         return 'menu-list-plac';
     }
 
-    public function getListAction(ServerRequestInterface $request): ResponseInterface {
-        //'tree' is handled specifically in Router.php
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $user = $request->getAttribute('user');
+    public function listUrl(Tree $tree, array $parameters = []): string {
+        
+        $parameters['tree'] = $tree->name();
+        
+        return route(SharedPlacesModule::class, $parameters);
+    }
+    
+    public function handle(ServerRequestInterface $request): ResponseInterface {
+        
+        $tree = Validator::attributes($request)->tree();
+        $user = Validator::attributes($request)->user();
+        
         Auth::checkComponentAccess($this, ModuleListInterface::class, $tree, $user);
 
         $link = null;
@@ -278,6 +290,9 @@ class SharedPlacesModule extends AbstractModule implements
 
         $router->get(LocationPage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
 
+        $router
+            ->get(static::class, static::ROUTE_URL, $this);
+        
         //no longer required (webtrees #3786)
         //$router->get(SearchGeneralPage::class, '/tree/{tree}/search-general', SearchGeneralPageExt::class);    
         //$router->post(SearchGeneralAction::class, '/tree/{tree}/search-general', SearchGeneralActionExt::class);    
@@ -348,43 +363,35 @@ class SharedPlacesModule extends AbstractModule implements
         $ef = Registry::elementFactory();
 
         /*
-        //make sure Gedcom-L tags are available even if the respective module isn't active
+        //make sure Gedcom-L tags are available even if the preference isn't checked
         //
         //this is no longer required - they are always available now!
         //see Gedcom.php
         //(but not always for editing, see customSubTags() in Gedcom.php)
-        
-        $gedcomL = $this->module_service->findByInterface(CustomTagsGedcomL::class)->first();
-        if ($gedcomL === null) {
-            $gedcomL = new CustomTagsGedcomL();
-            $customTags = $gedcomL->customTags();
-            
-            //must not register _LOC:_GOV though - Gov4Webtrees has a special edit control for this
-            unset($customTags['_LOC:_GOV']);
-            
-            $ef->register($customTags);
-            
-            foreach ($gedcomL->customSubTags() as $tag => $children) {
-                foreach ($children as $child) {
-                    $ef->make($tag)->subtag(...$child);
-                }
-            }
-        }
         */
       
         //but we need more (this partially overlaps with customSubTags() in Gedcom.php)
+        $ef->registerSubTags($this->customSubTags());
+        /*
         foreach ($this->customSubTags() as $tag => $children) {
             $element = $ef->make($tag);
             foreach ($children as $child) {
                 $element->subtag(...$child);
             }
         }
+        */
       
         //for now, keep established terminology for specific tags      
         $ef->registerTags([
+            //redundant, we swap translation globally anyway!
             'INDI:*:PLAC:_LOC' => new XrefSharedPlace(I18N::translate('Shared place')),
+            //redundant, we swap translation globally anyway!
             'FAM:*:PLAC:_LOC' => new XrefSharedPlace(I18N::translate('Shared place')),
 
+            //redundant, we swap translation globally anyway!
+            'SOUR:DATA:EVEN:PLAC:_LOC' => new XrefSharedPlace(I18N::translate('Shared place')),
+            
+            //redundant, we swap translation globally anyway!
             '_LOC' => new LocationRecord(I18N::translate('Shared place')),
 
             //'Place' seems confusing here - if hierarchical shared places are used, this should be just one part of the place name
@@ -399,13 +406,11 @@ class SharedPlacesModule extends AbstractModule implements
         $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 4);
     }
   
-    //this should probably be in CustomTagsGedcomL, see also 
-    //https://github.com/fisharebest/webtrees/issues/4251
+    //this should probably be in Gedcom::gedcomLTags
     /**
      * @return array<string,array<int,array<int,string>>>
      */
-    public function customSubTags(): array
-    {
+    protected function customSubTags(): array {
         return [
             'FAM:*:PLAC' => [['_LOC', '0:1']],
             'INDI:*:PLAC' => [['_LOC', '0:1']],
@@ -555,7 +560,7 @@ class SharedPlacesModule extends AbstractModule implements
     public function linkIcon($view, $title, $url) {
         return '<a href="' . $url . '" rel="nofollow" title="' . $title . '">' .
             view($view) .
-            '<span class="sr-only">' . $title . '</span>' .
+            '<span class="visually-hidden">' . $title . '</span>' .
             '</a>';
     }
   
