@@ -1,9 +1,17 @@
 <?php
 
+use Cissee\WebtreesExt\Module\ModuleVestalInterface;
 use Cissee\WebtreesExt\MoreI18N;
+use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
+use Vesta\CommonI18N;
+use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
+use Vesta\Model\FactFilter;
+use Vesta\Model\PlaceStructure;
+use Vesta\VestaUtils;
 
 //cf record-page-links.phtml
 
@@ -19,7 +27,37 @@ use Illuminate\Support\Collection;
  * @var ?Collection<int,Note>       $linked_notes
  * @var ?Collection<int,Source>     $linked_sources
  * @var Tree                        $tree
+ * 
+ * @var GedcomRecord                $record
+ * @var ModuleVestalInterface       $module
+ * 
+ * //$module must also provide getHelpAction for 'Predecessor'!
  */
+
+$factFilter = new class($module, $record) implements FactFilter {
+    
+    //gah painful
+    private $module;
+    private $record;
+
+    public function __construct($module, $record) {
+        $this->module = $module;
+        $this->record = $record;
+    }
+    
+    //performance doesn't look great
+    public function filter(Fact $fact): bool {
+        $ps = PlaceStructure::fromFact($fact);
+        if ($ps === null) {
+            return false;
+        }
+        $loc = FunctionsPlaceUtils::plac2loc($this->module, $ps, false);
+        if ($loc === null) {
+            return false;
+        }
+        return ($loc->getXref() === $this->record->xref());
+    }
+};
 
 ?>
 
@@ -83,6 +121,12 @@ use Illuminate\Support\Collection;
             </a>
         </li>
     <?php endif ?>
+        
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" data-bs-toggle="tab" role="tab" href="#placeHistory">
+            <?= CommonI18N::placeHistory() ?>
+        </a>
+    </li>
 </ul>
 
 <div class="tab-content">
@@ -125,4 +169,14 @@ use Illuminate\Support\Collection;
             <?= view('lists/notes-table', ['notes' => $linked_notes, 'tree' => $tree]) ?>
         </div>
     <?php endif ?>
+    
+    <div class="tab-pane fade" role="tabpanel" id="placeHistory">
+        <?= view(VestaUtils::vestaViewsNamespace() . '::lists/place-history', [
+            'individuals' => $linked_individuals, 
+            'record' => $record, 
+            'factFilter' => $factFilter,
+            'tree' => $tree,
+            'context' => 'sp',
+            'module' => $module]) ?>
+    </div>
 </div>

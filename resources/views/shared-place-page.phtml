@@ -1,5 +1,6 @@
 <?php
 
+use Cissee\WebtreesExt\Module\ModuleVestalInterface;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
@@ -22,6 +23,10 @@ use Illuminate\Support\Collection;
  * 
  * @var string $hierarchyHtml
  * @var string $summaryHtml
+ * 
+ * @var ModuleVestalInterface           $module
+ * 
+ * //$module must also provide getHelpAction for 'Predecessor'!
  */
 
 ?>
@@ -53,6 +58,9 @@ use Illuminate\Support\Collection;
             'linked_notes'         => $linked_notes,
             'linked_sources'       => $linked_sources,
             'tree'                 => $tree,
+            
+            'record'               => $record,
+            'module'               => $module,
         ]) ?>
     <?php else : ?>
         <?= view($moduleName . '::shared-place-page-details', [
@@ -64,6 +72,6 @@ use Illuminate\Support\Collection;
 </div>
 
 <?php
-  //this may not actually be required - we're not using any modals, or are we?
+//for help link
 ?>
 <?= view('modals/ajax') ?>

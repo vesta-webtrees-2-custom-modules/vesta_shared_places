@@ -19,6 +19,8 @@ use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Http\RequestHandlers\TomSelectLocation;
 use Cissee\WebtreesExt\Module\ModuleMetaInterface;
 use Cissee\WebtreesExt\Module\ModuleMetaTrait;
+use Cissee\WebtreesExt\Module\ModuleVestalInterface;
+use Cissee\WebtreesExt\Module\ModuleVestalTrait;
 use Cissee\WebtreesExt\MoreI18N;
 use Cissee\WebtreesExt\PlaceViaSharedPlace;
 use Cissee\WebtreesExt\Requests;
@@ -101,7 +103,8 @@ class SharedPlacesModule extends AbstractModule implements
     ModuleListInterface, 
     ModuleConfigInterface, 
     ModuleGlobalInterface, 
-    ModuleDataFixInterface,
+    ModuleDataFixInterface, 
+    ModuleVestalInterface,
     IndividualFactsTabExtenderInterface, 
     FunctionsPlaceInterface,
     PrintFunctionsPlaceInterface,
@@ -109,7 +112,7 @@ class SharedPlacesModule extends AbstractModule implements
     PlaceHierarchyParticipant, 
     RequestHandlerInterface {
 
-    use ModuleCustomTrait, ModuleMetaTrait, ModuleListTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait, ModuleDataFixTrait {
+    use ModuleCustomTrait, ModuleMetaTrait, ModuleListTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait, ModuleDataFixTrait, ModuleVestalTrait {
         VestaModuleTrait::customTranslations insteadof ModuleCustomTrait;
         VestaModuleTrait::getAssetAction insteadof ModuleCustomTrait;
         VestaModuleTrait::assetUrl insteadof ModuleCustomTrait;    

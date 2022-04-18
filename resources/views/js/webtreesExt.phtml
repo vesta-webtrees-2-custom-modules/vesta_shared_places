@@ -52,7 +52,15 @@ webtrees.initializeTomSelectLocation = function (element) {
           item: (data, escape) => '<div>' + data.text + '</div>',
           option: (data, escape) => '<div>' + data.text + '</div>',
         },        
-        firstUrl: query => element.dataset.url + '&query=' + encodeURIComponent(query),
+        firstUrl: function(query) {
+            <?php
+            //safer to use api. Do not encodeURIComponent, that's done internally!
+            ?>
+            var url_ = new URL(element.dataset.url);
+            url_.searchParams.set('query', query);
+            
+            return url_.href;
+        },
         load: function (query, callback) {
             var baseQuery = this.getUrl(query);
             <?php
