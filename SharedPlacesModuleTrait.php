@@ -25,8 +25,8 @@ trait SharedPlacesModuleTrait {
 
   public function getShortDescription() {
     return
-            I18N::translate('A module providing support for shared places.') . ' ' .
-            I18N::translate('Replacement for the original \'Locations\' module.');
+            I18N::translate('A module providing support for shared places.')/* . ' ' .
+            I18N::translate('Replacement for the original \'Locations\' module.')*/;
   }
 
   protected function getFullDescription() {
@@ -36,7 +36,7 @@ trait SharedPlacesModuleTrait {
     $description = array();    
     //TODO add link to https://genealogy.net/GEDCOM/
     $description[] = /* I18N: Module Configuration */I18N::translate('A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended \'Facts and events\' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module.');
-    $description[] = /* I18N: Module Configuration */I18N::translate('Replaces the original \'Locations\' module.');
+    /*$description[] =*/ /* I18N: Module Configuration *//*I18N::translate('Replaces the original \'Locations\' module.');*/
     $description[] = 
             CommonI18N::requires2(CommonI18N::titleVestaCommon(), CommonI18N::titleVestaPersonalFacts());
     $description[] = 

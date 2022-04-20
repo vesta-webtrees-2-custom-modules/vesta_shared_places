@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-06 21:17+0200\n"
+"POT-Creation-Date: 2022-04-20 21:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,33 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: HelpTexts.php:16
+#: HelpTexts.php:17
 msgid "Shared place summary"
 msgstr ""
 
-#: HelpTexts.php:18
+#: HelpTexts.php:19
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
 
-#: HelpTexts.php:19
+#: HelpTexts.php:20
 msgid "Therefore, the place name is displayed here including the full hierarchy."
 msgstr ""
 
-#: HelpTexts.php:20
+#: HelpTexts.php:21
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
 
-#: HelpTexts.php:26
+#: HelpTexts.php:27
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
 
-#: HelpTexts.php:27
+#: HelpTexts.php:28
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr ""
 
-#: HelpTexts.php:31 HelpTexts.php:41
+#: HelpTexts.php:31 HelpTexts.php:40
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
 
@@ -52,7 +52,7 @@ msgid "Place names should be entered as a comma-separated list, starting with th
 msgstr ""
 
 #: SharedPlacesListController.php:54 SharedPlacesListController.php:66
-#: SharedPlacesModule.php:152 SharedPlacesModule_20.php:162
+#: SharedPlacesModule.php:161 SharedPlacesModule_20.php:162
 #: resources/views/lists/locations-table.phtml:42
 #: resources/views/lists/shared-places-table_20.phtml:38
 #: resources/views/search-general-page-ext_20.phtml:99
@@ -60,60 +60,60 @@ msgstr ""
 msgid "Shared places"
 msgstr ""
 
-#: SharedPlacesModule.php:186 SharedPlacesModule_20.php:196
+#: SharedPlacesModule.php:201 SharedPlacesModule_20.php:196
 msgid "View Shared places hierarchy"
 msgstr ""
 
-#: SharedPlacesModule.php:188 SharedPlacesModule_20.php:198
+#: SharedPlacesModule.php:203 SharedPlacesModule_20.php:198
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:345 SharedPlacesModule_20.php:364
+#: SharedPlacesModule.php:363 SharedPlacesModule_20.php:364
 msgid "Location"
 msgstr ""
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:346
+#: SharedPlacesModule.php:364
 msgid "Locations"
 msgstr ""
 
-#: SharedPlacesModule.php:385 SharedPlacesModule.php:386
-#: SharedPlacesModule.php:388 SharedPlacesModule.php:551
-#: SharedPlacesModule_20.php:371 SharedPlacesModule_20.php:484
-#: resources/views/lists/locations-table.phtml:47
+#: SharedPlacesModule.php:390 SharedPlacesModule.php:392
+#: SharedPlacesModule.php:395 SharedPlacesModule.php:398
+#: SharedPlacesModule.php:559 SharedPlacesModule_20.php:371
+#: SharedPlacesModule_20.php:484 resources/views/lists/locations-table.phtml:47
 #: resources/views/lists/shared-places-table_20.phtml:43
 msgid "Shared place"
 msgstr ""
 
-#: SharedPlacesModule.php:393 SharedPlacesModule_20.php:376
+#: SharedPlacesModule.php:403 SharedPlacesModule_20.php:376
 msgid "Higher-level shared place"
 msgstr ""
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:395 SharedPlacesModule_20.php:378
+#: SharedPlacesModule.php:405 SharedPlacesModule_20.php:378
 msgid "Type of hierarchical relationship"
 msgstr ""
 
-#: SharedPlacesModule.php:396 SharedPlacesModule_20.php:379
+#: SharedPlacesModule.php:406 SharedPlacesModule_20.php:379
 msgid "GOV id for type of location"
 msgstr ""
 
-#: SharedPlacesModule.php:847 SharedPlacesModule_20.php:781
+#: SharedPlacesModule.php:855 SharedPlacesModule_20.php:781
 msgid "Shared place data"
 msgstr ""
 
-#: SharedPlacesModule.php:862 SharedPlacesModule_20.php:796
+#: SharedPlacesModule.php:870 SharedPlacesModule_20.php:796
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr ""
 
-#: SharedPlacesModule.php:863 SharedPlacesModule_20.php:797
+#: SharedPlacesModule.php:871 SharedPlacesModule_20.php:797
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
 
-#: SharedPlacesModule.php:950 SharedPlacesModule_20.php:884
+#: SharedPlacesModule.php:958 SharedPlacesModule_20.php:884
 msgid "shared places"
 msgstr ""
 
@@ -121,18 +121,9 @@ msgstr ""
 msgid "A module providing support for shared places."
 msgstr ""
 
-#: SharedPlacesModuleTrait.php:29
-msgid "Replacement for the original 'Locations' module."
-msgstr ""
-
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:38
 msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended 'Facts and events' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module."
-msgstr ""
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:39
-msgid "Replaces the original 'Locations' module."
 msgstr ""
 
 #. I18N: Module Configuration
@@ -572,7 +563,7 @@ msgstr ""
 msgid "The location of this shared place is not known."
 msgstr ""
 
-#: resources/views/shared-place-page-links.phtml:54
+#: resources/views/shared-place-page-links.phtml:92
 #: resources/views/shared-place-page_20.phtml:77
 msgid "Next lower-level shared places"
 msgstr ""

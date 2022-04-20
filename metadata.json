@@ -192,5 +192,10 @@
 		"from": "2.0.12",
 		"to": "2.1.0",
 		"changelog": ["Preview of place history functionality (webtrees 2.1 branch only)."]
+	},
+	{
+		"version": "2.1.0.0.0",
+		"from": "2.0.12",
+		"to": "2.1.1"
 	}
 ]

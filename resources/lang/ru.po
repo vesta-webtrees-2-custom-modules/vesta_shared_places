@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-06 21:17+0200\n"
+"POT-Creation-Date: 2022-04-20 21:33+0200\n"
 "PO-Revision-Date: 2022-04-05 07:39+0000\n"
 "Last-Translator: Олег <uolega@yandex.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/ru/>\n"
@@ -29,12 +29,12 @@ msgstr " (Примечание: были также созданы %s общих
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Примечание: также было создано общее место более высокого уровня)"
 
-#: SharedPlacesModule.php:863 SharedPlacesModule_20.php:797
+#: SharedPlacesModule.php:871 SharedPlacesModule_20.php:797
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr "%s, а также лица и семьи, которые ссылаются на него, включая родителей, братьев и сестер, супругов и детей каждого человека."
 
-#: SharedPlacesModule.php:862 SharedPlacesModule_20.php:796
+#: SharedPlacesModule.php:870 SharedPlacesModule_20.php:796
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s, а также лица и семьи, которые на него ссылаются."
@@ -114,7 +114,7 @@ msgstr "Исправление данных"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Определение количества ссылок (связанных отдельных лиц / семей) является дорогостоящим при назначении общих мест по имени и, следовательно, вызывает задержки при отображении списка общих мест. Рекомендуется выбирать этот вариант только в том случае, если места назначаются через внешние ссылки."
 
-#: SharedPlacesModule.php:188 SharedPlacesModule_20.php:198
+#: SharedPlacesModule.php:203 SharedPlacesModule_20.php:198
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Включите модуль карты Vesta Places и Pedigree, чтобы просмотреть иерархию общих мест."
 
@@ -132,7 +132,7 @@ msgstr "Факты для общих записей мест"
 msgid "Filter to unique shared places"
 msgstr "Фильтр по уникальным общим местам"
 
-#: SharedPlacesModule.php:396 SharedPlacesModule_20.php:379
+#: SharedPlacesModule.php:406 SharedPlacesModule_20.php:379
 msgid "GOV id for type of location"
 msgstr "Идентификатор GOV для типа местоположения"
 
@@ -140,7 +140,7 @@ msgstr "Идентификатор GOV для типа местоположен�
 msgid "Hierarchize Shared Places"
 msgstr "Иерархия общих мест"
 
-#: SharedPlacesModule.php:393 SharedPlacesModule_20.php:376
+#: SharedPlacesModule.php:403 SharedPlacesModule_20.php:376
 msgid "Higher-level shared place"
 msgstr "Общее место более высокого уровня"
 
@@ -219,12 +219,12 @@ msgid "Linking of shared places to places"
 msgstr "Связывание общих мест с местами"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:345 SharedPlacesModule_20.php:364
+#: SharedPlacesModule.php:363 SharedPlacesModule_20.php:364
 msgid "Location"
 msgstr "Место расположения"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:346
+#: SharedPlacesModule.php:364
 msgid "Locations"
 msgstr "Места"
 
@@ -247,7 +247,7 @@ msgstr "При необходимости создаются отсутству�
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "При необходимости создаются отсутствующие общие места. Чтобы это работало без потенциального создания дубликатов, вы должны установить флажок «Автоматически принимать изменения, сделанные этим пользователем» в администрировании пользователей, по крайней мере, на время этого исправления данных."
 
-#: resources/views/shared-place-page-links.phtml:54
+#: resources/views/shared-place-page-links.phtml:92
 #: resources/views/shared-place-page_20.phtml:77
 msgid "Next lower-level shared places"
 msgstr "Следующие общие места нижнего уровня"
@@ -266,7 +266,7 @@ msgstr "Обратите внимание, что это также влияет
 msgid "Note:"
 msgstr "Примечание:"
 
-#: HelpTexts.php:31 HelpTexts.php:41
+#: HelpTexts.php:31 HelpTexts.php:40
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr "Названия мест могут со временем меняться. Вы можете добавить несколько имен к общему месту и указать исторические имена через подходящий диапазон дат."
 
@@ -274,7 +274,7 @@ msgstr "Названия мест могут со временем менять�
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr "Названия мест следует вводить в виде списка, разделенного запятыми, начиная с наименьшего места и заканчивая страной. Например, «Вестминстер, Лондон, Англия»."
 
-#: HelpTexts.php:26
+#: HelpTexts.php:27
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr "Названия мест следует вводить как одно название места (не используйте здесь список, разделенный запятыми)."
 
@@ -287,15 +287,6 @@ msgstr "Краткие факты о совместных местах"
 #: SharedPlacesModuleTrait.php:196
 msgid "Reference year"
 msgstr "Базовый год"
-
-#: SharedPlacesModuleTrait.php:29
-msgid "Replacement for the original 'Locations' module."
-msgstr "Замена оригинального модуля «Локации»."
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:39
-msgid "Replaces the original 'Locations' module."
-msgstr "Заменяет исходный модуль «Местоположения»."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:148
@@ -313,15 +304,15 @@ msgstr "Подробнее см. %1$s."
 msgid "Shared Places"
 msgstr "Общие места"
 
-#: SharedPlacesModule.php:385 SharedPlacesModule.php:386
-#: SharedPlacesModule.php:388 SharedPlacesModule.php:551
-#: SharedPlacesModule_20.php:371 SharedPlacesModule_20.php:484
-#: resources/views/lists/locations-table.phtml:47
+#: SharedPlacesModule.php:390 SharedPlacesModule.php:392
+#: SharedPlacesModule.php:395 SharedPlacesModule.php:398
+#: SharedPlacesModule.php:559 SharedPlacesModule_20.php:371
+#: SharedPlacesModule_20.php:484 resources/views/lists/locations-table.phtml:47
 #: resources/views/lists/shared-places-table_20.phtml:43
 msgid "Shared place"
 msgstr "Общее место"
 
-#: SharedPlacesModule.php:847 SharedPlacesModule_20.php:781
+#: SharedPlacesModule.php:855 SharedPlacesModule_20.php:781
 msgid "Shared place data"
 msgstr "Общие данные о месте"
 
@@ -353,12 +344,12 @@ msgstr "Страница общего места"
 msgid "Shared place structure"
 msgstr "Структура общего места"
 
-#: HelpTexts.php:16
+#: HelpTexts.php:17
 msgid "Shared place summary"
 msgstr "Краткое описание общего места"
 
 #: SharedPlacesListController.php:54 SharedPlacesListController.php:66
-#: SharedPlacesModule.php:152 SharedPlacesModule_20.php:162
+#: SharedPlacesModule.php:161 SharedPlacesModule_20.php:162
 #: resources/views/lists/locations-table.phtml:42
 #: resources/views/lists/shared-places-table_20.phtml:38
 #: resources/views/search-general-page-ext_20.phtml:99
@@ -414,7 +405,7 @@ msgstr "Общее место %s уже существует."
 msgid "The shared place %s has been created."
 msgstr "Общее место %s создано."
 
-#: HelpTexts.php:18
+#: HelpTexts.php:19
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr "Сводка показывает данные общего места, отформатированные таким же образом, как и для событий с местом, сопоставленным с соответствующим общим местом."
 
@@ -432,7 +423,7 @@ msgstr "Доступны различные исправления данных.
 msgid "There is a data fix available which may be used to convert existing shared places."
 msgstr "Доступно исправление данных, которое можно использовать для преобразования существующих общих мест."
 
-#: HelpTexts.php:19
+#: HelpTexts.php:20
 msgid "Therefore, the place name is displayed here including the full hierarchy."
 msgstr "Поэтому здесь отображается название места, включая полную иерархию."
 
@@ -518,7 +509,7 @@ msgid "This tree has shared places with comma-separated name parts, while at the
 msgstr "В этом дереве есть общие места с частями имени, разделенными запятыми, и в то же время выбрана опция «Использовать иерархические общие места»."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:395 SharedPlacesModule_20.php:378
+#: SharedPlacesModule.php:405 SharedPlacesModule_20.php:378
 msgid "Type of hierarchical relationship"
 msgstr "Тип иерархических отношений"
 
@@ -536,12 +527,12 @@ msgstr "Уникальные факты об общих местах"
 msgid "Use hierarchical shared places"
 msgstr "Используйте иерархические общие места"
 
-#: HelpTexts.php:27
+#: HelpTexts.php:28
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Используйте отдельный тег «%1$s» для моделирования иерархии мест."
 
-#: SharedPlacesModule.php:186 SharedPlacesModule_20.php:196
+#: SharedPlacesModule.php:201 SharedPlacesModule_20.php:196
 msgid "View Shared places hierarchy"
 msgstr "Просмотр иерархии общих мест"
 
@@ -555,7 +546,7 @@ msgstr "Когда отмечен предыдущий параметр и не 
 msgid "When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated name parts."
 msgstr "Если этот флажок не установлен, используется первый подход, в котором иерархии только намекаются с помощью общих имен мест с разделенными запятыми частями имен."
 
-#: HelpTexts.php:20
+#: HelpTexts.php:21
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr "Вы можете установить базовый год (который может оцениваться другими модулями, такими как %1$s) в конфигурации модуля."
@@ -589,7 +580,7 @@ msgstr "Другие"
 msgid "religious"
 msgstr "религия"
 
-#: SharedPlacesModule.php:950 SharedPlacesModule_20.php:884
+#: SharedPlacesModule.php:958 SharedPlacesModule_20.php:884
 msgid "shared places"
 msgstr "общие места"
 
@@ -606,6 +597,12 @@ msgstr "Да, но только первое появление общего м�
 
 #~ msgid "Private"
 #~ msgstr "Частный"
+
+#~ msgid "Replacement for the original 'Locations' module."
+#~ msgstr "Замена оригинального модуля «Локации»."
+
+#~ msgid "Replaces the original 'Locations' module."
+#~ msgstr "Заменяет исходный модуль «Местоположения»."
 
 #~ msgid "no"
 #~ msgstr "нет"

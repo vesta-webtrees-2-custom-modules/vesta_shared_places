@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-06 21:17+0200\n"
+"POT-Creation-Date: 2022-04-20 21:33+0200\n"
 "PO-Revision-Date: 2021-04-12 20:21+0000\n"
 "Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/nb_NO/>\n"
@@ -29,12 +29,12 @@ msgstr " (Merk:%s delte steder på høyere nivå er også opprettet)"
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Merk: Det er også opprettet et delt sted på høyere nivå)"
 
-#: SharedPlacesModule.php:863 SharedPlacesModule_20.php:797
+#: SharedPlacesModule.php:871 SharedPlacesModule_20.php:797
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
 
-#: SharedPlacesModule.php:862 SharedPlacesModule_20.php:796
+#: SharedPlacesModule.php:870 SharedPlacesModule_20.php:796
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s og personene og familiene som viser til den."
@@ -114,7 +114,7 @@ msgstr "Datakorrigering"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Det er tungvindt å bestemme antall lenker (knyttet person / familie) når man tildeler delte steder via navn, og forårsaker derfor forsinkelser når listen over delte steder vises. Det anbefales å bare velge dette alternativet hvis steder er tildelt via XREF-er."
 
-#: SharedPlacesModule.php:188 SharedPlacesModule_20.php:198
+#: SharedPlacesModule.php:203 SharedPlacesModule_20.php:198
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Aktiver Vesta Steder og Stamtavle-modulen for å se strukturen av delte steder."
 
@@ -132,7 +132,7 @@ msgstr "Fakta for delt stedpost"
 msgid "Filter to unique shared places"
 msgstr "Filtrer til unike delte steder"
 
-#: SharedPlacesModule.php:396 SharedPlacesModule_20.php:379
+#: SharedPlacesModule.php:406 SharedPlacesModule_20.php:379
 #, fuzzy
 msgid "GOV id for type of location"
 msgstr "GOV-ID for stedstypen"
@@ -141,7 +141,7 @@ msgstr "GOV-ID for stedstypen"
 msgid "Hierarchize Shared Places"
 msgstr "Opprett hierarki/struktur av delte steder"
 
-#: SharedPlacesModule.php:393 SharedPlacesModule_20.php:376
+#: SharedPlacesModule.php:403 SharedPlacesModule_20.php:376
 msgid "Higher-level shared place"
 msgstr "Delt sted på overodnet nivå"
 
@@ -221,12 +221,12 @@ msgid "Linking of shared places to places"
 msgstr "Kobling av delte steder til steder"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:345 SharedPlacesModule_20.php:364
+#: SharedPlacesModule.php:363 SharedPlacesModule_20.php:364
 msgid "Location"
 msgstr "Sted"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:346
+#: SharedPlacesModule.php:364
 msgid "Locations"
 msgstr ""
 
@@ -249,7 +249,7 @@ msgstr "Manglende delte steder på høyere nivå opprettes om nødvendig. For at
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "Manglende delte steder opprettes om nødvendig. For at dette skal fungere uten potensielt å opprette duplikater, må du merke av for \"Godta automatisk endringer gjort av denne brukeren\" i brukeradministrasjonen, i det minste i løpet av denne datakorrigeringen."
 
-#: resources/views/shared-place-page-links.phtml:54
+#: resources/views/shared-place-page-links.phtml:92
 #: resources/views/shared-place-page_20.phtml:77
 msgid "Next lower-level shared places"
 msgstr "Neste delte steder på lavere nivå"
@@ -268,7 +268,7 @@ msgstr "Merk at dette også påvirker måten delte steder lages, og måten de bl
 msgid "Note:"
 msgstr "Notat:"
 
-#: HelpTexts.php:31 HelpTexts.php:41
+#: HelpTexts.php:31 HelpTexts.php:40
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr "Stedsnavn kan endres over tid. Du kan legge til flere navn til et delt sted og indikere historiske navn ved hjelp av et passende datointervall."
 
@@ -276,7 +276,7 @@ msgstr "Stedsnavn kan endres over tid. Du kan legge til flere navn til et delt s
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr "Stedsnavn må registreres som en kommaseparert liste, med det laveste stedsnavn-nivået først og landnavnet til slutt. For eksempel “Westminster, London, England”."
 
-#: HelpTexts.php:26
+#: HelpTexts.php:27
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr "Stedsnavn må registreres som et enkelt stedsnavn (ikke bruk kommaseparert liste her)."
 
@@ -289,15 +289,6 @@ msgstr "Hurtigfakta om delte steder"
 #: SharedPlacesModuleTrait.php:196
 msgid "Reference year"
 msgstr ""
-
-#: SharedPlacesModuleTrait.php:29
-msgid "Replacement for the original 'Locations' module."
-msgstr "Erstatning av den opprinelige stedsmodulen."
-
-#. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:39
-msgid "Replaces the original 'Locations' module."
-msgstr "Erstatter den opprinnelige stedsmodulen."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:148
@@ -315,15 +306,15 @@ msgstr "Se %1$s for detaljer."
 msgid "Shared Places"
 msgstr ""
 
-#: SharedPlacesModule.php:385 SharedPlacesModule.php:386
-#: SharedPlacesModule.php:388 SharedPlacesModule.php:551
-#: SharedPlacesModule_20.php:371 SharedPlacesModule_20.php:484
-#: resources/views/lists/locations-table.phtml:47
+#: SharedPlacesModule.php:390 SharedPlacesModule.php:392
+#: SharedPlacesModule.php:395 SharedPlacesModule.php:398
+#: SharedPlacesModule.php:559 SharedPlacesModule_20.php:371
+#: SharedPlacesModule_20.php:484 resources/views/lists/locations-table.phtml:47
 #: resources/views/lists/shared-places-table_20.phtml:43
 msgid "Shared place"
 msgstr "Delt sted"
 
-#: SharedPlacesModule.php:847 SharedPlacesModule_20.php:781
+#: SharedPlacesModule.php:855 SharedPlacesModule_20.php:781
 msgid "Shared place data"
 msgstr "Informasjon om delt sted"
 
@@ -355,12 +346,12 @@ msgstr ""
 msgid "Shared place structure"
 msgstr "Delt sted-struktur"
 
-#: HelpTexts.php:16
+#: HelpTexts.php:17
 msgid "Shared place summary"
 msgstr "Oppsummering delte steder"
 
 #: SharedPlacesListController.php:54 SharedPlacesListController.php:66
-#: SharedPlacesModule.php:152 SharedPlacesModule_20.php:162
+#: SharedPlacesModule.php:161 SharedPlacesModule_20.php:162
 #: resources/views/lists/locations-table.phtml:42
 #: resources/views/lists/shared-places-table_20.phtml:38
 #: resources/views/search-general-page-ext_20.phtml:99
@@ -416,7 +407,7 @@ msgstr "Delt sted %s eksisterer allerede."
 msgid "The shared place %s has been created."
 msgstr "Det delte stedet%s er opprettet."
 
-#: HelpTexts.php:18
+#: HelpTexts.php:19
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr "Oppsummeringen viser data om delte steder, formattert på samme måte som for hendelser med et sted mappet til det respektive delte stedet."
 
@@ -434,7 +425,7 @@ msgstr "Det er forskjellige datakorrigeringer tilgjengelig."
 msgid "There is a data fix available which may be used to convert existing shared places."
 msgstr "En dataoppretter er tilgjengelig som kan brukes til å konvertere eksisterende delte steder."
 
-#: HelpTexts.php:19
+#: HelpTexts.php:20
 msgid "Therefore, the place name is displayed here including the full hierarchy."
 msgstr "Stedsnavnet er derfor vist her inkludert fullt hierarki."
 
@@ -520,7 +511,7 @@ msgid "This tree has shared places with comma-separated name parts, while at the
 msgstr "Dette treet har delte steder med kommadelte navnedeler, samtidig som alternativet «Bruk hierarkiske delte steder» er valgt."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:395 SharedPlacesModule_20.php:378
+#: SharedPlacesModule.php:405 SharedPlacesModule_20.php:378
 msgid "Type of hierarchical relationship"
 msgstr "Struktur-relasjonstype"
 
@@ -538,12 +529,12 @@ msgstr "Unike fakta om delte steder"
 msgid "Use hierarchical shared places"
 msgstr "Brukt strukturerte delte steder"
 
-#: HelpTexts.php:27
+#: HelpTexts.php:28
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Bruk den separate tag'en '%1$s' for å modellere et stedshierarki."
 
-#: SharedPlacesModule.php:186 SharedPlacesModule_20.php:196
+#: SharedPlacesModule.php:201 SharedPlacesModule_20.php:196
 msgid "View Shared places hierarchy"
 msgstr "Se struktur for delte steder"
 
@@ -557,7 +548,7 @@ msgstr "Når det forrige alternativet er krysset av, og det ikke blir funnet noe
 msgid "When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated name parts."
 msgstr "Når det ikke er merket av, brukes den tidligere tilnærmingen, der hierarkier bare antydes ved å bruke delte stedsnavn med komma-atskilte navnedeler."
 
-#: HelpTexts.php:20
+#: HelpTexts.php:21
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
@@ -591,7 +582,7 @@ msgstr "annet"
 msgid "religious"
 msgstr "religiøs"
 
-#: SharedPlacesModule.php:950 SharedPlacesModule_20.php:884
+#: SharedPlacesModule.php:958 SharedPlacesModule_20.php:884
 msgid "shared places"
 msgstr "delte steder"
 
@@ -614,6 +605,12 @@ msgstr "ja, men bare for den første forekomsten av delt sted"
 
 #~ msgid "Private"
 #~ msgstr "Privat"
+
+#~ msgid "Replacement for the original 'Locations' module."
+#~ msgstr "Erstatning av den opprinelige stedsmodulen."
+
+#~ msgid "Replaces the original 'Locations' module."
+#~ msgstr "Erstatter den opprinnelige stedsmodulen."
 
 #~ msgid "Show all shared places in a list"
 #~ msgstr "Vis alle delte steder i en liste"
