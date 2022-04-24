@@ -39,8 +39,8 @@ class CreateSharedPlaceModal implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $tree = Validator::attributes($request)->tree();
-        $sharedPlaceName = Validator::attributes($request)->string('shared', '');
-        $selector = Validator::attributes($request)->string('selector', '');
+        $sharedPlaceName = Validator::queryParams($request)->string('shared-place-name', '');
+        $selector = Validator::queryParams($request)->string('shared-place-name-selector', '');
         
         //requires modal placeholder in SharedPlacesListController.sharedPlacesList(), uargh
         //also requires modal placeholder in edit fact!

@@ -16,6 +16,7 @@ use Vesta\ControlPanelUtils\Model\ControlPanelRange;
 use Vesta\ControlPanelUtils\Model\ControlPanelSection;
 use Vesta\ControlPanelUtils\Model\ControlPanelSubsection;
 use Vesta\ControlPanelUtils\Model\ControlPanelTextbox;
+use Vesta\Model\PlaceHistory;
 
 trait SharedPlacesModuleTrait {
 
@@ -118,6 +119,7 @@ trait SharedPlacesModuleTrait {
                         '_LOC_FACTS_UNIQUE',
                         'MAP,_GOV')));
 
+            //this is prepared for in the modal, but apparently was never used
             //really not that useful currently
             /*
             $factsSub[] = new ControlPanelSubsection(
@@ -200,6 +202,15 @@ trait SharedPlacesModuleTrait {
                 false,
                 4,
                 '[1-2][0-9][0-9][0-9]')));
+    
+    $pageSub[] = new ControlPanelSubsection(
+            CommonI18N::placeHistory(),
+            array(
+                new ControlPanelFactRestriction(
+                    PlaceHistory::getPicklistFacts(), 
+                    CommonI18N::restrictPlaceHistory(),
+                    'RESTRICTED_PLACE_HISTORY',
+                    PlaceHistory::initialFactsStringForPreferences())));
 
     $hierarchySub = array();
     $hierarchySub[] = new ControlPanelSubsection(
@@ -217,7 +228,7 @@ trait SharedPlacesModuleTrait {
             $generalSub);
     
     if (str_starts_with(Webtrees::VERSION, '2.1')) {
-        
+        //TODO: support this again? 
     } else {        
         $sections[] = new ControlPanelSection(
                 /* I18N: Module Configuration */I18N::translate('Facts for shared place records'),
