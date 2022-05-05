@@ -208,5 +208,10 @@
 		"from": "2.0.12",
 		"to": "2.1.2",
 		"changelog": ["Place history functionality."]
+	},
+	{
+		"version": "2.1.2.0.0",
+		"from": "2.0.12",
+		"to": "2.1.3"
 	}
 ]

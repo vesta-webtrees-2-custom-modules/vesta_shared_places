@@ -36,7 +36,8 @@ class XrefSharedPlace extends AbstractXrefElement
      */
     public function edit(string $id, string $name, string $value, Tree $tree): string
     {
-        $select = view('components/select-location', [
+        //[RC] view adjusted
+        $select = view('components/select-location-ext', [
             'id'       => $id,
             'name'     => $name,
             'location' => Registry::locationFactory()->make(trim($value, '@'), $tree),

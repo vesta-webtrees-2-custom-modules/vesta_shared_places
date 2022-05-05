@@ -14,12 +14,13 @@ use Vesta\Model\GedcomDateInterval;
 use function array_filter;
 use function explode;
 
-//[RC] extended with 'date'
+//[RC] TomSelectLocation extended with 'date'
+//and renamed so that we can use class name for route
 
 /**
  * Autocomplete for locations.
  */
-class TomSelectLocation extends AbstractTomSelectWithDateHandler
+class TomSelectSharedPlace extends AbstractTomSelectWithDateHandler
 {
     protected SearchServiceExt $search_service;
 
@@ -52,8 +53,8 @@ class TomSelectLocation extends AbstractTomSelectWithDateHandler
             string $query, 
             int $offset, 
             int $limit, 
-            string $at): Collection
-    {
+            string $at): Collection {        
+        
         // Search by XREF
         $location = Registry::locationFactory()->make($query, $tree);
 

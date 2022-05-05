@@ -16,7 +16,7 @@ use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
-use Cissee\WebtreesExt\Http\RequestHandlers\TomSelectLocation;
+use Cissee\WebtreesExt\Http\RequestHandlers\TomSelectSharedPlace;
 use Cissee\WebtreesExt\Module\ModuleMetaInterface;
 use Cissee\WebtreesExt\Module\ModuleMetaTrait;
 use Cissee\WebtreesExt\Module\ModuleVestalInterface;
@@ -275,10 +275,14 @@ class SharedPlacesModule extends AbstractModule implements
             unset($existingRoutes[CreateLocationAction::class]);        
         }
       
-        //same with TomSelectLocation
+        //no - we register a TomSelectLocation route ourselves 
+        //(use to have name TomSelectLocation as well, that's changed now),
+        //but we still need the original select control e.g. for merge records
+        /*
         if (array_key_exists("Fisharebest\Webtrees\Http\RequestHandlers\TomSelectLocation", $existingRoutes)) {
             unset($existingRoutes["Fisharebest\Webtrees\Http\RequestHandlers\TomSelectLocation"]);        
         }
+        */
       
         //no longer required (webtrees #3786)
         //if (array_key_exists(SearchGeneralPage::class, $existingRoutes)) {
@@ -293,8 +297,7 @@ class SharedPlacesModule extends AbstractModule implements
 
         $router->get(LocationPage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
 
-        $router
-            ->get(static::class, static::ROUTE_URL, $this);
+        $router->get(static::class, static::ROUTE_URL, $this);
         
         //no longer required (webtrees #3786)
         //$router->get(SearchGeneralPage::class, '/tree/{tree}/search-general', SearchGeneralPageExt::class);    
@@ -351,12 +354,13 @@ class SharedPlacesModule extends AbstractModule implements
         // Location support, some of this overlaps with webtrees core now
       
         //note that webtrees now (starting 2.0.16) also defines this view!
-        //still easier to use our view everywhere
-        View::registerCustomView('::components/select-location', $this->name() . '::components/select-location');
+        //still easier to use our view, but not everywhere (i.e. not when merging records)
+        //used via XrefSharedPlace
+        View::registerCustomView('::components/select-location-ext', $this->name() . '::components/select-location');
       
         View::registerCustomView('::selects/location', $this->name() . '::selects/location');
       
-        $router->get(TomSelectLocation::class, '/tree/{tree}/tom-select-location', TomSelectLocation::class);
+        $router->get(TomSelectSharedPlace::class, '/tree/{tree}/tom-select-shared-place', TomSelectSharedPlace::class);
       
         ////////////////////////////////////////////////////////////////////////////
       

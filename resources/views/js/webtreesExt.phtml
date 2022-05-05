@@ -3,7 +3,7 @@
 ?>
 
 <script>
-webtrees.initializeTomSelectLocation = function (element) {
+webtrees.initializeTomSelectSharedPlace = function (element) {
     if (element.tomselect) {
       return element.tomselect;
     }
@@ -107,7 +107,7 @@ webtrees.initializeTomSelectLocation = function (element) {
 }
 
 $(function () {
-    document.querySelectorAll('.tom-select-location').forEach(element => webtrees.initializeTomSelectLocation(element));
+    document.querySelectorAll('.tom-select-shared-place').forEach(element => webtrees.initializeTomSelectSharedPlace(element));
 });
 </script>
 

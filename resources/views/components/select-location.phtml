@@ -1,6 +1,6 @@
 <?php
 
-use Cissee\WebtreesExt\Http\RequestHandlers\TomSelectLocation;
+use Cissee\WebtreesExt\Http\RequestHandlers\TomSelectSharedPlace;
 use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Tree;
 
@@ -15,15 +15,15 @@ use Fisharebest\Webtrees\Tree;
 
 $at = $at ?? '';
 
-//use a special tom-select-location,
+//use a special tom-select-shared-place,
 //respective script is in js/webtreesExt.phtml
 
 ?>
 
 <select
     autocomplete="off"
-    class="form-select tom-select-location <?= $class ?? '' ?>"
-    data-url="<?= e(route(TomSelectLocation::class, ['tree' => $tree->name(), 'at' => $at])) ?>"
+    class="form-select tom-select-shared-place <?= $class ?? '' ?>"
+    data-url="<?= e(route(TomSelectSharedPlace::class, ['tree' => $tree->name(), 'at' => $at])) ?>"
     id="<?= e($id ?? $name) ?>"
     name="<?= e($name) ?>"
     <?= ($disabled ?? false) ? 'disabled="disabled"' : '' ?>
