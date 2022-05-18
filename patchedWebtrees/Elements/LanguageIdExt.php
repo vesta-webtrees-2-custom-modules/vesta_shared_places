@@ -35,6 +35,7 @@ use Fisharebest\Localization\Locale\LocaleHi;
 use Fisharebest\Localization\Locale\LocaleHu;
 use Fisharebest\Localization\Locale\LocaleHy;
 use Fisharebest\Localization\Locale\LocaleId;
+use Fisharebest\Localization\Locale\LocaleInterface;
 use Fisharebest\Localization\Locale\LocaleIs;
 use Fisharebest\Localization\Locale\LocaleIt;
 use Fisharebest\Localization\Locale\LocaleJa;
@@ -75,6 +76,8 @@ use Fisharebest\Localization\Locale\LocaleUr;
 use Fisharebest\Localization\Locale\LocaleVi;
 use Fisharebest\Localization\Locale\LocaleYi;
 use Fisharebest\Localization\Locale\LocaleYue;
+use Illuminate\Support\Collection;
+use function strtoupper;
 
 class LanguageIdExt
 {
@@ -178,4 +181,19 @@ class LanguageIdExt
 
         return $values;
     }
+    
+    public static function valuesWithUpperCasedKeys(): array {
+        $locales = LanguageIdExt::values();
+        
+        $coll = new Collection($locales);
+        
+        $values = $coll
+            ->mapWithKeys(static function (LocaleInterface $locale, string $key): array {
+                return [strtoupper($key) => $locale];
+            })
+            ->all();
+
+        return $values;
+    }
+        
 }

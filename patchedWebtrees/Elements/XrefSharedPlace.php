@@ -54,7 +54,7 @@ class XrefSharedPlace extends AbstractXrefElement
         
         return
             '<div class="input-group">' .
-            '<button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-backdrop="static" data-bs-target="#wt-ajax-modal" data-wt-href="' . e($route) . '" data-wt-select-id="' . $id . '" title="' . I18N::translate('Create a shared place') . '">' .
+            '<button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-backdrop="static" data-bs-target="#wt-ajax-modal-vesta" data-wt-href="' . e($route) . '" data-wt-select-id="' . $id . '" title="' . I18N::translate('Create a shared place') . '">' .
             view('icons/add') .
             '</button>' .
             $select .

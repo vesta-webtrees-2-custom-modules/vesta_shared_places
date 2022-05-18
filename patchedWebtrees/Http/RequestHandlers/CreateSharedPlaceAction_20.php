@@ -62,7 +62,7 @@ class CreateSharedPlaceAction_20 implements RequestHandlerInterface
             if ($ref->created() === 2) {
               $html = ' ' . I18N::translate(' (Note: A higher-level shared place has also been created)');
             } else if ($ref->created() > 2) {
-               $html = ' ' . I18N::translate(' (Note: %s higher-level shared places have also been created)', $ref->created());
+               $html = ' ' . I18N::translate(' (Note: %s higher-level shared places have also been created)', $ref->created()-1);
             }
           
             // id and text are for select2 / autocomplete

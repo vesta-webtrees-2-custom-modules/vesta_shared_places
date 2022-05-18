@@ -94,7 +94,7 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
                     //see https://github.com/orchidjs/tom-select/discussions/143
                     ?>
                     data = this.options[id];
-                    firstPlacInput.value = data.title;
+                    firstPlacInput.value = data.title; //coming from tom select, or from create shared place modal
                 } else {
                     console.log("PLAC is locked. Reset manually to unlock.");
                 }
@@ -109,6 +109,72 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
 $(function () {
     document.querySelectorAll('.tom-select-shared-place').forEach(element => webtrees.initializeTomSelectSharedPlace(element));
 });
+
+  /**
+   * Reset a tom-select input to have a single selected option
+   * @param {TomSelect} tomSelect
+   * @param {string} value
+   * @param {string} text
+   * @param {string} title
+   */
+  webtrees.resetTomSelectVesta = function (tomSelect, value, text, title) {
+    tomSelect.clear(true);
+    tomSelect.clearOptions();
+    tomSelect.addOption({ value: value, text: text , title: title });
+    tomSelect.refreshOptions();
+    tomSelect.addItem(value, true);
+    tomSelect.refreshItems();
+  };
+  
+  /**
+   * Save a form using ajax, for use in modals
+   *
+   * @param {Event} event
+   */
+  webtrees.createRecordModalVestaSubmit = function (event) {
+    event.preventDefault();
+    const form = event.target;
+    <?php
+    //[RC] adjusted
+    ?>
+    const modal = document.getElementById('wt-ajax-modal-vesta')
+    const modal_content = modal.querySelector('.modal-content');
+    const select = document.getElementById(modal_content.dataset.wtSelectId);
+
+    webtrees.httpPost(form.action, new FormData(form))
+      .then(async(response) => {
+        <?php
+        //[RC] adjusted
+        //https://learnwithparam.com/blog/how-to-handle-fetch-errors/
+        //plus
+        //https://stackoverflow.com/questions/39297345/fetch-resolves-even-if-404
+        ?>
+        if (response.status >= 200 && response.status <= 299) {
+          return response.json();
+        } else {
+          const json = await response.json();
+          throw Error(json.html);
+        }
+      })
+      .then(json => {
+        if (select) {
+          // This modal was activated by the "create new" button in a select edit control.
+          <?php
+          //[RC] adjusted
+          ?>
+          webtrees.resetTomSelectVesta(select.tomselect, json.value, json.text, json.title);
+
+          bootstrap.Modal.getInstance(modal).hide();
+        } else {
+          // Show the success message in the existing modal.
+          modal_content.innerHTML = json.html;
+        }
+      })
+      .catch(error => {
+        modal_content.innerHTML = error.message;
+      });
+  };
+
 </script>
 
 

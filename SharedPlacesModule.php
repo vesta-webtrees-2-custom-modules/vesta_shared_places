@@ -2,9 +2,9 @@
 
 namespace Cissee\Webtrees\Module\SharedPlaces;
 
-use Aura\Router\RouterContainer;
 use Cissee\Webtrees\Module\SharedPlaces\HelpTexts;
 use Cissee\WebtreesExt\AbstractModule;
+use Cissee\WebtreesExt\Elements\LanguageIdReplacement;
 use Cissee\WebtreesExt\Elements\XrefSharedPlace;
 use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
 use Cissee\WebtreesExt\Functions\FunctionsPrintExt;
@@ -251,10 +251,14 @@ class SharedPlacesModule extends AbstractModule implements
         //webtrees isn't interested in solving this properly, see
         //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
 
+        /*
         $router_container = app(RouterContainer::class);
         assert($router_container instanceof RouterContainer);
         $router = $router_container->getMap();
+        */
       
+        $router = Registry::routeFactory()->routeMap();
+            
         //(cf WebRoutes.php "Visitor routes with a tree")
         //note: this format has the side effect of handling privacy properly (Issue #9)
         //from 2.0.12, use standard name with specific handler!
@@ -333,6 +337,9 @@ class SharedPlacesModule extends AbstractModule implements
         //plus adjustment for coordinates
         View::registerCustomView('::edit/fact-location-edit', $this->name() . '::edit/fact-location-edit');
         
+        //adjustment for ajax-modal-vesta
+        View::registerCustomView('::edit/edit-fact', $this->name() . '::edit/edit-fact');
+        
         $createSharedPlaceModal = new CreateSharedPlaceModal($this);
       
         $router->get(CreateSharedPlaceModal::class, '/tree/{tree}/create-location', $createSharedPlaceModal)
@@ -407,7 +414,10 @@ class SharedPlacesModule extends AbstractModule implements
             '_LOC:_LOC' => new XrefSharedPlace(I18N::translate('Higher-level shared place'), ['DATE' => '0:1', 'SOUR' => '0:M', 'TYPE' => '0:1']),
             //'_LOC:TYPE' => new CustomElement(I18N::translate('Type of location')), //anyway requires subtags!
             '_LOC:_LOC:TYPE' => new HierarchicalRelationship(I18N::translate('Type of hierarchical relationship')),
-            '_LOC:TYPE:_GOVTYPE' => new CustomElement(I18N::translate('GOV id for type of location'))          
+            '_LOC:TYPE:_GOVTYPE' => new CustomElement(I18N::translate('GOV id for type of location')),
+            
+            
+            '_LOC:NAME:LANG' => new LanguageIdReplacement(I18N::translate('Language')),
         ]);
       
         $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 4);

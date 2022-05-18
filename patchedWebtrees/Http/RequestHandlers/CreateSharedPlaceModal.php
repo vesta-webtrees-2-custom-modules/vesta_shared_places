@@ -43,7 +43,7 @@ class CreateSharedPlaceModal implements RequestHandlerInterface
         $selector = Validator::queryParams($request)->string('shared-place-name-selector', '');
         
         //requires modal placeholder in SharedPlacesListController.sharedPlacesList(), uargh
-        //also requires modal placeholder in edit fact!
+        //also requires modal placeholder in edit fact! meh.
         //also requires modal placeholder in SharedPlacesModule.hFactsTabGetAdditionalEditControls(),
         //handled via hFactsTabRequiresModalVesta!
         
