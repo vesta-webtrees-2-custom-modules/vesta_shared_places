@@ -543,10 +543,15 @@ class SharedPlacesModule extends AbstractModule implements
             return new GenericViewElement('', '');
         }
     
-        //ok to edit - does a shared place with this name already exist? Or does the PLAC have an explicit _LOC link?
+        //ok to edit - does a shared place with this name already exist? Or does the PLAC have an explicit _LOC link?        
         $ps = PlaceStructure::fromFact($fact);
         if ($ps !== null) {
             $sharedPlace = $this->plac2sharedPlace($ps);    
+        } else {
+            //Issue #123
+            //unexpected, cf earlier check ($fact->attribute('PLAC') === '')
+            //anyway moving on
+            return new GenericViewElement('', '');
         }
     
         if ($sharedPlace !== null) {

@@ -219,5 +219,10 @@
 		"from": "2.0.12",
 		"to": "2.1.3",
 		"changelog": ["Bugfixes (create shared place functionality)."]
+	},
+	{
+		"version": "2.1.2.1.1",
+		"from": "2.0.12",
+		"to": "2.1.3"
 	}
 ]
