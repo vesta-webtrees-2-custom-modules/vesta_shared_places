@@ -41,6 +41,7 @@ use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Location;
+use Fisharebest\Webtrees\Module\LocationListModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
@@ -297,11 +298,21 @@ class SharedPlacesModule extends AbstractModule implements
         //  unset($existingRoutes[SearchGeneralAction::class]);        
         //}
       
+        if (array_key_exists(LocationListModule::class, $existingRoutes)) {
+            unset($existingRoutes[LocationListModule::class]);        
+        }
+        
         $router->setRoutes($existingRoutes);
 
         $router->get(LocationPage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
 
         $router->get(static::class, static::ROUTE_URL, $this);
+        
+        //also redirect webtrees location-list, otherwise confusing to have to apparently similar lists
+        //(actual difference: create shared place button and other additions on top of actual list)
+        //(this makes our list menu entry somewhat redundant though)
+        //unset: see above
+        $router->get(LocationListModule::class, static::ROUTE_URL, $this);
         
         //no longer required (webtrees #3786)
         //$router->get(SearchGeneralPage::class, '/tree/{tree}/search-general', SearchGeneralPageExt::class);    

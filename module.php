@@ -18,7 +18,6 @@ if (defined("WT_MODULES_DIR")) {
 //note: in the current module system, this would happen anyway because all module.php's are executed
 //whenever a single module is loaded (assuming these autoload.php's are called by the respective module.php's)
 //so we aren't loading 'too much' here, as long as we properly filter 'disabled' modules, as in ModuleService.
-//DO NOT USE $file HERE! see Module.loadModule($file) - we must not change that var!
 
 //cf ModuleService        
 $pattern   = Webtrees::MODULES_DIR . '*/autoload.php';
@@ -49,8 +48,5 @@ if (!$ok) {
   return;
 }
 
-if (str_starts_with(Webtrees::VERSION, '2.1')) {
-    return app(SharedPlacesModule::class);
-}
-
-return app(SharedPlacesModule_20::class);
+$placeholder = app(PlaceholderModule::class);
+return $placeholder->ifIncompatible() ?? app(SharedPlacesModule::class);

@@ -13,7 +13,6 @@ use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\GedcomService;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Webtrees;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -798,14 +797,8 @@ class SharedPlace extends Location {
 
             $actualDate = $date;
             if ($date === null) {
-                if (str_starts_with(Webtrees::VERSION, '2.1')) {
-                    if (sizeof($self->getAllNames) > 0) {
-                        return $self->getAllNames;
-                    }
-                } else {
-                    if ($self->getAllNames !== null) {
-                        return $self->getAllNames;
-                    }
+                if (sizeof($self->getAllNames) > 0) {
+                    return $self->getAllNames;
                 }
 
                 //null was just for caching
@@ -1543,12 +1536,7 @@ class SharedPlace extends Location {
         parent::updateFact($fact_id, $gedcom, $update_chan);
 
         //reset cached data (buggy in webtrees, which leads to 'undefined offset' errors wrt names)
-        if (str_starts_with(Webtrees::VERSION, '2.1')) {
-            $this->getAllNames = [];
-        } else {
-            $this->getAllNames = null;
-        }
-
+        $this->getAllNames = [];
         $this->getPrimaryName = null;
         $this->getSecondaryName = null;
     }
@@ -1557,11 +1545,7 @@ class SharedPlace extends Location {
         parent::updateRecord($gedcom, $update_chan);
 
         //reset cached data (buggy in webtrees, which leads to 'undefined offset' errors wrt names)
-        if (str_starts_with(Webtrees::VERSION, '2.1')) {
-            $this->getAllNames = [];
-        } else {
-            $this->getAllNames = null;
-        }
+        $this->getAllNames = [];
         $this->getPrimaryName = null;
         $this->getSecondaryName = null;
     }

@@ -5,7 +5,6 @@ use Fisharebest\Webtrees\I18N;
 ?>
 
 <form method="post" action="<?= e(route(CreateSharedPlaceAction::class, ['tree' => $tree->name()])) ?>" id="wt-modal-form">
-    <?= csrf_field() ?>
 
     <?= view('modals/header', ['title' => I18N::translate('Create a shared place')]) ?>
 
@@ -21,6 +20,7 @@ use Fisharebest\Webtrees\I18N;
     </div>
 
     <?= view('modals/footer-save-cancel') ?>
+    <?= csrf_field() ?>
 </form>
 
 <?php /*View::push('javascript') no need - this is a modal!*/ ?>

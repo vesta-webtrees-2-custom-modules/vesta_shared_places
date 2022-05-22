@@ -46,8 +46,7 @@ class SharedPlacesListController {
             })
             ->toArray();
 
-        if (str_starts_with(Webtrees::VERSION, '2.1')) {
-            return $this->viewResponse($this->moduleName . '::shared-places-list-page', [
+        return $this->viewResponse($this->moduleName . '::shared-places-list-page', [
                     'tree' => $tree,
                     'sharedPlaces' => $sharedPlaces,
                     'showLinkCounts' => $showLinkCounts,
@@ -57,18 +56,6 @@ class SharedPlacesListController {
                     'hasLocationsToFix' => $this->hasLocationsToFix,
                     'link' => $this->link,
             ]);
-        }
-
-        return $this->viewResponse($this->moduleName . '::shared-places-list-page_20', [
-                'tree' => $tree,
-                'sharedPlaces' => $sharedPlaces,
-                'showLinkCounts' => $showLinkCounts,
-                'title' => I18N::translate('Shared places'),
-                'moduleName' => $this->moduleName,
-                'select2Initializers' => $select2Initializers,
-                'hasLocationsToFix' => $this->hasLocationsToFix,
-                'link' => $this->link,
-        ]);
     }
 
     /**
