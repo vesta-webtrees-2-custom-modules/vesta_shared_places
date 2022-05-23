@@ -1,11 +1,15 @@
 <?php
 
+use Cissee\Webtrees\Module\PersonalFacts\DefaultAssociateFactUtils;
 use Fisharebest\Webtrees\GedcomRecord;
+use Vesta\VestaUtils;
 
 /**
- * @var GedcomRecord $record
- * @var string $hierarchyHtml
- * @var string $summaryHtml
+ * @var string                    $hierarchyHtml
+ * @var string                    $summaryHtml
+ * @var Collection<int,Fact>|null $clipboard_facts
+ * @var GedcomRecord              $record
+ * @var ModuleVestalInterface     $module
  */
 
 ?>
@@ -16,6 +20,20 @@ use Fisharebest\Webtrees\GedcomRecord;
         echo $summaryHtml;
     ?>
     <?php foreach ($record->facts([], true) as $fact) : ?>
-        <?= view('fact', ['fact' => $fact, 'record' => $record]) ?>
+        <?php
+        //we need the enhanced fact view here, e.g. for resetting GOV data
+        //view('fact', ['fact' => $fact, 'record' => $record])
+        ?>
+        <?= view(VestaUtils::vestaViewsNamespace() . '::fact', [                    
+                    'fact'                   => $fact, 
+                    'record'                 => $record, 
+                    'module'                 => $module,
+                    'useVestals'             => false,
+                    'hideCoordinates'        => false,
+                    'associateFactUtils'     => new DefaultAssociateFactUtils(),
+                    'styles'                 => [], //no additional styles
+                    'predecessors'           => [], //not used here
+                    'relToPredecessorSuffix' => '', //not used here
+                    ]) ?>
     <?php endforeach ?>
 </table>

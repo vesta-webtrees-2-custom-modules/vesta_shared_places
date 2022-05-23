@@ -602,7 +602,7 @@ class SharedPlacesModule extends AbstractModule implements
     public function placename2sharedPlaceImpl(
         string $placeGedcomName, 
         Tree $tree): ?SharedPlace {
-    
+            
         return $this->placename2sharedPlacesImpl($placeGedcomName, $tree)->first();
     }
   

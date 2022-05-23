@@ -50,7 +50,10 @@ use Illuminate\Support\Collection;
             'details'              => view($moduleName . '::shared-place-page-details', [
                 'hierarchyHtml' => $hierarchyHtml,
                 'summaryHtml' => $summaryHtml,
-                'record' => $record]),
+                'clipboard_facts' => $clipboard_facts,             
+                'record' => $record,
+                'module' => $module,
+                ]),
             
             'linked_families'      => $linked_families,
             'linked_individuals'   => $linked_individuals,
@@ -68,7 +71,9 @@ use Illuminate\Support\Collection;
             'hierarchyHtml' => $hierarchyHtml,
             'summaryHtml' => $summaryHtml,
             'clipboard_facts' => $clipboard_facts,             
-            'record' => $record]) ?>
+            'record' => $record,
+            'module' => $module,
+            ]) ?>
     <?php endif ?>
 </div>
 
