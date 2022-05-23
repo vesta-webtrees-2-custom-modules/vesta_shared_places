@@ -191,6 +191,7 @@ class SharedPlacesModule extends AbstractModule implements
             //Issue #28
             //we're looking for the first ModuleListInterface that is also a ModulePlaceHierarchyInterface
             //(and which the user is allowed to see)
+            //
             //note: we cannot use 
             //->findByComponent(ModulePlaceHierarchyInterface::class, $tree, Auth::user())
             //directly because the access level isn't set for this specific interface!
