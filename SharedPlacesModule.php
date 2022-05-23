@@ -187,8 +187,15 @@ class SharedPlacesModule extends AbstractModule implements
 
         if ($useHierarchy && !$hasLocationsToFix) {
             //link to place hierarchy
+            
+            //Issue #28
+            //we're looking for the first ModuleListInterface that is also a ModulePlaceHierarchyInterface
+            //(and which the user is allowed to see)
+            //note: we cannot use 
+            //->findByComponent(ModulePlaceHierarchyInterface::class, $tree, Auth::user())
+            //directly because the access level isn't set for this specific interface!
             $module = app(ModuleService::class)
-                ->findByComponent(ModulePlaceHierarchyInterface::class, $tree, Auth::user())
+                ->findByComponent(ModuleListInterface::class, $tree, Auth::user())
                 ->first(static function (ModuleInterface $module): bool {
                     return $module instanceof ModulePlaceHierarchyInterface;
                 });
@@ -201,7 +208,10 @@ class SharedPlacesModule extends AbstractModule implements
                 ]);
                 $link = new PlaceHierarchyLink(I18N::translate("View Shared places hierarchy"), null, $url);
             } else {
-                $link = new PlaceHierarchyLink(I18N::translate("Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."), null, null);
+                //only show this to admins!
+                if (Auth::isAdmin()) {
+                    $link = new PlaceHierarchyLink(I18N::translate("Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."), null, null);
+                }
             }
         }
 
