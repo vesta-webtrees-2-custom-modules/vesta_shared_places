@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-04-20 21:33+0200\n"
-"PO-Revision-Date: 2022-05-27 12:16+0000\n"
+"PO-Revision-Date: 2022-05-27 14:18+0000\n"
 "Last-Translator: Artem <artem@molotov.work>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/uk/>\n"
@@ -35,6 +35,8 @@ msgstr " (Примітка: Також створено спільне місц�
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
+"%s та особи й сім’ї, що на нього посилаються. Включно з батьками, братами й "
+"сестрами, подружжями та дітьми кожної людини."
 
 #: SharedPlacesModule.php:870 SharedPlacesModule_20.php:796
 #, php-format
