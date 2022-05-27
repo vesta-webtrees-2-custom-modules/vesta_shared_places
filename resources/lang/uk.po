@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-04-20 21:33+0200\n"
-"PO-Revision-Date: 2021-06-11 11:34+0000\n"
-"Last-Translator: z-yurets <zaharchenko.yurij@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/uk/>\n"
+"PO-Revision-Date: 2022-05-27 14:18+0000\n"
+"Last-Translator: Artem <artem@molotov.work>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:65
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:65
@@ -33,6 +35,8 @@ msgstr " (Примітка: Також створено спільне місц�
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
+"%s та особи й сім’ї, що на нього посилаються. Включно з батьками, братами й "
+"сестрами, подружжями та дітьми кожної людини."
 
 #: SharedPlacesModule.php:870 SharedPlacesModule_20.php:796
 #, php-format
@@ -226,7 +230,7 @@ msgstr "Локація"
 #. I18N: translate just like 'Shared Places' for consistency
 #: SharedPlacesModule.php:364
 msgid "Locations"
-msgstr ""
+msgstr "Місця"
 
 #: resources/views/data-fix-options.phtml:83
 #: resources/views/data-fix-options.phtml:102
@@ -302,7 +306,7 @@ msgstr "Детальніше дивіться %1$s."
 #: resources/views/media-page_20.phtml:96 resources/views/note-page_20.phtml:93
 #: resources/views/source-page_20.phtml:93
 msgid "Shared Places"
-msgstr ""
+msgstr "Спільні Місця"
 
 #: SharedPlacesModule.php:390 SharedPlacesModule.php:392
 #: SharedPlacesModule.php:395 SharedPlacesModule.php:398
