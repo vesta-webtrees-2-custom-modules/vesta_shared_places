@@ -76,21 +76,28 @@ class SharedPlace extends Location {
 
     public function check(): void {
         //have to use $this->gedcom() as additional key
-        //because any update operation orphans our places via FunctionsImport::updateRecord
+        //because any update operation orphans our places via GedcomImportService::updateRecord
         //
         //not sufficient as only key because parent names may have changed
         $pending = $this->isPendingAddition() ? '_P' : '';
-        $key = SharePlace::class . '_check_' . $this->xref() . '_' . $this->gedcom() . $pending . '_' . json_encode($this->namesAsPlaceStringsAt(GedcomDateInterval::createEmpty()));
+        
+        //Issue #127
+        //also must add tree id to all cache keys!
+        //(particularly important here as this is not a per-request cache)
+        $cacheKey = SharePlace::class . '_key_' . $this->tree()->id() . '_' . $this->xref();
+        
+        //here, the tree id (and likely also the xref) is actually redundant, nevermind
+        $key = SharePlace::class . '_check_' . $this->tree()->id() . '_' . $this->xref() . '_' . $this->gedcom() . $pending . '_' . json_encode($this->namesAsPlaceStringsAt(GedcomDateInterval::createEmpty()));
 
         //Issue #54
         //very expensive and called often, therefore cached to file
         //better solution would be to do this after import/update only, but that's intrusive (no hooks in webtrees core code for this)
-        //do not use $key as cache key 
+        //do not use $key as $cacheKey
         //(wouldn't work for changes back to some previous gedcom that is still cached)
         //rather compare with previous state
         $doCheck = false;
 
-        $previousKey = Registry::cache()->file()->remember($this->xref(), static function () use ($key, &$doCheck): string {
+        $previousKey = Registry::cache()->file()->remember($cacheKey, static function () use ($key, &$doCheck): string {
             $doCheck = true; //due to cache miss
             return $key;
         });
@@ -98,8 +105,8 @@ class SharedPlace extends Location {
         if ($key != $previousKey) {
             $doCheck = true; //due to change
             //must forget and then re-cache
-            Registry::cache()->file()->forget($this->xref());
-            Registry::cache()->file()->remember($this->xref(), static function () use ($key): string {
+            Registry::cache()->file()->forget($cacheKey);
+            Registry::cache()->file()->remember($cacheKey, static function () use ($key): string {
                 return $key;
             });
         }
@@ -118,15 +125,15 @@ class SharedPlace extends Location {
          */
 
         //make sure all places _for_all_dates_ exist, and are linked to this record 
-        //(otherwise they will be deleted again in next FunctionsImport::updateRecord() call as 'orphaned places')
+        //(otherwise they will be deleted again in next GedcomImportService::updateRecord() call as 'orphaned places')
         //note that we must not only link shared place 1:1 to place name, but to higher-level place names as well
         //(as with indi:place and fam:place links elsewhere in webtrees)
-        //(again, otherwise they will be deleted again in next FunctionsImport::updateRecord() call as 'orphaned places')
+        //(again, otherwise they will be deleted again in next GedcomImportService::updateRecord() call as 'orphaned places')
         //also cleanup obsolete placelinks
         //(should all this be done on updateRecord()? ultimately yes, but note that we will have to update children as well)
 
         $allPlaceIds = new Collection();
-        //cf FunctionsImport::updatePlaces
+        //cf GedcomImportService::updatePlaces
         foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
 
             // Calling Place::id() will create the entry in the database, if it doesn't already exist.
