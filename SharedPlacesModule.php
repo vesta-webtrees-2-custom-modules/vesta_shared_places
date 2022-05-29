@@ -15,6 +15,8 @@ use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
+use Cissee\WebtreesExt\Http\RequestHandlers\FunctionsPlaceProvidersAction;
+use Cissee\WebtreesExt\Http\RequestHandlers\IndividualFactsTabExtenderProvidersAction;
 use Cissee\WebtreesExt\Http\RequestHandlers\SharedPlacePage;
 use Cissee\WebtreesExt\Http\RequestHandlers\TomSelectSharedPlace;
 use Cissee\WebtreesExt\Module\ModuleMetaInterface;
@@ -71,6 +73,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
 use Throwable;
+use Vesta\CommonI18N;
 use Vesta\Hook\HookInterfaces\ClippingsCartAddToCartInterface;
 use Vesta\Hook\HookInterfaces\EmptyFunctionsPlace;
 use Vesta\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
@@ -81,6 +84,7 @@ use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
 use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
 use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
+use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderUtils;
 use Vesta\Hook\HookInterfaces\PrintFunctionsPlaceInterface;
 use Vesta\Model\GedcomDateInterval;
 use Vesta\Model\GenericViewElement;
@@ -89,6 +93,7 @@ use Vesta\Model\LocReference;
 use Vesta\Model\MapCoordinates;
 use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
+use Vesta\VestaAdminController;
 use Vesta\VestaModuleTrait;
 use function app;
 use function response;
@@ -211,6 +216,8 @@ class SharedPlacesModule extends AbstractModule implements
             } else {
                 //only show this to admins!
                 if (Auth::isAdmin()) {
+                    //technically, the module may be enabled but its list component may be hidden from everybody,
+                    //so this message is sometimes misleading
                     $link = new PlaceHierarchyLink(I18N::translate("Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."), null, null);
                 }
             }
@@ -530,6 +537,101 @@ class SharedPlacesModule extends AbstractModule implements
   
     public function bodyContent(): string {
         return view($this->name() . '::js/webtreesExt');
+    }
+    
+    public function hFactsTabGetStyleadds(
+        GedcomRecord $record,
+        Fact $fact): array {
+        
+        //is it one of our facts?
+        foreach ($this->hFactsTabGetAdditionalFacts($record) as $additionalFact) {
+            if ($additionalFact->id() === $fact->id()) {
+                $styleadds = [];
+                $styleadds[] = 'wt-location-fact-pfh collapse'; //see hFactsTabGetOutputInDBox
+                return $styleadds;
+            }
+        }
+        
+        return [];        
+    }
+    
+    public function hFactsTabGetAdditionalFacts(
+        GedcomRecord $record) {
+        
+        if (!($record instanceof SharedPlace)) {
+            return [];
+        }
+        
+        //use these regardless of any PLAC set there
+        //(which is anyway dubious and perhaps should be removed from the spec?)
+	return $record->facts(['FACT','EVEN']);
+    }
+    
+    public function hFactsTabGetOutputInDBox(
+        GedcomRecord $record): GenericViewElement {
+        
+        if (sizeof($this->hFactsTabGetAdditionalFacts($record)) === 0) {
+            return GenericViewElement::createEmpty();
+        }
+        
+	$toggleable = true/*boolval($this->getPreference('TAB_TOGGLEABLE_LOC_FACTS', '1'))*/;
+	return $this->getOutputInDescriptionBox($toggleable, 'show-location-facts-factstab', 'wt-location-fact-pfh', I18N::translate('Shared Place Events'));
+    }
+  
+    protected function getOutputInDescriptionBox(
+        bool $toggleable, 
+        string $id, 
+        string $targetClass,           
+        string $label) {
+      
+        ob_start();
+        if ($toggleable) {
+          ?>
+          <label>
+              <input id="<?php echo $id; ?>" type="checkbox" data-bs-toggle="collapse" data-bs-target=".<?php echo $targetClass; ?>" data-wt-persist="<?php echo $targetClass; ?>" autocomplete="off">
+              <?php echo $label; ?>
+          </label>
+          <?php
+        }
+
+        return new GenericViewElement(ob_get_clean(), '');
+    }
+  
+    public function hFactsTabGetOutputAfterTab(
+        GedcomRecord $record,
+        bool $ajax): GenericViewElement {
+                
+        if (!$ajax) {
+            //nothing to do - in fact must not initialize twice!
+            return GenericViewElement::createEmpty();
+        }
+        
+        if (sizeof($this->hFactsTabGetAdditionalFacts($record)) === 0) {
+            return GenericViewElement::createEmpty();
+        }
+        
+        $toggleable = true/*boolval($this->getPreference('TAB_TOGGLEABLE_LOC_FACTS', '1'))*/;
+        return $this->getOutputAfterTab($toggleable, 'show-location-facts-factstab');
+    }
+  
+    protected function getOutputAfterTab($toggleable, $toggle) {
+        $post = "";
+
+        if ($toggleable) {
+          $post = $this->getScript($toggle);
+        }
+
+        return new GenericViewElement('', $post);
+    }
+
+    protected function getScript($toggle) {
+        ob_start();
+        ?>
+        <script>
+          webtrees.persistentToggle(document.querySelector('#<?php echo $toggle; ?>'));
+        </script>
+        <?php
+        return ob_get_clean();
     }
   
     public function hFactsTabRequiresModalVesta(Tree $tree): ?string {
@@ -1818,4 +1920,111 @@ class SharedPlacesModule extends AbstractModule implements
 
         return $regex;
     }
+    
+    ////////////////////////////////////////////////////////////////////////////
+  
+    private function title1(): string {
+        return CommonI18N::locationDataProviders();
+    }
+  
+    private function description1(): string {
+        return CommonI18N::mapCoordinates();
+    }
+  
+    private function title2(): string {
+        return CommonI18N::placeHistoryDataProviders();
+    }
+  
+    private function description2(): string {
+        return CommonI18N::factDataProvidersDescription();
+    }
+  
+    //hook management - generalize?
+    //adapted from ModuleController (e.g. listFooters)
+    public function getFunctionsPlaceProvidersAction(): ResponseInterface {
+        $modules = FunctionsPlaceUtils::modules($this, true);
+
+        $controller = new VestaAdminController($this);
+        return $controller->listHooks(
+                    $modules,
+                    FunctionsPlaceInterface::class,
+                    $this->title1(),
+                    $this->description1(),
+                    true,
+                    true);
+    }
+  
+    public function getIndividualFactsTabExtenderProvidersAction(): ResponseInterface {
+        $modules = IndividualFactsTabExtenderUtils::modules($this, true);
+
+        $controller = new VestaAdminController($this);
+        return $controller->listHooks(
+                    $modules,
+                    IndividualFactsTabExtenderUtils::moduleSpecificComponentName($this),
+                    $this->title2(),
+                    $this->description2(),
+                    true,
+                    true,
+                    true);
+    }
+
+    public function postFunctionsPlaceProvidersAction(ServerRequestInterface $request): ResponseInterface {
+        $controller = new FunctionsPlaceProvidersAction($this);
+        return $controller->handle($request);
+    }
+  
+    public function postIndividualFactsTabExtenderProvidersAction(ServerRequestInterface $request): ResponseInterface {
+        $controller = new IndividualFactsTabExtenderProvidersAction($this);
+        return $controller->handle($request);
+    }
+
+    protected function editConfigBeforeFaq() {
+        $modules1 = FunctionsPlaceUtils::modules($this, true);
+
+        $url1 = route('module', [
+            'module' => $this->name(),
+            'action' => 'FunctionsPlaceProviders'
+        ]);
+    
+        $modules2 = IndividualFactsTabExtenderUtils::modules($this, true);
+
+        $url2 = route('module', [
+            'module' => $this->name(),
+            'action' => 'IndividualFactsTabExtenderProviders'
+        ]);
+
+        //cf control-panel.phtml
+        ?>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-9">
+                    <ul class="fa-ul">
+                        <li>
+                            <span class="fa-li"><?= view('icons/block') ?></span>
+                            <a href="<?= e($url1) ?>">
+                                <?= $this->title1() ?>
+                            </a>
+                            <?= view('components/badge', ['count' => $modules1->count()]) ?>
+                            <p class="small text-muted">
+                              <?= $this->description1() ?>
+                            </p>
+                        </li>
+                        <li>
+                            <span class="fa-li"><?= view('icons/block') ?></span>
+                            <a href="<?= e($url2) ?>">
+                                <?= $this->title2() ?>
+                            </a>
+                            <?= view('components/badge', ['count' => $modules2->count()]) ?>
+                            <p class="small text-muted">
+                              <?= $this->description2() ?>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>		
+
+        <?php
+    }
+
 }
