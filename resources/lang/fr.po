@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-20 21:33+0200\n"
+"POT-Creation-Date: 2022-05-30 19:05+0200\n"
 "PO-Revision-Date: 2022-04-12 11:10+0000\n"
 "Last-Translator: Vincent DENIS <vincent.denis06@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/fr/>\n"
@@ -18,23 +18,21 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 4.12-dev\n"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:65
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:65
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
 msgstr " (Note : %s lieux partagés de niveau supérieur ont aussi été créés)"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:63
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:63
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:60
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Note : un lieu partagé de niveau supérieur a aussi été créé)"
 
-#: SharedPlacesModule.php:871 SharedPlacesModule_20.php:797
+#: SharedPlacesModule.php:1014
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr "%s et les personnes et familles qui y font référence, y compris les parents, frères et sœurs, conjoints et enfants de chaque personne."
 
-#: SharedPlacesModule.php:870 SharedPlacesModule_20.php:796
+#: SharedPlacesModule.php:1013
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s et les personnes et familles qui y font référence."
@@ -54,7 +52,6 @@ msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis
 msgstr "Un module prenant en charge les espaces partagés en tant qu'objets GEDCOM de niveau 0, sur la base de l'Addendum GEDCOM-L à la spécification GEDCOM 5.5.1. Les lieux partagés peuvent contenir par exemple coordonnées de la carte, notes et objets multimédias. Le module affiche ces données pour tous les lieux correspondants via l'onglet étendu «Faits et événements». Il peut également être utilisé pour gérer les identifiants GOV, en combinaison avec le module Gov4Webtrees."
 
 #: resources/views/modals/shared-place-fields.phtml:14
-#: resources/views/modals/shared-place-fields_20.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
 msgstr "Un nom de lieu avec des parties de nom séparées par des virgules sera résolu en une hiérarchie de lieux partagés. Des espaces partagés de niveau supérieur manquants seront également créés."
 
@@ -73,7 +70,7 @@ msgid "Additionally link shared places via name"
 msgstr "Lier en plus les lieux partagés via le nom"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:105
+#: SharedPlacesModuleTrait.php:104
 msgid "All shared place facts"
 msgstr "Tous les faits sur les lieux partagés"
 
@@ -88,12 +85,9 @@ msgstr "Attention !"
 msgid "Automatically expand shared place data"
 msgstr "Étendre automatiquement les données des lieux partagés"
 
-#: patchedWebtrees/Elements/XrefSharedPlace.php:49
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:322
-#: resources/views/modals/create-shared-place.phtml:10
-#: resources/views/modals/create-shared-place_20.phtml:10
+#: patchedWebtrees/Elements/XrefSharedPlace.php:57
+#: resources/views/modals/create-shared-place.phtml:9
 #: resources/views/shared-places-list-page.phtml:42
-#: resources/views/shared-places-list-page_20.phtml:41
 msgid "Create a shared place"
 msgstr "Créer un lieu partagé"
 
@@ -114,7 +108,7 @@ msgstr "Correction de données"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "La détermination du nombre de liens (individus / familles liés) est coûteuse lors de l'attribution de lieux partagés via le nom, et entraîne donc des retards lorsque la liste des lieux partagés est affichée. Il est recommandé de ne sélectionner cette option que si les lieux sont attribués via des XREF."
 
-#: SharedPlacesModule.php:203 SharedPlacesModule_20.php:198
+#: SharedPlacesModule.php:221
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Activez le module de carte Vesta Places and Pedigree pour afficher la hiérarchie des lieux partagés."
 
@@ -123,16 +117,16 @@ msgid "Enhance existing shared places with tree-independent data"
 msgstr "Améliorez les espaces partagés existants avec des données indépendantes de l'arbre"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:223
+#: SharedPlacesModuleTrait.php:231
 msgid "Facts for shared place records"
 msgstr "Actes pour les enregistrements de lieux partagés"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:208
+#: SharedPlacesModuleTrait.php:217
 msgid "Filter to unique shared places"
 msgstr "Filtrer vers des lieux partagés uniques"
 
-#: SharedPlacesModule.php:406 SharedPlacesModule_20.php:379
+#: SharedPlacesModule.php:446
 msgid "GOV id for type of location"
 msgstr "Identifiant GOV pour le type d'emplacement"
 
@@ -140,7 +134,7 @@ msgstr "Identifiant GOV pour le type d'emplacement"
 msgid "Hierarchize Shared Places"
 msgstr "Hiérarchiser les lieux partagés"
 
-#: SharedPlacesModule.php:403 SharedPlacesModule_20.php:376
+#: SharedPlacesModule.php:443
 msgid "Higher-level shared place"
 msgstr "Lieu partagé de niveau supérieur"
 
@@ -168,9 +162,7 @@ msgstr "Si des données indépendantes de l'arbre sont disponibles, les coordonn
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
 msgstr "Si vous utilisez des espaces partagés hiérarchiques, un lieu avec le nom «A, B, C» est mappé vers un espace partagé «A» avec un espace partagé de niveau supérieur qui correspond à «B, C»."
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page_20.phtml:32
 #: resources/views/shared-places-list-page.phtml:16
-#: resources/views/shared-places-list-page_20.phtml:16
 msgid "Important note:"
 msgstr "Remarque importante :"
 
@@ -185,7 +177,7 @@ msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV id
 msgstr "En particulier, les coordonnées cartographiques des « Données géographiques » de webtrees et les identifiants GOV du module Gov4Webtrees sont ajoutés."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:209
+#: SharedPlacesModuleTrait.php:218
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr "Dans la liste de hiérarchie des lieux, lors de l'utilisation de l'option «restreindre aux espaces partagés», les lieux partagés avec plusieurs noms apparaissent plusieurs fois comme des entrées séparées. Cochez cette option pour afficher chaque lieu partagé une seule fois dans ce cas, sous le nom principal du lieu partagé, et afficher également ses noms supplémentaires."
 
@@ -194,9 +186,7 @@ msgstr "Dans la liste de hiérarchie des lieux, lors de l'utilisation de l'optio
 msgid "It is now recommended to use XREFs, as this improves performance and flexibility. There is a data fix available which may be used to add XREFs. "
 msgstr "Il est maintenant recommandé d'utiliser des XREF, car cela améliore les performances et la flexibilité. Il existe un correctif de données disponible qui peut être utilisé pour ajouter des XREF. "
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page_20.phtml:39
 #: resources/views/shared-places-list-page.phtml:23
-#: resources/views/shared-places-list-page_20.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr "Il est recommandé d'exécuter le correctif de données pour ce module personnalisé pour résoudre ce problème."
 
@@ -219,12 +209,12 @@ msgid "Linking of shared places to places"
 msgstr "Lier des lieux partagés à des lieux"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:363 SharedPlacesModule_20.php:364
+#: SharedPlacesModule.php:403
 msgid "Location"
 msgstr "Lieux Partagés"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:364
+#: SharedPlacesModule.php:404
 msgid "Locations"
 msgstr "Emplacements"
 
@@ -247,8 +237,7 @@ msgstr "Des espaces partagés de niveau supérieur manquants sont créés si né
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "Les espaces partagés manquants sont créés si nécessaire. Pour que cela fonctionne sans créer potentiellement de doublons, vous devez cocher «Accepter automatiquement les modifications apportées par cet utilisateur» dans l'administration des utilisateurs, au moins pour la durée de ce correctif de données."
 
-#: resources/views/shared-place-page-links.phtml:92
-#: resources/views/shared-place-page_20.phtml:77
+#: resources/views/shared-place-page-links.phtml:93
 msgid "Next lower-level shared places"
 msgstr "Lieux partagés de niveau inférieur suivants"
 
@@ -299,43 +288,26 @@ msgstr "Restreindre à des faits et événements spécifiques"
 msgid "See %1$s for details."
 msgstr "Voir %1$s pour les détails."
 
-#: resources/views/media-page_20.phtml:96 resources/views/note-page_20.phtml:93
-#: resources/views/source-page_20.phtml:93
-msgid "Shared Places"
-msgstr "Lieux partagés"
-
-#: SharedPlacesModule.php:390 SharedPlacesModule.php:392
-#: SharedPlacesModule.php:395 SharedPlacesModule.php:398
-#: SharedPlacesModule.php:559 SharedPlacesModule_20.php:371
-#: SharedPlacesModule_20.php:484 resources/views/lists/locations-table.phtml:47
-#: resources/views/lists/shared-places-table_20.phtml:43
+#: SharedPlacesModule.php:430 SharedPlacesModule.php:432
+#: SharedPlacesModule.php:435 SharedPlacesModule.php:438
+#: SharedPlacesModule.php:702 resources/views/lists/locations-table.phtml:47
 msgid "Shared place"
 msgstr "Lieu partagé"
 
-#: SharedPlacesModule.php:855 SharedPlacesModule_20.php:781
+#: SharedPlacesModule.php:578 SharedPlacesModule.php:998
 msgid "Shared place data"
 msgstr "Données du lieu partagé"
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/place-hierarchy_20.phtml:13
-msgid "Shared place hierarchy"
-msgstr "Hiérarchie du lieu partagé"
-
-#: resources/views/modules/generic-place-hierarchy-shared-places/list_20.phtml:12
-msgid "Shared place list"
-msgstr "Liste des lieux partagés"
-
 #: resources/views/modals/shared-place-fields.phtml:17
-#: resources/views/modals/shared-place-fields_20.phtml:17
 msgid "Shared place name"
 msgstr "Nom du Lieu partagé"
 
 #: resources/views/modals/shared-place-fields.phtml:12
-#: resources/views/modals/shared-place-fields_20.phtml:12
 msgid "Shared place name (complete hierarchy)"
 msgstr "Nom du lieu partagé (hiérarchie complète)"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:237
+#: SharedPlacesModuleTrait.php:245
 msgid "Shared place page"
 msgstr "Page de lieu partagé"
 
@@ -348,17 +320,13 @@ msgstr "Structure du lieu partagé"
 msgid "Shared place summary"
 msgstr "Résumé du lieu partagé"
 
-#: SharedPlacesListController.php:54 SharedPlacesListController.php:66
-#: SharedPlacesModule.php:161 SharedPlacesModule_20.php:162
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:167
 #: resources/views/lists/locations-table.phtml:42
-#: resources/views/lists/shared-places-table_20.phtml:38
-#: resources/views/search-general-page-ext_20.phtml:99
-#: resources/views/search-results-ext_20.phtml:88
 msgid "Shared places"
 msgstr "Lieux partagés"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:233
+#: SharedPlacesModuleTrait.php:241
 msgid "Shared places list"
 msgstr "Liste des lieux partagés"
 
@@ -370,7 +338,6 @@ msgstr "Afficher le nombre de liens pour la liste des lieux partagés"
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:194
 #: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:129
-#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage_20.php:127
 msgid "Summary"
 msgstr "Sommaire"
 
@@ -378,10 +345,6 @@ msgstr "Sommaire"
 #: resources/views/data-fix-options.phtml:128
 msgid "The created shared places, as well as existing shared places, are linked via XREFs to event places."
 msgstr "Les lieux partagés créés, ainsi que les lieux partagés existants, sont liés via des XREF aux lieux d'événements."
-
-#: resources/views/modules/generic-place-hierarchy-shared-places/sidebar_20.phtml:42
-msgid "The location of this shared place is not known."
-msgstr "L'emplacement de ce lieu partagé n'est pas connu."
 
 #: resources/views/data-fix-options.phtml:85
 msgid "The search cannot be implemented efficiently and may take some time in particular when displaying and updating a large number of records."
@@ -391,16 +354,13 @@ msgstr "La recherche ne peut pas être mise en œuvre efficacement et peut prend
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
 msgstr "La recherche de ce correctif de données ne correspond actuellement à aucun enregistrement, car l'option de configuration \"Utiliser les espaces partagés hiérarchiques\" n'est pas définie."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:55
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:55
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:52
 #, php-format
 msgid "The shared place %s already exists."
 msgstr "Le lieu partagé %s existe déjà."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:76
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:120
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:76
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:120
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:77
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:123
 #, php-format
 msgid "The shared place %s has been created."
 msgstr "Le lieu partagé %s a été créé."
@@ -458,7 +418,7 @@ msgid "This data fix turns shared places with comma-separated name parts into hi
 msgstr "Ce correctif de données transforme les espaces partagés avec des parties de nom séparées par des virgules en espaces partagés hiérarchiques (qui sont liés à des espaces partagés de niveau supérieur via des XREF)."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:109
+#: SharedPlacesModuleTrait.php:108
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list."
 msgstr "Voici la liste des faits GEDCOM que vos utilisateurs peuvent ajouter aux espaces partagés. Vous pouvez modifier cette liste en supprimant ou en ajoutant des noms de faits si nécessaire. Les noms de faits qui apparaissent dans cette liste ne doivent pas également apparaître dans la liste «Faits uniques de lieu partagé»."
 
@@ -468,13 +428,11 @@ msgid "This is the list of GEDCOM facts that your users can add to shared places
 msgstr "Voici la liste des faits GEDCOM que vos utilisateurs peuvent ajouter aux espaces partagés. Vous pouvez modifier cette liste en supprimant ou en ajoutant des noms de faits si nécessaire. Les noms de faits qui apparaissent dans cette liste ne doivent pas également apparaître dans la liste «Faits uniques de lieu partagé». "
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:117
+#: SharedPlacesModuleTrait.php:116
 msgid "This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list."
 msgstr "Il s'agit de la liste des faits GEDCOM que vos utilisateurs ne peuvent ajouter qu'une seule fois aux lieux partagés. Par exemple, si NAME figure dans cette liste, les utilisateurs ne pourront pas ajouter plusieurs enregistrements NAME à un espace partagé. Les noms de faits qui apparaissent dans cette liste ne doivent pas également apparaître dans la liste «Tous les faits de lieu partagé»."
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page_20.phtml:36
 #: resources/views/shared-places-list-page.phtml:20
-#: resources/views/shared-places-list-page_20.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr "Cela conduit à des incohérences lors du mappage de lieux à des lieux partagés et, en général, ne correspond pas aux spécifications des espaces partagés (que les versions antérieures de ce module personnalisé ne suivaient pas strictement)."
 
@@ -482,43 +440,17 @@ msgstr "Cela conduit à des incohérences lors du mappage de lieux à des lieux 
 msgid "This shared place does not exist or you do not have permission to view it."
 msgstr "Ce lieu partagé n'existe pas ou vous n'êtes pas autorisé à le consulter."
 
-#: resources/views/shared-place-page_20.phtml:34
-msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
-msgstr "Ce lieu partagé a été supprimé. La suppression devra être examinée par un modérateur."
-
-#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
-#: resources/views/shared-place-page_20.phtml:31
-#, php-format
-msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
-msgstr "Ce lieu partagé a été supprimé. Vous devriez revoir la suppression, puis %1$s ou %2$s."
-
-#: resources/views/shared-place-page_20.phtml:43
-msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
-msgstr "Ce lieu partagé a été modifié. Les modifications doivent être examinées par un modérateur."
-
-#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
-#: resources/views/shared-place-page_20.phtml:40
-#, php-format
-msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
-msgstr "Ce lieu partagé a été modifié. Vous devriez revoir les changements et ensuite %1$s ou %2$s."
-
-#: resources/views/modules/generic-place-hierarchy-shared-places/page_20.phtml:35
 #: resources/views/shared-places-list-page.phtml:19
-#: resources/views/shared-places-list-page_20.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr "Cet arbre a des espaces partagés avec des parties de nom séparées par des virgules, tandis que l'option « Utiliser les espaces partagés hiérarchiques » est sélectionnée."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:405 SharedPlacesModule_20.php:378
+#: SharedPlacesModule.php:445
 msgid "Type of hierarchical relationship"
 msgstr "Type de relation hiérarchique"
 
-#: SharedPlacesModule_20.php:377
-msgid "Type of location"
-msgstr "Type d'emplacement"
-
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:113
+#: SharedPlacesModuleTrait.php:112
 msgid "Unique shared place facts"
 msgstr "Faits uniques sur les lieux partagés"
 
@@ -532,7 +464,7 @@ msgstr "Utiliser des lieux partagés hiérarchiques"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Utilisez la balise séparée « %1$s » pour modéliser une hiérarchie de lieux."
 
-#: SharedPlacesModule.php:201 SharedPlacesModule_20.php:196
+#: SharedPlacesModule.php:215
 msgid "View Shared places hierarchy"
 msgstr "Afficher la hiérarchie des lieux partagés"
 
@@ -551,36 +483,11 @@ msgstr "Lorsqu'elle n'est pas cochée, la première approche est utilisée, dans
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr "Vous pouvez définir une année de référence (qui peut être évaluée par d'autres modules, tels que %1$s) dans la configuration du module."
 
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:559
-msgid "administrative"
-msgstr "administratif"
-
-#: patchedWebtrees/SharedPlace.php:977 patchedWebtrees/SharedPlace.php:1053
+#: patchedWebtrees/SharedPlace.php:976 patchedWebtrees/SharedPlace.php:1052
 msgid "circular shared place hierarchy"
 msgstr "hiérarchie circulaire des espaces partagés"
 
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:568
-msgid "cultural"
-msgstr "culturel"
-
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:565
-msgid "geographical"
-msgstr "géographique"
-
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:571
-msgid "other"
-msgstr "autre"
-
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:562
-msgid "religious"
-msgstr "religieux"
-
-#: SharedPlacesModule.php:958 SharedPlacesModule_20.php:884
+#: SharedPlacesModule.php:1101
 msgid "shared places"
 msgstr "lieux partagés"
 
@@ -628,14 +535,56 @@ msgstr "oui, mais seulement la première occurrence du lieu partagé"
 #~ msgid "Replaces the original 'Locations' module."
 #~ msgstr "Remplace le module d'origine «Emplacements»."
 
+#~ msgid "Shared Places"
+#~ msgstr "Lieux partagés"
+
+#~ msgid "Shared place hierarchy"
+#~ msgstr "Hiérarchie du lieu partagé"
+
+#~ msgid "Shared place list"
+#~ msgstr "Liste des lieux partagés"
+
 #~ msgid "Show all shared places in a list"
 #~ msgstr "Afficher tous les lieux partagés dans une liste"
 
 #~ msgid "Show shared place hierarchy"
 #~ msgstr "Afficher la hiérarchie des espaces partagés"
 
+#~ msgid "The location of this shared place is not known."
+#~ msgstr "L'emplacement de ce lieu partagé n'est pas connu."
+
+#~ msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
+#~ msgstr "Ce lieu partagé a été supprimé. La suppression devra être examinée par un modérateur."
+
+#~ msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
+#~ msgstr "Ce lieu partagé a été supprimé. Vous devriez revoir la suppression, puis %1$s ou %2$s."
+
+#~ msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
+#~ msgstr "Ce lieu partagé a été modifié. Les modifications doivent être examinées par un modérateur."
+
+#~ msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
+#~ msgstr "Ce lieu partagé a été modifié. Vous devriez revoir les changements et ensuite %1$s ou %2$s."
+
+#~ msgid "Type of location"
+#~ msgstr "Type d'emplacement"
+
+#~ msgid "administrative"
+#~ msgstr "administratif"
+
+#~ msgid "cultural"
+#~ msgstr "culturel"
+
+#~ msgid "geographical"
+#~ msgstr "géographique"
+
 #~ msgid "no"
 #~ msgstr "non"
+
+#~ msgid "other"
+#~ msgstr "autre"
+
+#~ msgid "religious"
+#~ msgstr "religieux"
 
 #~ msgid "yes"
 #~ msgstr "oui"

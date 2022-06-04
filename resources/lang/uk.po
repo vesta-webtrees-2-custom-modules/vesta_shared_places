@@ -7,38 +7,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-20 21:33+0200\n"
+"POT-Creation-Date: 2022-05-30 19:05+0200\n"
 "PO-Revision-Date: 2022-05-27 14:18+0000\n"
 "Last-Translator: Artem <artem@molotov.work>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-shared-places/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.13-dev\n"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:65
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:65
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
 msgstr " (Примітка: також створено %s місць вищого рівня)"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:63
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:63
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:60
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Примітка: Також створено спільне місце вищого рівня)"
 
-#: SharedPlacesModule.php:871 SharedPlacesModule_20.php:797
+#: SharedPlacesModule.php:1014
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
-msgstr ""
-"%s та особи й сім’ї, що на нього посилаються. Включно з батьками, братами й "
-"сестрами, подружжями та дітьми кожної людини."
+msgstr "%s та особи й сім’ї, що на нього посилаються. Включно з батьками, братами й сестрами, подружжями та дітьми кожної людини."
 
-#: SharedPlacesModule.php:870 SharedPlacesModule_20.php:796
+#: SharedPlacesModule.php:1013
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s та особи з сім'ями, які посилаються на нього."
@@ -58,7 +52,6 @@ msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis
 msgstr "Модуль, що підтримує спільні місця як об'єкти GEDCOM рівня 0, на основі Додатку GEDCOM-L до специфікації GEDCOM 5.5.1. Спільні місця можуть містити, наприклад координати карт, примітки та медіаоб'єкти. Модуль відображає ці дані для всіх відповідних місць через розширену вкладку \"Факти та події\". Він також може використовуватися для управління ідентифікаторами GOV у поєднанні з модулем Gov4Webtrees."
 
 #: resources/views/modals/shared-place-fields.phtml:14
-#: resources/views/modals/shared-place-fields_20.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
 msgstr "Ім'я місця з розділеними комами частинами імен буде перетворено на ієрархію спільних місць. Також буде створено місця, де бракує спільних місць вищого рівня."
 
@@ -77,7 +70,7 @@ msgid "Additionally link shared places via name"
 msgstr "Додатково зв’яжіть спільні місця за допомогою імені"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:105
+#: SharedPlacesModuleTrait.php:104
 msgid "All shared place facts"
 msgstr "Усі факти спільного місця"
 
@@ -92,12 +85,9 @@ msgstr "Увага!"
 msgid "Automatically expand shared place data"
 msgstr "Автоматично розширювати дані про спільні місця"
 
-#: patchedWebtrees/Elements/XrefSharedPlace.php:49
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:322
-#: resources/views/modals/create-shared-place.phtml:10
-#: resources/views/modals/create-shared-place_20.phtml:10
+#: patchedWebtrees/Elements/XrefSharedPlace.php:57
+#: resources/views/modals/create-shared-place.phtml:9
 #: resources/views/shared-places-list-page.phtml:42
-#: resources/views/shared-places-list-page_20.phtml:41
 msgid "Create a shared place"
 msgstr "Створити спільне місце"
 
@@ -118,7 +108,7 @@ msgstr "Виправлення даних"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Визначення кількості посилань (пов'язаних осіб/сімей) є складним, при призначенні спільних місць за іменем, і тому спричиняє затримки коли відображається список спільних місць. Рекомендується вибрати цей параметр, лише якщо місця призначаються за допомогою зовнішніх посилань."
 
-#: SharedPlacesModule.php:203 SharedPlacesModule_20.php:198
+#: SharedPlacesModule.php:221
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Увімкніть модуль Vesta Places and Pedigree map для перегляду ієрархії спільних місць."
 
@@ -127,16 +117,16 @@ msgid "Enhance existing shared places with tree-independent data"
 msgstr "Покращуйте наявні спільні місця за допомогою незалежних від дерева даних"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:223
+#: SharedPlacesModuleTrait.php:231
 msgid "Facts for shared place records"
 msgstr "Факти для записів спільних місць"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:208
+#: SharedPlacesModuleTrait.php:217
 msgid "Filter to unique shared places"
 msgstr "Фільтр за унікальними спільними місцями"
 
-#: SharedPlacesModule.php:406 SharedPlacesModule_20.php:379
+#: SharedPlacesModule.php:446
 msgid "GOV id for type of location"
 msgstr "Ідентифікатор GOV для типу локації"
 
@@ -144,7 +134,7 @@ msgstr "Ідентифікатор GOV для типу локації"
 msgid "Hierarchize Shared Places"
 msgstr "Ієрархізуйте спільні місця"
 
-#: SharedPlacesModule.php:403 SharedPlacesModule_20.php:376
+#: SharedPlacesModule.php:443
 msgid "Higher-level shared place"
 msgstr "Загальне місце більш високого рівня"
 
@@ -172,9 +162,7 @@ msgstr "Якщо доступні дані, незалежні від дерев
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
 msgstr "Якщо ви використовуєте ієрархічні спільні місця, місце з назвою \"A, B, C\" відображається у спільному місці \"A\" із спільним місцем більш високого рівня, яке відображається на \"B, C\"."
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page_20.phtml:32
 #: resources/views/shared-places-list-page.phtml:16
-#: resources/views/shared-places-list-page_20.phtml:16
 msgid "Important note:"
 msgstr "Важливе зауваження:"
 
@@ -189,7 +177,7 @@ msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV id
 msgstr "Зокрема, додані координати з модуля webtrees \"Географічні дані\" та GOVid із модуля Gov4Webtrees."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:209
+#: SharedPlacesModuleTrait.php:218
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr "У списку ієрархій місць, коли використовується опція \"обмежити спільні місця\", спільні місця з декількома іменами відображаються кілька разів як окремі записи. Позначте цю опцію, щоб показати кожне спільне місце лише один раз у цьому випадку під основним іменем спільного місця, а також показати його додаткові імена."
 
@@ -198,9 +186,7 @@ msgstr "У списку ієрархій місць, коли використо
 msgid "It is now recommended to use XREFs, as this improves performance and flexibility. There is a data fix available which may be used to add XREFs. "
 msgstr "Зараз рекомендується використовувати зовнішніх посилань, оскільки це покращує продуктивність та гнучкість. Доступне виправлення даних, яке може бути використано для додавання файлів посилань. "
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page_20.phtml:39
 #: resources/views/shared-places-list-page.phtml:23
-#: resources/views/shared-places-list-page_20.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr "Для вирішення цієї проблеми рекомендується запустити виправлення даних для цього користувацького модуля."
 
@@ -223,12 +209,12 @@ msgid "Linking of shared places to places"
 msgstr "Прив’язка спільних місць до місцевості"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:363 SharedPlacesModule_20.php:364
+#: SharedPlacesModule.php:403
 msgid "Location"
 msgstr "Локація"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:364
+#: SharedPlacesModule.php:404
 msgid "Locations"
 msgstr "Місця"
 
@@ -251,8 +237,7 @@ msgstr "За необхідності створюються спільні мі
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "За необхідності створюються відсутні місця для спільного використання. Щоб це працювало без потенційного створення дублікатів, потрібно встановити прапорець \"Автоматично приймати зміни, внесені цим користувачем\" в адмініструванні користувача, принаймні на час виправлення даних."
 
-#: resources/views/shared-place-page-links.phtml:92
-#: resources/views/shared-place-page_20.phtml:77
+#: resources/views/shared-place-page-links.phtml:93
 msgid "Next lower-level shared places"
 msgstr "Наступні спільні місця нижчого рівня"
 
@@ -303,43 +288,26 @@ msgstr "Обмежтесь конкретними фактами та подія
 msgid "See %1$s for details."
 msgstr "Детальніше дивіться %1$s."
 
-#: resources/views/media-page_20.phtml:96 resources/views/note-page_20.phtml:93
-#: resources/views/source-page_20.phtml:93
-msgid "Shared Places"
-msgstr "Спільні Місця"
-
-#: SharedPlacesModule.php:390 SharedPlacesModule.php:392
-#: SharedPlacesModule.php:395 SharedPlacesModule.php:398
-#: SharedPlacesModule.php:559 SharedPlacesModule_20.php:371
-#: SharedPlacesModule_20.php:484 resources/views/lists/locations-table.phtml:47
-#: resources/views/lists/shared-places-table_20.phtml:43
+#: SharedPlacesModule.php:430 SharedPlacesModule.php:432
+#: SharedPlacesModule.php:435 SharedPlacesModule.php:438
+#: SharedPlacesModule.php:702 resources/views/lists/locations-table.phtml:47
 msgid "Shared place"
 msgstr "Спільне місце"
 
-#: SharedPlacesModule.php:855 SharedPlacesModule_20.php:781
+#: SharedPlacesModule.php:578 SharedPlacesModule.php:998
 msgid "Shared place data"
 msgstr "Інформація про спільне місце"
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/place-hierarchy_20.phtml:13
-msgid "Shared place hierarchy"
-msgstr "Ієрархія спільного місця"
-
-#: resources/views/modules/generic-place-hierarchy-shared-places/list_20.phtml:12
-msgid "Shared place list"
-msgstr "Список спільних місць"
-
 #: resources/views/modals/shared-place-fields.phtml:17
-#: resources/views/modals/shared-place-fields_20.phtml:17
 msgid "Shared place name"
 msgstr "Назва спільного місця"
 
 #: resources/views/modals/shared-place-fields.phtml:12
-#: resources/views/modals/shared-place-fields_20.phtml:12
 msgid "Shared place name (complete hierarchy)"
 msgstr "Назва спільного місця (повна ієрархія)"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:237
+#: SharedPlacesModuleTrait.php:245
 msgid "Shared place page"
 msgstr "Сторінка спільного місця"
 
@@ -352,17 +320,13 @@ msgstr "Структура спільного місця"
 msgid "Shared place summary"
 msgstr "Підсумок про спільне місце"
 
-#: SharedPlacesListController.php:54 SharedPlacesListController.php:66
-#: SharedPlacesModule.php:161 SharedPlacesModule_20.php:162
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:167
 #: resources/views/lists/locations-table.phtml:42
-#: resources/views/lists/shared-places-table_20.phtml:38
-#: resources/views/search-general-page-ext_20.phtml:99
-#: resources/views/search-results-ext_20.phtml:88
 msgid "Shared places"
 msgstr "Спільні місця"
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:233
+#: SharedPlacesModuleTrait.php:241
 msgid "Shared places list"
 msgstr "Список спільних місць"
 
@@ -374,7 +338,6 @@ msgstr "Показати кількість посилань для списку
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:194
 #: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:129
-#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage_20.php:127
 msgid "Summary"
 msgstr "Резюме"
 
@@ -382,10 +345,6 @@ msgstr "Резюме"
 #: resources/views/data-fix-options.phtml:128
 msgid "The created shared places, as well as existing shared places, are linked via XREFs to event places."
 msgstr "Створені спільні місця, а також наявні спільні місця, пов’язані через посилання з місцями подій."
-
-#: resources/views/modules/generic-place-hierarchy-shared-places/sidebar_20.phtml:42
-msgid "The location of this shared place is not known."
-msgstr "Місцезнаходження цього спільного місця невідоме."
 
 #: resources/views/data-fix-options.phtml:85
 msgid "The search cannot be implemented efficiently and may take some time in particular when displaying and updating a large number of records."
@@ -395,16 +354,13 @@ msgstr "Пошук не може бути здійснений ефективн�
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
 msgstr "Пошук цього виправлення даних наразі не відповідає жодним записам, оскільки параметр конфігурації \"Використовувати ієрархічні спільні місця\" не встановлений."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:55
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:55
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:52
 #, php-format
 msgid "The shared place %s already exists."
 msgstr "Спільне місце %s вже існує."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:76
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:120
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:76
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction_20.php:120
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:77
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:123
 #, php-format
 msgid "The shared place %s has been created."
 msgstr "Спільне місце %s створено."
@@ -462,7 +418,7 @@ msgid "This data fix turns shared places with comma-separated name parts into hi
 msgstr "Це виправлення даних перетворює спільні місця з розділеними комами частинами імен на ієрархічні спільні місця (які пов’язані зі спільними місцями вищого рівня за допомогою зовнішніх посилань)."
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:109
+#: SharedPlacesModuleTrait.php:108
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list."
 msgstr "Це перелік фактів GEDCOM, які ваші користувачі можуть додавати до спільних місць. Ви можете змінити цей список, видаливши або додавши імена фактів за необхідності. Назви фактів, які містяться в цьому списку, не повинні також відображатися у списку «Унікальні факти про спільні місця»."
 
@@ -472,13 +428,11 @@ msgid "This is the list of GEDCOM facts that your users can add to shared places
 msgstr "Це перелік фактів GEDCOM, які ваші користувачі можуть додавати до спільних місць. Ви можете змінити цей список, видаливши або додавши імена фактів за необхідності. Назви фактів, які містяться в цьому списку, не повинні також відображатися у списку «Унікальні факти про спільні місця». "
 
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:117
+#: SharedPlacesModuleTrait.php:116
 msgid "This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list."
 msgstr "Це перелік фактів GEDCOM, які ваші користувачі можуть додати лише один раз до спільних місць. Наприклад, якщо NAME є у цьому списку, користувачі не зможуть додати більше одного запису NAME до спільного місця. Назви фактів, які містяться в цьому списку, не повинні також відображатися у списку \"Усі факти про спільні місця\"."
 
-#: resources/views/modules/generic-place-hierarchy-shared-places/page_20.phtml:36
 #: resources/views/shared-places-list-page.phtml:20
-#: resources/views/shared-places-list-page_20.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr "Це призводить до невідповідностей при відображенні місць до спільних місць, і загалом не відповідає специфікації для спільних місць (чого попередні версії цього користувацького модуля не суворо дотримувались)."
 
@@ -486,43 +440,17 @@ msgstr "Це призводить до невідповідностей при �
 msgid "This shared place does not exist or you do not have permission to view it."
 msgstr "Цього спільного місця не існує або Ви не маєте права на його перегляд."
 
-#: resources/views/shared-place-page_20.phtml:34
-msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
-msgstr "Це спільне місце було видалено. Видалення потрібно перевірити модератору."
-
-#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
-#: resources/views/shared-place-page_20.phtml:31
-#, php-format
-msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
-msgstr "Це спільне місце було видалено. Вам слід переглянути видалення, а потім %1$s s або %2$s це."
-
-#: resources/views/shared-place-page_20.phtml:43
-msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
-msgstr "Це спільне місце відредаговано. Зміни повинні бути розглянуті модератором."
-
-#. I18N: %1$s is “accept”, %2$s is “reject”. These are links.
-#: resources/views/shared-place-page_20.phtml:40
-#, php-format
-msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
-msgstr "Це спільне місце відредаговано. Вам слід переглянути зміни, а потім %1$s або %2$s їх."
-
-#: resources/views/modules/generic-place-hierarchy-shared-places/page_20.phtml:35
 #: resources/views/shared-places-list-page.phtml:19
-#: resources/views/shared-places-list-page_20.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr "У цьому дереві наявні спільні місця з розділеними комами частинами імен, водночас вибрано опцію \"Використовувати ієрархічні спільні місця\"."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:405 SharedPlacesModule_20.php:378
+#: SharedPlacesModule.php:445
 msgid "Type of hierarchical relationship"
 msgstr "Тип ієрархічних відносин"
 
-#: SharedPlacesModule_20.php:377
-msgid "Type of location"
-msgstr "Тип локації"
-
 #. I18N: Module Configuration
-#: SharedPlacesModuleTrait.php:113
+#: SharedPlacesModuleTrait.php:112
 msgid "Unique shared place facts"
 msgstr "Унікальні факти про спільне місце"
 
@@ -536,7 +464,7 @@ msgstr "Використовуйте ієрархічні спільні міс�
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Використовуйте окремий тег '%1$s' для моделювання ієрархії місць."
 
-#: SharedPlacesModule.php:201 SharedPlacesModule_20.php:196
+#: SharedPlacesModule.php:215
 msgid "View Shared places hierarchy"
 msgstr "Перегляд ієрархії спільних місць"
 
@@ -555,36 +483,11 @@ msgstr "Якщо не встановити прапорець, застосов�
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr "Ви можете встановити контрольний рік (який може оцінюватися іншими модулями, наприклад %1$s) у конфігурації модуля."
 
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:559
-msgid "administrative"
-msgstr "адміністративний"
-
-#: patchedWebtrees/SharedPlace.php:977 patchedWebtrees/SharedPlace.php:1053
+#: patchedWebtrees/SharedPlace.php:976 patchedWebtrees/SharedPlace.php:1052
 msgid "circular shared place hierarchy"
 msgstr "кругова ієрархія спільних місць"
 
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:568
-msgid "cultural"
-msgstr "культурний"
-
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:565
-msgid "geographical"
-msgstr "географічний"
-
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:571
-msgid "other"
-msgstr "інший"
-
-#. I18N: Type of hierarchical relationship between locations
-#: patchedWebtrees/Functions/FunctionsEditLoc.php:562
-msgid "religious"
-msgstr "релігійний"
-
-#: SharedPlacesModule.php:958 SharedPlacesModule_20.php:884
+#: SharedPlacesModule.php:1101
 msgid "shared places"
 msgstr "спільні місця"
 
@@ -605,8 +508,50 @@ msgstr "так, але лише перша поява спільного міс�
 #~ msgid "Replaces the original 'Locations' module."
 #~ msgstr "Замінює оригінальний модуль \"Locations\"."
 
+#~ msgid "Shared Places"
+#~ msgstr "Спільні Місця"
+
+#~ msgid "Shared place hierarchy"
+#~ msgstr "Ієрархія спільного місця"
+
+#~ msgid "Shared place list"
+#~ msgstr "Список спільних місць"
+
+#~ msgid "The location of this shared place is not known."
+#~ msgstr "Місцезнаходження цього спільного місця невідоме."
+
+#~ msgid "This shared place has been deleted. The deletion will need to be reviewed by a moderator."
+#~ msgstr "Це спільне місце було видалено. Видалення потрібно перевірити модератору."
+
+#~ msgid "This shared place has been deleted. You should review the deletion and then %1$s or %2$s it."
+#~ msgstr "Це спільне місце було видалено. Вам слід переглянути видалення, а потім %1$s s або %2$s це."
+
+#~ msgid "This shared place has been edited. The changes need to be reviewed by a moderator."
+#~ msgstr "Це спільне місце відредаговано. Зміни повинні бути розглянуті модератором."
+
+#~ msgid "This shared place has been edited. You should review the changes and then %1$s or %2$s them."
+#~ msgstr "Це спільне місце відредаговано. Вам слід переглянути зміни, а потім %1$s або %2$s їх."
+
+#~ msgid "Type of location"
+#~ msgstr "Тип локації"
+
+#~ msgid "administrative"
+#~ msgstr "адміністративний"
+
+#~ msgid "cultural"
+#~ msgstr "культурний"
+
+#~ msgid "geographical"
+#~ msgstr "географічний"
+
 #~ msgid "no"
 #~ msgstr "ні"
+
+#~ msgid "other"
+#~ msgstr "інший"
+
+#~ msgid "religious"
+#~ msgstr "релігійний"
 
 #~ msgid "yes"
 #~ msgstr "так"

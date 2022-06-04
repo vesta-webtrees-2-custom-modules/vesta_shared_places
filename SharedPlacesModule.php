@@ -446,7 +446,7 @@ class SharedPlacesModule extends AbstractModule implements
             '_LOC:TYPE:_GOVTYPE' => new CustomElement(I18N::translate('GOV id for type of location')),
             
             
-            '_LOC:NAME:LANG' => new LanguageIdReplacement(I18N::translate('Language')),
+            '_LOC:NAME:LANG' => new LanguageIdReplacement(MoreI18N::xlate('Language')),
         ]);
       
         $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 4);
@@ -575,7 +575,7 @@ class SharedPlacesModule extends AbstractModule implements
         }
         
 	$toggleable = true/*boolval($this->getPreference('TAB_TOGGLEABLE_LOC_FACTS', '1'))*/;
-	return $this->getOutputInDescriptionBox($toggleable, 'show-location-facts-factstab', 'wt-location-fact-pfh', I18N::translate('Shared Place Events'));
+	return $this->getOutputInDescriptionBox($toggleable, 'show-location-facts-factstab', 'wt-location-fact-pfh', I18N::translate('Shared place data'));
     }
   
     protected function getOutputInDescriptionBox(
