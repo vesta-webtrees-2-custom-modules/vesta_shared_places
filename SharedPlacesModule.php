@@ -927,7 +927,7 @@ class SharedPlacesModule extends AbstractModule implements
         //add name if different from PLAC name
         $nameAt = $sharedPlace->primaryPlaceAt($place->getEventDateInterval())->gedcomName();
         if ($nameAt !== $place->getGedcomName()) {
-            $html .= '<div class="indent">';
+            $html .= '<div class="ps-4 indent">';
             $html .= $nameAt;
             $html .= '</div>';
         }
@@ -938,7 +938,7 @@ class SharedPlacesModule extends AbstractModule implements
             //(and ultimately perhaps do not add entire 'shared place data', in case there is nothing else to display)
             $note = view($this->name() . '::fact-notes-shared-place', ['fact' => $sharedPlace]);
             if ($note !== '') {
-                $html .= '<div class="indent">';
+                $html .= '<div class="ps-4 indent">';
                 $html .= $note;
                 //$html .= '<br>';
                 $html .= '</div>';
@@ -949,7 +949,7 @@ class SharedPlacesModule extends AbstractModule implements
         if (preg_match_all("/1 OBJE @(.*)@/", $sharedPlace->gedcom(), $match)) {
             $media = view($this->name() . '::fact-media-shared-place', ['fact' => $sharedPlace]);
             if ($media !== '') {
-                $html .= '<div class="indent">';
+                $html .= '<div class="ps-4 indent">';
                 $html .= $media;
                 $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
                 $html .= '</div>';
@@ -960,7 +960,7 @@ class SharedPlacesModule extends AbstractModule implements
         if (preg_match_all("/1 SOUR @(.*)@/", $sharedPlace->gedcom(), $match)) {
             $sources = view($this->name() . '::fact-sources-shared-place', ['fact' => $sharedPlace]);
             if ($sources !== '') {
-                $html .= '<div class="indent">';
+                $html .= '<div class="ps-4 indent">';
                 $html .= $sources;
                 $html .= '<br class="media-separator" style="clear:both;">'; //otherwise layout issues wrt following elements, TODO handle differently!
                 $html .= '</div>';
