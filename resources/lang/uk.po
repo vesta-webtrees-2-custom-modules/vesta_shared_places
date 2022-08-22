@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-05-30 19:05+0200\n"
-"PO-Revision-Date: 2022-06-21 18:14+0000\n"
+"PO-Revision-Date: 2022-08-22 05:17+0000\n"
 "Last-Translator: Artem <artem@molotov.work>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/uk/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
@@ -140,7 +140,7 @@ msgstr "Ієрархізуйте спільні місця"
 
 #: SharedPlacesModule.php:443
 msgid "Higher-level shared place"
-msgstr "Загальне місце більш високого рівня"
+msgstr "Загальне місце вищого рівня"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:87
@@ -164,7 +164,10 @@ msgstr "Якщо доступні дані, незалежні від дерев
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:88
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
-msgstr "Якщо ви використовуєте ієрархічні спільні місця, місце з назвою \"A, B, C\" відображається у спільному місці \"A\" із спільним місцем більш високого рівня, яке відображається на \"B, C\"."
+msgstr ""
+"Якщо ви використовуєте ієрархічні спільні місця, місце з назвою \"A, B, C\" "
+"відображається у спільному місці \"A\" із спільним місцем вищого рівня, яке "
+"відображається на \"B, C\"."
 
 #: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
