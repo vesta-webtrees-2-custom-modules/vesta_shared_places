@@ -31,9 +31,11 @@ use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlacePreferences;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Elements\CustomElement;
+use Fisharebest\Webtrees\Elements\GovIdType;
 use Fisharebest\Webtrees\Elements\HierarchicalRelationship;
 use Fisharebest\Webtrees\Elements\LocationRecord;
 use Fisharebest\Webtrees\Elements\PlaceName;
+use Fisharebest\Webtrees\Elements\UnknownElement;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Middleware\AuthEditor;
@@ -443,11 +445,19 @@ class SharedPlacesModule extends AbstractModule implements
             '_LOC:_LOC' => new XrefSharedPlace(I18N::translate('Higher-level shared place'), ['DATE' => '0:1', 'SOUR' => '0:M', 'TYPE' => '0:1']),
             //'_LOC:TYPE' => new CustomElement(I18N::translate('Type of location')), //anyway requires subtags!
             '_LOC:_LOC:TYPE' => new HierarchicalRelationship(I18N::translate('Type of hierarchical relationship')),
-            '_LOC:TYPE:_GOVTYPE' => new CustomElement(I18N::translate('GOV id for type of location')),
-            
             
             '_LOC:NAME:LANG' => new LanguageIdReplacement(MoreI18N::xlate('Language')),
         ]);
+        
+        //register fallback in case Gov4Webtrees isn't active:
+        //(webtrees registers this as CustomElement via gedcomLTags(), 
+        //even though there is something more specific in webtrees core code)
+        $element = $ef->make('_LOC:TYPE:_GOVTYPE');
+        if (($element instanceof CustomElement) || ($element instanceof UnknownElement)) {
+            $ef->registerTags([
+                '_LOC:TYPE:_GOVTYPE' => new GovIdType(I18N::translate('GOV id for type of location')),
+            ]);    
+        }
       
         $this->flashWhatsNew('\Cissee\Webtrees\Module\SharedPlaces\WhatsNew', 4);
     }
