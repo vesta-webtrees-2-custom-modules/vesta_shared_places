@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-05-30 19:05+0200\n"
-"PO-Revision-Date: 2021-05-21 12:32+0000\n"
-"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/sv/>\n"
+"PO-Revision-Date: 2022-09-15 17:17+0000\n"
+"Last-Translator: tygyh <jonis9898@hotmail.com>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
@@ -31,6 +32,8 @@ msgstr " (Obs! En delad plats på högre nivå har också skapats)"
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
+"%s och de individer och familjer som hänvisar till den, inklusive föräldrar, "
+"syskon, makar och barn till varje individ."
 
 #: SharedPlacesModule.php:1013
 #, php-format
@@ -216,7 +219,7 @@ msgstr "Lokalisering"
 #. I18N: translate just like 'Shared Places' for consistency
 #: SharedPlacesModule.php:404
 msgid "Locations"
-msgstr ""
+msgstr "Platser"
 
 #: resources/views/data-fix-options.phtml:83
 #: resources/views/data-fix-options.phtml:102
@@ -373,6 +376,9 @@ msgstr "Sammanfattningen visar den delade platsens data, formaterad på samma s�
 #: SharedPlacesModuleTrait.php:197
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
 msgstr ""
+"Det årtal som anges här kan användas av andra moduler för att komplettera "
+"platsbeskrivningen med ytterligare uppgifter. Om det lämnas tomt används det "
+"aktuella året."
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
@@ -482,6 +488,8 @@ msgstr "När det inte är markerat används det tidigare tillvägagångssättet,
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"Du kan ange ett referensår (som kan utvärderas av andra moduler, t.ex. %1$s) "
+"i modulkonfigurationen."
 
 #: patchedWebtrees/SharedPlace.php:976 patchedWebtrees/SharedPlace.php:1052
 msgid "circular shared place hierarchy"
