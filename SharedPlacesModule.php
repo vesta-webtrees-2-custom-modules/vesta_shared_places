@@ -4,6 +4,7 @@ namespace Cissee\Webtrees\Module\SharedPlaces;
 
 use Cissee\Webtrees\Module\SharedPlaces\HelpTexts;
 use Cissee\WebtreesExt\AbstractModule;
+use Cissee\WebtreesExt\Elements\CustomLocationEvent;
 use Cissee\WebtreesExt\Elements\LanguageIdReplacement;
 use Cissee\WebtreesExt\Elements\XrefSharedPlace;
 use Cissee\WebtreesExt\Factories\SharedPlaceFactory;
@@ -439,6 +440,9 @@ class SharedPlacesModule extends AbstractModule implements
             //redundant, we swap translation globally anyway!
             '_LOC' => new LocationRecord(I18N::translate('Shared place')),
 
+            //fix #137
+            '_LOC:EVEN' => new CustomLocationEvent(I18N::translate('Event')),
+            
             //'Place' seems confusing here - if hierarchical shared places are used, this should be just one part of the place name
             '_LOC:NAME' => new PlaceName(MoreI18N::xlate('Name'), ['ABBR' => '0:1', 'DATE' => '0:1', 'LANG' => '0:1', 'SOUR' => '0:M']),
 
