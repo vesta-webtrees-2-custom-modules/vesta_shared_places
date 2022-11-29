@@ -451,6 +451,10 @@ class SharedPlacesModule extends AbstractModule implements
             '_LOC:_LOC:TYPE' => new HierarchicalRelationship(I18N::translate('Type of hierarchical relationship')),
             
             '_LOC:NAME:LANG' => new LanguageIdReplacement(MoreI18N::xlate('Language')),
+            
+            //these types of links are problematic because they mess up the shared place hierarchy (#140)
+            //but we have to support them at least this far, in oprder to avoid router errors
+            '_LOC:EVEN:PLAC:_LOC' => new XrefSharedPlace(I18N::translate('Location')),
         ]);
         
         //register fallback in case Gov4Webtrees isn't active:
