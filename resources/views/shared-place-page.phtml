@@ -47,13 +47,13 @@ use Illuminate\Support\Collection;
 <div class="wt-page-content">
     <?php if ($llSharedPlaces instanceof Collection || $linked_families instanceof Collection || $linked_individuals instanceof Collection || $linked_media_objects instanceof Collection || $linked_notes instanceof Collection || $linked_sources instanceof Collection) : ?>
         <?= view($moduleName . '::shared-place-page-links', [
-            'details'              => view($moduleName . '::shared-place-page-details', [
+            'details' => view($moduleName . '::shared-place-page-details', [
                 'hierarchyHtml' => $hierarchyHtml,
                 'summaryHtml' => $summaryHtml,
                 'clipboard_facts' => $clipboard_facts,             
                 'record' => $record,
                 'module' => $module,
-                ]),
+            ]),
             
             'linked_families'      => $linked_families,
             'linked_individuals'   => $linked_individuals,

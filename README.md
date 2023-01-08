@@ -89,7 +89,7 @@ LOCATION_RECORD:=
 
 ### Download<a name="download"/>
 
-* Current version: 2.1.15.0.0
+* Current version: 2.1.15.0.2
 * Based on and tested with webtrees 2.1.15. Requires webtrees 2.1.8 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
@@ -110,7 +110,7 @@ LOCATION_RECORD:=
 ### License<a name="license"/>
 
 * **vesta_shared_places: a webtrees custom module**
-* Copyright (C) 2019 – 2022 Richard Cissée
+* Copyright (C) 2019 – 2023 Richard Cissée
 * Derived from **webtrees** - Copyright 2022 webtrees development team.
 * French translations provided by Pierre Dousselin.
 * Dutch translations provided by TheDutchJewel.

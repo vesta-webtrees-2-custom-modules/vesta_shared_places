@@ -326,5 +326,11 @@
 		"version": "2.1.15.0.0",
 		"from": "2.1.10",
 		"to": "2.1.16"
+	},
+	{
+		"version": "2.1.15.0.2",
+		"from": "2.1.10",
+		"to": "2.1.16",
+		"changelog": ["Bugfix (use Shared Places without Personal Facts module)."]
 	}
 ]
