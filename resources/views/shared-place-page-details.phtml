@@ -1,6 +1,7 @@
 <?php
 
-use Cissee\Webtrees\Module\PersonalFacts\DefaultAssociateFactUtils;
+use Cissee\WebtreesExt\Contracts\FallbackAssociateFactUtils;
+use Cissee\WebtreesExt\Module\ModuleVestalInterface;
 use Fisharebest\Webtrees\GedcomRecord;
 use Vesta\VestaUtils;
 
@@ -30,7 +31,7 @@ use Vesta\VestaUtils;
                     'module'                 => $module,
                     'useVestals'             => false,
                     'hideCoordinates'        => false,
-                    'associateFactUtils'     => new DefaultAssociateFactUtils(),
+                    'associateFactUtils'     => new FallbackAssociateFactUtils(),
                     'ownAdditionalStyles'    => [], //none
                     'predecessors'           => [], //not used here
                     'relToPredecessorSuffix' => '', //not used here
