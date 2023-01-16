@@ -371,7 +371,9 @@ class SharedPlacesModule extends AbstractModule implements
         
         //adjustment for ajax-modal-vesta
         View::registerCustomView('::edit/edit-fact', $this->name() . '::edit/edit-fact');
-        
+        View::registerCustomView('::edit/link-spouse-to-individual', $this->name() . '::edit/link-spouse-to-individual');
+        View::registerCustomView('::edit/new-individual', $this->name() . '::edit/new-individual');
+
         $createSharedPlaceModal = new CreateSharedPlaceModal($this);
       
         $router->get(CreateSharedPlaceModal::class, '/tree/{tree}/create-location', $createSharedPlaceModal)

@@ -1,0 +1,41 @@
+<?php
+
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Services\GedcomEditService;
+use Fisharebest\Webtrees\Tree;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsInterface;
+use Vesta\Hook\HookInterfaces\GovIdEditControlsUtils;
+use Vesta\VestaUtils;
+
+/**
+ * @var string            $cancel_url
+ * @var GedcomEditService $gedcom_edit_service
+ * @var string            $label
+ * @var string            $post_url
+ * @var string            $title
+ * @var Tree              $tree
+ */
+
+//original view
+echo view('::edit/link-spouse-to-individual', [
+            'cancel_url'          => $cancel_url,
+            'facts'               => $facts, //undocumented!
+            'gedcom_edit_service' => $gedcom_edit_service,
+            'label'               => $label,
+            'post_url'            => $post_url,
+            'title'               => $title,
+            'tree'                => $tree,
+        ]);
+
+//select initializers for modal placeholder ajax-modal-vesta.phtml used via CreateSharedPlaceModal, urgh
+$select2Initializers = GovIdEditControlsUtils::accessibleModules($tree, Auth::user())
+    ->map(function (GovIdEditControlsInterface $module) {
+        return $module->govIdEditControlSelectScriptSnippet();
+    })
+    ->toArray();
+            
+echo view(VestaUtils::vestaViewsNamespace() . '::modals/ajax-modal-vesta', [
+            'ajax' => false,
+            'select2Initializers' => $select2Initializers
+        ]);
+?>
