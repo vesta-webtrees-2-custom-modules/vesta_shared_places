@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-05-30 19:05+0200\n"
-"PO-Revision-Date: 2023-01-17 18:52+0000\n"
+"PO-Revision-Date: 2023-02-03 19:40+0000\n"
 "Last-Translator: Markus Hemprich <hemprich@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
@@ -98,7 +98,9 @@ msgstr "Erstelle alle fehlenden gemeinsamen Orte und ergänze fehlende XREFs"
 
 #: resources/views/data-fix-options.phtml:96
 msgid "Create missing shared places from tree-independent data, and add missing XREFs"
-msgstr "Erstelle fehlende gemeinsamen Orte aus separat verwalteten Daten und ergänze fehlende XREFs"
+msgstr ""
+"Erstelle fehlende gemeinsame Orte aus separat verwalteten Daten und ergänze "
+"fehlende XREFs"
 
 #: resources/views/data-fix-options.phtml:18
 msgid "Data Fix"
@@ -133,7 +135,7 @@ msgstr "ID für den GOV-Objekttyp des Ortes"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
-msgstr "Gemeinsamen Orte hierarchisieren"
+msgstr "Gemeinsame Orte hierarchisieren"
 
 #: SharedPlacesModule.php:443
 msgid "Higher-level shared place"
@@ -390,7 +392,9 @@ msgstr "Daher wird hier der Ortsname einschließlich der vollständigen Hierarch
 
 #: resources/views/data-fix-options.phtml:84
 msgid "Therefore, this data fix enables you to move away from using that configuration option."
-msgstr "Dieser Datenkorrektur ermöglicht es, auf eine weitere Verwendung jener Konfigurationsoption zu verzichten."
+msgstr ""
+"Diese Datenkorrektur ermöglicht es, auf eine weitere Verwendung jener "
+"Konfigurationsoption zu verzichten."
 
 #: resources/views/data-fix-options.phtml:82
 msgid "This data fix adds XREFs, linking all places within events directly to the respective shared places."
