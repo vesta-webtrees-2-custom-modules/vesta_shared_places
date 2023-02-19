@@ -104,8 +104,12 @@ class LanguageIdExt
             'Bulgarian'     => (new LocaleBg()),
             'Burmese'       => (new LocaleMy()),
             'Cantonese'     => (new LocaleYue()),
-            'Catalan'       => (new LocaleCaEsValencia()),
-            'Catalan_Spn'   => (new LocaleCa()),
+            
+            //[RC] adjusted
+            //'Catalan'       => (new LocaleCaEsValencia()),
+            //'Catalan_Spn'   => (new LocaleCa()),
+            'Catalan'       => (new LocaleCa()),
+            
             'Church-Slavic' => (new LocaleCu()),
             'Czech'         => (new LocaleCs()),
             'Danish'        => (new LocaleDa()),

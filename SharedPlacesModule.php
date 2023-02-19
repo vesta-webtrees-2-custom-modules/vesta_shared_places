@@ -27,6 +27,7 @@ use Cissee\WebtreesExt\Module\ModuleVestalTrait;
 use Cissee\WebtreesExt\MoreI18N;
 use Cissee\WebtreesExt\PlaceViaSharedPlace;
 use Cissee\WebtreesExt\Requests;
+use Cissee\WebtreesExt\Services\GedcomImportServiceExt;
 use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlacePreferences;
@@ -62,6 +63,7 @@ use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\PlaceLocation;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\DataFixService;
+use Fisharebest\Webtrees\Services\GedcomImportService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
@@ -237,6 +239,9 @@ class SharedPlacesModule extends AbstractModule implements
      */
     public function onBoot(): void {
 
+        //extend
+        app()->instance(GedcomImportService::class, new GedcomImportServiceExt());
+        
         //explicitly register in order to re-use in views where we cannot pass via variable
         //(could also resolve via module service)
         app()->instance(SharedPlacesModule::class, $this); //do not use bind()! for some reason leads to 'Illegal offset type in isset or empty'

@@ -74,18 +74,24 @@ class SharedPlace extends Location {
         //$this->check();
     }
 
+    public static function forget(Tree $tree, string $xref): void {        
+        $cacheKey = SharePlace::class . '_key_' . $tree->id() . '_' . $xref;
+        Registry::cache()->file()->forget($cacheKey);
+    }
+    
     public function check(): void {
+        
+        //Issue #127
+        //must add tree id to all cache keys!
+        //(particularly important here as this is not a per-request cache)
+        $cacheKey = SharePlace::class . '_key_' . $this->tree()->id() . '_' . $this->xref();
+
         //have to use $this->gedcom() as additional key
         //because any update operation orphans our places via GedcomImportService::updateRecord
         //
         //not sufficient as only key because parent names may have changed
         $pending = $this->isPendingAddition() ? '_P' : '';
-        
-        //Issue #127
-        //also must add tree id to all cache keys!
-        //(particularly important here as this is not a per-request cache)
-        $cacheKey = SharePlace::class . '_key_' . $this->tree()->id() . '_' . $this->xref();
-        
+                
         //here, the tree id (and likely also the xref) is actually redundant, nevermind
         $key = SharePlace::class . '_check_' . $this->tree()->id() . '_' . $this->xref() . '_' . $this->gedcom() . $pending . '_' . json_encode($this->namesAsPlaceStringsAt(GedcomDateInterval::createEmpty()));
 
@@ -117,12 +123,14 @@ class SharedPlace extends Location {
     }
 
     protected function doCheck(): void {
-
+        
         /*
-          foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
+        foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
           error_log("doCheck placename for ".$this->xref(). ": " . $place->gedcomName());
-          }
-         */
+          $e = new \Exception();
+          error_log($e->getTraceAsString());
+        }
+        */
 
         //make sure all places _for_all_dates_ exist, and are linked to this record 
         //(otherwise they will be deleted again in next GedcomImportService::updateRecord() call as 'orphaned places')
@@ -157,6 +165,7 @@ class SharedPlace extends Location {
         }
 
         //error_log(print_r($allPlaceIds, true));
+        
         // Place links (first step: delete obsolete links)
         DB::table('placelinks')
             ->where('pl_gid', '=', $this->xref())
