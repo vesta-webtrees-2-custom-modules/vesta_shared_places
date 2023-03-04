@@ -8,17 +8,45 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
       return element.tomselect;
     }
     
+    //element.id has structure 'id-235a7975c6194772bd348f4b5740af11-INDI-CHR-PLAC-_LOC'
+    //we're looking for 'id-4393f90138404a5f92c0523de58d2810-INDI-CHR-DATE' and '...-PLAC'
+    let lio1 = element.id.lastIndexOf("INDI-");
+    let lio2 = element.id.lastIndexOf("FAM-");
+    let lio = (lio1 === -1)?lio2:lio1;
+    let tag = (lio === -1)?null:element.id.substring(lio).replace("INDI-", "").replace("FAM-", "").replace("-PLAC-_LOC", "");
+    //console.log("sp for "+tag);
+    
+    //using the tag isn't sufficient in case there are multiple facts with the same tag!
+    //(which is possible on special multi-fact dialogs)
+    //
+    //therefore additionally use the DOM tree itself as context
+    //note: this does not work for edit-record (which is hidden functionality anyway) in case of multiple same tags,
+    //because that dialog doesn't structure the facts.
+    //also note: for 'structured' dialogs, the tag itself wouldn't even be required, 
+    //because there is max one PLAC/DATE per fact)
+
+    //in multi-fact dialogs, per-fact top-level element has id starting with 'fact-'
+    //in single-fact dialogs, just use document itself
+    
+    var fact = element.closest('[id^=fact-]');
+    if (!fact) {
+        fact = document;
+    } else {
+        //console.log("sp for "+fact.id);
+    }    
+        
     <?php
     //prepare to sync PLAC value with _LOC title (for the respective DATE)
     //(but only if both were set initially, or if PLAC isn't set initially (or reset during edit))
-    ?>           
-    var firstPlacInput = document.querySelector('[id$=PLAC]');
-    if (firstPlacInput) {
-        if ((firstPlacInput.value !== '') && (element.value === '')) {
-            firstPlacInput.setAttribute('data-vesta-lock-plac', true);
-            firstPlacInput.addEventListener('input',function() {
-                if (firstPlacInput.value === '') {
-                    firstPlacInput.removeAttribute('data-vesta-lock-plac');
+    ?>
+    var ownPlacInput = fact.querySelector('[id$=' + tag + '-PLAC]');
+    if (ownPlacInput) {
+        if ((ownPlacInput.value !== '') && (element.value === '')) {
+            ownPlacInput.setAttribute('data-vesta-lock-plac', true);
+            //console.log("sp lock "+tag);
+            ownPlacInput.addEventListener('input',function() {
+                if (ownPlacInput.value === '') {
+                    ownPlacInput.removeAttribute('data-vesta-lock-plac');
                 }                
             });
         }        
@@ -63,13 +91,10 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
         },
         load: function (query, callback) {
             var baseQuery = this.getUrl(query);
-            <?php
-            //TODO: improve this: there may be additional DATE?
-            //also cf impl in ResearchSuggestions
-            ?>
-            var firstDateInput = document.querySelector('[id$=DATE]');
-            if (firstDateInput) {
-                var dateValue = firstDateInput.value;
+            
+            var ownDateInput = fact.querySelector('[id$=' + tag + '-DATE]');
+            if (ownDateInput) {
+                var dateValue = ownDateInput.value;
                 baseQuery += '&dateStr='+dateValue;
             }
             fetch(baseQuery)
@@ -87,14 +112,14 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
             <?php
             //actually sync PLAC value with _LOC title (for the respective DATE)
             ?>
-            var firstPlacInput = document.querySelector('[id$=PLAC]');
-            if (firstPlacInput) {
-                if (!("vestaLockPlac" in firstPlacInput.dataset)) {
+            var ownPlacInput = fact.querySelector('[id$=' + tag + '-PLAC]');
+            if (ownPlacInput) {
+                if (!("vestaLockPlac" in ownPlacInput.dataset)) {
                     <?php
                     //see https://github.com/orchidjs/tom-select/discussions/143
                     ?>
                     data = this.options[id];
-                    firstPlacInput.value = data.title; //coming from tom select, or from create shared place modal
+                    ownPlacInput.value = data.title; //coming from tom select, or from create shared place modal
                 } else {
                     console.log("PLAC is locked. Reset manually to unlock.");
                 }
