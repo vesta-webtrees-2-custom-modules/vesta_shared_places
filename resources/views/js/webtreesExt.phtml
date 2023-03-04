@@ -8,39 +8,47 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
       return element.tomselect;
     }
     
+    //used in
+    //a) 'structured' dialogs (single-fact or multi-fact)
+    //b) unstructured SOUR:DATA:EVEN dialog
+    //c) unstructured edit-record dialog (for top-level _LOC, otherwise hidden functionality)
+    
+    //in unstructured dialogs with multiple tags of same type, we have to count overall elements 
+    //in order to assign X:DATE to X:PLAC:_LOC properly
+    
+    //(in structured dialogs we could simply determine X by id (such as 'fact-') and just use that, like this
+    //var fact = element.closest('[id^=fact-]');
+    
     //element.id has structure 'id-235a7975c6194772bd348f4b5740af11-INDI-CHR-PLAC-_LOC'
     //we're looking for 'id-4393f90138404a5f92c0523de58d2810-INDI-CHR-DATE' and '...-PLAC'
     let lio1 = element.id.lastIndexOf("INDI-");
     let lio2 = element.id.lastIndexOf("FAM-");
-    let lio = (lio1 === -1)?lio2:lio1;
-    let tag = (lio === -1)?null:element.id.substring(lio).replace("INDI-", "").replace("FAM-", "").replace("-PLAC-_LOC", "");
+    let lio3 = element.id.lastIndexOf("SOUR-"); //for top level source
+    let lio4 = element.id.lastIndexOf("_LOC-"); //for top level shared place
+    let lio = (lio1 === -1)?((lio2 === -1)?((lio3 === -1)?lio4:lio3):lio2):lio1;
+    let tag = (lio === -1)?null:element.id.substring(lio).replace("-PLAC-_LOC", "");
     //console.log("sp for "+tag);
     
-    //using the tag isn't sufficient in case there are multiple facts with the same tag!
-    //(which is possible on special multi-fact dialogs)
-    //
-    //therefore additionally use the DOM tree itself as context
-    //note: this does not work for edit-record (which is hidden functionality anyway) in case of multiple same tags,
-    //because that dialog doesn't structure the facts.
-    //also note: for 'structured' dialogs, the tag itself wouldn't even be required, 
-    //because there is max one PLAC/DATE per fact)
-
-    //in multi-fact dialogs, per-fact top-level element has id starting with 'fact-'
-    //in single-fact dialogs, just use document itself
+    var allLoc = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC-_LOC]');
+    var overallCount = allLoc.length;
+    var overallPosition = -1;
+    for (let i = 0; i < allLoc.length; i++) {
+        if (allLoc[i] === element) {
+            overallPosition = i;
+        }
+    }
+    //console.log("sp count: "+overallCount);
+    //console.log("sp position: "+overallPosition);
     
-    var fact = element.closest('[id^=fact-]');
-    if (!fact) {
-        fact = document;
-    } else {
-        //console.log("sp for "+fact.id);
-    }    
-        
     <?php
     //prepare to sync PLAC value with _LOC title (for the respective DATE)
     //(but only if both were set initially, or if PLAC isn't set initially (or reset during edit))
     ?>
-    var ownPlacInput = fact.querySelector('[id$=' + tag + '-PLAC]');
-    if (ownPlacInput) {
+    var allPlac = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
+
+    if ((allPlac.length === overallCount) && (overallPosition !== -1)) {
+        var ownPlacInput = allPlac[overallPosition];
+        
         if ((ownPlacInput.value !== '') && (element.value === '')) {
             ownPlacInput.setAttribute('data-vesta-lock-plac', true);
             //console.log("sp lock "+tag);
@@ -49,83 +57,89 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
                     ownPlacInput.removeAttribute('data-vesta-lock-plac');
                 }                
             });
-        }        
+        } //else actually unexpected here, because PLAC:_LOC is subtag of PLAC
     }
 
     let options = {};
 
     if (element.dataset.url) {
-      let plugins = ['dropdown_input', 'virtual_scroll'];
+        let plugins = ['dropdown_input', 'virtual_scroll'];
 
-      if (element.multiple) {
-        plugins.push('remove_button');
-      } else if (!element.required) {
-        plugins.push('clear_button');
-      }
-
-      options = {
-        <?php
-        //[RC] disable standard scoring function which apparently matches input string with results
-        //this TomSelect feature isn't useful here (any name of a shared place matches)
-        ?>
-        // custom scoring
-	score: function() {
-            return function() {
-                return 1;
-            }
-        },
-        plugins: plugins,
-        maxOptions: false,
-        render: {
-          item: (data, escape) => '<div>' + data.text + '</div>',
-          option: (data, escape) => '<div>' + data.text + '</div>',
-        },        
-        firstUrl: function(query) {
-            <?php
-            //safer to use api. Do not encodeURIComponent, that's done internally!
-            ?>
-            var url_ = new URL(element.dataset.url);
-            url_.searchParams.set('query', query);
-            
-            return url_.href;
-        },
-        load: function (query, callback) {
-            var baseQuery = this.getUrl(query);
-            
-            var ownDateInput = fact.querySelector('[id$=' + tag + '-DATE]');
-            if (ownDateInput) {
-                var dateValue = ownDateInput.value;
-                baseQuery += '&dateStr='+dateValue;
-            }
-            fetch(baseQuery)
-                .then(response => response.json())
-                .then(json => {
-                    if (json.nextUrl !== null) {
-                        this.setNextUrl(query, json.nextUrl + '&query=' + encodeURIComponent(query));
-                    }
-                    
-                    callback(json.data);
-                })
-                .catch(callback);
-        },
-        onItemAdd: function(id) {
-            <?php
-            //actually sync PLAC value with _LOC title (for the respective DATE)
-            ?>
-            var ownPlacInput = fact.querySelector('[id$=' + tag + '-PLAC]');
-            if (ownPlacInput) {
-                if (!("vestaLockPlac" in ownPlacInput.dataset)) {
-                    <?php
-                    //see https://github.com/orchidjs/tom-select/discussions/143
-                    ?>
-                    data = this.options[id];
-                    ownPlacInput.value = data.title; //coming from tom select, or from create shared place modal
-                } else {
-                    console.log("PLAC is locked. Reset manually to unlock.");
-                }
-            }
+        if (element.multiple) {
+            plugins.push('remove_button');
+        } else if (!element.required) {
+            plugins.push('clear_button');
         }
-      };
+
+        options = {
+            <?php
+            //[RC] disable standard scoring function which apparently matches input string with results
+            //this TomSelect feature isn't useful here (any name of a shared place matches)
+            ?>
+            // custom scoring
+            score: function() {
+                return function() {
+                    return 1;
+                }
+            },
+            plugins: plugins,
+            maxOptions: false,
+            render: {
+              item: (data, escape) => '<div>' + data.text + '</div>',
+              option: (data, escape) => '<div>' + data.text + '</div>',
+            },        
+            firstUrl: function(query) {
+                <?php
+                //safer to use api. Do not encodeURIComponent, that's done internally!
+                ?>
+                var url_ = new URL(element.dataset.url);
+                url_.searchParams.set('query', query);
+
+                return url_.href;
+            },
+            load: function (query, callback) {
+                var baseQuery = this.getUrl(query);
+
+                var allDate = document.querySelectorAll('[id^=id][id$='+tag+'-DATE]');
+
+                if ((allDate.length === overallCount) && (overallPosition !== -1)) {
+                    var ownDateInput = allDate[overallPosition];
+                    var dateValue = ownDateInput.value;
+                    baseQuery += '&dateStr='+dateValue;
+                } //else DATE hidden, apparently
+                
+                fetch(baseQuery)
+                    .then(response => response.json())
+                    .then(json => {
+                        if (json.nextUrl !== null) {
+                            this.setNextUrl(query, json.nextUrl + '&query=' + encodeURIComponent(query));
+                        }
+
+                        callback(json.data);
+                    })
+                    .catch(callback);
+            },
+            onItemAdd: function(id) {
+                <?php
+                //actually sync PLAC value with _LOC title (for the respective DATE)
+                ?>
+                var allPlac = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
+
+                if ((allPlac.length === overallCount) && (overallPosition !== -1)) {
+                    var ownPlacInput = allPlac[overallPosition];
+
+                    if (!("vestaLockPlac" in ownPlacInput.dataset)) {
+                        <?php
+                        //see https://github.com/orchidjs/tom-select/discussions/143
+                        ?>
+                        data = this.options[id];
+                        ownPlacInput.value = data.title; //coming from tom select, or from create shared place modal
+                    } else {
+                        console.log("PLAC is locked. Reset manually to unlock.");
+                    }
+                } //else actually unexpected here, because PLAC:_LOC is subtag of PLAC
+            }
+        };
     }
 
     return new TomSelect(element, options);
@@ -135,28 +149,28 @@ $(function () {
     document.querySelectorAll('.tom-select-shared-place').forEach(element => webtrees.initializeTomSelectSharedPlace(element));
 });
 
-  /**
-   * Reset a tom-select input to have a single selected option
-   * @param {TomSelect} tomSelect
-   * @param {string} value
-   * @param {string} text
-   * @param {string} title
-   */
-  webtrees.resetTomSelectVesta = function (tomSelect, value, text, title) {
+/**
+ * Reset a tom-select input to have a single selected option
+ * @param {TomSelect} tomSelect
+ * @param {string} value
+ * @param {string} text
+ * @param {string} title
+ */
+webtrees.resetTomSelectVesta = function (tomSelect, value, text, title) {
     tomSelect.clear(true);
     tomSelect.clearOptions();
     tomSelect.addOption({ value: value, text: text , title: title });
     tomSelect.refreshOptions();
     tomSelect.addItem(value, true);
     tomSelect.refreshItems();
-  };
+};
   
-  /**
-   * Save a form using ajax, for use in modals
-   *
-   * @param {Event} event
-   */
-  webtrees.createRecordModalVestaSubmit = function (event) {
+/**
+ * Save a form using ajax, for use in modals
+ *
+ * @param {Event} event
+ */
+webtrees.createRecordModalVestaSubmit = function (event) {
     event.preventDefault();
     const form = event.target;
     <?php
@@ -167,39 +181,38 @@ $(function () {
     const select = document.getElementById(modal_content.dataset.wtSelectId);
 
     webtrees.httpPost(form.action, new FormData(form))
-      .then(async(response) => {
-        <?php
-        //[RC] adjusted
-        //https://learnwithparam.com/blog/how-to-handle-fetch-errors/
-        //plus
-        //https://stackoverflow.com/questions/39297345/fetch-resolves-even-if-404
-        ?>
-        if (response.status >= 200 && response.status <= 299) {
-          return response.json();
-        } else {
-          const json = await response.json();
-          throw Error(json.html);
-        }
-      })
-      .then(json => {
-        if (select) {
-          // This modal was activated by the "create new" button in a select edit control.
-          <?php
-          //[RC] adjusted
-          ?>
-          webtrees.resetTomSelectVesta(select.tomselect, json.value, json.text, json.title);
+        .then(async(response) => {
+            <?php
+            //[RC] adjusted
+            //https://learnwithparam.com/blog/how-to-handle-fetch-errors/
+            //plus
+            //https://stackoverflow.com/questions/39297345/fetch-resolves-even-if-404
+            ?>
+            if (response.status >= 200 && response.status <= 299) {
+              return response.json();
+            } else {
+              const json = await response.json();
+              throw Error(json.html);
+            }
+        })
+        .then(json => {
+            if (select) {
+                // This modal was activated by the "create new" button in a select edit control.
+                <?php
+                //[RC] adjusted
+                ?>
+                webtrees.resetTomSelectVesta(select.tomselect, json.value, json.text, json.title);
 
-          bootstrap.Modal.getInstance(modal).hide();
-        } else {
-          // Show the success message in the existing modal.
-          modal_content.innerHTML = json.html;
-        }
-      })
-      .catch(error => {
-        modal_content.innerHTML = error.message;
-      });
-  };
-
+                bootstrap.Modal.getInstance(modal).hide();
+            } else {
+                // Show the success message in the existing modal.
+                modal_content.innerHTML = json.html;
+            }
+        })
+        .catch(error => {
+            modal_content.innerHTML = error.message;
+        });
+};
 </script>
 
 
