@@ -86,15 +86,6 @@ $factFilter = new class($module, $record) implements FactFilter {
             </a>
         </li>
     <?php endif ?>
-        
-    <?php if ($llSharedPlaces instanceof Collection) : ?>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" data-bs-toggle="tab" role="tab" href="#llSharedPlaces">
-                <?= I18N::translate('Next lower-level shared places') ?>
-                <?= view('components/badge', ['count' => $llSharedPlaces->count()]) ?>
-            </a>
-        </li>
-    <?php endif ?>
 
     <?php if ($linked_media_objects instanceof Collection) : ?>
         <li class="nav-item" role="presentation">
@@ -119,6 +110,15 @@ $factFilter = new class($module, $record) implements FactFilter {
             <a class="nav-link" data-bs-toggle="tab" role="tab" href="#notes">
                 <?= MoreI18N::xlate('Notes') ?>
                 <?= view('components/badge', ['count' => $linked_notes->count()]) ?>
+            </a>
+        </li>
+    <?php endif ?>
+        
+    <?php if ($llSharedPlaces instanceof Collection) : ?>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" data-bs-toggle="tab" role="tab" href="#llSharedPlaces">
+                <?= I18N::translate('Next lower-level shared places') ?>
+                <?= view('components/badge', ['count' => $llSharedPlaces->count()]) ?>
             </a>
         </li>
     <?php endif ?>

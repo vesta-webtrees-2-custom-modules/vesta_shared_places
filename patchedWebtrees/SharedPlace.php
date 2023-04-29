@@ -472,6 +472,73 @@ class SharedPlace extends Location {
         return $main;
     }
 
+    public function linkedSources(string $link): Collection {
+        if ($link !== '_LOC') {
+            throw new Exception("unexpected link!");
+        }
+
+        return SharedPlace::linkedSourcesRecords(new Collection([$this]));
+    }
+
+    //more efficient than count(linkedSources())
+    public function countSourcesFamilies(string $link): int {
+        if ($link !== '_LOC') {
+            throw new Exception("unexpected link!");
+        }
+
+        return SharedPlace::linkedSourcesCount(new Collection([$this]));
+    }
+
+    public static function linkedSourcesRecords(Collection $sharedPlaces): Collection {
+        if ($sharedPlaces->count() === 0) {
+            return new Collection();
+        }
+        $anySharedPlace = $sharedPlaces->first();
+        return SharedPlace::linkedSourcesRaw($sharedPlaces)
+                ->map(Registry::sourceFactory()->mapper($anySharedPlace->tree()))
+                ->unique()
+                ->filter(self::accessFilter());
+    }
+
+    // Count the number of linked records. These numbers include private records.
+    // It is not good to bypass privacy, but many servers do not have the resources
+    // to process privacy for every record in the tree
+    public static function linkedSourcesCount(Collection $sharedPlaces): int {
+        return SharedPlace::linkedSourcesRaw($sharedPlaces)
+                ->map(function (stdClass $row): string {
+                    return $row->s_id;
+                })
+                ->unique()
+                ->count();
+    }
+
+    //batch mode for multiple inputs could be optimized for count!
+    public static function linkedSourcesRaw(Collection $sharedPlaces): Collection {
+        if ($sharedPlaces->count() === 0) {
+            return new Collection();
+        }
+        $anySharedPlace = $sharedPlaces->first();
+
+        //for compatibility with indirect links, we consider all child places as well (that's how placelinks work)
+        //in particular for batch operations, loading the entire _LOC-graph seems to be the most efficient solution if we cache it.
+        $main = LocGraph::get($anySharedPlace->tree())
+            ->linkedSources($sharedPlaces->map(function (SharedPlace $sharedPlace): string {
+                return $sharedPlace->xref();
+            }));
+
+        //consistent across all shared places
+        $useIndirectLinks = $anySharedPlace->useIndirectLinks();
+
+        if ($useIndirectLinks) {
+            
+            //TODO cannot use placelinks: sources are not included there by webtrees
+            //DB::table('placelinks')
+            return new Collection();
+        }
+
+        return $main;
+    }
+    
     //this impl is buggy because it always uses $date, rather than specific $intersectedDate
     //e.g. for $date (1801-2000): A has parent B from (1801-1900), B has parent C from (1901-2000);
     //then C isn't relevant here at all.

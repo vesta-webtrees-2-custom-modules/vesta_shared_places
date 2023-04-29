@@ -148,7 +148,7 @@ class SharedPlacePage implements RequestHandlerInterface {
             'llSharedPlaces'       => $this->linked_record_service->linkedLocations($record, '_LOC'),
             'linked_media_objects' => null, //TODO
             'linked_notes'         => null, //TODO
-            'linked_sources'       => null, //TODO
+            'linked_sources'       => $record->linkedSources('_LOC'),
             
             'record' => $record,
             'title' => $record->fullName(),
