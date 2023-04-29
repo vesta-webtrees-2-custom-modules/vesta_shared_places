@@ -1484,7 +1484,10 @@ class SharedPlace extends Location {
         return $this->primaryPlaceAt(GedcomDateInterval::createNow());
     }
 
-    public function primaryPlaceAt(GedcomDateInterval $date, ?string $query = null): Place {
+    public function primaryPlaceAt(
+        GedcomDateInterval $date, 
+        ?string $query = null): Place {
+        
         $firstMatch = null;
 
         if ($query !== null) {
@@ -1519,7 +1522,7 @@ class SharedPlace extends Location {
                 $this->getTransitiveParentsAt($date));
 
         if (sizeof($namesAsString) === 0) {
-            throw new \Exception("unexpectedly empty!");
+            throw new \Exception("unexpectedly empty for " . $firstMatch['fullNN'] . " at date " . $date->toGedcomString(0, true));
         }
 
         if (sizeof($namesAsString) !== 1) {
