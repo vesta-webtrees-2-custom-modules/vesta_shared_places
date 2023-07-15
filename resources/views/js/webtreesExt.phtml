@@ -192,6 +192,7 @@ webtrees.createRecordModalVestaSubmit = function (event) {
               return response.json();
             } else {
               const json = await response.json();
+              console.log('createRecordModalVestaSubmit: Error response ' + response.status);
               throw Error(json.html);
             }
         })
@@ -203,7 +204,12 @@ webtrees.createRecordModalVestaSubmit = function (event) {
                 ?>
                 webtrees.resetTomSelectVesta(select.tomselect, json.value, json.text, json.title);
 
-                bootstrap.Modal.getInstance(modal).hide();
+                // Show the success message in the existing modal.
+                modal_content.innerHTML = json.html;
+                
+                //[2023/05] changed: Message is useful here as well,
+                //in particular if additional changed places have been created
+                //bootstrap.Modal.getInstance(modal).hide();
             } else {
                 // Show the success message in the existing modal.
                 modal_content.innerHTML = json.html;
