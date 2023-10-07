@@ -26,6 +26,10 @@ See [here](https://github.com/vesta-webtrees-2-custom-modules/vesta_common/blob/
 
 <p align="center"><img src="place.png" alt="Screenshot" align="center" width="67%"></p>
 
+* Shared places also provide a place history tab, listing all events of specific types. This is particularly useful if you also use shared places for single buildings (e.g. farms), because it also shows the relationships between the respective individuals, thereby providing a 'line of succession' for the shared place.
+
+<p align="center"><img src="placeHistory.png" alt="Screenshot" align="center" width="67%"></p>
+
 * On the (extended) facts and events tab, shared place data is displayed in addition to regular place data.
 
 <p align="center"><img src="event.png" alt="Screenshot" align="center" width="67%"></p>
@@ -90,7 +94,7 @@ LOCATION_RECORD:=
 ### Download<a name="download"/>
 
 * Current version: 2.1.17.0.0
-* Based on and tested with webtrees 2.1.17. Requires webtrees 2.1.8 or later.
+* Based on and tested with webtrees 2.1.17. Requires webtrees 2.1.17 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
 * Provides location data to other custom modules.
