@@ -8,56 +8,71 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-05-30 19:05+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-10-09 20:02+0000\n"
+"Last-Translator: Imran <irwanmarzuki@gmail.com>\n"
+"Language-Team: Malay <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/ms/>\n"
 "Language: ms\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.1-dev\n"
 
 #: HelpTexts.php:17
 msgid "Shared place summary"
-msgstr ""
+msgstr "Ringkasan tempat perkongsian"
 
 #: HelpTexts.php:19
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
+"Ringkasan menunjukkan data tempat kongsi, diformatkan dengan cara yang sama "
+"seperti acara dengan tempat dipetakan ke tempat kongsi masing-masing."
 
 #: HelpTexts.php:20
 msgid "Therefore, the place name is displayed here including the full hierarchy."
-msgstr ""
+msgstr "Oleh itu, nama tempat dipaparkan di sini termasuk hierarki penuh."
 
 #: HelpTexts.php:21
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"Anda boleh menetapkan tahun rujukan (yang mungkin dinilai oleh modul lain, "
+"seperti %1$s) dalam konfigurasi modul."
 
 #: HelpTexts.php:27
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
+"Nama tempat hendaklah dimasukkan sebagai nama tempat tunggal (jangan gunakan "
+"senarai yang dipisahkan koma di sini)."
 
 #: HelpTexts.php:28
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
-msgstr ""
+msgstr "Gunakan teg berasingan '%1$s' untuk memodelkan hierarki tempat."
 
 #: HelpTexts.php:31 HelpTexts.php:40
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
+"Nama tempat boleh berubah dari semasa ke semasa. Anda boleh menambah "
+"berbilang nama pada tempat kongsi dan menunjukkan nama bersejarah melalui "
+"julat tarikh yang sesuai."
 
 #: HelpTexts.php:37
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
+"Nama tempat hendaklah dimasukkan sebagai senarai yang dipisahkan koma, "
+"bermula dengan tempat terkecil dan berakhir dengan negara. Contohnya, "
+"\"Westminster, London, England\"."
 
 #: SharedPlacesListController.php:53 SharedPlacesModule.php:167
 #: resources/views/lists/locations-table.phtml:42
 msgid "Shared places"
-msgstr ""
+msgstr "Tempat-tempat kongsi"
 
 #: SharedPlacesModule.php:215
 msgid "View Shared places hierarchy"
-msgstr ""
+msgstr "Lihat hierarki tempat-tempat kongsi"
 
 #: SharedPlacesModule.php:221
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
