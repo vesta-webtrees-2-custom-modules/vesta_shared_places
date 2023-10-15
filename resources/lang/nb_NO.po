@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-05-30 19:05+0200\n"
+"POT-Creation-Date: 2023-10-14 10:31+0200\n"
 "PO-Revision-Date: 2021-04-12 20:21+0000\n"
 "Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/nb_NO/>\n"
@@ -27,12 +27,12 @@ msgstr " (Merk:%s delte steder på høyere nivå er også opprettet)"
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Merk: Det er også opprettet et delt sted på høyere nivå)"
 
-#: SharedPlacesModule.php:1014
+#: SharedPlacesModule.php:994
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
 
-#: SharedPlacesModule.php:1013
+#: SharedPlacesModule.php:993
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s og personene og familiene som viser til den."
@@ -108,7 +108,7 @@ msgstr "Datakorrigering"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Det er tungvindt å bestemme antall lenker (knyttet person / familie) når man tildeler delte steder via navn, og forårsaker derfor forsinkelser når listen over delte steder vises. Det anbefales å bare velge dette alternativet hvis steder er tildelt via XREF-er."
 
-#: SharedPlacesModule.php:221
+#: SharedPlacesModule.php:226
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Aktiver Vesta Steder og Stamtavle-modulen for å se strukturen av delte steder."
 
@@ -126,16 +126,20 @@ msgstr "Fakta for delt stedpost"
 msgid "Filter to unique shared places"
 msgstr "Filtrer til unike delte steder"
 
-#: SharedPlacesModule.php:446
+#: SharedPlacesModule.php:428
 #, fuzzy
 msgid "GOV id for type of location"
 msgstr "GOV-ID for stedstypen"
+
+#: resources/views/lists/locations-table.phtml:53
+msgid "GOV id?"
+msgstr ""
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
 msgstr "Opprett hierarki/struktur av delte steder"
 
-#: SharedPlacesModule.php:443
+#: SharedPlacesModule.php:411
 msgid "Higher-level shared place"
 msgstr "Delt sted på overodnet nivå"
 
@@ -211,12 +215,12 @@ msgid "Linking of shared places to places"
 msgstr "Kobling av delte steder til steder"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:403
+#: SharedPlacesModule.php:368 SharedPlacesModule.php:419
 msgid "Location"
 msgstr "Sted"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:404
+#: SharedPlacesModule.php:369
 msgid "Locations"
 msgstr ""
 
@@ -239,7 +243,7 @@ msgstr "Manglende delte steder på høyere nivå opprettes om nødvendig. For at
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "Manglende delte steder opprettes om nødvendig. For at dette skal fungere uten potensielt å opprette duplikater, må du merke av for \"Godta automatisk endringer gjort av denne brukeren\" i brukeradministrasjonen, i det minste i løpet av denne datakorrigeringen."
 
-#: resources/views/shared-place-page-links.phtml:93
+#: resources/views/shared-place-page-links.phtml:120
 msgid "Next lower-level shared places"
 msgstr "Neste delte steder på lavere nivå"
 
@@ -290,13 +294,13 @@ msgstr "Begrens til spesifikke fakta og hendelser"
 msgid "See %1$s for details."
 msgstr "Se %1$s for detaljer."
 
-#: SharedPlacesModule.php:430 SharedPlacesModule.php:432
-#: SharedPlacesModule.php:435 SharedPlacesModule.php:438
-#: SharedPlacesModule.php:702 resources/views/lists/locations-table.phtml:47
+#: SharedPlacesModule.php:395 SharedPlacesModule.php:397
+#: SharedPlacesModule.php:400 SharedPlacesModule.php:403
+#: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
 msgstr "Delt sted"
 
-#: SharedPlacesModule.php:578 SharedPlacesModule.php:998
+#: SharedPlacesModule.php:558 SharedPlacesModule.php:978
 msgid "Shared place data"
 msgstr "Informasjon om delt sted"
 
@@ -322,8 +326,8 @@ msgstr "Delt sted-struktur"
 msgid "Shared place summary"
 msgstr "Oppsummering delte steder"
 
-#: SharedPlacesListController.php:53 SharedPlacesModule.php:167
-#: resources/views/lists/locations-table.phtml:42
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:172
+#: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
 msgstr "Delte steder"
 
@@ -447,7 +451,7 @@ msgid "This tree has shared places with comma-separated name parts, while at the
 msgstr "Dette treet har delte steder med kommadelte navnedeler, samtidig som alternativet «Bruk hierarkiske delte steder» er valgt."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:445
+#: SharedPlacesModule.php:413
 msgid "Type of hierarchical relationship"
 msgstr "Struktur-relasjonstype"
 
@@ -466,7 +470,7 @@ msgstr "Brukt strukturerte delte steder"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Bruk den separate tag'en '%1$s' for å modellere et stedshierarki."
 
-#: SharedPlacesModule.php:215
+#: SharedPlacesModule.php:220
 msgid "View Shared places hierarchy"
 msgstr "Se struktur for delte steder"
 
@@ -485,11 +489,11 @@ msgstr "Når det ikke er merket av, brukes den tidligere tilnærmingen, der hier
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
 
-#: patchedWebtrees/SharedPlace.php:976 patchedWebtrees/SharedPlace.php:1052
+#: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
 msgid "circular shared place hierarchy"
 msgstr "sirkulært delt sted-hierarki/struktur"
 
-#: SharedPlacesModule.php:1101
+#: SharedPlacesModule.php:1081
 msgid "shared places"
 msgstr "delte steder"
 

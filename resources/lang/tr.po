@@ -7,11 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-05-30 19:05+0200\n"
+"POT-Creation-Date: 2023-10-14 10:31+0200\n"
 "PO-Revision-Date: 2022-07-14 07:21+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-shared-places/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,12 +27,12 @@ msgstr " (Not: %s üst düzey paylaşılan yerler de oluşturuldu)"
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Not: Daha yüksek düzeyde bir paylaşılan yer de oluşturuldu)"
 
-#: SharedPlacesModule.php:1014
+#: SharedPlacesModule.php:994
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr "%s ve her bireyin ebeveynleri, kardeşleri, eşleri ve çocukları dahil olmak üzere ona referans veren bireyler ve aileler."
 
-#: SharedPlacesModule.php:1013
+#: SharedPlacesModule.php:993
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s ve ona referans veren bireyler ve aileler."
@@ -109,7 +108,7 @@ msgstr "Veri Düzeltme"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Paylaşılan yerleri ad yoluyla atarken bağlantı sayımlarının belirlenmesi (bağlantılı bireyler/aileler) maliyetlidir ve bu nedenle paylaşılan yerler listesi görüntülendiğinde gecikmelere neden olur. Bu seçeneğin yalnızca yerler XREF'ler aracılığıyla atanmışsa seçilmesi önerilir."
 
-#: SharedPlacesModule.php:221
+#: SharedPlacesModule.php:226
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Paylaşılan yerler hiyerarşisini görüntülemek için Vesta Places ve Pedigree harita modülünü etkinleştirin."
 
@@ -127,15 +126,19 @@ msgstr "Paylaşılan yer kayıtları için gerçekler"
 msgid "Filter to unique shared places"
 msgstr "Benzersiz paylaşılan yerlere göre filtrele"
 
-#: SharedPlacesModule.php:446
+#: SharedPlacesModule.php:428
 msgid "GOV id for type of location"
 msgstr "Konum türü için GOV kimliği"
+
+#: resources/views/lists/locations-table.phtml:53
+msgid "GOV id?"
+msgstr ""
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
 msgstr "Paylaşılan Yerleri Hiyerarşikleştirin"
 
-#: SharedPlacesModule.php:443
+#: SharedPlacesModule.php:411
 msgid "Higher-level shared place"
 msgstr "Daha yüksek düzeyde paylaşılan yer"
 
@@ -210,12 +213,12 @@ msgid "Linking of shared places to places"
 msgstr "Paylaşılan yerlerin yerlere bağlanması"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:403
+#: SharedPlacesModule.php:368 SharedPlacesModule.php:419
 msgid "Location"
 msgstr "Yer"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:404
+#: SharedPlacesModule.php:369
 msgid "Locations"
 msgstr "Konumlar"
 
@@ -238,7 +241,7 @@ msgstr "Gerekirse eksik üst düzey paylaşılan yerler oluşturulur. Bunun pota
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "Gerekirse eksik paylaşılan yerler oluşturulur. Bunun potansiyel olarak yineleme oluşturmadan çalışması için, en azından bu veri düzeltmesi süresince kullanıcı yönetiminde 'Bu kullanıcı tarafından yapılan değişiklikleri otomatik olarak kabul et' seçeneğini işaretlemeniz gerekir."
 
-#: resources/views/shared-place-page-links.phtml:93
+#: resources/views/shared-place-page-links.phtml:120
 msgid "Next lower-level shared places"
 msgstr "Sonraki alt düzey paylaşılan yerler"
 
@@ -289,13 +292,13 @@ msgstr "Belirli gerçekleri ve olayları sınırlayın"
 msgid "See %1$s for details."
 msgstr "Ayrıntılar için %1$s bölümüne bakın."
 
-#: SharedPlacesModule.php:430 SharedPlacesModule.php:432
-#: SharedPlacesModule.php:435 SharedPlacesModule.php:438
-#: SharedPlacesModule.php:702 resources/views/lists/locations-table.phtml:47
+#: SharedPlacesModule.php:395 SharedPlacesModule.php:397
+#: SharedPlacesModule.php:400 SharedPlacesModule.php:403
+#: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
 msgstr "Paylaşılan yer"
 
-#: SharedPlacesModule.php:578 SharedPlacesModule.php:998
+#: SharedPlacesModule.php:558 SharedPlacesModule.php:978
 msgid "Shared place data"
 msgstr "Paylaşılan yer verileri"
 
@@ -321,8 +324,8 @@ msgstr "Paylaşılan yer yapısı"
 msgid "Shared place summary"
 msgstr "Paylaşılan yer özeti"
 
-#: SharedPlacesListController.php:53 SharedPlacesModule.php:167
-#: resources/views/lists/locations-table.phtml:42
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:172
+#: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
 msgstr "Paylaşılan yerler"
 
@@ -446,7 +449,7 @@ msgid "This tree has shared places with comma-separated name parts, while at the
 msgstr "Bu ağaç, virgülle ayrılmış ad bölümleriyle paylaşılan yerlere sahipken, aynı zamanda 'hiyerarşik paylaşılan yerleri kullan' seçeneği seçilir."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:445
+#: SharedPlacesModule.php:413
 msgid "Type of hierarchical relationship"
 msgstr "Hiyerarşik ilişki türü"
 
@@ -465,7 +468,7 @@ msgstr "Hiyerarşik paylaşılan yerleri kullanın"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Bir yer hiyerarşisini modellemek için ayrı '%1$s' etiketini kullanın."
 
-#: SharedPlacesModule.php:215
+#: SharedPlacesModule.php:220
 msgid "View Shared places hierarchy"
 msgstr "Paylaşılan yerler hiyerarşisini görüntüleyin"
 
@@ -484,11 +487,11 @@ msgstr "İşaretlenmediğinde, hiyerarşilerin yalnızca virgülle ayrılmış a
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr "Modül yapılandırmasında bir referans yılı (%1$s gibi diğer modüller tarafından değerlendirilebilir) ayarlayabilirsiniz."
 
-#: patchedWebtrees/SharedPlace.php:976 patchedWebtrees/SharedPlace.php:1052
+#: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
 msgid "circular shared place hierarchy"
 msgstr "dairesel paylaşılan yer hiyerarşisi"
 
-#: SharedPlacesModule.php:1101
+#: SharedPlacesModule.php:1081
 msgid "shared places"
 msgstr "paylaşılan yerler"
 

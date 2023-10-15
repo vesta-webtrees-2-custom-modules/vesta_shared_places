@@ -63,30 +63,40 @@ class TomSelectSharedPlace extends AbstractTomSelectWithDateHandler
         if ($location instanceof Location) {
             $results = new Collection([$location]);
         } else {
-            if (str_contains($query,',')) {
-              //[PATCHED]
-              //extended in order to find hierarchical shared places
-              //overall not very efficient
-              //TODO strictly only required if hierarchical shared places are enabled!
-              
-              $places = $this->search_service->searchPlaces($tree, $query);
-              
-              $results1 = $this->search_service->searchLocationsInPlaces($tree, $places);
+            //experimental: always go via places only (to avoid matching on other parts of shared place gedcom)
+            $places = $this->search_service->searchPlaces($tree, $query);
 
-              //add 'regular' results
-              $results2 = $this->search_service->searchLocations([$tree], [$query]);
+            $results = $this->search_service->searchLocationsInPlaces($tree, $places);
+            $paginate = true;
+            
+            /*
+            if (str_contains($query,',')) {
+                //[PATCHED]
+                //extended in order to find hierarchical shared places
+                //overall not very efficient
+                //TODO strictly only required if hierarchical shared places are enabled!
+
+                $places = $this->search_service->searchPlaces($tree, $query);
+
+                $results1 = $this->search_service->searchLocationsInPlaces($tree, $places);
+
+                //add 'regular' results
+                //TODO: remove matches on other parts of shared place gedcom?
+                $results2 = $this->search_service->searchLocations([$tree], [$query]);
+
+                $results = $results1->merge($results2)
+
+                        //skip duplicates
+                        ->unique();
               
-              $results = $results1->merge($results2)
-                      
-                      //skip duplicates
-                      ->unique();
-              
-              $paginate = true;
+                $paginate = true;
               
             } else {
-                $search  = array_filter(explode(' ', $query));
+                $search = array_filter(explode(' ', $query));
+                //TODO: remove matches on other parts of shared place gedcom?
                 $results = $this->search_service->searchLocations([$tree], $search, $offset, $limit);
             }
+            */
         }
         
         //[PATCHED]
@@ -106,8 +116,8 @@ class TomSelectSharedPlace extends AbstractTomSelectWithDateHandler
                 });
                 
         if ($paginate) {
-          $ret = $ret->slice($offset, $limit+$offset);
-        }  
+            $ret = $ret->slice($offset, $limit+$offset);
+        }
         
         //re-key for https://github.com/laravel/framework/issues/1335
         return $ret->values();

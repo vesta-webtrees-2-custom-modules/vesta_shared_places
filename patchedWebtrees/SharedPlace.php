@@ -144,6 +144,8 @@ class SharedPlace extends Location {
         //cf GedcomImportService::updatePlaces
         foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
 
+            //error_log("doCheck:" . $place->gedcomName());
+            
             // Calling Place::id() will create the entry in the database, if it doesn't already exist.
             
             //we must reset the cache used by Place.php though:
@@ -538,39 +540,15 @@ class SharedPlace extends Location {
 
         return $main;
     }
-    
-    //this impl is buggy because it always uses $date, rather than specific $intersectedDate
-    //e.g. for $date (1801-2000): A has parent B from (1801-1900), B has parent C from (1901-2000);
-    //then C isn't relevant here at all.
-    /*
-      public function getTransitiveParentsAt(GedcomDateInterval $date): Collection {
-      $ret = new Collection();
-
-      //safer wrt loops (than to use method recursively)
-      $queue = new Collection();
-      $queue->prepend($this);
-
-      while ($queue->count() > 0) {
-      $current = $queue->pop();
-      $parents = $current->getWrappedParentsAt($date, true);
-      $ret->put($current->xref(), $parents);
-      foreach ($parents as $parent) {
-      $parentSharedPlace = $parent->getSharedPlace();
-      if (($parentSharedPlace !== null) && !$ret->has($parentSharedPlace->xref())) {
-      $queue->prepend($parentSharedPlace);
-      }
-      }
-      }
-
-      return $ret;
-      }
-     */
 
     /**
      * 
      * @return Collection key: xref, value: Collection<SharedPlaceParentAt> (direct parents)
      */
-    public function getTransitiveParentsAt(GedcomDateInterval $date): Collection {
+    public function getTransitiveParentsAt(
+        GedcomDateInterval $date,
+        bool $includeVoid): Collection {
+        
         $ret = new Collection();
 
         //safer wrt loops (than to use method recursively)
@@ -589,7 +567,7 @@ class SharedPlace extends Location {
             //we only add elements with non-null shared place to the queue!
             assert($current !== null);
 
-            $parents = $current->getWrappedParentsAt($intersectedDate, true);
+            $parents = $current->getWrappedParentsAt($intersectedDate, true, $includeVoid);
             $ret->put($current->xref(), $parents);
             foreach ($parents as $parent) {
                 $parentSharedPlace = $parent->getSharedPlace();
@@ -603,8 +581,13 @@ class SharedPlace extends Location {
     }
 
     //do not use recursively! Tree may have circular hierarchies
-    public function getParents(): Collection {
-        return $this->getWrappedParentsAt(GedcomDateInterval::createNow(), false)
+    public function getParents(
+        bool $includeVoid = false): Collection {
+        
+        return $this->getWrappedParentsAt(
+            GedcomDateInterval::createNow(), 
+            false,
+            $includeVoid)
                 ->map(function (SharedPlaceParentAt $element): SharedPlace {
                     //non-null because we don't fillInterval!
                     return $element->getSharedPlace();
@@ -621,7 +604,8 @@ class SharedPlace extends Location {
      */
     public function getWrappedParentsAt(
         GedcomDateInterval $date,
-        bool $fillInterval): Collection {
+        bool $fillInterval,
+        bool $includeVoid = false): Collection {
 
         $sharedPlaces = [];
         $indexOfFact = -1;
@@ -639,7 +623,17 @@ class SharedPlace extends Location {
                 } else if ($parent->attribute("DATE") === '') {
                     $sharedPlaces[] = new SharedPlaceParentAt($date, $target, $indexOfFact);
                 }
-            } //else could not make() target, e.g. due to invalid xref (or missing data during import), skip
+            } else {
+                //could not make() target, e.g. due to invalid xref (or missing data during import), skip
+                
+                //but maybe handle explicit @VOID@ as 'no parent'
+                //(this allows to avoid creating a hierarchical primary name in case there are further parents)
+                //(bit of a hack tbh)
+                if ($includeVoid && ($parent->value() === '@VOID@')) {
+                    $voidSharedPlace = Registry::locationFactory()->make($parent->value(), $this->tree(), '');
+                    $sharedPlaces[] = new SharedPlaceParentAt($date, $voidSharedPlace, $indexOfFact);
+                }
+            }
         }
 
         //order: by date.getFrom (nulls first), then by original order
@@ -869,7 +863,7 @@ class SharedPlace extends Location {
     public function getAllNamesAt(
         ?GedcomDateInterval $date,
         ?string $preferredLangCodeForSort): array {
-
+        
         $self = $this;
 
         $cacheKey = SharedPlace::class . 'getAllNamesAt_' . $this->xref() . '_' . (($date === null) ? 'null' : json_encode($date)) . '_' . $preferredLangCodeForSort;
@@ -1035,11 +1029,11 @@ class SharedPlace extends Location {
         Collection $transitiveParents,
         array /* of array with fields 'name' (partially built name hierarchy) and 'lang' */ $currentNames): array {
 
-        if ($alreadySeenXrefs->contains($xref)) {
-            //mark as circular and treat as leaf
+        if (($xref === '@VOID@') || $alreadySeenXrefs->contains($xref)) {
+            //treat as leaf
             $ret = [];
 
-            if (sizeof($currentNames) === 0) {
+            if ($alreadySeenXrefs->contains($xref) && (sizeof($currentNames) === 0)) {
                 throw new \Exception("unexpected!");
             }
 
@@ -1048,8 +1042,14 @@ class SharedPlace extends Location {
                     throw new \Exception("unexpected!");
                 }
 
-                //append
-                $ret [] = $head . Gedcom::PLACE_SEPARATOR . /* json_decode('"\u221E"') . */ " <" . I18N::translate("circular shared place hierarchy") . ">";
+                //append                    
+                if ($alreadySeenXrefs->contains($xref)) {
+                    //mark as circular
+                    $ret [] = $head . Gedcom::PLACE_SEPARATOR . /* json_decode('"\u221E"') . */ " <" . I18N::translate("circular shared place hierarchy") . ">";
+                } else {
+                    //just use head
+                    $ret [] = $head;
+                }
             }
 
             return $ret;
@@ -1109,12 +1109,12 @@ class SharedPlace extends Location {
         array /* of array with nameStructure fields */ $nextNames,
         Collection $transitiveParents,
         array /* of array (keyed by language) of partially built names */ $currentNames): array {
-
-        if ($alreadySeenXrefs->contains($xref)) {
-            //mark as circular and treat as leaf
+        
+        if (($xref === '@VOID@') || $alreadySeenXrefs->contains($xref)) {
+            //treat as leaf
             $ret = [];
 
-            if (sizeof($currentNames) === 0) {
+            if ($alreadySeenXrefs->contains($xref) && (sizeof($currentNames) === 0)) {
                 throw new \Exception("unexpected!");
             }
 
@@ -1124,8 +1124,14 @@ class SharedPlace extends Location {
                         throw new \Exception("unexpected!");
                     }
 
-                    //append
-                    $ret [] = $head . Gedcom::PLACE_SEPARATOR . /* json_decode('"\u221E"') . */ " <" . I18N::translate("circular shared place hierarchy") . ">";
+                    //append                    
+                    if ($alreadySeenXrefs->contains($xref)) {
+                        //mark as circular
+                        $ret [] = $head . Gedcom::PLACE_SEPARATOR . /* json_decode('"\u221E"') . */ " <" . I18N::translate("circular shared place hierarchy") . ">";
+                    } else {
+                        //just use head
+                        $ret [] = $head;
+                    }               
                 }
             }
 
@@ -1502,7 +1508,9 @@ class SharedPlace extends Location {
                 false,
                 $this->xref(),
                 $this->getAllNamesAt($date, null),
-                $this->getTransitiveParentsAt(($date == null) ? GedcomDateInterval::createNow() : $date));
+                $this->getTransitiveParentsAt(
+                    ($date == null) ? GedcomDateInterval::createNow() : $date,
+                    true));
 
         foreach ($namesAsString as $name) {
             $place = new Place($name, $this->tree);
@@ -1536,7 +1544,9 @@ class SharedPlace extends Location {
                 false,
                 $this->xref(),
                 $this->getAllNamesAt($date, I18N::locale()->code()),
-                $this->getTransitiveParentsAt(($date == null) ? GedcomDateInterval::createNow() : $date));
+                $this->getTransitiveParentsAt(
+                    ($date == null) ? GedcomDateInterval::createNow() : $date,
+                    true));
 
         foreach ($namesAsString as $name) {
             $places->add($name);
@@ -1586,10 +1596,10 @@ class SharedPlace extends Location {
                 true,
                 $this->xref(),
                 $names,
-                $this->getTransitiveParentsAt($date));
+                $this->getTransitiveParentsAt($date, true));
 
         if (sizeof($namesAsString) === 0) {
-            throw new \Exception("unexpectedly empty for " . $firstMatch['fullNN'] . " at date " . $date->toGedcomString(0, true));
+            throw new \Exception($this->xref() . " primaryPlaceAt unexpectedly empty for " . $firstMatch['fullNN'] . " at date " . $date->toGedcomString(0, true));
         }
 
         if (sizeof($namesAsString) !== 1) {

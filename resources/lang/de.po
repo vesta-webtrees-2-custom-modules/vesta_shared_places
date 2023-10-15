@@ -7,11 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-05-30 19:05+0200\n"
+"POT-Creation-Date: 2023-10-14 10:31+0200\n"
 "PO-Revision-Date: 2023-02-03 19:40+0000\n"
 "Last-Translator: Markus Hemprich <hemprich@gmx.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,12 +27,12 @@ msgstr " (Hinweis: Es wurden außerdem %s gemeinsame Orte auf höheren Ebenen er
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Hinweis: Es wurde außerdem ein gemeinsamer Ort auf einer höheren Ebene angelegt)"
 
-#: SharedPlacesModule.php:1014
+#: SharedPlacesModule.php:994
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr "%s und die Einzelpersonen und Familien, die sich darauf beziehen, einschließlich der Eltern, Geschwister, Ehegatten und Kinder der einzelnen Personen."
 
-#: SharedPlacesModule.php:1013
+#: SharedPlacesModule.php:993
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s und die Personen und Familien, die darauf verweisen."
@@ -98,9 +97,7 @@ msgstr "Erstelle alle fehlenden gemeinsamen Orte und ergänze fehlende XREFs"
 
 #: resources/views/data-fix-options.phtml:96
 msgid "Create missing shared places from tree-independent data, and add missing XREFs"
-msgstr ""
-"Erstelle fehlende gemeinsame Orte aus separat verwalteten Daten und ergänze "
-"fehlende XREFs"
+msgstr "Erstelle fehlende gemeinsame Orte aus separat verwalteten Daten und ergänze fehlende XREFs"
 
 #: resources/views/data-fix-options.phtml:18
 msgid "Data Fix"
@@ -111,7 +108,7 @@ msgstr "Datenkorrektur"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Ermittlung der Anzahl der Verknüpfungen (verknüpfte Person/Familien) ist aufwendig, wenn die Zuweisung der gemeinsamen Orte über den Namen erfolgt. Dies verursacht Verzögerungen bei der Anzeige der Liste gemeinsamer Orte. Es wird empfohlen diese Option nur zu aktivieren, wenn die Orte mittels XREFs zugewiesen wurden."
 
-#: SharedPlacesModule.php:221
+#: SharedPlacesModule.php:226
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Aktiviere das 'Vesta Places and Pedigree map'-Modul, um die Hierarchie der gemeinsamen Orte zu sehen."
 
@@ -129,15 +126,19 @@ msgstr "Tatsachen für gemeinsame Orte-Datensätze"
 msgid "Filter to unique shared places"
 msgstr "Nach eindeutigen gemeinsamen Orten filtern"
 
-#: SharedPlacesModule.php:446
+#: SharedPlacesModule.php:428
 msgid "GOV id for type of location"
 msgstr "ID für den GOV-Objekttyp des Ortes"
+
+#: resources/views/lists/locations-table.phtml:53
+msgid "GOV id?"
+msgstr ""
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
 msgstr "Gemeinsame Orte hierarchisieren"
 
-#: SharedPlacesModule.php:443
+#: SharedPlacesModule.php:411
 msgid "Higher-level shared place"
 msgstr "Gemeinsamer Ort höherer Ebene"
 
@@ -212,12 +213,12 @@ msgid "Linking of shared places to places"
 msgstr "Verknüpfung von gemeinsamen Orten mit Orten"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:403
+#: SharedPlacesModule.php:368 SharedPlacesModule.php:419
 msgid "Location"
 msgstr "Gemeinsamer Ort"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:404
+#: SharedPlacesModule.php:369
 msgid "Locations"
 msgstr "Gemeinsame Orte"
 
@@ -240,7 +241,7 @@ msgstr "Fehlende übergeordnete gemeinsame Orte werden bei Bedarf erstellt. Dami
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "Fehlende gemeinsame Orte werden bei Bedarf erstellt. Damit dies funktioniert, ohne dass möglicherweise Duplikate erstellt werden, müssen Sie in der Benutzerverwaltung zumindest für die Dauer dieser Datenkorrektur die Option 'Durch diesen Benutzer vorgenommene Änderungen automatisch genehmigen' aktivieren."
 
-#: resources/views/shared-place-page-links.phtml:93
+#: resources/views/shared-place-page-links.phtml:120
 msgid "Next lower-level shared places"
 msgstr "Nächste untergeordnete gemeinsame Orte"
 
@@ -291,13 +292,13 @@ msgstr "Beschränkung auf bestimmte Tatsachen und Ereignisse"
 msgid "See %1$s for details."
 msgstr "Siehe %1$s für weitere Details."
 
-#: SharedPlacesModule.php:430 SharedPlacesModule.php:432
-#: SharedPlacesModule.php:435 SharedPlacesModule.php:438
-#: SharedPlacesModule.php:702 resources/views/lists/locations-table.phtml:47
+#: SharedPlacesModule.php:395 SharedPlacesModule.php:397
+#: SharedPlacesModule.php:400 SharedPlacesModule.php:403
+#: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
 msgstr "Gemeinsamer Ort"
 
-#: SharedPlacesModule.php:578 SharedPlacesModule.php:998
+#: SharedPlacesModule.php:558 SharedPlacesModule.php:978
 msgid "Shared place data"
 msgstr "Daten des gemeinsamen Ortes"
 
@@ -323,8 +324,8 @@ msgstr "Struktur des gemeinsamen Ortes"
 msgid "Shared place summary"
 msgstr "Zusammenfassung des gemeinsamen Ortes"
 
-#: SharedPlacesListController.php:53 SharedPlacesModule.php:167
-#: resources/views/lists/locations-table.phtml:42
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:172
+#: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
 msgstr "Gemeinsame Orte"
 
@@ -392,9 +393,7 @@ msgstr "Daher wird hier der Ortsname einschließlich der vollständigen Hierarch
 
 #: resources/views/data-fix-options.phtml:84
 msgid "Therefore, this data fix enables you to move away from using that configuration option."
-msgstr ""
-"Diese Datenkorrektur ermöglicht es, auf eine weitere Verwendung jener "
-"Konfigurationsoption zu verzichten."
+msgstr "Diese Datenkorrektur ermöglicht es, auf eine weitere Verwendung jener Konfigurationsoption zu verzichten."
 
 #: resources/views/data-fix-options.phtml:82
 msgid "This data fix adds XREFs, linking all places within events directly to the respective shared places."
@@ -450,7 +449,7 @@ msgid "This tree has shared places with comma-separated name parts, while at the
 msgstr "Dieser Stammbaum verfügt über gemeinsame Orte mit durch Kommas getrennten Namensteilen, während gleichzeitig die Option „Hierarchische gemeinsame Orte verwenden“ ausgewählt ist."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:445
+#: SharedPlacesModule.php:413
 msgid "Type of hierarchical relationship"
 msgstr "Art der hierarchischen Beziehung"
 
@@ -469,7 +468,7 @@ msgstr "Hierarchische gemeinsame Orte verwenden"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Verwenden Sie die gesonderte Markierung „%1$s“, um eine Ortshierarchie zu modellieren."
 
-#: SharedPlacesModule.php:215
+#: SharedPlacesModule.php:220
 msgid "View Shared places hierarchy"
 msgstr "Hierarchie der gemeinsamen Orte anzeigen"
 
@@ -488,11 +487,11 @@ msgstr "Wenn diese Option deaktiviert ist, wird der erstere Ansatz genutzt, bei 
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr "Sie können in der Modul-Konfiguration ein Bezugsjahr festlegen (das von anderen Modulen ausgewertet werden kann, z. B. %1$s)."
 
-#: patchedWebtrees/SharedPlace.php:976 patchedWebtrees/SharedPlace.php:1052
+#: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
 msgid "circular shared place hierarchy"
 msgstr "zirkuläre Hierarchie gemeinsamer Orte"
 
-#: SharedPlacesModule.php:1101
+#: SharedPlacesModule.php:1081
 msgid "shared places"
 msgstr "Gemeinsame Orte"
 

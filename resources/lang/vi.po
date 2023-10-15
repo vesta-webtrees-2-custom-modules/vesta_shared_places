@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-05-30 19:05+0200\n"
+"POT-Creation-Date: 2023-10-14 10:31+0200\n"
 "PO-Revision-Date: 2021-07-15 15:33+0000\n"
 "Last-Translator: ngohuuthuanfc9865b89dde4baf <ngohuuthuan@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/vi/>\n"
@@ -27,12 +27,12 @@ msgstr " (Lưu ý: %s địa điểm được chia sẻ cấp cao hơn cũng đ�
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Lưu ý: Địa điểm chia sẻ cấp cao hơn cũng đã được tạo)"
 
-#: SharedPlacesModule.php:1014
+#: SharedPlacesModule.php:994
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
 
-#: SharedPlacesModule.php:1013
+#: SharedPlacesModule.php:993
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s và các cá nhân và gia đình tham chiếu đến nó."
@@ -108,7 +108,7 @@ msgstr "Sửa dữ liệu"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Việc xác định số lượng liên kết (cá nhân / gia đình được liên kết) rất tốn kém khi chỉ định địa điểm được chia sẻ thông qua tên và do đó gây ra sự chậm trễ khi danh sách địa điểm được chia sẻ được hiển thị. Bạn chỉ nên chọn tùy chọn này nếu các địa điểm được chỉ định qua XREF."
 
-#: SharedPlacesModule.php:221
+#: SharedPlacesModule.php:226
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Kích hoạt mô-đun bản đồ Vesta Địa điểm và Phả hệ để xem thứ bậc các địa điểm được chia sẻ."
 
@@ -126,15 +126,19 @@ msgstr "Dữ kiện cho các bản ghi địa điểm được chia sẻ"
 msgid "Filter to unique shared places"
 msgstr "Lọc các địa điểm được chia sẻ duy nhất"
 
-#: SharedPlacesModule.php:446
+#: SharedPlacesModule.php:428
 msgid "GOV id for type of location"
 msgstr "Kiểu id GOV của vị trí"
+
+#: resources/views/lists/locations-table.phtml:53
+msgid "GOV id?"
+msgstr ""
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
 msgstr "Phân cấp địa điểm được chia sẻ"
 
-#: SharedPlacesModule.php:443
+#: SharedPlacesModule.php:411
 msgid "Higher-level shared place"
 msgstr "Địa điểm được chia sẻ cấp cao hơn"
 
@@ -209,12 +213,12 @@ msgid "Linking of shared places to places"
 msgstr "Liên kết các địa điểm được chia sẻ với các địa điểm"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:403
+#: SharedPlacesModule.php:368 SharedPlacesModule.php:419
 msgid "Location"
 msgstr "Vị trí"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:404
+#: SharedPlacesModule.php:369
 msgid "Locations"
 msgstr ""
 
@@ -237,7 +241,7 @@ msgstr "Các địa điểm được chia sẻ cấp cao hơn bị thiếu đư�
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "Các địa điểm được chia sẻ bị thiếu được tạo nếu cần. Để tính năng này hoạt động mà không có khả năng tạo ra các bản sao, bạn phải chọn 'Tự động chấp nhận các thay đổi do người dùng này thực hiện' trong quản trị người dùng, ít nhất là trong khoảng thời gian sửa chữa dữ liệu này."
 
-#: resources/views/shared-place-page-links.phtml:93
+#: resources/views/shared-place-page-links.phtml:120
 msgid "Next lower-level shared places"
 msgstr "Các địa điểm được chia sẻ cấp thấp hơn tiếp theo"
 
@@ -288,13 +292,13 @@ msgstr "Hạn chế đối với các dữ kiện và sự kiện cụ thể"
 msgid "See %1$s for details."
 msgstr "Xem %1$s để biết chi tiết."
 
-#: SharedPlacesModule.php:430 SharedPlacesModule.php:432
-#: SharedPlacesModule.php:435 SharedPlacesModule.php:438
-#: SharedPlacesModule.php:702 resources/views/lists/locations-table.phtml:47
+#: SharedPlacesModule.php:395 SharedPlacesModule.php:397
+#: SharedPlacesModule.php:400 SharedPlacesModule.php:403
+#: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
 msgstr "Địa điểm được chia sẻ"
 
-#: SharedPlacesModule.php:578 SharedPlacesModule.php:998
+#: SharedPlacesModule.php:558 SharedPlacesModule.php:978
 msgid "Shared place data"
 msgstr "Dữ liệu địa điểm được chia sẻ"
 
@@ -320,8 +324,8 @@ msgstr "Cấu trúc địa điểm được chia sẻ"
 msgid "Shared place summary"
 msgstr "Tóm tắt địa điểm được chia sẻ"
 
-#: SharedPlacesListController.php:53 SharedPlacesModule.php:167
-#: resources/views/lists/locations-table.phtml:42
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:172
+#: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
 msgstr "Các địa điểm được chia sẻ"
 
@@ -445,7 +449,7 @@ msgid "This tree has shared places with comma-separated name parts, while at the
 msgstr "Cây này có các địa điểm được chia sẻ với các phần tên được phân tách bằng dấu phẩy, đồng thời tùy chọn 'Sử dụng các địa điểm được chia sẻ theo thứ bậc' được chọn."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:445
+#: SharedPlacesModule.php:413
 msgid "Type of hierarchical relationship"
 msgstr "Kiểu mối quan hệ thứ bậc"
 
@@ -464,7 +468,7 @@ msgstr "Sử dụng các địa điểm được chia sẻ theo thứ bậc"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Sử dụng thẻ riêng biệt '%1$s' để lập mô hình phân cấp địa điểm."
 
-#: SharedPlacesModule.php:215
+#: SharedPlacesModule.php:220
 msgid "View Shared places hierarchy"
 msgstr "Xem thứ bậc các địa điểm được chia sẻ"
 
@@ -483,11 +487,11 @@ msgstr "Khi bỏ chọn, phương pháp trước đây được sử dụng, tro
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr "Bạn có thể đặt năm tham chiếu (có thể được đánh giá bởi các mô-đun khác, chẳng hạn như %1$s) trong cấu hình mô-đun."
 
-#: patchedWebtrees/SharedPlace.php:976 patchedWebtrees/SharedPlace.php:1052
+#: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
 msgid "circular shared place hierarchy"
 msgstr "phân cấp địa điểm được chia sẻ hình tròn"
 
-#: SharedPlacesModule.php:1101
+#: SharedPlacesModule.php:1081
 msgid "shared places"
 msgstr "các địa điểm được chia sẻ"
 

@@ -33,6 +33,7 @@ if ($showLinkCounts) {
             ['visible' => true],
             ['visible' => true],
             ['visible' => true],
+            ['visible' => true],
             ['visible' => $showLinkCounts],
             ['visible' => $showLinkCounts]
         ]))
@@ -49,6 +50,7 @@ if ($showLinkCounts) {
                 <th><?= MoreI18N::xlate('Place') ?></th>
                 <th><?= MoreI18N::xlate('Latitude') ?></th>
                 <th><?= MoreI18N::xlate('Longitude') ?></th>
+                <th><?= str_replace(' ','&nbsp;',I18N::translate('GOV id?')) ?></th>
                 <th><?= MoreI18N::xlate('Individuals') ?></th>
                 <th><?= MoreI18N::xlate('Families') ?></th>
             </tr>
@@ -98,6 +100,13 @@ if ($showLinkCounts) {
                   </td>
                   <td class="center">
                       <?= $sharedPlace->printLong() ?>
+                  </td>
+                  
+                  <!-- GOV id set? --> 
+                  <td class="center">
+                      <?php if ($sharedPlace->facts(['_GOV'])->isNotEmpty()) : ?>
+                        <span class="wt-icon-save"><i class="fas fa-check fa-fw" aria-hidden="true"></i></span>
+                        <?php endif ?>
                   </td>
                   
                   <!-- Count of linked individuals --> 

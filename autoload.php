@@ -10,4 +10,5 @@ $loader->addPsr4('Cissee\\WebtreesExt\\Functions\\', __DIR__ . "/patchedWebtrees
 $loader->addPsr4('Cissee\\WebtreesExt\\Exceptions\\', __DIR__ . "/patchedWebtrees/Exceptions");
 $loader->addPsr4('Cissee\\WebtreesExt\\Elements\\', __DIR__ . "/patchedWebtrees/Elements");
 $loader->addPsr4('Cissee\\WebtreesExt\\Http\\RequestHandlers\\', __DIR__ . "/patchedWebtrees/Http/RequestHandlers");
+
 $loader->register();

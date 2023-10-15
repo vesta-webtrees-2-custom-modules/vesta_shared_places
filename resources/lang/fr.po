@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-05-30 19:05+0200\n"
+"POT-Creation-Date: 2023-10-14 10:31+0200\n"
 "PO-Revision-Date: 2022-04-12 11:10+0000\n"
 "Last-Translator: Vincent DENIS <vincent.denis06@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/fr/>\n"
@@ -27,12 +27,12 @@ msgstr " (Note : %s lieux partagés de niveau supérieur ont aussi été créés
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Note : un lieu partagé de niveau supérieur a aussi été créé)"
 
-#: SharedPlacesModule.php:1014
+#: SharedPlacesModule.php:994
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr "%s et les personnes et familles qui y font référence, y compris les parents, frères et sœurs, conjoints et enfants de chaque personne."
 
-#: SharedPlacesModule.php:1013
+#: SharedPlacesModule.php:993
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s et les personnes et familles qui y font référence."
@@ -108,7 +108,7 @@ msgstr "Correction de données"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "La détermination du nombre de liens (individus / familles liés) est coûteuse lors de l'attribution de lieux partagés via le nom, et entraîne donc des retards lorsque la liste des lieux partagés est affichée. Il est recommandé de ne sélectionner cette option que si les lieux sont attribués via des XREF."
 
-#: SharedPlacesModule.php:221
+#: SharedPlacesModule.php:226
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Activez le module de carte Vesta Places and Pedigree pour afficher la hiérarchie des lieux partagés."
 
@@ -126,15 +126,19 @@ msgstr "Actes pour les enregistrements de lieux partagés"
 msgid "Filter to unique shared places"
 msgstr "Filtrer vers des lieux partagés uniques"
 
-#: SharedPlacesModule.php:446
+#: SharedPlacesModule.php:428
 msgid "GOV id for type of location"
 msgstr "Identifiant GOV pour le type d'emplacement"
+
+#: resources/views/lists/locations-table.phtml:53
+msgid "GOV id?"
+msgstr ""
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
 msgstr "Hiérarchiser les lieux partagés"
 
-#: SharedPlacesModule.php:443
+#: SharedPlacesModule.php:411
 msgid "Higher-level shared place"
 msgstr "Lieu partagé de niveau supérieur"
 
@@ -209,12 +213,12 @@ msgid "Linking of shared places to places"
 msgstr "Lier des lieux partagés à des lieux"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:403
+#: SharedPlacesModule.php:368 SharedPlacesModule.php:419
 msgid "Location"
 msgstr "Lieux Partagés"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:404
+#: SharedPlacesModule.php:369
 msgid "Locations"
 msgstr "Emplacements"
 
@@ -237,7 +241,7 @@ msgstr "Des espaces partagés de niveau supérieur manquants sont créés si né
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr "Les espaces partagés manquants sont créés si nécessaire. Pour que cela fonctionne sans créer potentiellement de doublons, vous devez cocher «Accepter automatiquement les modifications apportées par cet utilisateur» dans l'administration des utilisateurs, au moins pour la durée de ce correctif de données."
 
-#: resources/views/shared-place-page-links.phtml:93
+#: resources/views/shared-place-page-links.phtml:120
 msgid "Next lower-level shared places"
 msgstr "Lieux partagés de niveau inférieur suivants"
 
@@ -288,13 +292,13 @@ msgstr "Restreindre à des faits et événements spécifiques"
 msgid "See %1$s for details."
 msgstr "Voir %1$s pour les détails."
 
-#: SharedPlacesModule.php:430 SharedPlacesModule.php:432
-#: SharedPlacesModule.php:435 SharedPlacesModule.php:438
-#: SharedPlacesModule.php:702 resources/views/lists/locations-table.phtml:47
+#: SharedPlacesModule.php:395 SharedPlacesModule.php:397
+#: SharedPlacesModule.php:400 SharedPlacesModule.php:403
+#: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
 msgstr "Lieu partagé"
 
-#: SharedPlacesModule.php:578 SharedPlacesModule.php:998
+#: SharedPlacesModule.php:558 SharedPlacesModule.php:978
 msgid "Shared place data"
 msgstr "Données du lieu partagé"
 
@@ -320,8 +324,8 @@ msgstr "Structure du lieu partagé"
 msgid "Shared place summary"
 msgstr "Résumé du lieu partagé"
 
-#: SharedPlacesListController.php:53 SharedPlacesModule.php:167
-#: resources/views/lists/locations-table.phtml:42
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:172
+#: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
 msgstr "Lieux partagés"
 
@@ -445,7 +449,7 @@ msgid "This tree has shared places with comma-separated name parts, while at the
 msgstr "Cet arbre a des espaces partagés avec des parties de nom séparées par des virgules, tandis que l'option « Utiliser les espaces partagés hiérarchiques » est sélectionnée."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:445
+#: SharedPlacesModule.php:413
 msgid "Type of hierarchical relationship"
 msgstr "Type de relation hiérarchique"
 
@@ -464,7 +468,7 @@ msgstr "Utiliser des lieux partagés hiérarchiques"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Utilisez la balise séparée « %1$s » pour modéliser une hiérarchie de lieux."
 
-#: SharedPlacesModule.php:215
+#: SharedPlacesModule.php:220
 msgid "View Shared places hierarchy"
 msgstr "Afficher la hiérarchie des lieux partagés"
 
@@ -483,11 +487,11 @@ msgstr "Lorsqu'elle n'est pas cochée, la première approche est utilisée, dans
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr "Vous pouvez définir une année de référence (qui peut être évaluée par d'autres modules, tels que %1$s) dans la configuration du module."
 
-#: patchedWebtrees/SharedPlace.php:976 patchedWebtrees/SharedPlace.php:1052
+#: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
 msgid "circular shared place hierarchy"
 msgstr "hiérarchie circulaire des espaces partagés"
 
-#: SharedPlacesModule.php:1101
+#: SharedPlacesModule.php:1081
 msgid "shared places"
 msgstr "lieux partagés"
 

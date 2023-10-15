@@ -7,11 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-05-30 19:05+0200\n"
+"POT-Creation-Date: 2023-10-14 10:31+0200\n"
 "PO-Revision-Date: 2023-06-01 15:51+0000\n"
 "Last-Translator: NxDs SdXn <nxdstrash@gmail.com>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-shared-places/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,12 +27,12 @@ msgstr ""
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr ""
 
-#: SharedPlacesModule.php:1014
+#: SharedPlacesModule.php:994
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
 
-#: SharedPlacesModule.php:1013
+#: SharedPlacesModule.php:993
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr ""
@@ -109,7 +108,7 @@ msgstr ""
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr ""
 
-#: SharedPlacesModule.php:221
+#: SharedPlacesModule.php:226
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Abilita la visualizzazione della gerarchia dei luoghi condivisi nel modulo \"Vesta Places and Pedigree map\"."
 
@@ -127,15 +126,19 @@ msgstr ""
 msgid "Filter to unique shared places"
 msgstr ""
 
-#: SharedPlacesModule.php:446
+#: SharedPlacesModule.php:428
 msgid "GOV id for type of location"
+msgstr ""
+
+#: resources/views/lists/locations-table.phtml:53
+msgid "GOV id?"
 msgstr ""
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
 msgstr ""
 
-#: SharedPlacesModule.php:443
+#: SharedPlacesModule.php:411
 msgid "Higher-level shared place"
 msgstr ""
 
@@ -210,12 +213,12 @@ msgid "Linking of shared places to places"
 msgstr ""
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:403
+#: SharedPlacesModule.php:368 SharedPlacesModule.php:419
 msgid "Location"
 msgstr ""
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:404
+#: SharedPlacesModule.php:369
 msgid "Locations"
 msgstr ""
 
@@ -238,7 +241,7 @@ msgstr ""
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr ""
 
-#: resources/views/shared-place-page-links.phtml:93
+#: resources/views/shared-place-page-links.phtml:120
 msgid "Next lower-level shared places"
 msgstr ""
 
@@ -289,13 +292,13 @@ msgstr ""
 msgid "See %1$s for details."
 msgstr ""
 
-#: SharedPlacesModule.php:430 SharedPlacesModule.php:432
-#: SharedPlacesModule.php:435 SharedPlacesModule.php:438
-#: SharedPlacesModule.php:702 resources/views/lists/locations-table.phtml:47
+#: SharedPlacesModule.php:395 SharedPlacesModule.php:397
+#: SharedPlacesModule.php:400 SharedPlacesModule.php:403
+#: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
 msgstr ""
 
-#: SharedPlacesModule.php:578 SharedPlacesModule.php:998
+#: SharedPlacesModule.php:558 SharedPlacesModule.php:978
 msgid "Shared place data"
 msgstr ""
 
@@ -321,8 +324,8 @@ msgstr ""
 msgid "Shared place summary"
 msgstr "Riepilogo dei Luoghi Condivisi"
 
-#: SharedPlacesListController.php:53 SharedPlacesModule.php:167
-#: resources/views/lists/locations-table.phtml:42
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:172
+#: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
 msgstr "Luoghi condivisi"
 
@@ -446,7 +449,7 @@ msgid "This tree has shared places with comma-separated name parts, while at the
 msgstr ""
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:445
+#: SharedPlacesModule.php:413
 msgid "Type of hierarchical relationship"
 msgstr ""
 
@@ -465,7 +468,7 @@ msgstr ""
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Usa l'etichetta «%1$s» per modellare la gerarchia dei luoghi."
 
-#: SharedPlacesModule.php:215
+#: SharedPlacesModule.php:220
 msgid "View Shared places hierarchy"
 msgstr "Mostra la gerarchia dei Luoghi condivisi"
 
@@ -484,11 +487,11 @@ msgstr ""
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
 
-#: patchedWebtrees/SharedPlace.php:976 patchedWebtrees/SharedPlace.php:1052
+#: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
 msgid "circular shared place hierarchy"
 msgstr ""
 
-#: SharedPlacesModule.php:1101
+#: SharedPlacesModule.php:1081
 msgid "shared places"
 msgstr ""
 

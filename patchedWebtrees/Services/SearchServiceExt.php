@@ -120,7 +120,12 @@ class SearchServiceExt {
         $this->whereTrees($query, 'o_file', $trees);
         $this->whereSearch($query, 'o_gedcom', $search);
 
-        return $this->paginateQuery($query, $this->locationRowMapper(), GedcomRecord::accessFilter(), $offset, $limit);
+        return $this->paginateQuery(
+            $query, 
+            $this->locationRowMapper(), 
+            GedcomRecord::accessFilter(), 
+            $offset, 
+            $limit);
     }
 
     /**

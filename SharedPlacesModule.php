@@ -306,24 +306,6 @@ class SharedPlacesModule extends AbstractModule implements
             unset($existingRoutes[CreateLocationAction::class]);        
         }
       
-        //no - we register a TomSelectLocation route ourselves 
-        //(use to have name TomSelectLocation as well, that's changed now),
-        //but we still need the original select control e.g. for merge records
-        /*
-        if (array_key_exists("Fisharebest\Webtrees\Http\RequestHandlers\TomSelectLocation", $existingRoutes)) {
-            unset($existingRoutes["Fisharebest\Webtrees\Http\RequestHandlers\TomSelectLocation"]);        
-        }
-        */
-      
-        //no longer required (webtrees #3786)
-        //if (array_key_exists(SearchGeneralPage::class, $existingRoutes)) {
-        //  unset($existingRoutes[SearchGeneralPage::class]);        
-        //}
-        //
-        //if (array_key_exists(SearchGeneralAction::class, $existingRoutes)) {
-        //  unset($existingRoutes[SearchGeneralAction::class]);        
-        //}
-      
         if (array_key_exists(LocationListModule::class, $existingRoutes)) {
             unset($existingRoutes[LocationListModule::class]);        
         }
@@ -339,33 +321,6 @@ class SharedPlacesModule extends AbstractModule implements
         //(this makes our list menu entry somewhat redundant though)
         //unset: see above
         $router->get(LocationListModule::class, static::ROUTE_URL, $this);
-        
-        //no longer required (webtrees #3786)
-        //$router->get(SearchGeneralPage::class, '/tree/{tree}/search-general', SearchGeneralPageExt::class);    
-        //$router->post(SearchGeneralAction::class, '/tree/{tree}/search-general', SearchGeneralActionExt::class);    
-        //View::registerCustomView('::search-general-page-ext', $this->name() . '::search-general-page-ext');
-        //View::registerCustomView('::search-results-ext', $this->name() . '::search-results-ext');
-
-        // no longer required (TODO re-check this)
-        //
-        // Register a view under the main namespace (referred to from modules/media-list/page)
-        //View::registerCustomView('::icons/shared-place', $this->name() . '::icons/shared-place');
-        //
-        // Replace an existing view with our own version.
-        // (record icons e.g. for clippings cart)
-        //View::registerCustomView('::icons/record', $this->name() . '::icons/record');
-
-        // no longer required (webtrees #4250)
-        //      
-        // Replace an existing view with our own version.
-        // (media management via list module)
-        //View::registerCustomView('::modules/media-list/page', $this->name() . '::modules/media-list/page');
-        // Replace an existing view with our own version.
-        // (media management via admin, and via list module)
-        // Replace an existing view with our own version.
-        //View::registerCustomView('::note-page', $this->name() . '::note-page');      
-        // Replace an existing view with our own version.
-        //View::registerCustomView('::source-page', $this->name() . '::source-page');
 
         // Replace an existing view with our own version.
         // (referred to from media-page, from search results, etc)
@@ -448,7 +403,7 @@ class SharedPlacesModule extends AbstractModule implements
             '_LOC' => new LocationRecord(I18N::translate('Shared place')),
 
             //fix #137
-            '_LOC:EVEN' => new CustomLocationEvent(I18N::translate('Event')),
+            '_LOC:EVEN' => new CustomLocationEvent(MoreI18N::xlate('Event')),
             
             //'Place' seems confusing here - if hierarchical shared places are used, this should be just one part of the place name
             '_LOC:NAME' => new PlaceName(MoreI18N::xlate('Name'), ['ABBR' => '0:1', 'DATE' => '0:1', 'LANG' => '0:1', 'SOUR' => '0:M']),
@@ -904,7 +859,7 @@ class SharedPlacesModule extends AbstractModule implements
                 //TODO check type of location via _GOVTYPE
                 //TODO check dateInterval
                 //TODO use maxLevels for transitive parents
-              $ret->add(new LocReference($parent->xref(), $parent->tree(), $trace, $currentLevel));
+                $ret->add(new LocReference($parent->xref(), $parent->tree(), $trace, $currentLevel));
             }
         }
 
