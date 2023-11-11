@@ -14,6 +14,7 @@ use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyLink;
 use Cissee\WebtreesExt\Http\Controllers\PlaceHierarchyParticipant;
 use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
+use Cissee\WebtreesExt\Http\RequestHandlers\AutoCompletePlaceExt;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceAction;
 use Cissee\WebtreesExt\Http\RequestHandlers\CreateSharedPlaceModal;
 use Cissee\WebtreesExt\Http\RequestHandlers\FunctionsPlaceProvidersAction;
@@ -41,6 +42,7 @@ use Fisharebest\Webtrees\Elements\UnknownElement;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Middleware\AuthEditor;
+use Fisharebest\Webtrees\Http\RequestHandlers\AutoCompletePlace;
 use Fisharebest\Webtrees\Http\RequestHandlers\CreateLocationAction;
 use Fisharebest\Webtrees\Http\RequestHandlers\CreateLocationModal;
 use Fisharebest\Webtrees\Http\RequestHandlers\LocationPage;
@@ -310,8 +312,17 @@ class SharedPlacesModule extends AbstractModule implements
             unset($existingRoutes[LocationListModule::class]);        
         }
         
+        //[2023/10] improve place autocomplete
+        if (array_key_exists(AutoCompletePlace::class, $existingRoutes)) {
+            unset($existingRoutes[AutoCompletePlace::class]);        
+        }
+        
         $router->setRoutes($existingRoutes);
 
+        //[2023/10] improve place autocomplete
+        $router->get(AutoCompletePlace::class, '/tree/{tree}/autocomplete/place', app(AutoCompletePlaceExt::class))
+            ->extras(['middleware' => [AuthEditor::class]]);
+        
         $router->get(LocationPage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);    
 
         $router->get(static::class, static::ROUTE_URL, $this);
@@ -831,6 +842,17 @@ class SharedPlacesModule extends AbstractModule implements
     
         return null;
     }
+    
+    public function loc2placAt(LocReference $loc, GedcomDateInterval $date): ?PlaceStructure {
+        /** @var SharedPlace $sharedPlace */
+        $sharedPlace = Registry::gedcomRecordFactory()->make($loc->getXref(), $loc->getTree());
+    
+        if ($sharedPlace !== null) {
+            return PlaceStructure::fromPlace($sharedPlace->primaryPlaceAt($date));
+        }
+    
+        return null;
+    }    
   
     public function loc2linkIcon(LocReference $loc): ?string {
         $sharedPlace = Registry::gedcomRecordFactory()->make($loc->getXref(), $loc->getTree());
@@ -1095,14 +1117,12 @@ class SharedPlacesModule extends AbstractModule implements
 
         //find matching shared places
         $sharedPlaces = $this->placename2sharedPlacesImpl($actual->gedcomName(), $actual->tree());    
-        $searchService = app(SearchServiceExt::class);
-        return new PlaceViaSharedPlace($actual, $asAdditionalParticipant, $urls, $sharedPlaces, $this, $searchService);
+        return new PlaceViaSharedPlace($actual, $asAdditionalParticipant, $urls, $sharedPlaces, $this);
     }
   
     public function createNonMatchingPlace(Place $actual, PlaceUrls $urls) {
         //there are no matching shared places!
-        $searchService = app(SearchServiceExt::class);
-        return new PlaceViaSharedPlace($actual, false, $urls, new Collection(), $this, $searchService);
+        return new PlaceViaSharedPlace($actual, false, $urls, new Collection(), $this);
     }
   
     ////////////////////////////////////////////////////////////////////////////

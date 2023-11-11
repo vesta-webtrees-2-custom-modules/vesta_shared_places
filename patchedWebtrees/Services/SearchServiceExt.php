@@ -292,8 +292,9 @@ class SearchServiceExt {
         $query->whereIn($tree_id_field, $tree_ids);
     }
 
-    //same as main, but handle search strings 'A, B' (main only handles 'A,B')
-
+    //same as main, but 
+    //a) handle search strings 'A, B' (main only handles 'A,B')
+    //b) search first for 'startingWith'
     /**
      * Search for places.
      *
@@ -304,7 +305,13 @@ class SearchServiceExt {
      *
      * @return Collection<Place>
      */
-    public function searchPlaces(Tree $tree, string $search, int $offset = 0, int $limit = PHP_INT_MAX): Collection {
+    public function searchPlaces(
+        Tree $tree, 
+        string $search, 
+        bool $startsWith = false,
+        int $offset = 0, 
+        int $limit = PHP_INT_MAX): Collection {
+        
         $query = DB::table('places AS p0')
             ->where('p0.p_file', '=', $tree->id())
             ->leftJoin('places AS p1', 'p1.p_id', '=', 'p0.p_parent_id')
@@ -338,7 +345,11 @@ class SearchServiceExt {
 
         // Filter each level of the hierarchy.
         foreach (explode(',', $search, 9) as $level => $string) {
-            $query->where('p' . $level . '.p_place', 'LIKE', '%' . addcslashes(trim($string), '\\%_') . '%');
+            $prefix = '';
+            if ($startsWith) {
+                $prefix = '%';
+            }
+            $query->where('p' . $level . '.p_place', 'LIKE', $prefix . addcslashes(trim($string), '\\%_') . '%');
         }
 
         $row_mapper = static function (stdClass $row) use ($tree): Place {

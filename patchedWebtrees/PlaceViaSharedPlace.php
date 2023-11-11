@@ -4,7 +4,6 @@ namespace Cissee\WebtreesExt;
 
 use Cissee\WebtreesExt\Http\Controllers\PlaceUrls;
 use Cissee\WebtreesExt\Http\Controllers\PlaceWithinHierarchy;
-use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Exception;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\Module\ModuleInterface;
@@ -38,9 +37,6 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
   /** @var Collection */
   protected $sharedPlaces;
   
-  /** @var SearchServiceExt */
-  protected $search_service_ext;
-  
   /** @var MapCoordinates|null */
   protected $latLon = null;
   
@@ -51,15 +47,13 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
           bool $asAdditionalParticipant,
           PlaceUrls $urls,
           Collection $sharedPlaces,
-          ModuleInterface $module,
-          SearchServiceExt $search_service_ext) {
+          ModuleInterface $module) {
 
     $this->actual = $actual;
     $this->asAdditionalParticipant = $asAdditionalParticipant;
     $this->urls = $urls;
     $this->module = $module;
     $this->sharedPlaces = $sharedPlaces;
-    $this->search_service_ext = $search_service_ext;    
   }  
     
   //Speedup
@@ -194,8 +188,7 @@ class PlaceViaSharedPlace implements PlaceWithinHierarchy {
                   $self->asAdditionalParticipant, 
                   $self->urls, 
                   $sharedPlaces, 
-                  $self->module, 
-                  $self->search_service_ext);
+                  $self->module);
         })
         ->sort(static function (PlaceViaSharedPlace $x, PlaceViaSharedPlace $y): int {
           return strtolower($x->gedcomName()) <=> strtolower($y->gedcomName());
