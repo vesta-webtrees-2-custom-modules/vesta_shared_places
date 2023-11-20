@@ -8,492 +8,640 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2023-10-14 10:31+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-11-20 13:01+0000\n"
+"Last-Translator: BernatBanyuls <bernatbanyuls@gmail.com>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.2\n"
 
 #: HelpTexts.php:17
 msgid "Shared place summary"
-msgstr ""
+msgstr "Resum del lloc compartit"
 
 #: HelpTexts.php:19
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
+"El resum mostra les dades del lloc compartit, formatades de la mateixa "
+"manera que per als esdeveniments amb un lloc assignat al lloc compartit "
+"respectiu."
 
 #: HelpTexts.php:20
 msgid "Therefore, the place name is displayed here including the full hierarchy."
-msgstr ""
+msgstr "Per tant, aquí es mostra el topònim incloent tota la jerarquia."
 
 #: HelpTexts.php:21
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"Podeu establir un any de referència (que pot ser avaluat per altres mòduls, "
+"com ara %1$s) en la configuració del mòdul."
 
 #: HelpTexts.php:27
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
+"Els topònims s'han d'introduir com a topònim únic (aquí no utilitzeu una "
+"llista separada per comes)."
 
 #: HelpTexts.php:28
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr ""
+"Utilitzeu l'etiqueta separada '%1$s' per tal de modelar una jerarquia de "
+"lloc."
 
 #: HelpTexts.php:31 HelpTexts.php:40
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
+"Els topònims poden canviar amb el temps. Podeu afegir diversos noms a un "
+"lloc compartit i indicar noms històrics mitjançant un interval de dates "
+"adequat."
 
 #: HelpTexts.php:37
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
+"Els topònims s'han d'introduir com una llista separada per comes, començant "
+"pel lloc més petit i acabant pel país. Per exemple, \"Westminster, Londres, "
+"Anglaterra\"."
 
 #: SharedPlacesListController.php:53 SharedPlacesModule.php:172
 #: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
-msgstr ""
+msgstr "Llocs compartits"
 
 #: SharedPlacesModule.php:220
 msgid "View Shared places hierarchy"
-msgstr ""
+msgstr "Veure la jerarquia de llocs compartits"
 
 #: SharedPlacesModule.php:226
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
+"Habiliteu el mòdul de mapes de llocs i pedigrí de Vesta per veure la "
+"jerarquia de llocs compartits."
 
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:368 SharedPlacesModule.php:419
 msgid "Location"
-msgstr ""
+msgstr "Ubicació"
 
 #. I18N: translate just like 'Shared Places' for consistency
 #: SharedPlacesModule.php:369
 msgid "Locations"
-msgstr ""
+msgstr "Ubicacions"
 
 #: SharedPlacesModule.php:395 SharedPlacesModule.php:397
 #: SharedPlacesModule.php:400 SharedPlacesModule.php:403
 #: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
-msgstr ""
+msgstr "Lloc compartit"
 
 #: SharedPlacesModule.php:411
 msgid "Higher-level shared place"
-msgstr ""
+msgstr "Lloc compartit de nivell superior"
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
 #: SharedPlacesModule.php:413
 msgid "Type of hierarchical relationship"
-msgstr ""
+msgstr "Tipus de relació jeràrquica"
 
 #: SharedPlacesModule.php:428
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "Identificador GOV per al tipus d'ubicació"
 
 #: SharedPlacesModule.php:558 SharedPlacesModule.php:978
 msgid "Shared place data"
-msgstr ""
+msgstr "Dades de llocs compartits"
 
 #: SharedPlacesModule.php:993
 #, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr ""
+msgstr "%s i les persones i famílies que hi fan referència."
 
 #: SharedPlacesModule.php:994
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
+"%s i les persones i famílies que hi fan referència, inclosos els pares, "
+"germans, cònjuges i fills de cada individu."
 
 #: SharedPlacesModule.php:1081
 msgid "shared places"
-msgstr ""
+msgstr "Llocs compartits"
 
 #: SharedPlacesModuleTrait.php:28
 msgid "A module providing support for shared places."
-msgstr ""
+msgstr "Un mòdul de suport als llocs compartits."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:38
 msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended 'Facts and events' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module."
 msgstr ""
+"Un mòdul que suporta llocs compartits com a objectes GEDCOM de nivell 0, "
+"sobre la base de l'Addenda GEDCOM-L a l'especificació GEDCOM 5.5.1. Els "
+"llocs compartits poden contenir, per exemple, coordenades del mapa, notes i "
+"objectes multimèdia. El mòdul mostra aquestes dades per a tots els llocs "
+"coincidents mitjançant la pestanya ampliada \"Fets i esdeveniments\". També "
+"es pot utilitzar per gestionar identificadors GOV, en combinació amb el "
+"mòdul Gov4Webtrees."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:67
 msgid "Shared place structure"
-msgstr ""
+msgstr "Estructura de llocs compartits"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:69
 msgid "Use hierarchical shared places"
-msgstr ""
+msgstr "Utilitzar llocs compartits jeràrquics"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:70
 msgid "If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to higher-level shared places, as described in the specification."
 msgstr ""
+"Si es comprova, les relacions entre llocs compartits es modelen a través "
+"d'una jerarquia explícita, on els llocs compartits tenen XREF a llocs "
+"compartits de nivell superior, tal com es descriu a l'especificació."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:71
 msgid "Note that this also affects the way shared places are created, and the way they are mapped to places."
 msgstr ""
+"Tingueu en compte que això també afecta la manera com es creen els llocs "
+"compartits i la manera com s'assignen als llocs."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:72
 msgid "In particular, hierarchical shared places do not have names with comma-separated name parts."
 msgstr ""
+"En particular, els llocs compartits jeràrquics no tenen noms amb parts de "
+"noms separades per comes."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:73
 #, php-format
 msgid "See %1$s for details."
-msgstr ""
+msgstr "Veure %1$s per a més detalls."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:74
 msgid "There is a data fix available which may be used to convert existing shared places."
 msgstr ""
+"Hi ha una correcció de dades disponible que es pot utilitzar per convertir "
+"llocs compartits existents."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:75
 msgid "When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated name parts."
 msgstr ""
+"Quan no es marca, s'utilitza el primer enfocament, en què les jerarquies "
+"només s'insinuen mitjançant l'ús de topònims compartits amb parts de noms "
+"separades per comes."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:76
 msgid "It is strongly recommended to switch to hierarchical shared places."
-msgstr ""
+msgstr "Es recomana encaridament canviar a llocs compartits jeràrquics."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:81
 msgid "Linking of shared places to places"
-msgstr ""
+msgstr "Vinculació de llocs compartits a llocs"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:84
 msgid "Additionally link shared places via name"
-msgstr ""
+msgstr "A més, enllaça llocs compartits a través del nom"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:85
 msgid "According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. "
 msgstr ""
+"Segons l'Annex GEDCOM-L, els llocs compartits estan referenciats a través de "
+"XREFs, igual que les notes compartides, etc. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:86
 msgid "It is now recommended to use XREFs, as this improves performance and flexibility. There is a data fix available which may be used to add XREFs. "
 msgstr ""
+"Ara es recomana utilitzar XREF, ja que això millora el rendiment i la "
+"flexibilitat. Hi ha una correcció de dades disponible que es pot utilitzar "
+"per afegir XREF. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:87
 msgid "However, you can still check this option and link shared places via the place name itself. In this case, links are established internally by searching for a shared place with any name matching case-insensitively."
 msgstr ""
+"Tot i això, encara podeu marcar aquesta opció i enllaçar llocs compartits "
+"mitjançant el mateix topònim. En aquest cas, els enllaços s'estableixen "
+"internament cercant un lloc compartit amb qualsevol nom que coincideixi "
+"entre majúscules i minúscules."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:88
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
 msgstr ""
+"Si utilitzeu llocs compartits jeràrquics, un lloc amb el nom \"A, B, C\" "
+"s'assigna a un lloc compartit \"A\" amb un lloc compartit de nivell superior "
+"que s'assigna a \"B, C\"."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:92
 msgid "... and fall back to n parent levels"
-msgstr ""
+msgstr "... i caure de nou a n nivells parentals"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:93
 msgid "When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would also match shared places that match \"B, C\" and \"C\")"
 msgstr ""
+"Quan es marca l'opció anterior i no es troba cap lloc compartit coincident, "
+"torneu a n llocs pares (de manera que, per exemple, per a n=2 un lloc \"A, "
+"B, C\" també coincidiria amb els llocs compartits que coincideixin amb \"B, "
+"C\" i \"C\")"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:104
 msgid "All shared place facts"
-msgstr ""
+msgstr "Tots els fets de llocs compartits"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:108
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list."
 msgstr ""
+"Aquesta és la llista de dades de GEDCOM que els vostres usuaris poden afegir "
+"als llocs compartits. Podeu modificar aquesta llista eliminant o afegint "
+"noms de fet segons calgui. Els noms de fets que apareixen en aquesta llista "
+"no han d'aparèixer també a la llista \"Fets únics del lloc compartit\"."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:112
 msgid "Unique shared place facts"
-msgstr ""
+msgstr "Dades úniques del lloc compartit"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:116
 msgid "This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list."
 msgstr ""
+"Aquesta és la llista de dades de GEDCOM que els usuaris només poden afegir "
+"una vegada als llocs compartits. Per exemple, si NAME es troba en aquesta "
+"llista, els usuaris no podran afegir més d'un registre NAME a un lloc "
+"compartit. Els noms de fets que apareixen en aquesta llista no han "
+"d'aparèixer també a la llista \"Tots els fets de llocs compartits\"."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:134
 msgid "Quick shared place facts"
-msgstr ""
+msgstr "Dades ràpides del lloc compartit"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:138
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list. "
 msgstr ""
+"Aquesta és la llista de dades de GEDCOM que els vostres usuaris poden afegir "
+"als llocs compartits. Podeu modificar aquesta llista eliminant o afegint "
+"noms de fet segons calgui. Els noms de fets que apareixen en aquesta llista "
+"no han d'aparèixer també a la llista \"Fets únics del lloc compartit\". "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:148
 msgid "Restrict to specific facts and events"
-msgstr ""
+msgstr "Restringir fets i esdeveniments concrets"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:149
 msgid "If this option is checked, shared place data is only displayed for the following facts and events. "
 msgstr ""
+"Si aquesta opció està marcada, les dades de llocs compartits només es "
+"mostren per als fets i esdeveniments següents. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:163
 msgid "Automatically expand shared place data"
-msgstr ""
+msgstr "Expandiu automàticament les dades dels llocs compartits"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:172
 msgid "yes, but only the first occurrence of the shared place"
-msgstr ""
+msgstr "Sí, però només la primera ocurrència del lloc compartit"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:173
 msgid "Note that the first occurrence may be within a toggleable, currently hidden fact or event (such as an event of a close relative). This will probably be improved in future versions of the module."
 msgstr ""
+"Tingueu en compte que la primera aparició pot estar dins d'un fet o "
+"esdeveniment commutable i actualment ocult (com ara un esdeveniment d'un "
+"familiar proper). Això probablement es millorarà en futures versions del "
+"mòdul."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:187
 msgid "Show link counts for shared places list"
-msgstr ""
+msgstr "Mostra el recompte d'enllaços per a la llista de llocs compartits"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:188
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr ""
+"La determinació del recompte d'enllaços (individu/famílies enllaçades) és "
+"costosa a l'hora d'assignar llocs compartits mitjançant el nom i, per tant, "
+"provoca retards quan es mostra la llista de llocs compartits. Es recomana "
+"seleccionar aquesta opció només si les places s'assignen mitjançant XREF."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:194
 #: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:129
 msgid "Summary"
-msgstr ""
+msgstr "Resum"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:196
 msgid "Reference year"
-msgstr ""
+msgstr "Any de referència"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:197
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
 msgstr ""
+"L'any establert aquí pot ser utilitzat per altres mòduls per millorar la "
+"descripció del lloc amb dades addicionals. Si es deixa buit, s'utilitza "
+"l'any en curs."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:217
 msgid "Filter to unique shared places"
-msgstr ""
+msgstr "Filtrar a llocs compartits únics"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:218
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr ""
+"A la llista de jerarquia de llocs, quan s'utilitza l'opció \"restringir a "
+"llocs compartits\", els llocs compartits amb diversos noms es mostren "
+"diverses vegades com a entrades separades. Marqueu aquesta opció per mostrar "
+"cada lloc compartit només una vegada en aquest cas, sota el nom principal "
+"del lloc compartit, i també mostrar-ne els noms addicionals."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:231
 msgid "Facts for shared place records"
-msgstr ""
+msgstr "Dades per als registres de llocs compartits"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:241
 msgid "Shared places list"
-msgstr ""
+msgstr "Llista de llocs compartits"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:245
 msgid "Shared place page"
-msgstr ""
+msgstr "Pàgina de lloc compartit"
 
 #: patchedWebtrees/Elements/XrefSharedPlace.php:57
 #: resources/views/modals/create-shared-place.phtml:9
 #: resources/views/shared-places-list-page.phtml:42
 msgid "Create a shared place"
-msgstr ""
+msgstr "Crear un lloc compartit"
 
 #: patchedWebtrees/Exceptions/SharedPlaceNotFoundException.php:13
 msgid "This shared place does not exist or you do not have permission to view it."
-msgstr ""
+msgstr "Aquest lloc compartit no existeix o no teniu permís per veure'l."
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:52
 #, php-format
 msgid "The shared place %s already exists."
-msgstr ""
+msgstr "El lloc compartit %s ja existeix."
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:60
 msgid " (Note: A higher-level shared place has also been created)"
-msgstr ""
+msgstr " (Nota: També s'ha creat un lloc compartit de nivell superior)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
-msgstr ""
+msgstr " (Nota: %s També s'han creat llocs compartits de nivell superior)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:77
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:123
 #, php-format
 msgid "The shared place %s has been created."
-msgstr ""
+msgstr "El lloc compartit %s s'ha creat."
 
 #: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
 msgid "circular shared place hierarchy"
-msgstr ""
+msgstr "Jerarquia circular de llocs compartits"
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
-msgstr ""
+msgstr "Hi ha diverses correccions de dades disponibles."
 
 #: resources/views/data-fix-options.phtml:13
 msgid "It is strongly recommended to backup your tree first."
 msgstr ""
+"Es recomana encaridament fer una còpia de seguretat del vostre arbre primer."
 
 #: resources/views/data-fix-options.phtml:18
 msgid "Data Fix"
-msgstr ""
+msgstr "Correcció de dades"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
-msgstr ""
+msgstr "Jerarquitzar els llocs compartits"
 
 #: resources/views/data-fix-options.phtml:32
 msgid "This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to higher-level shared places via XREFs)."
 msgstr ""
+"Aquesta correcció de dades converteix els llocs compartits amb parts de noms "
+"separades per comes en llocs compartits jeràrquics (que estan enllaçats a "
+"llocs compartits de nivell superior mitjançant XREF)."
 
 #: resources/views/data-fix-options.phtml:33
 msgid "It usually will have to be carried out once only, as a migration when switching to hierarchical shared places via the respective configuration option."
 msgstr ""
+"Normalment s'haurà de dur a terme una sola vegada, com una migració en "
+"canviar a llocs compartits jeràrquics mitjançant l'opció de configuració "
+"respectiva."
 
 #: resources/views/data-fix-options.phtml:38
 msgid "Note:"
-msgstr ""
+msgstr "Nota:"
 
 #: resources/views/data-fix-options.phtml:41
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
 msgstr ""
+"Actualment, la cerca d'aquesta correcció de dades no coincideix amb cap "
+"registre, perquè l'opció de configuració \"Utilitza llocs compartits "
+"jeràrquics\" no està definida."
 
 #: resources/views/data-fix-options.phtml:46
 #: resources/views/data-fix-options.phtml:107
 #: resources/views/data-fix-options.phtml:134
 msgid "Attention!"
-msgstr ""
+msgstr "Atenció!"
 
 #: resources/views/data-fix-options.phtml:49
 msgid "Missing higher-level shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr ""
+"Si cal, es creen llocs compartits de nivell superior que falten. Perquè això "
+"funcioni sense crear potencialment duplicats, heu de marcar \"Accepta "
+"automàticament els canvis realitzats per aquest usuari\" a l'administració "
+"d'usuaris, almenys mentre duri aquesta correcció de dades."
 
 #: resources/views/data-fix-options.phtml:50
 #: resources/views/data-fix-options.phtml:111
 #: resources/views/data-fix-options.phtml:138
 msgid "This data fix currently won't update anything, because this preference isn't set."
 msgstr ""
+"Actualment, aquesta correcció de dades no actualitzarà res, perquè aquesta "
+"preferència no està definida."
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
 msgstr ""
+"Millorar els llocs compartits existents amb dades independents de l'arbre"
 
 #: resources/views/data-fix-options.phtml:66
 msgid "This data fix adds tree-independent data (managed outside GEDCOM) to existing shared places."
 msgstr ""
+"Aquesta correcció de dades afegeix dades independents de l'arbre ("
+"gestionades fora de GEDCOM) als llocs compartits existents."
 
 #: resources/views/data-fix-options.phtml:67
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"En particular, s'afegeixen les coordenades del mapa dels arbres web 'Dades "
+"geogràfiques' i els identificadors GOV del mòdul Gov4Webtrees."
 
 #: resources/views/data-fix-options.phtml:68
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name'."
 msgstr ""
+"La coincidència de llocs compartits es determina mitjançant l'opció de "
+"configuració \"Enllaça addicionalment llocs compartits mitjançant el nom\"."
 
 #: resources/views/data-fix-options.phtml:79
 msgid "Add missing XREFs"
-msgstr ""
+msgstr "Afegir XREFs que falten"
 
 #: resources/views/data-fix-options.phtml:82
 msgid "This data fix adds XREFs, linking all places within events directly to the respective shared places."
 msgstr ""
+"Aquesta correcció de dades afegeix XREF, enllaçant tots els llocs dels "
+"esdeveniments directament amb els llocs compartits respectius."
 
 #: resources/views/data-fix-options.phtml:83
 #: resources/views/data-fix-options.phtml:102
 #: resources/views/data-fix-options.phtml:129
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name', including parent levels if set."
 msgstr ""
+"La coincidència de llocs compartits es determina mitjançant l'opció de "
+"configuració \"Enllaça addicionalment llocs compartits mitjançant el nom\", "
+"inclosos els nivells parentals si s'estableixen."
 
 #: resources/views/data-fix-options.phtml:84
 msgid "Therefore, this data fix enables you to move away from using that configuration option."
 msgstr ""
+"Per tant, aquesta correcció de dades us permet deixar d'utilitzar aquesta "
+"opció de configuració."
 
 #: resources/views/data-fix-options.phtml:85
 msgid "The search cannot be implemented efficiently and may take some time in particular when displaying and updating a large number of records."
 msgstr ""
+"La cerca no es pot implementar de manera eficient i pot trigar un temps, en "
+"particular, a mostrar i actualitzar un gran nombre de registres."
 
 #: resources/views/data-fix-options.phtml:96
 msgid "Create missing shared places from tree-independent data, and add missing XREFs"
 msgstr ""
+"Creeu llocs compartits que falten a partir de dades independents de l'arbre "
+"i afegiu XREF que falten"
 
 #: resources/views/data-fix-options.phtml:99
 msgid "This data fix creates missing shared places, if tree-independent data (managed outside GEDCOM) is available for the respective place."
 msgstr ""
+"Aquesta correcció de dades crea llocs compartits que falten si les dades "
+"independents de l'arbre (gestionades fora del GEDCOM) estan disponibles per "
+"al lloc respectiu."
 
 #: resources/views/data-fix-options.phtml:101
 #: resources/views/data-fix-options.phtml:128
 msgid "The created shared places, as well as existing shared places, are linked via XREFs to event places."
 msgstr ""
+"Els llocs compartits creats, així com els llocs compartits existents, "
+"s'enllacen mitjançant XREFs a llocs d'esdeveniments."
 
 #: resources/views/data-fix-options.phtml:110
 #: resources/views/data-fix-options.phtml:137
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr ""
+"Si cal, es creen llocs compartits que falten. Perquè això funcioni sense "
+"crear potencialment duplicats, heu de marcar \"Accepta automàticament els "
+"canvis realitzats per aquest usuari\" a l'administració d'usuaris, almenys "
+"mentre duri aquesta correcció de dades."
 
 #: resources/views/data-fix-options.phtml:123
 msgid "Create all missing shared places, and add missing XREFs"
-msgstr ""
+msgstr "Creeu tots els llocs compartits que falten i afegiu els XREF que falten"
 
 #: resources/views/data-fix-options.phtml:126
 msgid "This data fix creates missing shared places, even if no tree-independent data (managed outside GEDCOM) is available for the respective place."
 msgstr ""
+"Aquesta correcció de dades crea llocs compartits que falten, encara que no "
+"hi hagi dades independents de l'arbre (gestionades fora del GEDCOM) "
+"disponibles per al lloc respectiu."
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"Si hi ha dades independents de l'arbre disponibles, s'afegeixen les "
+"coordenades del mapa dels arbres web \"Dades geogràfiques\" i els "
+"identificadors GOV del mòdul Gov4Webtrees."
 
 #: resources/views/lists/locations-table.phtml:53
 msgid "GOV id?"
-msgstr ""
+msgstr "Identificador GOV?"
 
 #: resources/views/modals/shared-place-fields.phtml:12
 msgid "Shared place name (complete hierarchy)"
-msgstr ""
+msgstr "Topònim compartit (jerarquia completa)"
 
 #: resources/views/modals/shared-place-fields.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
 msgstr ""
+"Un topònim amb parts de noms separats per comes es resoldrà a una jerarquia "
+"de llocs compartits. També es crearan llocs compartits de nivell superior "
+"que faltin."
 
 #: resources/views/modals/shared-place-fields.phtml:17
 msgid "Shared place name"
-msgstr ""
+msgstr "Topònim compartit"
 
 #: resources/views/shared-place-page-links.phtml:120
 msgid "Next lower-level shared places"
-msgstr ""
+msgstr "Següents llocs compartits de nivell inferior"
 
 #: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
-msgstr ""
+msgstr "Nota important:"
 
 #: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr ""
+"Aquest arbre té llocs compartits amb parts de noms separades per comes, "
+"mentre que al mateix temps se selecciona l'opció \"Utilitza llocs compartits "
+"jeràrquics\"."
 
 #: resources/views/shared-places-list-page.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr ""
+"Això comporta incoherències a l'hora d'assignar llocs a llocs compartits i, "
+"en general, no coincideix amb l'especificació dels llocs compartits (que les "
+"versions anteriors d'aquest mòdul personalitzat no seguien estrictament)."
 
 #: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr ""
+"Es recomana executar la correcció de dades d'aquest mòdul personalitzat per "
+"resoldre aquest problema."
