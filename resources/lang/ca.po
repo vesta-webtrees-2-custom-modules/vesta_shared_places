@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2023-10-14 10:31+0200\n"
-"PO-Revision-Date: 2023-11-20 13:01+0000\n"
+"PO-Revision-Date: 2023-11-20 17:01+0000\n"
 "Last-Translator: BernatBanyuls <bernatbanyuls@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/ca/>\n"
@@ -91,7 +91,7 @@ msgstr "Ubicació"
 #. I18N: translate just like 'Shared Places' for consistency
 #: SharedPlacesModule.php:369
 msgid "Locations"
-msgstr "Ubicacions"
+msgstr "Ubicació"
 
 #: SharedPlacesModule.php:395 SharedPlacesModule.php:397
 #: SharedPlacesModule.php:400 SharedPlacesModule.php:403
