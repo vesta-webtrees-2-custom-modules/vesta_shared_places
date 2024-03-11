@@ -93,7 +93,7 @@ LOCATION_RECORD:=
 
 ### Download<a name="download"/>
 
-* Current version: 2.1.18.2.0
+* Current version: 2.1.18.2.2
 * Based on and tested with webtrees 2.1.18. Requires webtrees 2.1.17 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
