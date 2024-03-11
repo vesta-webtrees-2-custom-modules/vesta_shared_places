@@ -972,9 +972,8 @@ class SharedPlacesModule extends AbstractModule implements
         if ($html == '') {
             return null;
         }
-    
+        
         //wrap in order to make expandable/collapsible
-        $data = '<br/>';
 
         $expandSetting = $this->getPreference('EXPAND', '1');
         if ($expandSetting == '0') {
@@ -992,7 +991,9 @@ class SharedPlacesModule extends AbstractModule implements
 
         $id = 'collapse-' . Uuid::uuid4()->toString();
 
-        $data .= '<a href="#' . e($id) . '" role="button" data-bs-toggle="collapse" aria-controls="' . e($id) . '" aria-expanded="' . ($expanded ? 'true' : 'false') . '">' .
+        $data = ''; //#170 remove br, use css for styling
+        
+        $data .= '<div class="vesta_sp_data"><a href="#' . e($id) . '" role="button" data-bs-toggle="collapse" aria-controls="' . e($id) . '" aria-expanded="' . ($expanded ? 'true' : 'false') . '">' .
             view('icons/expand') .
             view('icons/collapse') .
             '</a> ';
@@ -1001,7 +1002,7 @@ class SharedPlacesModule extends AbstractModule implements
         $data .= '<div id="' . e($id) . '" class="shared_place_data collapse ' . ($expanded ? 'show' : '') . '">' .
             $html .
             '</div>';
-        $data .= '</div>';
+        $data .= '</div></div>';
     
         return $data;
     }
