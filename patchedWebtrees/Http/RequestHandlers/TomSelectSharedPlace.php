@@ -55,6 +55,8 @@ class TomSelectSharedPlace extends AbstractTomSelectWithDateHandler
             int $limit, 
             string $at): Collection {        
         
+        error_log("!!!");
+        
         // Search by XREF
         $location = Registry::locationFactory()->make($query, $tree);
 
@@ -64,8 +66,10 @@ class TomSelectSharedPlace extends AbstractTomSelectWithDateHandler
             $results = new Collection([$location]);
         } else {
             //experimental: always go via places only (to avoid matching on other parts of shared place gedcom)
-            $places = $this->search_service->searchPlaces($tree, $query);
-
+            
+            //#172: add parameter startsWith ("true" := "does NOT have to start with")
+            $places = $this->search_service->searchPlaces($tree, $query, true);
+            
             $results = $this->search_service->searchLocationsInPlaces($tree, $places);
             $paginate = true;
             
