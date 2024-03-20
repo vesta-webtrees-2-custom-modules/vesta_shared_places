@@ -1325,7 +1325,7 @@ class SharedPlacesModule extends AbstractModule implements
             return false;
         }
 
-        return preg_match($this->createRegex('1 NAME.*,.*\n'), $record->gedcom()) === 1;
+        return preg_match($this->createRegex('1 NAME [^\n]*,'), $record->gedcom()) === 1;
     }
   
     protected function doesRecordNeedUpdateWrtEnhance(GedcomRecord $record): bool {
