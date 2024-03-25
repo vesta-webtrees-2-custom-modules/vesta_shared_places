@@ -19,24 +19,24 @@ use Vesta\VestaUtils;
  * @var string                      $details
  * @var ?Collection<int,Family>     $linked_families
  * @var ?Collection<int,Individual> $linked_individuals
- * 
+ *
  * //[RC] added
  * @var ?Collection<int,Location>   $llSharedPlaces
- * 
+ *
  * @var ?Collection<int,Media>      $linked_media_objects
  * @var ?Collection<int,Note>       $linked_notes
  * @var ?Collection<int,Source>     $linked_sources
  * @var Tree                        $tree
- * 
+ *
  * @var GedcomRecord                $record
  * @var ModuleVestalInterface       $module
- * 
+ *
  * //$module must also provide getHelpAction for 'Predecessor'!
  * //$module may also provide preferences for 'RESTRICTED_PLACE_HISTORY'!
  */
 
 $factFilter = new class($module, $record) implements FactFilter {
-    
+
     //gah painful
     private $module;
     private $record;
@@ -45,7 +45,7 @@ $factFilter = new class($module, $record) implements FactFilter {
         $this->module = $module;
         $this->record = $record;
     }
-    
+
     //performance doesn't look great
     public function filter(Fact $fact): bool {
         $ps = PlaceStructure::fromFact($fact);
@@ -113,7 +113,7 @@ $factFilter = new class($module, $record) implements FactFilter {
             </a>
         </li>
     <?php endif ?>
-        
+
     <?php if ($llSharedPlaces instanceof Collection) : ?>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" role="tab" href="#llSharedPlaces">
@@ -122,7 +122,7 @@ $factFilter = new class($module, $record) implements FactFilter {
             </a>
         </li>
     <?php endif ?>
-        
+
     <li class="nav-item" role="presentation">
         <a class="nav-link" data-bs-toggle="tab" role="tab" href="#placeHistory">
             <?= CommonI18N::placeHistory() ?>
@@ -152,7 +152,7 @@ $factFilter = new class($module, $record) implements FactFilter {
             <?= view('lists/locations-table', ['locations' => $llSharedPlaces, 'tree' => $tree]) ?>
         </div>
     <?php endif ?>
-    
+
     <?php if ($linked_media_objects instanceof Collection) : ?>
         <div class="tab-pane fade" role="tabpanel" id="media">
             <?= view('lists/media-table', ['media_objects' => $linked_media_objects, 'tree' => $tree]) ?>
@@ -170,11 +170,11 @@ $factFilter = new class($module, $record) implements FactFilter {
             <?= view('lists/notes-table', ['notes' => $linked_notes, 'tree' => $tree]) ?>
         </div>
     <?php endif ?>
-    
+
     <div class="tab-pane fade" role="tabpanel" id="placeHistory">
         <?= view(VestaUtils::vestaViewsNamespace() . '::lists/place-history', [
-            'individuals' => $linked_individuals, 
-            'record' => $record, 
+            'individuals' => $linked_individuals,
+            'record' => $record,
             'factFilter' => $factFilter,
             'tree' => $tree,
             'context' => 'sp',

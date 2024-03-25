@@ -16,7 +16,7 @@ use Vesta\VestaUtils;
 ?>
 
 <table class="table wt-facts-table">
-    <?php 
+    <?php
         echo $hierarchyHtml;
         echo $summaryHtml;
     ?>
@@ -25,9 +25,9 @@ use Vesta\VestaUtils;
         //we need the enhanced fact view here, e.g. for resetting GOV data
         //view('fact', ['fact' => $fact, 'record' => $record])
         ?>
-        <?= view(VestaUtils::vestaViewsNamespace() . '::fact', [                    
-                    'fact'                   => $fact, 
-                    'record'                 => $record, 
+        <?= view(VestaUtils::vestaViewsNamespace() . '::fact', [
+                    'fact'                   => $fact,
+                    'record'                 => $record,
                     'module'                 => $module,
                     'useVestals'             => false,
                     'hideCoordinates'        => false,

@@ -38,7 +38,7 @@ class LanguageIdReplacement extends AbstractElement
         $locales = LanguageIdExt::values();
 
         $coll = new Collection($locales);
-        
+
         $values = $coll
             ->mapWithKeys(static function (LocaleInterface $locale, string $key): array {
                 if ($key === $locale->endonym()) {
@@ -47,18 +47,18 @@ class LanguageIdReplacement extends AbstractElement
                 return [strtoupper($key) => $key . ' ('. $locale->endonym() . ')'];
             })
             ->all();
-        
+
         uasort($values, I18N::comparator());
 
         return $values;
     }
-    
+
     public function valuesG7(): array
     {
         $locales = LanguageIdExt::values();
 
         $coll = new Collection($locales);
-        
+
         $values = $coll
             ->mapWithKeys(static function (LocaleInterface $locale, string $key): array {
                 $keyViaCode = $locale->language()->code();
@@ -68,12 +68,12 @@ class LanguageIdReplacement extends AbstractElement
                 return [strtoupper($keyViaCode) => $key . ' ('. $locale->endonym() . ')'];
             })
             ->all();
-        
+
         uasort($values, I18N::comparator());
 
         return $values;
     }
-    
+
     /**
      * Display the value of this type of element.
      *
@@ -85,12 +85,12 @@ class LanguageIdReplacement extends AbstractElement
     public function value(string $value, Tree $tree): string
     {
         $values = $this->values();
-        
+
         $canonical = $this->canonical($value);
 
         //issue #149: also properly display gedcom 7 language tags (no edit support yet)
         $valuesG7 = $this->valuesG7();
-        
+
         return $values[$canonical] ?? $valuesG7[$canonical] ?? '<bdi>' . e($value) . '</bdi>';
     }
 }

@@ -19,10 +19,10 @@ if ($showLinkCounts) {
     $count_families[$sharedPlace->xref()] = $sharedPlace->countLinkedFamilies('_LOC');
   }
 }
-    
+
 ?>
 
-<div class="wt-page-content">      
+<div class="wt-page-content">
     <table
         class="table table-bordered table-sm wt-table-note datatables"
         <?= view('lists/datatables-attributes') ?>
@@ -57,7 +57,7 @@ if ($showLinkCounts) {
         </thead>
 
         <tbody>
-            <?php foreach ($locations as $sharedPlace) : ?>              
+            <?php foreach ($locations as $sharedPlace) : ?>
               <tr class="<?= $sharedPlace->isPendingDeletion() ? 'wt-old' : ($sharedPlace->isPendingAddition() ? 'wt-new' : '') ?>">
                   <!-- Title -->
                   <td data-sort="<?= e($sharedPlace->fullName()) ?>">
@@ -80,36 +80,36 @@ if ($showLinkCounts) {
                         <br>
                       <?php endforeach ?>
                   </td>
-                  
+
                   <td data-sort="<?= e($sharedPlace->getAttribute("TYPE")) ?>">
                       <?php foreach ($sharedPlace->getAttributes("TYPE") as $type) : ?>
                         <?= $type ?>
                         <br>
                       <?php endforeach ?>
                   </td>
-                  
-                  <!-- Place (in hierarchy) --> 
+
+                  <!-- Place (in hierarchy) -->
 
                   <td class="center">
                       <?= $sharedPlace->primaryPlace()->shortName(true) ?>
                   </td>
-                  
-                  <!-- Coordinates --> 
+
+                  <!-- Coordinates -->
                   <td class="center">
                       <?= $sharedPlace->printLati() ?>
                   </td>
                   <td class="center">
                       <?= $sharedPlace->printLong() ?>
                   </td>
-                  
-                  <!-- GOV id set? --> 
+
+                  <!-- GOV id set? -->
                   <td class="center">
                       <?php if ($sharedPlace->facts(['_GOV'])->isNotEmpty()) : ?>
                         <span class="wt-icon-save"><i class="fas fa-check fa-fw" aria-hidden="true"></i></span>
                         <?php endif ?>
                   </td>
-                  
-                  <!-- Count of linked individuals --> 
+
+                  <!-- Count of linked individuals -->
                   <td class="center" data-sort="<?= $count_individuals[$sharedPlace->xref()] ?? 0 ?>">
                       <?= I18N::number($count_individuals[$sharedPlace->xref()] ?? 0) ?>
                   </td>

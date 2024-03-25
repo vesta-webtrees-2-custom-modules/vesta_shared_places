@@ -123,7 +123,7 @@ class LocGraph {
 
         return $ret->unique();
     }
-    
+
     public static function get(Tree $tree): LocGraph {
         return Registry::cache()->array()->remember('locGraph', function () use ($tree) {
                 return LocGraph::create($tree);
@@ -173,7 +173,7 @@ class LocGraph {
                 $sour[$row->l_to][$row->l_from] = $row;
             } else if ($row->o_id !== null) {
                 $loc[$row->l_to][$row->l_from] = $row;
-            } //else some other type which we currently don't care about        
+            } //else some other type which we currently don't care about
         }
 
         return new LocGraph($indi, $fam, $sour, $loc);

@@ -33,7 +33,7 @@ abstract class AbstractTomSelectWithDateHandler implements RequestHandlerInterfa
         $at    = Validator::queryParams($request)->isInArray(['', '@'])->string('at');
         $page  = Validator::queryParams($request)->integer('page', 1);
         $query = Validator::queryParams($request)->string('query');
-        
+
         $dateStr = Validator::queryParams($request)->string('dateStr', '');
         $date = ($dateStr === '')?GedcomDateInterval::createNow():GedcomDateInterval::create($dateStr);
 

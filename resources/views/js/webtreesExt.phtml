@@ -1,5 +1,5 @@
 <?php
-//adapted from webtrees.js: webtrees.initializeTomSelect 
+//adapted from webtrees.js: webtrees.initializeTomSelect
 ?>
 
 <script>
@@ -7,18 +7,18 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
     if (element.tomselect) {
       return element.tomselect;
     }
-    
+
     //used in
     //a) 'structured' dialogs (single-fact or multi-fact)
     //b) unstructured SOUR:DATA:EVEN dialog
     //c) unstructured edit-record dialog (for top-level _LOC, otherwise hidden functionality)
-    
-    //in unstructured dialogs with multiple tags of same type, we have to count overall elements 
+
+    //in unstructured dialogs with multiple tags of same type, we have to count overall elements
     //in order to assign X:DATE to X:PLAC:_LOC properly
-    
+
     //(in structured dialogs we could simply determine X by id (such as 'fact-') and just use that, like this
     //var fact = element.closest('[id^=fact-]');
-    
+
     //element.id has structure 'id-235a7975c6194772bd348f4b5740af11-INDI-CHR-PLAC-_LOC'
     //we're looking for 'id-4393f90138404a5f92c0523de58d2810-INDI-CHR-DATE' and '...-PLAC'
     let lio1 = element.id.lastIndexOf("INDI-");
@@ -28,7 +28,7 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
     let lio = (lio1 === -1)?((lio2 === -1)?((lio3 === -1)?lio4:lio3):lio2):lio1;
     let tag = (lio === -1)?null:element.id.substring(lio).replace("-PLAC-_LOC", "");
     //console.log("sp for "+tag);
-    
+
     var allLoc = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC-_LOC]');
     var overallCount = allLoc.length;
     var overallPosition = -1;
@@ -39,7 +39,7 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
     }
     //console.log("sp count: "+overallCount);
     //console.log("sp position: "+overallPosition);
-    
+
     <?php
     //prepare to sync PLAC value with _LOC title (for the respective DATE)
     //(but only if both were set initially, or if PLAC isn't set initially (or reset during edit))
@@ -48,14 +48,14 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
 
     if ((allPlac.length === overallCount) && (overallPosition !== -1)) {
         var ownPlacInput = allPlac[overallPosition];
-        
+
         if ((ownPlacInput.value !== '') && (element.value === '')) {
             ownPlacInput.setAttribute('data-vesta-lock-plac', true);
             //console.log("sp lock "+tag);
             ownPlacInput.addEventListener('input',function() {
                 if (ownPlacInput.value === '') {
                     ownPlacInput.removeAttribute('data-vesta-lock-plac');
-                }                
+                }
             });
         } //else actually unexpected here, because PLAC:_LOC is subtag of PLAC
     }
@@ -87,7 +87,7 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
             render: {
               item: (data, escape) => '<div>' + data.text + '</div>',
               option: (data, escape) => '<div>' + data.text + '</div>',
-            },        
+            },
             firstUrl: function(query) {
                 <?php
                 //safer to use api. Do not encodeURIComponent, that's done internally!
@@ -107,7 +107,7 @@ webtrees.initializeTomSelectSharedPlace = function (element) {
                     var dateValue = ownDateInput.value;
                     baseQuery += '&dateStr='+dateValue;
                 } //else DATE hidden, apparently
-                
+
                 fetch(baseQuery)
                     .then(response => response.json())
                     .then(json => {
@@ -164,7 +164,7 @@ webtrees.resetTomSelectVesta = function (tomSelect, value, text, title) {
     tomSelect.addItem(value, true);
     tomSelect.refreshItems();
 };
-  
+
 /**
  * Save a form using ajax, for use in modals
  *
@@ -206,7 +206,7 @@ webtrees.createRecordModalVestaSubmit = function (event) {
 
                 // Show the success message in the existing modal.
                 modal_content.innerHTML = json.html;
-                
+
                 //[2023/05] changed: Message is useful here as well,
                 //in particular if additional changed places have been created
                 //bootstrap.Modal.getInstance(modal).hide();
@@ -220,6 +220,3 @@ webtrees.createRecordModalVestaSubmit = function (event) {
         });
 };
 </script>
-
-
-

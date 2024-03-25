@@ -10,18 +10,17 @@ use Ramsey\Uuid\Uuid;
   $id = /* $fact . */ Uuid::uuid4()->toString();
 ?>
 
-<button 
-    class="btn btn-link btn-sm" 
-    type="button" 
-    data-bs-toggle="modal" 
-    data-bs-target="#wt-ajax-modal-vesta" 
+<button
+    class="btn btn-link btn-sm"
+    type="button"
+    data-bs-toggle="modal"
+    data-bs-target="#wt-ajax-modal-vesta"
     data-wt-href="<?= e(route(CreateSharedPlaceModal::class, [
-        'shared-place-name' => $fact->place()->gedcomName(), 
+        'shared-place-name' => $fact->place()->gedcomName(),
         'tree' => $fact->record()->tree()->name()
-        ])) ?>" 
-    data-wt-select-id="<?= $id ?>" 
+        ])) ?>"
+    data-wt-select-id="<?= $id ?>"
     title="<?= I18N::translate('Create a shared place'); ?>">
         <?= view($moduleName . '::icons/shared-place') ?>
         <span class="visually-hidden"><?= I18N::translate('Create a shared place') ?></span>
 </button>
-

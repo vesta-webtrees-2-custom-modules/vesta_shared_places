@@ -74,13 +74,13 @@ class SharedPlace extends Location {
         //$this->check();
     }
 
-    public static function forget(Tree $tree, string $xref): void {        
+    public static function forget(Tree $tree, string $xref): void {
         $cacheKey = SharePlace::class . '_key_' . $tree->id() . '_' . $xref;
         Registry::cache()->file()->forget($cacheKey);
     }
-    
+
     public function check(): void {
-        
+
         //Issue #127
         //must add tree id to all cache keys!
         //(particularly important here as this is not a per-request cache)
@@ -91,7 +91,7 @@ class SharedPlace extends Location {
         //
         //not sufficient as only key because parent names may have changed
         $pending = $this->isPendingAddition() ? '_P' : '';
-                
+
         //here, the tree id (and likely also the xref) is actually redundant, nevermind
         $key = SharePlace::class . '_check_' . $this->tree()->id() . '_' . $this->xref() . '_' . $this->gedcom() . $pending . '_' . json_encode($this->namesAsPlaceStringsAt(GedcomDateInterval::createEmpty()));
 
@@ -123,7 +123,7 @@ class SharedPlace extends Location {
     }
 
     protected function doCheck(): void {
-        
+
         /*
         foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
           error_log("doCheck placename for ".$this->xref(). ": " . $place->gedcomName());
@@ -132,7 +132,7 @@ class SharedPlace extends Location {
         }
         */
 
-        //make sure all places _for_all_dates_ exist, and are linked to this record 
+        //make sure all places _for_all_dates_ exist, and are linked to this record
         //(otherwise they will be deleted again in next GedcomImportService::updateRecord() call as 'orphaned places')
         //note that we must not only link shared place 1:1 to place name, but to higher-level place names as well
         //(as with indi:place and fam:place links elsewhere in webtrees)
@@ -145,9 +145,9 @@ class SharedPlace extends Location {
         foreach ($this->namesAsPlacesAt(GedcomDateInterval::createEmpty()) as $place) {
 
             //error_log("doCheck:" . $place->gedcomName());
-            
+
             // Calling Place::id() will create the entry in the database, if it doesn't already exist.
-            
+
             //we must reset the cache used by Place.php though:
             //
             //before creating a shared place, its Place is created first (when we check whether the shared place already exists)
@@ -156,18 +156,18 @@ class SharedPlace extends Location {
             //
             //therefore:
             Registry::cache()->array()->forget('place-' . $place->gedcomName());
-            
+
             while ($place->id() !== 0) {
                 $allPlaceIds->add($place->id());
                 $place = $place->parent();
-                
+
                 //same here:
                 Registry::cache()->array()->forget('place-' . $place->gedcomName());
             }
         }
 
         //error_log(print_r($allPlaceIds, true));
-        
+
         // Place links (first step: delete obsolete links)
         DB::table('placelinks')
             ->where('pl_gid', '=', $this->xref())
@@ -383,7 +383,7 @@ class SharedPlace extends Location {
                 ->select(['i_id', 'i_gedcom'])
                 ->get();
 
-            $main = $main->concat($indis); //not sufficient to use unique() here - structures are different! 
+            $main = $main->concat($indis); //not sufficient to use unique() here - structures are different!
         }
 
         return $main;
@@ -468,7 +468,7 @@ class SharedPlace extends Location {
                 ->select(['f_id', 'f_gedcom'])
                 ->get();
 
-            $main = $main->concat($fams); //not sufficient to use unique() here - structures are different! 
+            $main = $main->concat($fams); //not sufficient to use unique() here - structures are different!
         }
 
         return $main;
@@ -532,7 +532,7 @@ class SharedPlace extends Location {
         $useIndirectLinks = $anySharedPlace->useIndirectLinks();
 
         if ($useIndirectLinks) {
-            
+
             //TODO cannot use placelinks: sources are not included there by webtrees
             //DB::table('placelinks')
             return new Collection();
@@ -542,13 +542,13 @@ class SharedPlace extends Location {
     }
 
     /**
-     * 
+     *
      * @return Collection key: xref, value: Collection<SharedPlaceParentAt> (direct parents)
      */
     public function getTransitiveParentsAt(
         GedcomDateInterval $date,
         bool $includeVoid): Collection {
-        
+
         $ret = new Collection();
 
         //safer wrt loops (than to use method recursively)
@@ -583,9 +583,9 @@ class SharedPlace extends Location {
     //do not use recursively! Tree may have circular hierarchies
     public function getParents(
         bool $includeVoid = false): Collection {
-        
+
         return $this->getWrappedParentsAt(
-            GedcomDateInterval::createNow(), 
+            GedcomDateInterval::createNow(),
             false,
             $includeVoid)
                 ->map(function (SharedPlaceParentAt $element): SharedPlace {
@@ -597,7 +597,7 @@ class SharedPlace extends Location {
     //do not use recursively! Tree may have circular hierarchies
 
     /**
-     * 
+     *
      * @param GedcomDateInterval $date
      * @return Collection<SharedPlaceParentAt>, sorted by date
      * returned elements have non-null return for ->getSharedPlace() if $fillInterval is false!
@@ -625,7 +625,7 @@ class SharedPlace extends Location {
                 }
             } else {
                 //could not make() target, e.g. due to invalid xref (or missing data during import), skip
-                
+
                 //but maybe handle explicit @VOID@ as 'no parent'
                 //(this allows to avoid creating a hierarchical primary name in case there are further parents)
                 //(bit of a hack tbh)
@@ -655,7 +655,7 @@ class SharedPlace extends Location {
             return new Collection($sharedPlaces);
         }
 
-        //fill given interval 
+        //fill given interval
         //(which also means there is always at least one SharedPlaceParentAt, but its target may be null)
         $filled = $date->fillInterval(
             new Collection($sharedPlaces),
@@ -863,7 +863,7 @@ class SharedPlace extends Location {
     public function getAllNamesAt(
         ?GedcomDateInterval $date,
         ?string $preferredLangCodeForSort): array {
-        
+
         $self = $this;
 
         $cacheKey = SharedPlace::class . 'getAllNamesAt_' . $this->xref() . '_' . (($date === null) ? 'null' : json_encode($date)) . '_' . $preferredLangCodeForSort;
@@ -1042,7 +1042,7 @@ class SharedPlace extends Location {
                     throw new \Exception("unexpected!");
                 }
 
-                //append                    
+                //append
                 if ($alreadySeenXrefs->contains($xref)) {
                     //mark as circular
                     $ret [] = $head . Gedcom::PLACE_SEPARATOR . /* json_decode('"\u221E"') . */ " <" . I18N::translate("circular shared place hierarchy") . ">";
@@ -1093,7 +1093,7 @@ class SharedPlace extends Location {
     }
 
     /**
-     * 
+     *
      * @param bool $primaryOnly
      * @param string $xref
      * @param Collection $alreadySeenXrefs
@@ -1109,7 +1109,7 @@ class SharedPlace extends Location {
         array /* of array with nameStructure fields */ $nextNames,
         Collection $transitiveParents,
         array /* of array (keyed by language) of partially built names */ $currentNames): array {
-        
+
         if (($xref === '@VOID@') || $alreadySeenXrefs->contains($xref)) {
             //treat as leaf
             $ret = [];
@@ -1124,14 +1124,14 @@ class SharedPlace extends Location {
                         throw new \Exception("unexpected!");
                     }
 
-                    //append                    
+                    //append
                     if ($alreadySeenXrefs->contains($xref)) {
                         //mark as circular
                         $ret [] = $head . Gedcom::PLACE_SEPARATOR . /* json_decode('"\u221E"') . */ " <" . I18N::translate("circular shared place hierarchy") . ">";
                     } else {
                         //just use head
                         $ret [] = $head;
-                    }               
+                    }
                 }
             }
 
@@ -1193,7 +1193,7 @@ class SharedPlace extends Location {
 
         $nextNames = [];
         if (sizeof($currentNames) === 0) {
-            //roots      
+            //roots
             $firstLang = null;
 
             foreach ($nextBatch as $nameStructure) {
@@ -1266,7 +1266,7 @@ class SharedPlace extends Location {
                             $nextNames[$substituteLang] = [];
                         }
                         foreach ($currentNames[$substituteLang] as $head) {
-                            //append          
+                            //append
                             $headAndNextName = $head . Gedcom::PLACE_SEPARATOR . $nextName;
                             $nextNames[$substituteLang][$headAndNextName] = $headAndNextName; //use key to avoid duplicates
                             //error_log("substitute: '".$substituteLang."' = ".$headAndNextName);
@@ -1280,7 +1280,7 @@ class SharedPlace extends Location {
                 }
 
                 foreach ($currentNames[$sourceLang] as $head) {
-                    //append          
+                    //append
                     $headAndNextName = $head . Gedcom::PLACE_SEPARATOR . $nextName;
                     $nextNames[$nameLang][$headAndNextName] = $headAndNextName; //use key to avoid duplicates
                     //error_log("regular: '".$nameLang."' = ".$headAndNextName);
@@ -1323,7 +1323,7 @@ class SharedPlace extends Location {
 
             /* @var $parent SharedPlaceParentAt */
 
-            //special intersect! 
+            //special intersect!
             $intersectedDate = $parent->getDate()->intersect($nextDate, true);
 
             if ($intersectedDate === null) {
@@ -1401,7 +1401,7 @@ class SharedPlace extends Location {
             foreach ($currentNames as $head) {
                 //append
                 //but exclude certain language combinations
-                //gah we need 
+                //gah we need
                 //one current CONCAT all next IN ORDER TO ANALYZE
                 //not
                 //all current CONCAT one next
@@ -1434,7 +1434,7 @@ class SharedPlace extends Location {
 
             /* @var $parent SharedPlaceParentAt */
 
-            //special intersect! 
+            //special intersect!
             $intersectedDate = $parent->getDate()->intersect($nextNameDate, true);
 
             if ($intersectedDate === null) {
@@ -1519,7 +1519,7 @@ class SharedPlace extends Location {
 
         return $places->all();
 
-        //note: impl via recursion would not be safe wrt loops   
+        //note: impl via recursion would not be safe wrt loops
     }
 
     //if shared places hierarchy is used, build returned place names via hierarchy!
@@ -1554,7 +1554,7 @@ class SharedPlace extends Location {
 
         return $places;
 
-        //note: impl via recursion would not be safe wrt loops   
+        //note: impl via recursion would not be safe wrt loops
     }
 
     public function primaryPlace(): Place {
@@ -1562,9 +1562,9 @@ class SharedPlace extends Location {
     }
 
     public function primaryPlaceAt(
-        GedcomDateInterval $date, 
+        GedcomDateInterval $date,
         ?string $query = null): Place {
-        
+
         $firstMatch = null;
 
         if ($query !== null) {
@@ -1647,14 +1647,14 @@ class SharedPlace extends Location {
     }
 
     public function url(): string {
-        
+
         if ($this->xref() === '') {
             //a dummy record
             //provide url via PLAC (useful to return after editing, e.g. from place history in place hierarchy)
             //assuming at least PLAC is set
             return $this->primaryPlace()->url();
         }
-        
+
         return parent::url();
     }
 }

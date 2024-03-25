@@ -220,7 +220,7 @@ class CreateSharedPlaceAction implements RequestHandlerInterface {
         //we need Location for proper names!
         //and we must check() in order to update place links
         /** @var SharedPlace $record */
-        
+
         $record = Registry::locationFactory()->make($newXref, $tree, $gedcom);
         $record->check();
 

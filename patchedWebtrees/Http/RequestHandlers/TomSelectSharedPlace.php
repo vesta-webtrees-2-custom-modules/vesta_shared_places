@@ -48,31 +48,31 @@ class TomSelectSharedPlace extends AbstractTomSelectWithDateHandler
      * @return Collection<int,array{text:string,value:string}>
      */
     protected function search(
-            Tree $tree, 
-            GedcomDateInterval $date, 
-            string $query, 
-            int $offset, 
-            int $limit, 
-            string $at): Collection {        
-        
+            Tree $tree,
+            GedcomDateInterval $date,
+            string $query,
+            int $offset,
+            int $limit,
+            string $at): Collection {
+
         error_log("!!!");
-        
+
         // Search by XREF
         $location = Registry::locationFactory()->make($query, $tree);
 
         $paginate = false;
-        
+
         if ($location instanceof Location) {
             $results = new Collection([$location]);
         } else {
             //experimental: always go via places only (to avoid matching on other parts of shared place gedcom)
-            
+
             //#172: add parameter startsWith ("true" := "does NOT have to start with")
             $places = $this->search_service->searchPlaces($tree, $query, true);
-            
+
             $results = $this->search_service->searchLocationsInPlaces($tree, $places);
             $paginate = true;
-            
+
             /*
             if (str_contains($query,',')) {
                 //[PATCHED]
@@ -92,9 +92,9 @@ class TomSelectSharedPlace extends AbstractTomSelectWithDateHandler
 
                         //skip duplicates
                         ->unique();
-              
+
                 $paginate = true;
-              
+
             } else {
                 $search = array_filter(explode(' ', $query));
                 //TODO: remove matches on other parts of shared place gedcom?
@@ -102,30 +102,30 @@ class TomSelectSharedPlace extends AbstractTomSelectWithDateHandler
             }
             */
         }
-        
+
         //[PATCHED]
         $ret = $results
-                
+
                 ->map(static function (Location $location) use ($at, $date, $query): array {
                     return [
                         'value' => $at . $location->xref() . $at,
                         'text'  => view('selects/location', ['location' => $location]),
                         'title' => $location->primaryPlaceAt($date, $query)->gedcomName(),
                     ];
-                })                
-                                      
+                })
+
                 //sort
                 ->sort(static function (array $x, array $y): int {
                     return $x['text'] <=> $y['text'];
                 });
-                
+
         if ($paginate) {
             $ret = $ret->slice($offset, $limit+$offset);
         }
-        
+
         //re-key for https://github.com/laravel/framework/issues/1335
         return $ret->values();
-        
+
         /*
         // Search by XREF
         $location = Registry::locationFactory()->make($query, $tree);
@@ -142,7 +142,7 @@ class TomSelectSharedPlace extends AbstractTomSelectWithDateHandler
                 'text'  => view('selects/location', ['location' => $location]),
                 'value' => $at . $location->xref() . $at,
             ];
-        });         
+        });
         */
     }
 }
