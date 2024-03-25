@@ -22,23 +22,23 @@ use Vesta\VestaUtils;
       <p>
           <?= I18N::translate('It is recommended to run the data fix for this custom module to resolve this issue.') ?>
       </p>
-    <?php endif ?>          
+    <?php endif ?>
 
     <?php
     //create new shared place
     $id = /* $fact . */ Uuid::uuid4()->toString();
     ?>
-          
+
     <div class="input-group d-flex justify-content-between">
         <span class="input-group-btn">
-            <button 
-                class="btn btn-secondary" 
-                type="button" 
+            <button
+                class="btn btn-secondary"
+                type="button"
                 data-bs-toggle="modal"
                 data-bs-backdrop="static"
-                data-bs-target="#wt-ajax-modal-vesta" 
-                data-wt-href="<?= e(route(CreateSharedPlaceAction::class, ['tree' => $tree->name()])) ?>" 
-                data-wt-select-id="<?= $id ?>" 
+                data-bs-target="#wt-ajax-modal-vesta"
+                data-wt-href="<?= e(route(CreateSharedPlaceAction::class, ['tree' => $tree->name()])) ?>"
+                data-wt-select-id="<?= $id ?>"
                 title="<?= I18N::translate('Create a shared place'); ?>">
                     <?= view('icons/add') ?>
             </button>
@@ -52,7 +52,7 @@ use Vesta\VestaUtils;
 </div>
 
 <?= view('lists/locations-table', [
-                'locations' => $sharedPlaces, 
+                'locations' => $sharedPlaces,
                 'tree' => $tree]) ?>
 
 <?php

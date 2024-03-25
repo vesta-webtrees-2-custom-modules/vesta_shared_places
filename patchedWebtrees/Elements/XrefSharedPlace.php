@@ -46,12 +46,12 @@ class XrefSharedPlace extends AbstractXrefElement
         ]);
 
         $selector = '[id$=PLAC]';
-        
+
         $route = route(CreateSharedPlaceModal::class, [
             'tree' => $tree->name(),
             'shared-place-name-selector' => $selector,
             ]);
-        
+
         return
             '<div class="input-group">' .
             '<button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-backdrop="static" data-bs-target="#wt-ajax-modal-vesta" data-wt-href="' . e($route) . '" data-wt-select-id="' . $id . '" title="' . I18N::translate('Create a shared place') . '">' .
