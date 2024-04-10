@@ -33,13 +33,13 @@ trait SharedPlacesModuleTrait {
     $link1 = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_shared_places">'.CommonI18N::readme().'</a>';
     $link2 = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_common/blob/master/docs/LocationData.md">'.CommonI18N::readmeLocationData().'</a>';
 
-    $description = array();    
+    $description = array();
     //TODO add link to https://genealogy.net/GEDCOM/
     $description[] = /* I18N: Module Configuration */I18N::translate('A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended \'Facts and events\' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module.');
     /*$description[] =*/ /* I18N: Module Configuration *//*I18N::translate('Replaces the original \'Locations\' module.');*/
-    $description[] = 
+    $description[] =
             CommonI18N::requires2(CommonI18N::titleVestaCommon(), CommonI18N::titleVestaPersonalFacts());
-    $description[] = 
+    $description[] =
             CommonI18N::providesLocationData();
     $description[] = $link1 . '. ' . $link2 . '.';;
     return $description;
@@ -60,9 +60,9 @@ trait SharedPlacesModuleTrait {
                 CommonI18N::vestaSymbolInTitle2(),
                 'VESTA_LIST',
                 '1')));
-    
+
     $link = '<a href="https://github.com/vesta-webtrees-2-custom-modules/vesta_shared_places">'.CommonI18N::readme().'</a>';
-    
+
     $generalSub[] = new ControlPanelSubsection(
             /* I18N: Module Configuration */I18N::translate('Shared place structure'),
             array(new ControlPanelCheckbox(
@@ -76,7 +76,7 @@ trait SharedPlacesModuleTrait {
                 /* I18N: Module Configuration */I18N::translate('It is strongly recommended to switch to hierarchical shared places.'),
                 'USE_HIERARCHY',
                 '1')));
-    
+
     $generalSub[] = new ControlPanelSubsection(
             /* I18N: Module Configuration */I18N::translate('Linking of shared places to places'),
             array(
@@ -95,14 +95,14 @@ trait SharedPlacesModuleTrait {
                 5,
                 'INDIRECT_LINKS_PARENT_LEVELS',
                 0)));
-    
+
     $factsSub = array();
-    
-    //TODO: make this configurable again?    
+
+    //TODO: make this configurable again?
     if (false) {
         $factsSub[] = new ControlPanelSubsection(
         /* I18N: Module Configuration */I18N::translate('All shared place facts'),
-        array(     
+        array(
             ControlPanelFactRestriction::createWithFacts(
                     SharedPlacesModuleTrait::getPicklistFactsLoc(),
                     /* I18N: Module Configuration */I18N::translate('This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list.'),
@@ -110,7 +110,7 @@ trait SharedPlacesModuleTrait {
                     'NAME,_LOC:TYPE,NOTE,SHARED_NOTE,SOUR,_LOC:_LOC')));
         $factsSub[] = new ControlPanelSubsection(
                 /* I18N: Module Configuration */I18N::translate('Unique shared place facts'),
-                array(     
+                array(
             ControlPanelFactRestriction::createWithFacts(
                     SharedPlacesModuleTrait::getPicklistFactsLoc(),
                     /* I18N: Module Configuration */I18N::translate('This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list.'),
@@ -122,7 +122,7 @@ trait SharedPlacesModuleTrait {
         /*
         $factsSub[] = new ControlPanelSubsection(
                 I18N::translate('Facts for new shared places'),
-                array(     
+                array(
             ControlPanelFactRestriction::createWithFacts(
                     SharedPlacesModuleTrait::getPicklistFactsLoc(true),
                     I18N::translate('This is the list of GEDCOM facts that will be shown when adding a new shared place.'),
@@ -139,11 +139,11 @@ trait SharedPlacesModuleTrait {
                     '_LOC_FACTS_QUICK',
                     'NAME,_LOC:_LOC,MAP,NOTE,SHARED_NOTE,_GOV')));
     }
-    
+
     $factsAndEventsSub = array();
     $factsAndEventsSub[] = new ControlPanelSubsection(
             CommonI18N::displayedData(),
-            array(     
+            array(
         new ControlPanelCheckbox(
                 /* I18N: Module Configuration */I18N::translate('Restrict to specific facts and events'),
                 /* I18N: Module Configuration */I18N::translate('If this option is checked, shared place data is only displayed for the following facts and events. ') .
@@ -200,12 +200,12 @@ trait SharedPlacesModuleTrait {
                 false,
                 4,
                 '[1-2][0-9][0-9][0-9]')));
-    
+
     $pageSub[] = new ControlPanelSubsection(
             CommonI18N::placeHistory(),
             array(
                 new ControlPanelFactRestriction(
-                    PlaceHistory::getPicklistFacts(), 
+                    PlaceHistory::getPicklistFacts(),
                     CommonI18N::restrictPlaceHistory(),
                     'RESTRICTED_PLACE_HISTORY',
                     PlaceHistory::initialFactsStringForPreferences())));
@@ -218,21 +218,21 @@ trait SharedPlacesModuleTrait {
                 /* I18N: Module Configuration */I18N::translate('In the place hierarchy list, when using the option \'restrict to shared places\', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place\'s primary name, and also show its additional names.'),
                 'UNIQUE_SP_IN_HIERARCHY',
                 '0')));
-    
+
     $sections = array();
     $sections[] = new ControlPanelSection(
             CommonI18N::general(),
             null,
             $generalSub);
-    
-    //TODO: support this again? 
+
+    //TODO: support this again?
     if (false) {
         $sections[] = new ControlPanelSection(
                 /* I18N: Module Configuration */I18N::translate('Facts for shared place records'),
                 null,
                 $factsSub);
     }
-    
+
     $sections[] = new ControlPanelSection(
             CommonI18N::factsAndEventsTabSettings(),
             null,
@@ -264,15 +264,15 @@ trait SharedPlacesModuleTrait {
         "_LOC:_LOC",
         "MAP",
         "_GOV"];
-    
+
     if ($forRequired) {
       //others are redundant, tricky, or anyway TBI
       $tags = [
         "NOTE"];
-      
+
         //"SHARED_NOTE" problematic (potential modal within modal)
     }
-    
+
     $facts = [];
     foreach ($tags as $tag) {
         $facts[$tag] = GedcomTag::getLabel($tag);

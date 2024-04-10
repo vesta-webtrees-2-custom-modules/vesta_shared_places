@@ -121,10 +121,10 @@ class SearchServiceExt {
         $this->whereSearch($query, 'o_gedcom', $search);
 
         return $this->paginateQuery(
-            $query, 
-            $this->locationRowMapper(), 
-            GedcomRecord::accessFilter(), 
-            $offset, 
+            $query,
+            $this->locationRowMapper(),
+            GedcomRecord::accessFilter(),
+            $offset,
             $limit);
     }
 
@@ -265,7 +265,7 @@ class SearchServiceExt {
 
         foreach ($search_terms as $search_term) {
             //issue #122
-            //this doesn't nest the disjunction as intended!  
+            //this doesn't nest the disjunction as intended!
             /*
               $query
               ->where(new Expression($field), 'LIKE', '%' . addcslashes($search_term . "\n", '\\%_') . '%') //EOL
@@ -292,7 +292,7 @@ class SearchServiceExt {
         $query->whereIn($tree_id_field, $tree_ids);
     }
 
-    //same as main, but 
+    //same as main, but
     //a) handle search strings 'A, B' (main only handles 'A,B')
     //b) search first for 'startingWith'
     /**
@@ -306,12 +306,12 @@ class SearchServiceExt {
      * @return Collection<Place>
      */
     public function searchPlaces(
-        Tree $tree, 
-        string $search, 
+        Tree $tree,
+        string $search,
         bool $startsWith = false,
-        int $offset = 0, 
+        int $offset = 0,
         int $limit = PHP_INT_MAX): Collection {
-        
+
         $query = DB::table('places AS p0')
             ->where('p0.p_file', '=', $tree->id())
             ->leftJoin('places AS p1', 'p1.p_id', '=', 'p0.p_parent_id')

@@ -32,7 +32,7 @@ use function redirect;
 class SharedPlacePage implements RequestHandlerInterface {
 
     use ViewResponseTrait;
-    
+
     // Show the shared place's facts in this order:
     private const FACT_ORDER = [
         1 => 'NAME',
@@ -54,23 +54,23 @@ class SharedPlacePage implements RequestHandlerInterface {
         'CHAN',
         'RESN',
     ];
-  
+
     protected $module;
     protected LinkedRecordService $linked_record_service;
     protected ClipboardService $clipboard_service;
-    
+
     public function __construct(
-            ModuleService $moduleService, 
-            LinkedRecordService $linked_record_service, 
+            ModuleService $moduleService,
+            LinkedRecordService $linked_record_service,
             ClipboardService $clipboard_service) {
-        
+
         //access level irrelevant here: there is no way to configure an access level for this specific functionality
         //(it's not a list, chart, etc. - we'd have to define it specifically)
         $this->module = $moduleService->findByInterface(SharedPlacesModule::class, false)->first();
-        
+
         //otherwise we wouldn't even get here (router redirects)
         assert ($this->module instanceof SharedPlacesModule);
-        
+
         $this->linked_record_service = $linked_record_service;
         $this->clipboard_service = $clipboard_service;
     }
@@ -81,26 +81,26 @@ class SharedPlacePage implements RequestHandlerInterface {
      * @return ResponseInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface {
-        
+
         $tree   = Validator::attributes($request)->tree();
         $xref   = Validator::attributes($request)->isXref()->string('xref');
         $slug   = Validator::attributes($request)->string('slug', '');
         $record = Registry::locationFactory()->make($xref, $tree);
-        
-        //we don't need a specific method here, 
+
+        //we don't need a specific method here,
         //if we ever refactor this:
-        //use SharedPlaceNotFoundException! 
+        //use SharedPlaceNotFoundException!
         $record = Auth::checkLocationAccess($record, false);
-        
+
         // Redirect to correct xref/slug
         if ($record->xref() !== $xref || Registry::slugFactory()->make($record) !== $slug) {
             return redirect($record->url(), StatusCodeInterface::STATUS_MOVED_PERMANENTLY);
         }
-        
+
         $canonical = $record->primaryPlace()->gedcomName();
-      
+
         $hierarchyHtml = '';
-      
+
         //what was the point of this? summary shows same data!
         /*
         $mainForDisplay = $sharedPlace->fullName();
@@ -110,7 +110,7 @@ class SharedPlacePage implements RequestHandlerInterface {
           $hierarchyHtml = '<tr class=""><th scope="row">' . I18N::translate('Shared place hierarchy') . '</th><td class="">' . $canonicalForDisplay . '</td></tr>';
         }
         */
-      
+
         //summary (with any additional data such as GOV data, map links etc),
         //if there is a module that provides this summary
         $summaryHtml = '';
@@ -128,17 +128,17 @@ class SharedPlacePage implements RequestHandlerInterface {
                 //if ($summaryHtml !== '') {
                     $summaryHtml = '<tr class=""><th scope="row">' . I18N::translate('Summary') . FunctionsPrintExtHelpLink::helpLink($this->module->name(), 'Summary') . '</th><td class="">' . $summaryGve->getMain() . '</td></tr>';
                     //TODO: handle getScript()!
-                //}          
+                //}
             }
         }
-      
+
         return $this->viewResponse($this->module->name() . '::shared-place-page', [
             'module' => $this->module,
             'moduleName' => $this->module->name(),
             'hierarchyHtml' => $hierarchyHtml,
             'summaryHtml' => $summaryHtml,
             'facts' => $this->facts($record),
-            
+
             'clipboard_facts'      => $this->clipboard_service->pastableFacts($record),
             //no, must use own impl in case of indirect links
             //'linked_individuals'   => $this->linked_record_service->linkedIndividuals($record, '_LOC'),
@@ -155,16 +155,16 @@ class SharedPlacePage implements RequestHandlerInterface {
             'tree' => $tree,
         ]);
     }
-    
+
     private function facts(SharedPlace $record): Collection {
-      
+
         $factsArray = $record->facts()->toArray();
-      
+
         $facts = $record->facts()
             ->sort(function (Fact $x, Fact $y) use ($factsArray): int {
                 [, $tag_x] = explode(':', $x->tag());
                 [, $tag_y] = explode(':', $y->tag());
-                
+
                 $sort_x = array_search($tag_x, self::FACT_ORDER) ?: PHP_INT_MAX;
                 $sort_y = array_search($tag_y, self::FACT_ORDER) ?: PHP_INT_MAX;
 
@@ -176,7 +176,7 @@ class SharedPlacePage implements RequestHandlerInterface {
                 //fallback to original order within gedcom (e.g. for multiple names)
                 return array_search($x, $factsArray) <=> array_search($y, $factsArray);
             });
-      
+
         return $facts;
     }
 }

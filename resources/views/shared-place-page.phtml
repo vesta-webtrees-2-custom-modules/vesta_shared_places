@@ -11,21 +11,21 @@ use Illuminate\Support\Collection;
  * @var Collection<int,Fact>|null       $clipboard_facts
  * @var Collection<int,Family>|null     $linked_families
  * @var Collection<int,Individual>|null $linked_individuals
- * 
+ *
  * //[RC] added
  * @var Collection<int,Location>|null   $llSharedPlaces
- * 
+ *
  * @var Collection<int,Media>|null      $linked_media_objects
  * @var Collection<int,Note>|null       $linked_notes
  * @var Collection<int,Source>|null     $linked_sources
  * @var GedcomRecord                    $record
  * @var Tree                            $tree
- * 
+ *
  * @var string $hierarchyHtml
  * @var string $summaryHtml
- * 
+ *
  * @var ModuleVestalInterface           $module
- * 
+ *
  * //$module must also provide getHelpAction for 'Predecessor'!
  * //$module may also provide preferences for 'RESTRICTED_PLACE_HISTORY'!
  */
@@ -50,11 +50,11 @@ use Illuminate\Support\Collection;
             'details' => view($moduleName . '::shared-place-page-details', [
                 'hierarchyHtml' => $hierarchyHtml,
                 'summaryHtml' => $summaryHtml,
-                'clipboard_facts' => $clipboard_facts,             
+                'clipboard_facts' => $clipboard_facts,
                 'record' => $record,
                 'module' => $module,
             ]),
-            
+
             'linked_families'      => $linked_families,
             'linked_individuals'   => $linked_individuals,
             'llSharedPlaces'       => $llSharedPlaces,
@@ -62,7 +62,7 @@ use Illuminate\Support\Collection;
             'linked_notes'         => $linked_notes,
             'linked_sources'       => $linked_sources,
             'tree'                 => $tree,
-            
+
             'record'               => $record,
             'module'               => $module,
         ]) ?>
@@ -70,7 +70,7 @@ use Illuminate\Support\Collection;
         <?= view($moduleName . '::shared-place-page-details', [
             'hierarchyHtml' => $hierarchyHtml,
             'summaryHtml' => $summaryHtml,
-            'clipboard_facts' => $clipboard_facts,             
+            'clipboard_facts' => $clipboard_facts,
             'record' => $record,
             'module' => $module,
             ]) ?>
