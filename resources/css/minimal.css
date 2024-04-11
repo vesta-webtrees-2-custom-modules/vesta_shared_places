@@ -7,5 +7,5 @@
 
 /* properly align non editable place name (hacky) */
 .input-group-replacement {
-  flex: 100 1 auto;     
+  flex: 100 1 auto;
 }

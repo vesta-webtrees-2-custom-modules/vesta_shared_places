@@ -50,44 +50,44 @@ See [here](https://github.com/vesta-webtrees-2-custom-modules/vesta_common/blob/
 The Gedcom-L Addendum to the GEDCOM 5.5.1 specification is available [here](https://genealogy.net/GEDCOM/). It defines the following structure for top-level place records:
 
 ~~~~
-LOCATION_RECORD:= 
-0 @<XREF:_LOC>@ _LOC {1:1} 
-1 NAME <PLACE_NAME> {1:M} 
-2 DATE <DATE_VALUE> {0:1} 
-2 ABBR <ABBREVIATION_OF_NAME> {0:M} 
-3 TYPE <TYPE_OF_ABBREVIATION> {0:1} 
-2 LANG <LANGUAGE_ID> {0:1} 
-2 <<SOURCE_CITATION>> {0:M} 
-1 TYPE <TYPE_OF_LOCATION> {0:M} 
-2 _GOVTYPE <GOVID_OF_TYPE> {0:1} 
-2 DATE <DATE_VALUE> {0:1} 
-2 <<SOURCE_CITATION>> {0:M} 
-1 _POST <POSTAL_CODE> {0:M} 
-2 DATE <DATE_VALUE> {0:1} 
-2 <<SOURCE_CITATION>> {0:M} 
-1 _GOV <GOV_IDENTIFIER> {0:1} 
-1 MAP {0:1} 
-2 LATI <PLACE_LATITUDE> {1:1} 
-2 LONG <PLACE_LONGITUDE> {1:1} 
-1 _MAIDENHEAD <MAIDENHEAD_LOCATOR> {0:1} 
-1 RELI <DENOMINATION> {0:1} 
-1 EVEN [<EVENT_DESCRIPTOR>|<NULL>] {0:M} 
-2 <<EVENT_DETAIL>> {0:1} 
-1 _LOC @<XREF:_LOC>@ {0:M} 
-2 TYPE <HIERARCHICAL_RELATIONSHIP> {1:1} 
-2 DATE <DATE_VALUE> {0:1} 
-2 <<SOURCE_CITATION>> {0:M} 
-1 _DMGD <DEMOGRAPHICAL_DATA> {0:M} 
-2 DATE <DATE_VALUE> {0:1} 
-2 <<SOURCE_CITATION>> {0:M} 
-2 TYPE <TYPE_OF_DEMOGRAPICAL_DATA> {1:1} 
-1 _AIDN <ADMINISTRATIVE_IDENTIFIER> {0:M} 
-2 DATE <DATE_VALUE> {0:1} 
-2 <<SOURCE_CITATION>> {0:M} 
-2 TYPE <TYPE_OF_ADMINISTRATIVE_IDENTIFIER> {1:1} 
-1 <<MULTIMEDIA_LINK>> {0:M} 
-1 <<NOTE_STRUCTURE>> {0:M} 
-1 <<SOURCE_CITATION>> {0:M} 
+LOCATION_RECORD:=
+0 @<XREF:_LOC>@ _LOC {1:1}
+1 NAME <PLACE_NAME> {1:M}
+2 DATE <DATE_VALUE> {0:1}
+2 ABBR <ABBREVIATION_OF_NAME> {0:M}
+3 TYPE <TYPE_OF_ABBREVIATION> {0:1}
+2 LANG <LANGUAGE_ID> {0:1}
+2 <<SOURCE_CITATION>> {0:M}
+1 TYPE <TYPE_OF_LOCATION> {0:M}
+2 _GOVTYPE <GOVID_OF_TYPE> {0:1}
+2 DATE <DATE_VALUE> {0:1}
+2 <<SOURCE_CITATION>> {0:M}
+1 _POST <POSTAL_CODE> {0:M}
+2 DATE <DATE_VALUE> {0:1}
+2 <<SOURCE_CITATION>> {0:M}
+1 _GOV <GOV_IDENTIFIER> {0:1}
+1 MAP {0:1}
+2 LATI <PLACE_LATITUDE> {1:1}
+2 LONG <PLACE_LONGITUDE> {1:1}
+1 _MAIDENHEAD <MAIDENHEAD_LOCATOR> {0:1}
+1 RELI <DENOMINATION> {0:1}
+1 EVEN [<EVENT_DESCRIPTOR>|<NULL>] {0:M}
+2 <<EVENT_DETAIL>> {0:1}
+1 _LOC @<XREF:_LOC>@ {0:M}
+2 TYPE <HIERARCHICAL_RELATIONSHIP> {1:1}
+2 DATE <DATE_VALUE> {0:1}
+2 <<SOURCE_CITATION>> {0:M}
+1 _DMGD <DEMOGRAPHICAL_DATA> {0:M}
+2 DATE <DATE_VALUE> {0:1}
+2 <<SOURCE_CITATION>> {0:M}
+2 TYPE <TYPE_OF_DEMOGRAPICAL_DATA> {1:1}
+1 _AIDN <ADMINISTRATIVE_IDENTIFIER> {0:M}
+2 DATE <DATE_VALUE> {0:1}
+2 <<SOURCE_CITATION>> {0:M}
+2 TYPE <TYPE_OF_ADMINISTRATIVE_IDENTIFIER> {1:1}
+1 <<MULTIMEDIA_LINK>> {0:M}
+1 <<NOTE_STRUCTURE>> {0:M}
+1 <<SOURCE_CITATION>> {0:M}
 1 <<CHANGE_DATE>> {0:1}
 ~~~~
 
@@ -96,7 +96,7 @@ LOCATION_RECORD:=
 * Current version: 2.1.20.0.0
 * Based on and tested with webtrees 2.1.20. Requires webtrees 2.1.17 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
-* Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
+* Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts').
 * Provides location data to other custom modules.
 * Download the zip file, which includes all Vesta modules, [here](https://cissee.de/vesta.latest.zip).
 * Support, suggestions, feature requests: <ric@richard-cissee.de>

@@ -18,13 +18,13 @@ use Psr\Http\Message\ServerRequestInterface;
  * Autocomplete handler for places
  */
 class AutoCompletePlaceExt extends AutoCompletePlace {
-    
+
     private ModuleService $module_service;
     private SearchServiceExt $search_service_ext;
 
     public function __construct(
-        ModuleService $module_service, 
-        SearchService $search_service, 
+        ModuleService $module_service,
+        SearchService $search_service,
         SearchServiceExt $search_service_ext) {
 
         parent::__construct($module_service, $search_service);
@@ -59,7 +59,7 @@ class AutoCompletePlaceExt extends AutoCompletePlace {
             ->unique() //drop duplicates
             ->values(); //re-key to 0,1,2,3 ...
         }
-        
+
         // No place found? Use external gazetteers.
         foreach ($this->module_service->findByInterface(ModuleMapAutocompleteInterface::class) as $module) {
             if ($data->isEmpty()) {

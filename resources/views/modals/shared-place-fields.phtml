@@ -9,12 +9,12 @@ use Illuminate\Support\Collection;
 <div class="form-group">
     <?php if ($useHierarchy) : ?>
       <label class="col-form-label" for="shared-place-name">
-          <?= I18N::translate('Shared place name (complete hierarchy)') ?>        
+          <?= I18N::translate('Shared place name (complete hierarchy)') ?>
       </label>
       <div><?= I18N::translate('A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well.') ?></div>
     <?php else : ?>
       <label class="col-form-label" for="shared-place-name">
-          <?= I18N::translate('Shared place name') ?>        
+          <?= I18N::translate('Shared place name') ?>
       </label>
     <?php endif ?>
     <input class="form-control" type="text" id="shared-place-name" name="shared-place-name" value="<?= $sharedPlaceName ?>" required>
@@ -26,7 +26,7 @@ use Illuminate\Support\Collection;
 
     //TODO integrate $additionalControls better with the following!
     //TODO $requiredfacts currently always empty
-    
+
     //cf new-individual.phtml (must adapt to 2.1)
     $tags = new Collection($requiredfacts);
 
@@ -41,9 +41,9 @@ use Illuminate\Support\Collection;
             'level' => 1,
             'tree'  => $tree,
         ]);
-      } //else skip        
+      } //else skip
     }
-  
+
     ?>
 </div>
 
@@ -60,10 +60,9 @@ if ($selector !== '') {
   //View::push('javascript'); no need - this is within a modal!
   $script = '<script>' .
       'var REF = $(\'' . $selector . '\');' .
-      '$(\'#shared-place-name\').val(REF.val());' . 
+      '$(\'#shared-place-name\').val(REF.val());' .
       '</script>';
   echo $script;
   //View::endpush();
 }
 ?>
-

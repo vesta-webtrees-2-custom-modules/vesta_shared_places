@@ -104,12 +104,12 @@ class LanguageIdExt
             'Bulgarian'     => (new LocaleBg()),
             'Burmese'       => (new LocaleMy()),
             'Cantonese'     => (new LocaleYue()),
-            
+
             //[RC] adjusted
             //'Catalan'       => (new LocaleCaEsValencia()),
             //'Catalan_Spn'   => (new LocaleCa()),
             'Catalan'       => (new LocaleCa()),
-            
+
             'Church-Slavic' => (new LocaleCu()),
             'Czech'         => (new LocaleCs()),
             'Danish'        => (new LocaleDa()),
@@ -185,12 +185,12 @@ class LanguageIdExt
 
         return $values;
     }
-    
+
     public static function valuesWithUpperCasedKeys(): array {
         $locales = LanguageIdExt::values();
-        
+
         $coll = new Collection($locales);
-        
+
         $values = $coll
             ->mapWithKeys(static function (LocaleInterface $locale, string $key): array {
                 return [strtoupper($key) => $locale];
@@ -199,5 +199,5 @@ class LanguageIdExt
 
         return $values;
     }
-        
+
 }
