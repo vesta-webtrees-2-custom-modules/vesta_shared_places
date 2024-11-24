@@ -102,7 +102,6 @@ use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
 use Vesta\VestaAdminController;
 use Vesta\VestaModuleTrait;
-use function app;
 use function response;
 use function route;
 use function str_contains;
@@ -207,7 +206,7 @@ class SharedPlacesModule extends AbstractModule implements
             //note: we cannot use
             //->findByComponent(ModulePlaceHierarchyInterface::class, $tree, Auth::user())
             //directly because the access level isn't set for this specific interface!
-            $module = app(ModuleService::class)
+            $module = \Vesta\VestaUtils::get(ModuleService::class)
                 ->findByComponent(ModuleListInterface::class, $tree, Auth::user())
                 ->first(static function (ModuleInterface $module): bool {
                     return $module instanceof ModulePlaceHierarchyInterface;
@@ -242,11 +241,11 @@ class SharedPlacesModule extends AbstractModule implements
     public function onBoot(): void {
 
         //extend
-        app()->instance(GedcomImportService::class, new GedcomImportServiceExt());
+        \Vesta\VestaUtils::set(GedcomImportService::class, new GedcomImportServiceExt());
 
         //explicitly register in order to re-use in views where we cannot pass via variable
         //(could also resolve via module service)
-        app()->instance(SharedPlacesModule::class, $this); //do not use bind()! for some reason leads to 'Illegal offset type in isset or empty'
+        \Vesta\VestaUtils::set(SharedPlacesModule::class, $this);
 
         $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
         $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '0'));
@@ -281,7 +280,7 @@ class SharedPlacesModule extends AbstractModule implements
         //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
 
         /*
-        $router_container = app(RouterContainer::class);
+        $router_container = \Vesta\VestaUtils::get(RouterContainer::class);
         assert($router_container instanceof RouterContainer);
         $router = $router_container->getMap();
         */
@@ -320,7 +319,7 @@ class SharedPlacesModule extends AbstractModule implements
         $router->setRoutes($existingRoutes);
 
         //[2023/10] improve place autocomplete
-        $router->get(AutoCompletePlace::class, '/tree/{tree}/autocomplete/place', app(AutoCompletePlaceExt::class))
+        $router->get(AutoCompletePlace::class, '/tree/{tree}/autocomplete/place', \Vesta\VestaUtils::get(AutoCompletePlaceExt::class))
             ->extras(['middleware' => [AuthEditor::class]]);
 
         $router->get(LocationPage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);
@@ -718,7 +717,7 @@ class SharedPlacesModule extends AbstractModule implements
         return new Collection();
         }
 
-        $searchService = app(SearchServiceExt::class);
+        $searchService = \Vesta\VestaUtils::get(SearchServiceExt::class);
         return $searchService->searchLocationsInPlace(new Place($placeGedcomName, $tree));
     }
 
@@ -799,7 +798,7 @@ class SharedPlacesModule extends AbstractModule implements
     }
 
     public function gov2loc(GovReference $gov, Tree $tree): ?LocReference {
-        $searchService = app(SearchServiceExt::class);
+        $searchService = \Vesta\VestaUtils::get(SearchServiceExt::class);
         $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 _GOV " . $gov->getId()));
         foreach ($sharedPlaces as $sharedPlace) {
             //first match wins
@@ -1465,7 +1464,7 @@ class SharedPlacesModule extends AbstractModule implements
         $new = $this->updateGedcomWrtHierarchy($record);
 
         //higher-level shared places for all names
-        $creator = app(CreateSharedPlaceAction::class);
+        $creator = \Vesta\VestaUtils::get(CreateSharedPlaceAction::class);
         $newlyCreated = '';
 
         foreach ($record->namesNN() as $placeGedcomName) {
@@ -1501,7 +1500,7 @@ class SharedPlacesModule extends AbstractModule implements
         }
         $new .= $newlyCreated;
 
-        $data_fix_service = app(DataFixService::class);
+        $data_fix_service = \Vesta\VestaUtils::get(DataFixService::class);
         return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
     }
 
@@ -1509,7 +1508,7 @@ class SharedPlacesModule extends AbstractModule implements
         $old = $record->gedcom();
         $new = $this->updateGedcomWrtEnhance($record);
 
-        $data_fix_service = app(DataFixService::class);
+        $data_fix_service = \Vesta\VestaUtils::get(DataFixService::class);
         return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
     }
 
@@ -1517,7 +1516,7 @@ class SharedPlacesModule extends AbstractModule implements
         $old = $record->gedcom();
         $new = $this->updateGedcomWrtXrefs($record);
 
-        $data_fix_service = app(DataFixService::class);
+        $data_fix_service = \Vesta\VestaUtils::get(DataFixService::class);
         return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
     }
 
@@ -1536,7 +1535,7 @@ class SharedPlacesModule extends AbstractModule implements
         // First line of record may contain data - e.g. NOTE records.
         [$new_gedcom] = explode("\n", $record->gedcom(), 2);
 
-        $creator = app(CreateSharedPlaceAction::class);
+        $creator = \Vesta\VestaUtils::get(CreateSharedPlaceAction::class);
         $newlyCreated = '';
 
         //avoid previewing multiple creations for same place in multiple facts
@@ -1588,7 +1587,7 @@ class SharedPlacesModule extends AbstractModule implements
         }
         $new_gedcom .= $newlyCreated;
 
-        $data_fix_service = app(DataFixService::class);
+        $data_fix_service = \Vesta\VestaUtils::get(DataFixService::class);
         return $data_fix_service->gedcomDiff($record->tree(), $old, $new_gedcom);
     }
 
@@ -1638,7 +1637,7 @@ class SharedPlacesModule extends AbstractModule implements
         $new = $this->updateGedcomWrtHierarchy($record);
 
         //higher-level shared places for all names
-        $creator = app(CreateSharedPlaceAction::class);
+        $creator = \Vesta\VestaUtils::get(CreateSharedPlaceAction::class);
         foreach ($record->namesNN() as $placeGedcomName) {
             $parts = SharedPlace::placeNameParts($placeGedcomName);
             $tail = SharedPlace::placeNamePartsTail($parts);
@@ -1712,7 +1711,7 @@ class SharedPlacesModule extends AbstractModule implements
         // First line of record may contain data - e.g. NOTE records.
         [$new_gedcom] = explode("\n", $record->gedcom(), 2);
 
-        $creator = app(CreateSharedPlaceAction::class);
+        $creator = \Vesta\VestaUtils::get(CreateSharedPlaceAction::class);
 
         foreach ($record->facts([]) as $fact) {
             $factGedcom = $fact->gedcom();

@@ -7,7 +7,7 @@ use Fisharebest\Webtrees\I18N;
 $count_individuals = [];
 $count_families = [];
 
-$module = app(SharedPlacesModule::class);
+$module = \Vesta\VestaUtils::get(SharedPlacesModule::class);
 $showLinkCounts = boolval($module->getPreference('LINK_COUNTS', '0'));
 
 if ($showLinkCounts) {

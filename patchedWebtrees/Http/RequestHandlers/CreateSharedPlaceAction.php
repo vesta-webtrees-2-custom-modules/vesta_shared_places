@@ -17,7 +17,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Vesta\Model\PlaceStructure;
-use function app;
 use function response;
 use function view;
 
@@ -151,7 +150,7 @@ class CreateSharedPlaceAction implements RequestHandlerInterface {
 
         //if the place exists (with hierarchy), just return
         /* @var $searchService SearchServiceExt */
-        $searchService = app(SearchServiceExt::class);
+        $searchService = \Vesta\VestaUtils::get(SearchServiceExt::class);
         $sharedPlace = $searchService->searchLocationsInPlace(new Place($placeGedcomName, $tree))->first();
         if ($sharedPlace !== null) {
             return new SharedPlaceRef($sharedPlace, true, 0, null);
