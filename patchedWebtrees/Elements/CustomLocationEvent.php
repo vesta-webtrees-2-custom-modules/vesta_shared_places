@@ -11,7 +11,7 @@ use Fisharebest\Webtrees\Elements\AbstractEventElement;
  */
 class CustomLocationEvent extends AbstractEventElement
 {
-    protected const SUBTAGS = [
+    protected const VESTA_SUBTAGS = [
         'TYPE'  => '0:1',
         'DATE'  => '0:1',
         //'AGE'   => '0:1', //should probably be removed from webtrees CustomEvent
@@ -29,4 +29,9 @@ class CustomLocationEvent extends AbstractEventElement
         'SOUR'  => '0:M',
         'RESN'  => '0:1',
     ];
+    
+     public function __construct(string $label, $subtags = null)
+    {
+        parent::__construct($label, self::VESTA_SUBTAGS);
+    }
 }

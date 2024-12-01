@@ -30,10 +30,10 @@ use function str_contains;
  */
 class SharedPlace extends Location {
 
-    public const RECORD_TYPE = '_LOC';
+    public const VESTA_RECORD_TYPE = '_LOC';
     //[from 2.0.12] use standard name (relevant e.g. for ClippingsCartModule.php, where the standard names are hard-coded)
     //and redefine this route with SharedPlacePage::class as handler!
-    protected const ROUTE_NAME = LocationPage::class;
+    protected const VESTA_ROUTE_NAME = LocationPage::class;
 
     protected $preferences;
 
@@ -896,7 +896,7 @@ class SharedPlace extends Location {
                 function (GedcomDateInterval $date) use ($self): array {
                     //fallback name
                     return $self->createName(
-                        static::RECORD_TYPE,
+                        static::VESTA_RECORD_TYPE,
                         $self->getFallBackName(),
                         '',
                         $date,
@@ -1655,6 +1655,11 @@ class SharedPlace extends Location {
             return $this->primaryPlace()->url();
         }
 
-        return parent::url();
+        //return parent::url();
+        return route(static::VESTA_ROUTE_NAME, [
+            'xref' => $this->xref(),
+            'tree' => $this->tree->name(),
+            'slug' => Registry::slugFactory()->make($this),
+        ]);
     }
 }
