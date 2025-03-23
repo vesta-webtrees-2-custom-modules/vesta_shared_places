@@ -8,492 +8,618 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2023-10-14 10:31+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-03-23 02:01+0000\n"
+"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-shared-places/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: HelpTexts.php:17
 msgid "Shared place summary"
-msgstr ""
+msgstr "பகிரப்பட்ட இட சுருக்கம்"
 
 #: HelpTexts.php:19
 msgid "The summary shows the shared place data, formatted in the same way as for events with a place mapped to the respective shared place."
 msgstr ""
+"சுருக்கம் பகிரப்பட்ட இடத் தரவைக் காட்டுகிறது, அந்தந்த பகிரப்பட்ட இடத்திற்கு வரைபடமாக்கப்பட்ட "
+"இடத்துடன் நிகழ்வுகளைப் போலவே வடிவமைக்கப்பட்டுள்ளது."
 
 #: HelpTexts.php:20
 msgid "Therefore, the place name is displayed here including the full hierarchy."
-msgstr ""
+msgstr "எனவே, முழு வரிசைமுறை உட்பட இடத்தின் பெயர் இங்கே காட்டப்படும்."
 
 #: HelpTexts.php:21
 #, php-format
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr ""
+"தொகுதி உள்ளமைவில் நீங்கள் ஒரு குறிப்பு ஆண்டை அமைக்கலாம் (இது %1$s போன்ற பிற தொகுதிகளால் "
+"மதிப்பீடு செய்யப்படலாம்)."
 
 #: HelpTexts.php:27
 msgid "Place names should be entered as single place name (do not use a comma-separated list here)."
 msgstr ""
+"இடப் பெயர்களை ஒற்றை இட பெயராக உள்ளிட வேண்டும் (கமாவால் பிரிக்கப்பட்ட பட்டியலைப் பயன்படுத்த "
+"வேண்டாம்)."
 
 #: HelpTexts.php:28
 #, php-format
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr ""
+"ஒரு இட வரிசைமுறையை மாதிரியாகக் கொள்ள தனித்தனி குறிச்சொல்லைப் பயன்படுத்தவும்."
 
 #: HelpTexts.php:31 HelpTexts.php:40
 msgid "Place names can change over time. You can add multiple names to a shared place, and indicate historic names via a suitable date range."
 msgstr ""
+"இடப் பெயர்கள் காலப்போக்கில் மாறலாம். பகிரப்பட்ட இடத்தில் நீங்கள் பல பெயர்களைச் சேர்க்கலாம், "
+"மேலும் வரலாற்று பெயர்களை பொருத்தமான தேதி வரம்பு வழியாக குறிக்கலாம்."
 
 #: HelpTexts.php:37
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
+"இடப் பெயர்கள் கமாவால் பிரிக்கப்பட்ட பட்டியலாக உள்ளிடப்பட வேண்டும், இது மிகச்சிறிய "
+"இடத்திலிருந்து தொடங்கி நாட்டோடு முடிவடைகிறது. உதாரணமாக, “வெச்ட்மின்ச்டர், லண்டன், "
+"இங்கிலாந்து”."
 
 #: SharedPlacesListController.php:53 SharedPlacesModule.php:172
 #: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
-msgstr ""
+msgstr "பகிரப்பட்ட இடங்கள்"
 
 #: SharedPlacesModule.php:220
 msgid "View Shared places hierarchy"
-msgstr ""
+msgstr "பகிரப்பட்ட இடங்கள் வரிசைக்கு காண்க"
 
 #: SharedPlacesModule.php:226
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
+"பகிரப்பட்ட இடங்கள் வரிசைக்கு காண வெச்டா இடங்கள் மற்றும் வம்சாவளி வரைபட தொகுதியை இயக்கவும்."
 
 #. I18N: translate just like 'Shared Place' for consistency
 #: SharedPlacesModule.php:368 SharedPlacesModule.php:419
 msgid "Location"
-msgstr ""
+msgstr "இடம்"
 
 #. I18N: translate just like 'Shared Places' for consistency
 #: SharedPlacesModule.php:369
 msgid "Locations"
-msgstr ""
+msgstr "இருப்பிடங்கள்"
 
 #: SharedPlacesModule.php:395 SharedPlacesModule.php:397
 #: SharedPlacesModule.php:400 SharedPlacesModule.php:403
 #: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
-msgstr ""
+msgstr "பகிரப்பட்ட இடம்"
 
 #: SharedPlacesModule.php:411
 msgid "Higher-level shared place"
-msgstr ""
+msgstr "உயர் மட்ட பகிரப்பட்ட இடம்"
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
 #: SharedPlacesModule.php:413
 msgid "Type of hierarchical relationship"
-msgstr ""
+msgstr "படிநிலை உறவின் வகை"
 
 #: SharedPlacesModule.php:428
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "இருப்பிட வகைக்கு அரசு ஐடி"
 
 #: SharedPlacesModule.php:558 SharedPlacesModule.php:978
 msgid "Shared place data"
-msgstr ""
+msgstr "பகிரப்பட்ட இட தரவு"
 
 #: SharedPlacesModule.php:993
 #, php-format
 msgid "%s and the individuals and families that reference it."
-msgstr ""
+msgstr "%s மற்றும் அதைக் குறிக்கும் தனிநபர்கள் மற்றும் குடும்பங்கள்."
 
 #: SharedPlacesModule.php:994
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
+"ஒவ்வொரு நபரின் பெற்றோர்கள், உடன்பிறப்புகள், வாழ்க்கைத் துணைவர்கள் மற்றும் குழந்தைகள் உட்பட அதைக்"
+" குறிப்பிடும் நபர்கள் மற்றும் தனிநபர்கள் மற்றும் குடும்பங்கள்."
 
 #: SharedPlacesModule.php:1081
 msgid "shared places"
-msgstr ""
+msgstr "பகிரப்பட்ட இடங்கள்"
 
 #: SharedPlacesModuleTrait.php:28
 msgid "A module providing support for shared places."
-msgstr ""
+msgstr "பகிரப்பட்ட இடங்களுக்கு ஆதரவை வழங்கும் ஒரு தொகுதி."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:38
 msgid "A module supporting shared places as level 0 GEDCOM objects, on the basis of the GEDCOM-L Addendum to the GEDCOM 5.5.1 specification. Shared places may contain e.g. map coordinates, notes and media objects. The module displays this data for all matching places via the extended 'Facts and events' tab. It may also be used to manage GOV ids, in combination with the Gov4Webtrees module."
 msgstr ""
+"GEDCOM-L சேர்க்கையின் அடிப்படையில் GEDCOM 5.5.1 விவரக்குறிப்புக்கு GEDCOM-L சேர்க்கையின்"
+" அடிப்படையில், நிலை 0 GEDCOM பொருள்களாக பகிரப்பட்ட இடங்களை ஆதரிக்கும் ஒரு தொகுதி. "
+"பகிரப்பட்ட இடங்களில் எ.கா. வரைபட ஒருங்கிணைப்புகள், குறிப்புகள் மற்றும் ஊடக பொருள்கள். "
+"நீட்டிக்கப்பட்ட 'உண்மைகள் மற்றும் நிகழ்வுகள்' தாவல் வழியாக பொருந்தக்கூடிய அனைத்து இடங்களுக்கும்"
+" இந்த தரவை தொகுதி காட்டுகிறது. Gov4webtrees தொகுதியுடன் இணைந்து அரசாங்க ஐடிகளை "
+"நிர்வகிக்க இது பயன்படுத்தப்படலாம்."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:67
 msgid "Shared place structure"
-msgstr ""
+msgstr "பகிரப்பட்ட இட அமைப்பு"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:69
 msgid "Use hierarchical shared places"
-msgstr ""
+msgstr "படிநிலை பகிரப்பட்ட இடங்களைப் பயன்படுத்துங்கள்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:70
 msgid "If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to higher-level shared places, as described in the specification."
 msgstr ""
+"சரிபார்க்கப்பட்டால், பகிரப்பட்ட இடங்களுக்கிடையிலான உறவுகள் வெளிப்படையான வரிசைமுறை வழியா"
+"க வடிவமைக்கப்பட்டுள்ளன, அங்கு பகிரப்பட்ட இடங்கள் விவரக்குறிப்பில் விவரிக்கப்பட்டுள்ளபடி, உயர் "
+"மட்ட பகிரப்பட்ட இடங்களுக்கு XREF களைக் கொண்டுள்ளன."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:71
 msgid "Note that this also affects the way shared places are created, and the way they are mapped to places."
 msgstr ""
+"இது பகிரப்பட்ட இடங்கள் உருவாக்கப்பட்ட விதத்தையும், அவை இடங்களுக்கு வரைபடமாக்கப்படுவதையும் "
+"பாதிக்கிறது என்பதை நினைவில் கொள்க."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:72
 msgid "In particular, hierarchical shared places do not have names with comma-separated name parts."
 msgstr ""
+"குறிப்பாக, படிநிலை பகிரப்பட்ட இடங்களில் கமாவால் பிரிக்கப்பட்ட பெயர் பகுதிகளுடன் பெயர்கள் "
+"இல்லை."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:73
 #, php-format
 msgid "See %1$s for details."
-msgstr ""
+msgstr "விவரங்களுக்கு %1$s ஐப் பார்க்கவும்."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:74
 msgid "There is a data fix available which may be used to convert existing shared places."
 msgstr ""
+"தற்போதுள்ள பகிரப்பட்ட இடங்களை மாற்ற பயன்படுத்தக்கூடிய தரவு பிழைத்திருத்தம் உள்ளது."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:75
 msgid "When unchecked, the former approach is used, in which hierarchies are only hinted at by using shared place names with comma-separated name parts."
 msgstr ""
+"தேர்வு செய்யப்படும்போது, முன்னாள் அணுகுமுறை பயன்படுத்தப்படுகிறது, இதில் கமாவால் "
+"பிரிக்கப்பட்ட பெயர் பகுதிகளுடன் பகிரப்பட்ட இடப் பெயர்களைப் பயன்படுத்துவதன் மூலம் மட்டுமே "
+"படிநிலைகள் குறிக்கப்படுகின்றன."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:76
 msgid "It is strongly recommended to switch to hierarchical shared places."
-msgstr ""
+msgstr "படிநிலை பகிரப்பட்ட இடங்களுக்கு மாறுவது கடுமையாக பரிந்துரைக்கப்படுகிறது."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:81
 msgid "Linking of shared places to places"
-msgstr ""
+msgstr "பகிரப்பட்ட இடங்களை இடங்களுடன் இணைத்தல்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:84
 msgid "Additionally link shared places via name"
-msgstr ""
+msgstr "கூடுதலாக பகிரப்பட்ட இடங்களை பெயர் வழியாக இணைக்கவும்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:85
 msgid "According to the GEDCOM-L Addendum, shared places are referenced via XREFs, just like shared notes etc. "
 msgstr ""
+"GEDCOM-L கூடுதல் படி, பகிரப்பட்ட குறிப்புகள் போன்றவற்றைப் போலவே பகிரப்பட்ட இடங்களும் "
+"XREFS வழியாக குறிப்பிடப்படுகின்றன. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:86
 msgid "It is now recommended to use XREFs, as this improves performance and flexibility. There is a data fix available which may be used to add XREFs. "
 msgstr ""
+"இது செயல்திறன் மற்றும் நெகிழ்வுத்தன்மையை மேம்படுத்துவதால், இப்போது XREFS ஐப் பயன்படுத்த "
+"பரிந்துரைக்கப்படுகிறது. தரவு பிழைத்திருத்தம் கிடைக்கிறது, இது XREFS ஐ சேர்க்க "
+"பயன்படுத்தப்படலாம். "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:87
 msgid "However, you can still check this option and link shared places via the place name itself. In this case, links are established internally by searching for a shared place with any name matching case-insensitively."
 msgstr ""
+"இருப்பினும், நீங்கள் இன்னும் இந்த விருப்பத்தை சரிபார்த்து, பகிரப்பட்ட இடங்களை இடத்தின் பெயர் "
+"வழியாக இணைக்கலாம். இந்த வழக்கில், எந்தவொரு பெயரும் பொருந்தக்கூடிய வழக்கு-ஈடுசெய்யும் "
+"வகையில் பகிரப்பட்ட இடத்தைத் தேடுவதன் மூலம் இணைப்புகள் உள்நாட்டில் நிறுவப்படுகின்றன."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:88
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
 msgstr ""
+"நீங்கள் படிநிலை பகிரப்பட்ட இடங்களைப் பயன்படுத்துகிறீர்கள் என்றால், \"A, B, C\" என்ற பெயரைக் "
+"கொண்ட ஒரு இடம் \"A\" என்ற பகிர்வு இடத்திற்கு \"B, C\" க்கு வரைபடமாக்கும் உயர் மட்ட "
+"பகிரப்பட்ட இடத்துடன் வரைபடமாக்கப்படுகிறது."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:92
 msgid "... and fall back to n parent levels"
-msgstr ""
+msgstr "... மற்றும் என் பெற்றோர் நிலைகளுக்கு மீண்டும் விழுங்கள்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:93
 msgid "When the preceding option is checked, and no matching shared place is found, fall back to n parent places (so that e.g. for n=2 a place \"A, B, C\" would also match shared places that match \"B, C\" and \"C\")"
 msgstr ""
+"முந்தைய விருப்பம் சரிபார்க்கப்படும்போது, பொருந்தக்கூடிய பகிரப்பட்ட இடம் எதுவும் "
+"காணப்படாதபோது, என் பெற்றோர் இடங்களுக்குத் திரும்பிச் செல்லுங்கள் (எனவே எ.கா. n = 2 க்கு "
+"ஒரு இடம் \"A, B, C\" \"B, C\" மற்றும் \"C\" உடன் பொருந்தக்கூடிய பகிரப்பட்ட இடங்களுக்கும்"
+" பொருந்தும்)"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:104
 msgid "All shared place facts"
-msgstr ""
+msgstr "அனைத்து பகிரப்பட்ட இட உண்மைகளும்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:108
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list."
 msgstr ""
+"உங்கள் பயனர்கள் பகிரப்பட்ட இடங்களில் சேர்க்கக்கூடிய GEDCOM உண்மைகளின் பட்டியல் இது. உண்மை "
+"பெயர்களை அகற்றுவதன் மூலமோ அல்லது சேர்ப்பதன் மூலமோ இந்த பட்டியலை மாற்றலாம். இந்த பட்டியலில் "
+"தோன்றும் உண்மை பெயர்கள் “தனித்துவமான பகிரப்பட்ட இடம் உண்மைகள்” பட்டியலில் தோன்றக்கூடாது."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:112
 msgid "Unique shared place facts"
-msgstr ""
+msgstr "தனித்துவமான பகிரப்பட்ட இடம் உண்மைகள்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:116
 msgid "This is the list of GEDCOM facts that your users can only add once to shared places. For example, if NAME is in this list, users will not be able to add more than one NAME record to a shared place. Fact names that appear in this list must not also appear in the “All shared place facts” list."
 msgstr ""
+"உங்கள் பயனர்கள் பகிரப்பட்ட இடங்களுக்கு ஒரு முறை மட்டுமே சேர்க்கக்கூடிய GEDCOM உண்மைகளின் "
+"பட்டியல் இது. எடுத்துக்காட்டாக, இந்த பட்டியலில் பெயர் இருந்தால், பயனர்கள் பகிரப்பட்ட இடத்தில் "
+"ஒன்றுக்கு மேற்பட்ட பெயர் பதிவுகளைச் சேர்க்க முடியாது. இந்த பட்டியலில் தோன்றும் உண்மை பெயர்கள்"
+" “அனைத்து பகிரப்பட்ட இட உண்மைகள்” பட்டியலில் தோன்றக்கூடாது."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:134
 msgid "Quick shared place facts"
-msgstr ""
+msgstr "விரைவாக பகிரப்பட்ட இட உண்மைகள்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:138
 msgid "This is the list of GEDCOM facts that your users can add to shared places. You can modify this list by removing or adding fact names as necessary. Fact names that appear in this list must not also appear in the “Unique shared place facts” list. "
 msgstr ""
+"உங்கள் பயனர்கள் பகிரப்பட்ட இடங்களில் சேர்க்கக்கூடிய GEDCOM உண்மைகளின் பட்டியல் இது. உண்மை "
+"பெயர்களை அகற்றுவதன் மூலமோ அல்லது சேர்ப்பதன் மூலமோ இந்த பட்டியலை மாற்றலாம். இந்த பட்டியலில் "
+"தோன்றும் உண்மை பெயர்கள் “தனித்துவமான பகிரப்பட்ட இடம் உண்மைகள்” பட்டியலில் தோன்றக்கூடாது. "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:148
 msgid "Restrict to specific facts and events"
-msgstr ""
+msgstr "குறிப்பிட்ட உண்மைகள் மற்றும் நிகழ்வுகளுக்கு கட்டுப்படுத்துங்கள்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:149
 msgid "If this option is checked, shared place data is only displayed for the following facts and events. "
 msgstr ""
+"இந்த விருப்பம் சரிபார்க்கப்பட்டால், பகிரப்பட்ட இட தரவு பின்வரும் உண்மைகள் மற்றும் "
+"நிகழ்வுகளுக்கு மட்டுமே காட்டப்படும். "
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:163
 msgid "Automatically expand shared place data"
-msgstr ""
+msgstr "பகிரப்பட்ட இட தரவை தானாக விரிவாக்கவும்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:172
 msgid "yes, but only the first occurrence of the shared place"
-msgstr ""
+msgstr "ஆம், ஆனால் பகிரப்பட்ட இடத்தின் முதல் நிகழ்வு மட்டுமே"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:173
 msgid "Note that the first occurrence may be within a toggleable, currently hidden fact or event (such as an event of a close relative). This will probably be improved in future versions of the module."
 msgstr ""
+"முதல் நிகழ்வு ஒரு தடுமாறக்கூடிய, தற்போது மறைக்கப்பட்ட உண்மை அல்லது நிகழ்வுக்குள் இருக்கலாம்"
+" (நெருங்கிய உறவினரின் நிகழ்வு போன்றவை). இது தொகுதியின் எதிர்கால பதிப்புகளில் "
+"மேம்படுத்தப்படும்."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:187
 msgid "Show link counts for shared places list"
-msgstr ""
+msgstr "பகிரப்பட்ட இடங்கள் பட்டியலுக்கான இணைப்பு எண்ணிக்கையைக் காட்டு"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:188
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr ""
+"பெயர் வழியாக பகிரப்பட்ட இடங்களை ஒதுக்கும்போது இணைப்பு எண்ணிக்கையை (இணைக்கப்பட்ட "
+"தனிநபர்/குடும்பங்கள்) தீர்மானிப்பது விலை உயர்ந்தது, எனவே பகிரப்பட்ட இடங்கள் பட்டியல் "
+"காட்டப்படும் போது தாமதங்களை ஏற்படுத்துகிறது. இடங்கள் XREFS வழியாக ஒதுக்கப்பட்டால் மட்டுமே "
+"இந்த விருப்பத்தைத் தேர்ந்தெடுக்க பரிந்துரைக்கப்படுகிறது."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:194
 #: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:129
 msgid "Summary"
-msgstr ""
+msgstr "சுருக்கம்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:196
 msgid "Reference year"
-msgstr ""
+msgstr "குறிப்பு ஆண்டு"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:197
 msgid "The year set here may be used by other modules to enhance the place description with additional data. If left empty, the current year is used."
 msgstr ""
+"கூடுதல் தரவுகளுடன் இட விளக்கத்தை மேம்படுத்த இங்கே அமைக்கப்பட்ட ஆண்டு பிற தொகுதிகளால் "
+"பயன்படுத்தப்படலாம். காலியாக இருந்தால், நடப்பு ஆண்டு பயன்படுத்தப்படுகிறது."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:217
 msgid "Filter to unique shared places"
-msgstr ""
+msgstr "தனித்துவமான பகிரப்பட்ட இடங்களுக்கு வடிகட்டவும்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:218
 msgid "In the place hierarchy list, when using the option 'restrict to shared places', shared places with multiple names show up multiple times as separate entries. Check this option to show each shared place only once in this case, under the shared place's primary name, and also show its additional names."
 msgstr ""
+"இட வரிசைமுறை பட்டியலில், 'பகிரப்பட்ட இடங்களுக்கு கட்டுப்படுத்துங்கள்' என்ற விருப்பத்தைப் "
+"பயன்படுத்தும் போது, பல பெயர்களைக் கொண்ட பகிரப்பட்ட இடங்கள் தனித்தனி உள்ளீடுகளாகக் "
+"காண்பிக்கப்படுகின்றன. பகிரப்பட்ட இடத்தின் முதன்மை பெயரின் கீழ், இந்த வழக்கில் ஒரு முறை "
+"மட்டுமே பகிரப்பட்ட ஒவ்வொரு இடத்தையும் காட்ட இந்த விருப்பத்தை சரிபார்க்கவும், அதன் கூடுதல் "
+"பெயர்களையும் காட்டுங்கள்."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:231
 msgid "Facts for shared place records"
-msgstr ""
+msgstr "பகிரப்பட்ட இட பதிவுகளுக்கான உண்மைகள்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:241
 msgid "Shared places list"
-msgstr ""
+msgstr "பகிரப்பட்ட இடங்கள் பட்டியல்"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:245
 msgid "Shared place page"
-msgstr ""
+msgstr "பகிரப்பட்ட இடப் பக்கம்"
 
 #: patchedWebtrees/Elements/XrefSharedPlace.php:57
 #: resources/views/modals/create-shared-place.phtml:9
 #: resources/views/shared-places-list-page.phtml:42
 msgid "Create a shared place"
-msgstr ""
+msgstr "பகிரப்பட்ட இடத்தை உருவாக்கவும்"
 
 #: patchedWebtrees/Exceptions/SharedPlaceNotFoundException.php:13
 msgid "This shared place does not exist or you do not have permission to view it."
-msgstr ""
+msgstr "இந்த பகிரப்பட்ட இடம் இல்லை அல்லது அதைப் பார்க்க உங்களுக்கு இசைவு இல்லை."
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:52
 #, php-format
 msgid "The shared place %s already exists."
-msgstr ""
+msgstr "பகிரப்பட்ட இடம் %s ஏற்கனவே உள்ளன."
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:60
 msgid " (Note: A higher-level shared place has also been created)"
-msgstr ""
+msgstr " (குறிப்பு: உயர் மட்ட பகிரப்பட்ட இடமும் உருவாக்கப்பட்டுள்ளது)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
-msgstr ""
+msgstr " (குறிப்பு: %s உயர் மட்ட பகிரப்பட்ட இடங்களும் உருவாக்கப்பட்டுள்ளன)"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:77
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:123
 #, php-format
 msgid "The shared place %s has been created."
-msgstr ""
+msgstr "பகிரப்பட்ட இடம் %s உருவாக்கப்பட்டுள்ளன."
 
 #: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
 msgid "circular shared place hierarchy"
-msgstr ""
+msgstr "வட்ட பகிரப்பட்ட இட வரிசைமுறை"
 
 #: resources/views/data-fix-options.phtml:12
 msgid "There are various data fixes available."
-msgstr ""
+msgstr "பல்வேறு தரவு திருத்தங்கள் உள்ளன."
 
 #: resources/views/data-fix-options.phtml:13
 msgid "It is strongly recommended to backup your tree first."
 msgstr ""
+"முதலில் உங்கள் மரத்தை காப்புப் பிரதி எடுக்க இது கடுமையாக பரிந்துரைக்கப்படுகிறது."
 
 #: resources/views/data-fix-options.phtml:18
 msgid "Data Fix"
-msgstr ""
+msgstr "தரவு பிழைத்திருத்தம்"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
-msgstr ""
+msgstr "பகிரப்பட்ட இடங்களை படிநிலை"
 
 #: resources/views/data-fix-options.phtml:32
 msgid "This data fix turns shared places with comma-separated name parts into hierarchical shared places (which are linked to higher-level shared places via XREFs)."
 msgstr ""
+"இந்த தரவு பிழைத்திருத்தம் கமாவால் பிரிக்கப்பட்ட பெயர் பகுதிகளுடன் பகிரப்பட்ட இடங்களை "
+"படிநிலை பகிரப்பட்ட இடங்களாக மாற்றுகிறது (அவை XREFS வழியாக உயர் மட்ட பகிரப்பட்ட "
+"இடங்களுடன் இணைக்கப்பட்டுள்ளன)."
 
 #: resources/views/data-fix-options.phtml:33
 msgid "It usually will have to be carried out once only, as a migration when switching to hierarchical shared places via the respective configuration option."
 msgstr ""
+"அந்தந்த உள்ளமைவு விருப்பத்தின் மூலம் படிநிலை பகிரப்பட்ட இடங்களுக்கு மாறும்போது இடம்பெயர்வா"
+"க இது வழக்கமாக ஒரு முறை மட்டுமே மேற்கொள்ளப்பட வேண்டும்."
 
 #: resources/views/data-fix-options.phtml:38
 msgid "Note:"
-msgstr ""
+msgstr "குறிப்பு:"
 
 #: resources/views/data-fix-options.phtml:41
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
 msgstr ""
+"இந்த தரவு பிழைத்திருத்தத்திற்கான தேடல் தற்போது எந்த பதிவுகளுக்கும் பொருந்தவில்லை, ஏனெனில் "
+"'படிநிலை பகிரப்பட்ட இடங்களைப் பயன்படுத்துவதற்கான' உள்ளமைவு விருப்பம் அமைக்கப்படவில்லை."
 
 #: resources/views/data-fix-options.phtml:46
 #: resources/views/data-fix-options.phtml:107
 #: resources/views/data-fix-options.phtml:134
 msgid "Attention!"
-msgstr ""
+msgstr "கவனம்!"
 
 #: resources/views/data-fix-options.phtml:49
 msgid "Missing higher-level shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr ""
+"தேவைப்பட்டால் உயர் மட்ட பகிரப்பட்ட இடங்களைக் காணவில்லை. நகல்களை உருவாக்காமல் இது செயல்பட, "
+"பயனர் நிர்வாகத்தில் 'இந்த பயனரால் செய்யப்பட்ட மாற்றங்களை தானாகவே ஏற்றுக்கொள்ளுங்கள்' என்பதை "
+"நீங்கள் சரிபார்க்க வேண்டும், குறைந்தபட்சம் இந்த தரவு சரிசெய்தலின் காலத்திற்கு."
 
 #: resources/views/data-fix-options.phtml:50
 #: resources/views/data-fix-options.phtml:111
 #: resources/views/data-fix-options.phtml:138
 msgid "This data fix currently won't update anything, because this preference isn't set."
 msgstr ""
+"இந்த தரவு பிழைத்திருத்தம் தற்போது எதையும் புதுப்பிக்காது, ஏனெனில் இந்த விருப்பம் "
+"அமைக்கப்படவில்லை."
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
-msgstr ""
+msgstr "மரம் சுயாதீனமான தரவுகளுடன் ஏற்கனவே பகிரப்பட்ட இடங்களை மேம்படுத்தவும்"
 
 #: resources/views/data-fix-options.phtml:66
 msgid "This data fix adds tree-independent data (managed outside GEDCOM) to existing shared places."
 msgstr ""
+"இந்த தரவு பிழைத்திருத்தம் ஏற்கனவே பகிரப்பட்ட இடங்களுக்கு மரம்-சுயாதீனமான தரவை (GEDCOM "
+"க்கு வெளியே நிர்வகிக்கப்படுகிறது) சேர்க்கிறது."
 
 #: resources/views/data-fix-options.phtml:67
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"குறிப்பாக, வெப் ட்ரீசின் புவியியல் தரவு 'இலிருந்து MAP ஒருங்கிணைப்புகள் மற்றும் "
+"Gov4Webtrees தொகுதியிலிருந்து வரும் அரசு ஐடிகள் சேர்க்கப்பட்டுள்ளன."
 
 #: resources/views/data-fix-options.phtml:68
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name'."
 msgstr ""
+"பொருந்தக்கூடிய பகிரப்பட்ட இடங்கள் உள்ளமைவு விருப்பத்தின் வழியாக தீர்மானிக்கப்படுகின்றன "
+"'கூடுதலாக பகிரப்பட்ட இடங்களை பெயர் வழியாக இணைக்கவும்'."
 
 #: resources/views/data-fix-options.phtml:79
 msgid "Add missing XREFs"
-msgstr ""
+msgstr "காணாமல் போன XREFS ஐச் சேர்க்கவும்"
 
 #: resources/views/data-fix-options.phtml:82
 msgid "This data fix adds XREFs, linking all places within events directly to the respective shared places."
 msgstr ""
+"இந்த தரவு பிழைத்திருத்தம் XREFS ஐ சேர்க்கிறது, நிகழ்வுகளுக்குள் உள்ள எல்லா இடங்களையும் "
+"அந்தந்த பகிரப்பட்ட இடங்களுடன் நேரடியாக இணைக்கிறது."
 
 #: resources/views/data-fix-options.phtml:83
 #: resources/views/data-fix-options.phtml:102
 #: resources/views/data-fix-options.phtml:129
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name', including parent levels if set."
 msgstr ""
+"பொருந்தக்கூடிய பகிரப்பட்ட இடங்கள் உள்ளமைவு விருப்பத்தின் வழியாக தீர்மானிக்கப்படுகின்றன "
+"'கூடுதலாக பகிரப்பட்ட இடங்களை பெயர் வழியாக இணைக்கவும்', பெற்றோர் நிலைகள் உட்பட."
 
 #: resources/views/data-fix-options.phtml:84
 msgid "Therefore, this data fix enables you to move away from using that configuration option."
 msgstr ""
+"எனவே, இந்த உள்ளமைவு விருப்பத்தைப் பயன்படுத்துவதிலிருந்து விலகிச் செல்ல இந்த தரவு "
+"பிழைத்திருத்தம் உங்களுக்கு உதவுகிறது."
 
 #: resources/views/data-fix-options.phtml:85
 msgid "The search cannot be implemented efficiently and may take some time in particular when displaying and updating a large number of records."
 msgstr ""
+"தேடலை திறமையாக செயல்படுத்த முடியாது மற்றும் அதிக எண்ணிக்கையிலான பதிவுகளைக் காண்பிக்கும்"
+" மற்றும் புதுப்பிக்கும்போது குறிப்பாக சிறிது நேரம் ஆகலாம்."
 
 #: resources/views/data-fix-options.phtml:96
 msgid "Create missing shared places from tree-independent data, and add missing XREFs"
 msgstr ""
+"மரம்-சுயாதீனமான தரவுகளிலிருந்து காணாமல் போன இடங்களை உருவாக்கி, காணாமல் போன XREFS ஐச் "
+"சேர்க்கவும்"
 
 #: resources/views/data-fix-options.phtml:99
 msgid "This data fix creates missing shared places, if tree-independent data (managed outside GEDCOM) is available for the respective place."
 msgstr ""
+"அந்தந்த இடத்திற்கு மரம்-சுயாதீனமான தரவு (GEDCOM க்கு வெளியே நிர்வகிக்கப்படுகிறது) "
+"கிடைத்தால், இந்த தரவு பிழைத்திருத்தம் காணாமல் போன இடங்களை உருவாக்குகிறது."
 
 #: resources/views/data-fix-options.phtml:101
 #: resources/views/data-fix-options.phtml:128
 msgid "The created shared places, as well as existing shared places, are linked via XREFs to event places."
 msgstr ""
+"உருவாக்கப்பட்ட பகிரப்பட்ட இடங்களும், ஏற்கனவே உள்ள பகிரப்பட்ட இடங்களும் XREFS வழியாக நிகழ்வு"
+" இடங்களுடன் இணைக்கப்பட்டுள்ளன."
 
 #: resources/views/data-fix-options.phtml:110
 #: resources/views/data-fix-options.phtml:137
 msgid "Missing shared places are created if required. For this to work without potentially creating duplicates, you have to check 'Automatically accept changes made by this user' in the user administration, at least for the duration of this data fix."
 msgstr ""
+"தேவைப்பட்டால் காணாமல் போன இடங்கள் உருவாக்கப்படுகின்றன. நகல்களை உருவாக்காமல் இது செயல்பட, "
+"பயனர் நிர்வாகத்தில் 'இந்த பயனரால் செய்யப்பட்ட மாற்றங்களை தானாகவே ஏற்றுக்கொள்ளுங்கள்' என்பதை "
+"நீங்கள் சரிபார்க்க வேண்டும், குறைந்தபட்சம் இந்த தரவு சரிசெய்தலின் காலத்திற்கு."
 
 #: resources/views/data-fix-options.phtml:123
 msgid "Create all missing shared places, and add missing XREFs"
 msgstr ""
+"காணாமல் போன அனைத்து பகிரப்பட்ட இடங்களையும் உருவாக்கி, காணாமல் போன XREFS ஐச் சேர்க்கவும்"
 
 #: resources/views/data-fix-options.phtml:126
 msgid "This data fix creates missing shared places, even if no tree-independent data (managed outside GEDCOM) is available for the respective place."
 msgstr ""
+"இந்த தரவு பிழைத்திருத்தம் காணாமல் போன இடங்களை உருவாக்குகிறது, அந்தந்த இடத்திற்கு "
+"மரம்-சுயாதீனமான தரவு (GEDCOM க்கு வெளியே நிர்வகிக்கப்படுகிறது) கிடைக்கவில்லை என்றாலும்."
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"மரம்-சுயாதீன தரவு கிடைத்தால், வெப் ட்ரீசின் புவியியல் தரவு 'இலிருந்து MAP ஒருங்கிணைப்புகள்"
+" மற்றும் Gov4Webtrees தொகுதியிலிருந்து வரும் அரசாங்க ஐடிகள் சேர்க்கப்படுகின்றன."
 
 #: resources/views/lists/locations-table.phtml:53
 msgid "GOV id?"
-msgstr ""
+msgstr "அரசு ஐடி?"
 
 #: resources/views/modals/shared-place-fields.phtml:12
 msgid "Shared place name (complete hierarchy)"
-msgstr ""
+msgstr "பகிரப்பட்ட இடத்தின் பெயர் (முழுமையான வரிசைமுறை)"
 
 #: resources/views/modals/shared-place-fields.phtml:14
 msgid "A place name with comma-separated name parts will be resolved to a hierarchy of shared places. Missing higher-level shared places will be created as well."
 msgstr ""
+"கமாவால் பிரிக்கப்பட்ட பெயர் பாகங்கள் கொண்ட இடத்தின் பெயர் பகிரப்பட்ட இடங்களின் படிநிலைக்கு "
+"தீர்க்கப்படும். உயர் மட்ட பகிரப்பட்ட இடங்களைக் காணவில்லை."
 
 #: resources/views/modals/shared-place-fields.phtml:17
 msgid "Shared place name"
-msgstr ""
+msgstr "பகிரப்பட்ட இடத்தின் பெயர்"
 
 #: resources/views/shared-place-page-links.phtml:120
 msgid "Next lower-level shared places"
-msgstr ""
+msgstr "அடுத்த கீழ்-நிலை பகிரப்பட்ட இடங்கள்"
 
 #: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
-msgstr ""
+msgstr "முக்கியமான குறிப்பு:"
 
 #: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr ""
+"இந்த மரம் கமாவால் பிரிக்கப்பட்ட பெயர் பகுதிகளுடன் இடங்களைப் பகிர்ந்துள்ளது, அதே நேரத்தில் "
+"'படிநிலை பகிரப்பட்ட இடங்களைப் பயன்படுத்துவதற்கான' விருப்பம் தேர்ந்தெடுக்கப்படுகிறது."
 
 #: resources/views/shared-places-list-page.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
 msgstr ""
+"பகிரப்பட்ட இடங்களுக்கு இடங்களை மேப்பிங் செய்யும் போது இது முரண்பாடுகளுக்கு வழிவகுக்கிறது"
+", பொதுவாக பகிரப்பட்ட இடங்களுக்கான விவரக்குறிப்புடன் பொருந்தவில்லை (இந்த தனிப்பயன் "
+"தொகுதியின் முந்தைய பதிப்புகள் கண்டிப்பாக பின்பற்றவில்லை)."
 
 #: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr ""
+"இந்த சிக்கலைத் தீர்க்க இந்த தனிப்பயன் தொகுதிக்கான தரவு பிழைத்திருத்தத்தை இயக்க "
+"பரிந்துரைக்கப்படுகிறது."
