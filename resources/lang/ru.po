@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2023-10-14 10:31+0200\n"
-"PO-Revision-Date: 2024-12-02 00:00+0000\n"
-"Last-Translator: Олег <uolega@yandex.ru>\n"
+"PO-Revision-Date: 2025-04-28 15:01+0000\n"
+"Last-Translator: Sotski Eugene <jekakmail@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
@@ -134,7 +134,7 @@ msgstr "Идентификатор правительства для типа м
 
 #: resources/views/lists/locations-table.phtml:53
 msgid "GOV id?"
-msgstr ""
+msgstr "Идентификатор GOV?"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
