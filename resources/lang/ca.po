@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2023-10-14 10:31+0200\n"
-"PO-Revision-Date: 2023-11-20 17:01+0000\n"
+"PO-Revision-Date: 2025-05-12 11:02+0000\n"
 "Last-Translator: BernatBanyuls <bernatbanyuls@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/ca/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: HelpTexts.php:17
 msgid "Shared place summary"
@@ -91,7 +91,7 @@ msgstr "Ubicació"
 #. I18N: translate just like 'Shared Places' for consistency
 #: SharedPlacesModule.php:369
 msgid "Locations"
-msgstr "Ubicació"
+msgstr "Localitzacions"
 
 #: SharedPlacesModule.php:395 SharedPlacesModule.php:397
 #: SharedPlacesModule.php:400 SharedPlacesModule.php:403
@@ -130,7 +130,7 @@ msgstr ""
 
 #: SharedPlacesModule.php:1081
 msgid "shared places"
-msgstr "Llocs compartits"
+msgstr "llocs compartits"
 
 #: SharedPlacesModuleTrait.php:28
 msgid "A module providing support for shared places."
