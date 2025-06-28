@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2023-10-14 10:31+0200\n"
-"PO-Revision-Date: 2024-08-02 11:09+0000\n"
-"Last-Translator: Alexander Kulumbeg <kulumbeg@gmail.com>\n"
+"PO-Revision-Date: 2025-06-28 17:04+0000\n"
+"Last-Translator: ro-la <lacoros@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
@@ -129,7 +129,7 @@ msgstr "Vyfiltrovať jedinečné zdieľané miesta"
 
 #: SharedPlacesModule.php:428
 msgid "GOV id for type of location"
-msgstr "GOV id druhu lokality"
+msgstr "Identifikátor GOV pre typy miesta"
 
 #: resources/views/lists/locations-table.phtml:53
 msgid "GOV id?"
