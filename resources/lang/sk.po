@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2023-10-14 10:31+0200\n"
-"PO-Revision-Date: 2025-06-28 17:04+0000\n"
+"PO-Revision-Date: 2025-06-30 17:01+0000\n"
 "Last-Translator: ro-la <lacoros@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
@@ -227,7 +227,10 @@ msgstr "Zdieľané miesta"
 #: resources/views/data-fix-options.phtml:102
 #: resources/views/data-fix-options.phtml:129
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name', including parent levels if set."
-msgstr "Príslušné zdieľané miesta s zistia tak, ako cez konfiguračnú možnosť \"Dodatočne prepojiť zdieľané miesta cez meno\", včítane vyšších úrovní, ak sú nastavené."
+msgstr ""
+"Príslušné zdieľané miesta sa zistia tak, ako cez konfiguračnú možnosť „"
+"Dodatočne prepojiť zdieľané miesta cez meno“, včítane vyšších úrovní, ak sú "
+"nastavené."
 
 #: resources/views/data-fix-options.phtml:68
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name'."
