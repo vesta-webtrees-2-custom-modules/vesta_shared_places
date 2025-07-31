@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2023-10-14 10:31+0200\n"
-"PO-Revision-Date: 2023-10-23 10:01+0000\n"
+"PO-Revision-Date: 2025-07-31 11:02+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1.1-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
@@ -193,7 +193,9 @@ msgstr "Het wordt nu aanbevolen om XREF's te gebruiken, omdat dit de prestaties 
 
 #: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
-msgstr "Het wordt aanbevolen om de gegevenscorrectie voor deze aangepaste module uit te voeren om dit probleem op te lossen."
+msgstr ""
+"Het wordt aanbevolen om de gegevenscorrectie voor deze uitbreidingsmodule "
+"uit te voeren om dit probleem op te lossen."
 
 #: resources/views/data-fix-options.phtml:13
 msgid "It is strongly recommended to backup your tree first."
@@ -439,7 +441,11 @@ msgstr "Dit is de lijst met GEDCOM-feiten die uw gebruikers slechts één keer k
 
 #: resources/views/shared-places-list-page.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
-msgstr "Dit leidt tot inconsistenties bij het toewijzen van plaatsen aan gedeelde plaatsen, en komt over het algemeen niet overeen met de specificatie voor gedeelde plaatsen (die eerdere versies van deze aangepaste module niet strikt volgden)."
+msgstr ""
+"Dit leidt tot inconsistenties bij het toewijzen van plaatsen aan gedeelde "
+"plaatsen, en komt over het algemeen niet overeen met de specificatie voor "
+"gedeelde plaatsen (die eerdere versies van deze uitbreidingsmodule niet "
+"strikt volgden)."
 
 #: patchedWebtrees/Exceptions/SharedPlaceNotFoundException.php:13
 msgid "This shared place does not exist or you do not have permission to view it."
