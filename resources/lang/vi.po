@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2023-10-14 10:31+0200\n"
-"PO-Revision-Date: 2021-07-15 15:33+0000\n"
+"PO-Revision-Date: 2025-12-31 05:06+0000\n"
 "Last-Translator: ngohuuthuanfc9865b89dde4baf <ngohuuthuan@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/vesta-"
+"webtrees-custom-modules/vesta-shared-places/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
 #, php-format
@@ -31,6 +32,8 @@ msgstr " (Lưu ý: Địa điểm chia sẻ cấp cao hơn cũng đã được t
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
+"%s và các cá nhân, gia đình tham chiếu đến nó, bao gồm cha mẹ, anh chị em "
+"ruột, vợ/chồng và con cái của mỗi cá nhân."
 
 #: SharedPlacesModule.php:993
 #, php-format
@@ -128,11 +131,11 @@ msgstr "Lọc các địa điểm được chia sẻ duy nhất"
 
 #: SharedPlacesModule.php:428
 msgid "GOV id for type of location"
-msgstr "Kiểu id GOV của vị trí"
+msgstr "Mã định danh GOV cho loại địa điểm"
 
 #: resources/views/lists/locations-table.phtml:53
 msgid "GOV id?"
-msgstr ""
+msgstr "Mã định danh GOV?"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
@@ -220,7 +223,7 @@ msgstr "Vị trí"
 #. I18N: translate just like 'Shared Places' for consistency
 #: SharedPlacesModule.php:369
 msgid "Locations"
-msgstr ""
+msgstr "Địa điểm"
 
 #: resources/views/data-fix-options.phtml:83
 #: resources/views/data-fix-options.phtml:102
