@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
 use Cissee\WebtreesExt\Services\SearchServiceExt;
-use Fisharebest\Webtrees\Http\RequestHandlers\AutoCompletePlace;
 use Fisharebest\Webtrees\Module\ModuleMapAutocompleteInterface;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -17,7 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Autocomplete handler for places
  */
-class AutoCompletePlaceExt extends AutoCompletePlace {
+class AutoCompletePlaceExt extends AutoCompletePlacePatched {
 
     private ModuleService $module_service;
     private SearchServiceExt $search_service_ext;

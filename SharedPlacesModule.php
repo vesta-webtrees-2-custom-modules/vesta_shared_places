@@ -64,9 +64,12 @@ use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\PlaceLocation;
 use Fisharebest\Webtrees\Registry;
+use Fisharebest\Webtrees\Services\ClipboardService;
 use Fisharebest\Webtrees\Services\DataFixService;
 use Fisharebest\Webtrees\Services\GedcomImportService;
+use Fisharebest\Webtrees\Services\LinkedRecordService;
 use Fisharebest\Webtrees\Services\ModuleService;
+use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Session;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
@@ -102,6 +105,7 @@ use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
 use Vesta\VestaAdminController;
 use Vesta\VestaModuleTrait;
+use Vesta\VestaUtils;
 use function response;
 use function route;
 use function str_contains;
@@ -206,7 +210,7 @@ class SharedPlacesModule extends AbstractModule implements
             //note: we cannot use
             //->findByComponent(ModulePlaceHierarchyInterface::class, $tree, Auth::user())
             //directly because the access level isn't set for this specific interface!
-            $module = \Vesta\VestaUtils::get(ModuleService::class)
+            $module = VestaUtils::get(ModuleService::class)
                 ->findByComponent(ModuleListInterface::class, $tree, Auth::user())
                 ->first(static function (ModuleInterface $module): bool {
                     return $module instanceof ModulePlaceHierarchyInterface;
@@ -241,11 +245,11 @@ class SharedPlacesModule extends AbstractModule implements
     public function onBoot(): void {
 
         //extend
-        \Vesta\VestaUtils::set(GedcomImportService::class, new GedcomImportServiceExt());
+        VestaUtils::set(GedcomImportService::class, new GedcomImportServiceExt());
 
         //explicitly register in order to re-use in views where we cannot pass via variable
         //(could also resolve via module service)
-        \Vesta\VestaUtils::set(SharedPlacesModule::class, $this);
+        VestaUtils::set(SharedPlacesModule::class, $this);
 
         $useHierarchy = boolval($this->getPreference('USE_HIERARCHY', '1'));
         $useIndirectLinks = boolval($this->getPreference('INDIRECT_LINKS', '0'));
@@ -279,58 +283,28 @@ class SharedPlacesModule extends AbstractModule implements
         //webtrees isn't interested in solving this properly, see
         //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
 
-        /*
-        $router_container = \Vesta\VestaUtils::get(RouterContainer::class);
-        assert($router_container instanceof RouterContainer);
-        $router = $router_container->getMap();
-        */
-
         $router = Registry::routeFactory()->routeMap();
 
-        //(cf WebRoutes.php "Visitor routes with a tree")
-        //note: this format has the side effect of handling privacy properly (Issue #9)
-        //from 2.0.12, use standard name with specific handler!
-
-        //for this, we have to remove the original route, otherwise: RouteAlreadyExists (meh)
-        $existingRoutes = $router->getRoutes();
-        if (array_key_exists(LocationPage::class, $existingRoutes)) {
-            unset($existingRoutes[LocationPage::class]);
-        }
-
-        //while we're at it: webtrees 2.0.12 has CreateLocationModal and CreateLocationAction on the same urls
-        //as our CreateSharedPlaceModal and CreateSharedPlaceAction, we have to drop those!
-        if (array_key_exists(CreateLocationModal::class, $existingRoutes)) {
-            unset($existingRoutes[CreateLocationModal::class]);
-        }
-
-        if (array_key_exists(CreateLocationAction::class, $existingRoutes)) {
-            unset($existingRoutes[CreateLocationAction::class]);
-        }
-
-        if (array_key_exists(LocationListModule::class, $existingRoutes)) {
-            unset($existingRoutes[LocationListModule::class]);
-        }
-
         //[2023/10] improve place autocomplete
-        if (array_key_exists(AutoCompletePlace::class, $existingRoutes)) {
-            unset($existingRoutes[AutoCompletePlace::class]);
-        }
+        //replace handler (do not use closure here!)
+        Registry::container()->set(AutoCompletePlace::class, new AutoCompletePlaceExt(
+                Registry::container()->get(ModuleService::class),
+                Registry::container()->get(SearchService::class),
+                Registry::container()->get(SearchServiceExt::class)));
 
-        $router->setRoutes($existingRoutes);
-
-        //[2023/10] improve place autocomplete
-        $router->get(AutoCompletePlace::class, '/tree/{tree}/autocomplete/place', \Vesta\VestaUtils::get(AutoCompletePlaceExt::class))
-            ->extras(['middleware' => [AuthEditor::class]]);
-
-        $router->get(LocationPage::class, '/tree/{tree}/sharedPlace/{xref}{/slug}', SharedPlacePage::class);
+        //replace handler (do not use closure here!)
+        Registry::container()->set(LocationPage::class, new SharedPlacePage(
+                Registry::container()->get(ModuleService::class),
+                Registry::container()->get(LinkedRecordService::class),
+                Registry::container()->get(ClipboardService::class)));
 
         $router->get(static::class, static::ROUTE_URL, $this);
 
         //also redirect webtrees location-list, otherwise confusing to have to apparently similar lists
         //(actual difference: create shared place button and other additions on top of actual list)
         //(this makes our list menu entry somewhat redundant though)
-        //unset: see above
-        $router->get(LocationListModule::class, static::ROUTE_URL, $this);
+        //replace handler
+        Registry::container()->set(LocationListModule::class, $this);
 
         // Replace an existing view with our own version.
         // (referred to from media-page, from search results, etc)
@@ -345,12 +319,18 @@ class SharedPlacesModule extends AbstractModule implements
         View::registerCustomView('::edit/new-individual', $this->name() . '::edit/new-individual');
 
         $createSharedPlaceModal = new CreateSharedPlaceModal($this);
-
+                
         $router->get(CreateSharedPlaceModal::class, '/tree/{tree}/create-location', $createSharedPlaceModal)
             ->extras(['middleware' => [AuthEditor::class]]);
 
         $router->post(CreateSharedPlaceAction::class, '/tree/{tree}/create-location', CreateSharedPlaceAction::class)
             ->extras(['middleware' => [AuthEditor::class]]);
+
+        //webtrees has CreateLocationModal and CreateLocationAction on the same urls
+        //as our CreateSharedPlaceModal and CreateSharedPlaceAction, we have to replace those!
+        //replace handler
+        Registry::container()->set(CreateLocationModal::class, $createSharedPlaceModal);
+        Registry::container()->set(CreateLocationAction::class, new CreateSharedPlaceAction());
 
         //TODO: cleanup - remove and/or integrate!
         //(main difference is note in page.phtml wrt hasLocationsToFix, everything else was cosmetic and apparently obsolete!)
@@ -717,7 +697,7 @@ class SharedPlacesModule extends AbstractModule implements
         return new Collection();
         }
 
-        $searchService = \Vesta\VestaUtils::get(SearchServiceExt::class);
+        $searchService = VestaUtils::get(SearchServiceExt::class);
         return $searchService->searchLocationsInPlace(new Place($placeGedcomName, $tree));
     }
 
@@ -798,7 +778,7 @@ class SharedPlacesModule extends AbstractModule implements
     }
 
     public function gov2loc(GovReference $gov, Tree $tree): ?LocReference {
-        $searchService = \Vesta\VestaUtils::get(SearchServiceExt::class);
+        $searchService = VestaUtils::get(SearchServiceExt::class);
         $sharedPlaces = $searchService->searchLocationsEOL(array($tree), array("1 _GOV " . $gov->getId()));
         foreach ($sharedPlaces as $sharedPlace) {
             //first match wins
@@ -1464,7 +1444,7 @@ class SharedPlacesModule extends AbstractModule implements
         $new = $this->updateGedcomWrtHierarchy($record);
 
         //higher-level shared places for all names
-        $creator = \Vesta\VestaUtils::get(CreateSharedPlaceAction::class);
+        $creator = VestaUtils::get(CreateSharedPlaceAction::class);
         $newlyCreated = '';
 
         foreach ($record->namesNN() as $placeGedcomName) {
@@ -1500,7 +1480,7 @@ class SharedPlacesModule extends AbstractModule implements
         }
         $new .= $newlyCreated;
 
-        $data_fix_service = \Vesta\VestaUtils::get(DataFixService::class);
+        $data_fix_service = VestaUtils::get(DataFixService::class);
         return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
     }
 
@@ -1508,7 +1488,7 @@ class SharedPlacesModule extends AbstractModule implements
         $old = $record->gedcom();
         $new = $this->updateGedcomWrtEnhance($record);
 
-        $data_fix_service = \Vesta\VestaUtils::get(DataFixService::class);
+        $data_fix_service = VestaUtils::get(DataFixService::class);
         return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
     }
 
@@ -1516,7 +1496,7 @@ class SharedPlacesModule extends AbstractModule implements
         $old = $record->gedcom();
         $new = $this->updateGedcomWrtXrefs($record);
 
-        $data_fix_service = \Vesta\VestaUtils::get(DataFixService::class);
+        $data_fix_service = VestaUtils::get(DataFixService::class);
         return $data_fix_service->gedcomDiff($record->tree(), $old, $new);
     }
 
@@ -1535,7 +1515,7 @@ class SharedPlacesModule extends AbstractModule implements
         // First line of record may contain data - e.g. NOTE records.
         [$new_gedcom] = explode("\n", $record->gedcom(), 2);
 
-        $creator = \Vesta\VestaUtils::get(CreateSharedPlaceAction::class);
+        $creator = VestaUtils::get(CreateSharedPlaceAction::class);
         $newlyCreated = '';
 
         //avoid previewing multiple creations for same place in multiple facts
@@ -1587,7 +1567,7 @@ class SharedPlacesModule extends AbstractModule implements
         }
         $new_gedcom .= $newlyCreated;
 
-        $data_fix_service = \Vesta\VestaUtils::get(DataFixService::class);
+        $data_fix_service = VestaUtils::get(DataFixService::class);
         return $data_fix_service->gedcomDiff($record->tree(), $old, $new_gedcom);
     }
 
@@ -1637,7 +1617,7 @@ class SharedPlacesModule extends AbstractModule implements
         $new = $this->updateGedcomWrtHierarchy($record);
 
         //higher-level shared places for all names
-        $creator = \Vesta\VestaUtils::get(CreateSharedPlaceAction::class);
+        $creator = VestaUtils::get(CreateSharedPlaceAction::class);
         foreach ($record->namesNN() as $placeGedcomName) {
             $parts = SharedPlace::placeNameParts($placeGedcomName);
             $tail = SharedPlace::placeNamePartsTail($parts);
@@ -1711,7 +1691,7 @@ class SharedPlacesModule extends AbstractModule implements
         // First line of record may contain data - e.g. NOTE records.
         [$new_gedcom] = explode("\n", $record->gedcom(), 2);
 
-        $creator = \Vesta\VestaUtils::get(CreateSharedPlaceAction::class);
+        $creator = VestaUtils::get(CreateSharedPlaceAction::class);
 
         foreach ($record->facts([]) as $fact) {
             $factGedcom = $fact->gedcom();
