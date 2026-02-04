@@ -1702,9 +1702,11 @@ class SharedPlacesModule extends AbstractModule implements
                 $loc = $ps->getLoc();
                 if ($loc === null) {
 
+                    $gov = $ps->getGov();
+                            
                     $ref = $creator->createIfRequired(
                         $ps->getGedcomName(),
-                        '',
+                        ($gov === null)?'':$gov,
                         $record->tree(),
                         false,
                         $this,
