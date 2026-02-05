@@ -1535,9 +1535,11 @@ class SharedPlacesModule extends AbstractModule implements
                         $ref = $refs[$ps->getGedcomName()];
                         $reused = true;
                     } else {
+                        $gov = $ps->getGov();
+                        
                         $ref = $creator->createIfRequired(
                             $ps->getGedcomName(),
-                            '',
+                            ($gov === null)?'':$gov,
                             $record->tree(),
                             true,
                             $this,
