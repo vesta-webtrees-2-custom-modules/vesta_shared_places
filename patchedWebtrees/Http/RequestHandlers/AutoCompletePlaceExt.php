@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cissee\WebtreesExt\Http\RequestHandlers;
 
 use Cissee\WebtreesExt\Services\SearchServiceExt;
+use Fisharebest\Webtrees\Http\RequestHandlers\AbstractAutocompleteHandler;
 use Fisharebest\Webtrees\Module\ModuleMapAutocompleteInterface;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -16,20 +17,14 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Autocomplete handler for places
  */
-class AutoCompletePlaceExt extends AutoCompletePlacePatched {
-
-    private ModuleService $module_service;
-    private SearchServiceExt $search_service_ext;
+class AutoCompletePlaceExt extends AbstractAutocompleteHandler {
 
     public function __construct(
-        ModuleService $module_service,
+        private readonly ModuleService $module_service,
         SearchService $search_service,
-        SearchServiceExt $search_service_ext) {
-
-        parent::__construct($module_service, $search_service);
-
-        $this->module_service = $module_service;
-        $this->search_service_ext = $search_service_ext;
+        private readonly SearchServiceExt $search_service_ext) {
+        
+        parent::__construct($search_service);
     }
 
     /**
@@ -37,8 +32,7 @@ class AutoCompletePlaceExt extends AutoCompletePlacePatched {
      *
      * @return Collection<int,string>
      */
-    protected function search(ServerRequestInterface $request): Collection
-    {
+    protected function search(ServerRequestInterface $request): Collection {
         $tree  = Validator::attributes($request)->tree();
         $query = Validator::queryParams($request)->string('query');
 
