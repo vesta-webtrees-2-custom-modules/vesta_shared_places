@@ -540,7 +540,7 @@ class SharedPlace extends Location {
 
         return $main;
     }
-
+    
     /**
      *
      * @return Collection key: xref, value: Collection<SharedPlaceParentAt> (direct parents)
@@ -552,17 +552,24 @@ class SharedPlace extends Location {
         $ret = new Collection();
 
         //safer wrt loops (than to use method recursively)
-        $queue = new Collection(); //of SharedPlaceParentAt, we reuse this class here for convenience
+        //Collection of SharedPlaceParentAt, we reuse this class here for convenience
+        $queue = new Collection(); 
         $queue->prepend(new SharedPlaceParentAt($date, $this, -1));
-
+        
         while ($queue->count() > 0) {
             $currentSharedPlaceParentAt = $queue->pop();
             $current = $currentSharedPlaceParentAt->getSharedPlace();
-
+            
             //important to use this rather than original $date:
             //e.g. for $date (1801-2000): A has parent B from (1801-1900), B has parent C from (1901-2000);
             //then C isn't relevant here at all.
-            $intersectedDate = $currentSharedPlaceParentAt->getDate();
+            //
+            //Issue #205
+            //different paths to same xref may use different dates though, 
+            //therefore must compute for full range after all
+            //in the example above, C must be filtered elsewhere!
+            //
+            $intersectedDate = $date; //$currentSharedPlaceParentAt->getDate();
 
             //we only add elements with non-null shared place to the queue!
             assert($current !== null);
@@ -576,7 +583,7 @@ class SharedPlace extends Location {
                 }
             }
         }
-
+        
         return $ret;
     }
 
@@ -1317,8 +1324,9 @@ class SharedPlace extends Location {
 
         /* @var $parents Collection<SharedPlaceParentAt> */
         $parents = $transitiveParents->get($xref);
-
+        
         $ret = [];
+        $hasRelevantParent = false;
         foreach ($parents as $parent) {
 
             /* @var $parent SharedPlaceParentAt */
@@ -1331,6 +1339,8 @@ class SharedPlace extends Location {
                 continue;
             }
 
+            $hasRelevantParent = true;
+            
             /* @var $parentSharedPlace SharedPlace */
             $parentSharedPlace = $parent->getSharedPlace();
 
@@ -1348,16 +1358,18 @@ class SharedPlace extends Location {
                 $parentNames = $parentSharedPlace->getAllNamesAt($intersectedDate, null);
 
                 if ($primaryOnly) {
-                    //only use primary name, also restrict to primary parent
+                    //only use primary name, also restrict to primary i.e. first parent
                     $parentNames = [$parentNames[0]];
 
-                    return SharedPlace::namesAsStringsAtA(
+                    $retPrimaryOnly = SharedPlace::namesAsStringsAtA(
                             $primaryOnly,
                             $parentSharedPlace->xref(),
                             $alreadySeenXrefs,
                             $parentNames,
                             $transitiveParents,
                             $currentNames);
+                    
+                    return $retPrimaryOnly;
                 }
 
                 $toMerge = SharedPlace::namesAsStringsAtA(
@@ -1367,10 +1379,17 @@ class SharedPlace extends Location {
                         $parentNames,
                         $transitiveParents,
                         $currentNames);
-
+                
                 $ret = array_merge($ret, $toMerge);
             }
         }
+        
+        if (count($ret) == 0) {            
+            if (!$hasRelevantParent) {
+                error_log("namesAsStringsAtC unexpected: no relevant parent for " . $xref);
+            }
+        }
+        
         return $ret;
     }
 
@@ -1592,7 +1611,7 @@ class SharedPlace extends Location {
         $names = [$firstMatch];
 
         $namesAsString = SharedPlace::namesAsStringsAt(
-                $date,
+                $date, //actually only evaluated via getTransitiveParentsAt
                 true,
                 $this->xref(),
                 $names,
