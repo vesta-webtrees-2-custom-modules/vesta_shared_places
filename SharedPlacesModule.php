@@ -1935,6 +1935,7 @@ class SharedPlacesModule extends AbstractModule implements
                     $this->title1(),
                     $this->description1(),
                     true,
+                    true,
                     true);
     }
 
