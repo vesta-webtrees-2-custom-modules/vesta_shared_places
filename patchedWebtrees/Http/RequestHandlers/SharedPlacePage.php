@@ -21,6 +21,7 @@ use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Vesta\CommonI18N;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Model\PlaceStructure;
 use function redirect;
@@ -131,12 +132,18 @@ class SharedPlacePage implements RequestHandlerInterface {
                 //}
             }
         }
-
+        
+        $placeHistoryHtml = '';
+        if (count($this->module->hFactsTabGetAdditionalFacts($record)) > 0) {
+            $placeHistoryHtml = '<tr class=""><th scope="row">' . CommonI18N::placeHistory() . '</th><td class="">' . I18N::translate('Facts and events of this shared place are displayed on the %1$s tab.', CommonI18N::placeHistory()) . '</td></tr>';
+        }
+        
         return $this->viewResponse($this->module->name() . '::shared-place-page', [
             'module' => $this->module,
             'moduleName' => $this->module->name(),
             'hierarchyHtml' => $hierarchyHtml,
             'summaryHtml' => $summaryHtml,
+            'placeHistoryHtml' => $placeHistoryHtml,
             'facts' => $this->facts($record),
 
             'clipboard_facts'      => $this->clipboard_service->pastableFacts($record),

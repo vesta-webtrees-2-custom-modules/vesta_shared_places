@@ -2,16 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the vesta package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2023-10-14 10:31+0200\n"
+"POT-Creation-Date: 2026-07-26 17:42+0200\n"
 "PO-Revision-Date: 2026-02-12 08:09+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/vesta-webtrees-"
-"custom-modules/vesta-shared-places/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,21 +18,21 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.16-dev\n"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:61
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
 msgstr " (Opmerking: %s bovenliggende gedeelde plaatsen zijn ook gecreëerd)"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:60
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:59
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Opmerking: er is ook een bovenliggende gedeelde plaats gecreëerd)"
 
-#: SharedPlacesModule.php:994
+#: SharedPlacesModule.php:1086
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr "%s en de personen en gezinnen die ernaar verwijzen, met inbegrip van ouders, broers en zussen, echtgenoten en kinderen van elk persoon."
 
-#: SharedPlacesModule.php:993
+#: SharedPlacesModule.php:1085
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s en de personen en gezinnen die ernaar verwijzen."
@@ -109,13 +108,18 @@ msgstr "Gegevens correcties"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Het bepalen van het aantal koppelingen (gekoppelde personen/gezinnen) is vergt veel bij het toewijzen van gedeelde plaatsen via naam, en veroorzaakt daarom vertragingen wanneer de lijst met gedeelde plaatsen wordt weergegeven. Het wordt aanbevolen om deze optie alleen te selecteren als plaatsen zijn toegewezen via XREF's."
 
-#: SharedPlacesModule.php:226
+#: SharedPlacesModule.php:267
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Schakel de module Vesta Plaatsen en Grafische kwartierstaat in om de hiërarchie van gedeelde plaatsen te bekijken."
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
 msgstr "Verbeter bestaande gedeelde plaatsen met stamboomonafhankelijke gegevens"
+
+#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:138
+#, php-format
+msgid "Facts and events of this shared place are displayed on the %1$s tab."
+msgstr ""
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:231
@@ -127,7 +131,7 @@ msgstr "Feiten voor gedeeldeplaatsrecords"
 msgid "Filter to unique shared places"
 msgstr "Filter op unieke gedeelde plaatsen"
 
-#: SharedPlacesModule.php:428
+#: SharedPlacesModule.php:500
 msgid "GOV id for type of location"
 msgstr "GOV-ID voor soort locatie"
 
@@ -139,7 +143,7 @@ msgstr "GOV-ID?"
 msgid "Hierarchize Shared Places"
 msgstr "Hiërarchiseer gedeelde plaatsen"
 
-#: SharedPlacesModule.php:411
+#: SharedPlacesModule.php:479
 msgid "Higher-level shared place"
 msgstr "Bovenliggende gedeelde plaats"
 
@@ -193,9 +197,7 @@ msgstr "Het wordt nu aanbevolen om XREF's te gebruiken, omdat dit de prestaties 
 
 #: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
-msgstr ""
-"Het wordt aanbevolen om de gegevenscorrectie voor deze uitbreidingsmodule "
-"uit te voeren om dit probleem op te lossen."
+msgstr "Het wordt aanbevolen om de gegevenscorrectie voor deze uitbreidingsmodule uit te voeren om dit probleem op te lossen."
 
 #: resources/views/data-fix-options.phtml:13
 msgid "It is strongly recommended to backup your tree first."
@@ -216,12 +218,13 @@ msgid "Linking of shared places to places"
 msgstr "Koppeling van gedeelde plaatsen naar plaatsen"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:368 SharedPlacesModule.php:419
+#: SharedPlacesModule.php:394 SharedPlacesModule.php:487
+#: SharedPlacesModule.php:488
 msgid "Location"
 msgstr "Locatie"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:369
+#: SharedPlacesModule.php:395
 msgid "Locations"
 msgstr "Locaties"
 
@@ -295,13 +298,13 @@ msgstr "Beperken tot specifieke feiten en gebeurtenissen"
 msgid "See %1$s for details."
 msgstr "Zie %1$s voor details."
 
-#: SharedPlacesModule.php:395 SharedPlacesModule.php:397
-#: SharedPlacesModule.php:400 SharedPlacesModule.php:403
-#: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
+#: SharedPlacesModule.php:410 SharedPlacesModule.php:412
+#: SharedPlacesModule.php:415 SharedPlacesModule.php:418
+#: SharedPlacesModule.php:762 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
 msgstr "Gedeelde plaats"
 
-#: SharedPlacesModule.php:558 SharedPlacesModule.php:978
+#: SharedPlacesModule.php:638 SharedPlacesModule.php:1070
 msgid "Shared place data"
 msgstr "Gegevens over gedeelde plaats"
 
@@ -327,7 +330,7 @@ msgstr "Structuur van gedeelde plaatsen"
 msgid "Shared place summary"
 msgstr "Samenvatting van gedeelde plaats"
 
-#: SharedPlacesListController.php:53 SharedPlacesModule.php:172
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:213
 #: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
 msgstr "Gedeelde plaatsen"
@@ -344,7 +347,7 @@ msgstr "Toon aantal koppelingen voor de lijst met gedeelde plaatsen"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:194
-#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:129
+#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:130
 msgid "Summary"
 msgstr "Samenvatting"
 
@@ -361,13 +364,13 @@ msgstr "De zoekopdracht kan niet efficiënt worden uitgevoerd en kan enige tijd 
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
 msgstr "De zoekopdracht voor deze gegevenscorrectie komt momenteel niet overeen met records, omdat de configuratieoptie 'Hiërarchische gedeelde plaatsen gebruiken' niet is ingesteld."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:52
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:51
 #, php-format
 msgid "The shared place %s already exists."
 msgstr "De gedeelde plaats %s bestaat al."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:77
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:123
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:76
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:122
 #, php-format
 msgid "The shared place %s has been created."
 msgstr "De gedeelde plaats %s is gecreëerd."
@@ -441,24 +444,18 @@ msgstr "Dit is de lijst met GEDCOM-feiten die uw gebruikers slechts één keer k
 
 #: resources/views/shared-places-list-page.phtml:20
 msgid "This leads to inconsistencies when mapping places to shared places, and in general doesn't match the specification for shared places (which earlier versions of this custom module didn't follow strictly)."
-msgstr ""
-"Dit leidt tot inconsistenties bij het toewijzen van plaatsen aan gedeelde "
-"plaatsen, en komt over het algemeen niet overeen met de specificatie voor "
-"gedeelde plaatsen (die eerdere versies van deze uitbreidingsmodule niet "
-"strikt volgden)."
+msgstr "Dit leidt tot inconsistenties bij het toewijzen van plaatsen aan gedeelde plaatsen, en komt over het algemeen niet overeen met de specificatie voor gedeelde plaatsen (die eerdere versies van deze uitbreidingsmodule niet strikt volgden)."
 
 #: patchedWebtrees/Exceptions/SharedPlaceNotFoundException.php:13
 msgid "This shared place does not exist or you do not have permission to view it."
-msgstr ""
-"Deze gedeelde plaats bestaat niet of u heeft geen toestemming om deze te "
-"bekijken."
+msgstr "Deze gedeelde plaats bestaat niet of u heeft geen toestemming om deze te bekijken."
 
 #: resources/views/shared-places-list-page.phtml:19
 msgid "This tree has shared places with comma-separated name parts, while at the same time the option to 'Use hierarchical shared places' is selected."
 msgstr "Deze stamboom heeft gedeelde plaatsen met door komma's gescheiden naamdelen, terwijl tegelijkertijd de optie 'Hiërarchische gedeelde plaatsen gebruiken' is geselecteerd."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:413
+#: SharedPlacesModule.php:481
 msgid "Type of hierarchical relationship"
 msgstr "Soort hiërarchische verwantschap"
 
@@ -477,7 +474,7 @@ msgstr "Hiërarchische gedeelde plaatsen gebruiken"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Gebruik het scheidingslabel '%1$s' om een plaatshiërarchie te modelleren."
 
-#: SharedPlacesModule.php:220
+#: SharedPlacesModule.php:261
 msgid "View Shared places hierarchy"
 msgstr "Hiërarchie van gedeelde plaatsen weergeven"
 
@@ -496,11 +493,11 @@ msgstr "Indien niet aangevinkt, wordt de eerste benadering gebruikt, waarbij hi�
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr "U kunt een referentiejaar (dat kan worden geëvalueerd door andere modules, zoals %1$s) instellen in de moduleconfiguratie."
 
-#: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
+#: patchedWebtrees/SharedPlace.php:1055 patchedWebtrees/SharedPlace.php:1137
 msgid "circular shared place hierarchy"
 msgstr "cirkelhiërarchie van gedeelde plaatsen"
 
-#: SharedPlacesModule.php:1081
+#: SharedPlacesModule.php:1173
 msgid "shared places"
 msgstr "gedeelde plaatsen"
 

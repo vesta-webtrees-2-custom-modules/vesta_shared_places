@@ -33,12 +33,48 @@ use Cissee\WebtreesExt\Services\SearchServiceExt;
 use Cissee\WebtreesExt\SharedPlace;
 use Cissee\WebtreesExt\SharedPlacePreferences;
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Elements\AddressCity;
+use Fisharebest\Webtrees\Elements\AddressCountry;
+use Fisharebest\Webtrees\Elements\AddressEmail;
+use Fisharebest\Webtrees\Elements\AddressFax;
+use Fisharebest\Webtrees\Elements\AddressLine;
+use Fisharebest\Webtrees\Elements\AddressLine1;
+use Fisharebest\Webtrees\Elements\AddressLine2;
+use Fisharebest\Webtrees\Elements\AddressLine3;
+use Fisharebest\Webtrees\Elements\AddressPostalCode;
+use Fisharebest\Webtrees\Elements\AddressState;
+use Fisharebest\Webtrees\Elements\CauseOfEvent;
+use Fisharebest\Webtrees\Elements\CertaintyAssessment;
 use Fisharebest\Webtrees\Elements\CustomElement;
+use Fisharebest\Webtrees\Elements\DateValue;
+use Fisharebest\Webtrees\Elements\EmptyElement;
+use Fisharebest\Webtrees\Elements\EventAttributeType;
+use Fisharebest\Webtrees\Elements\EventTypeCitedFrom;
 use Fisharebest\Webtrees\Elements\GovIdType;
 use Fisharebest\Webtrees\Elements\HierarchicalRelationship;
 use Fisharebest\Webtrees\Elements\LocationRecord;
+use Fisharebest\Webtrees\Elements\NoteStructure;
+use Fisharebest\Webtrees\Elements\PhoneNumber;
+use Fisharebest\Webtrees\Elements\PhoneticType;
+use Fisharebest\Webtrees\Elements\PlaceHierarchy;
+use Fisharebest\Webtrees\Elements\PlaceLatitude;
+use Fisharebest\Webtrees\Elements\PlaceLongtitude;
 use Fisharebest\Webtrees\Elements\PlaceName;
+use Fisharebest\Webtrees\Elements\PlacePhoneticVariation;
+use Fisharebest\Webtrees\Elements\PlaceRomanizedVariation;
+use Fisharebest\Webtrees\Elements\RelationIsDescriptor;
+use Fisharebest\Webtrees\Elements\ReligiousAffiliation;
+use Fisharebest\Webtrees\Elements\ResponsibleAgency;
+use Fisharebest\Webtrees\Elements\RestrictionNotice;
+use Fisharebest\Webtrees\Elements\RoleInEvent;
+use Fisharebest\Webtrees\Elements\RomanizedType;
+use Fisharebest\Webtrees\Elements\SourceData;
+use Fisharebest\Webtrees\Elements\TextFromSource;
 use Fisharebest\Webtrees\Elements\UnknownElement;
+use Fisharebest\Webtrees\Elements\WhereWithinSource;
+use Fisharebest\Webtrees\Elements\XrefAssociate;
+use Fisharebest\Webtrees\Elements\XrefMedia;
+use Fisharebest\Webtrees\Elements\XrefSource;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\Middleware\AuthEditor;
@@ -368,17 +404,6 @@ class SharedPlacesModule extends AbstractModule implements
         //(but not always for editing, see customSubTags() in Gedcom.php)
         */
 
-        //but we need more (this partially overlaps with customSubTags() in Gedcom.php)
-        $ef->registerSubTags($this->customSubTags());
-        /*
-        foreach ($this->customSubTags() as $tag => $children) {
-            $element = $ef->make($tag);
-            foreach ($children as $child) {
-                $element->subtag(...$child);
-            }
-        }
-        */
-
         //for now, keep established terminology for specific tags
         $ef->registerTags([
             //redundant, we swap translation globally anyway!
@@ -394,6 +419,59 @@ class SharedPlacesModule extends AbstractModule implements
 
             //fix #137
             '_LOC:EVEN' => new CustomLocationEvent(MoreI18N::xlate('Event')),
+            
+            //fix #207 (note this isn't in Gedcom-L)
+            '_LOC:FACT' => new CustomLocationEvent(MoreI18N::xlate('Fact')),
+            
+            '_LOC:FACT'                       => new CustomElement(MoreI18N::xlate('Fact'), ['TYPE'  => '0:1', 'DATE'  => '0:1', 'PLAC'  => '0:1', 'ADDR'  => '0:1', 'EMAIL' => '0:1:?', 'WWW'   => '0:1:?', 'PHON'  => '0:1:?', 'FAX'   => '0:1:?', 'CAUS'  => '0:1', 'AGNC'  => '0:1', 'RELI'  => '0:1', 'NOTE'  => '0:M', 'OBJE'  => '0:M', 'SOUR'  => '0:M', 'RESN'  => '0:1']),
+            '_LOC:FACT:ADDR'                  => new AddressLine(MoreI18N::xlate('Address')),
+            '_LOC:FACT:ADDR:ADR1'             => new AddressLine1(MoreI18N::xlate('Address line 1')),
+            '_LOC:FACT:ADDR:ADR2'             => new AddressLine2(MoreI18N::xlate('Address line 2')),
+            '_LOC:FACT:ADDR:ADR3'             => new AddressLine3(MoreI18N::xlate('Address line 3')),
+            '_LOC:FACT:ADDR:CITY'             => new AddressCity(MoreI18N::xlate('City')),
+            '_LOC:FACT:ADDR:CTRY'             => new AddressCountry(MoreI18N::xlate('Country')),
+            '_LOC:FACT:ADDR:POST'             => new AddressPostalCode(MoreI18N::xlate('Postal code')),
+            '_LOC:FACT:ADDR:STAE'             => new AddressState(MoreI18N::xlate('State')),
+            '_LOC:FACT:AGNC'                  => new ResponsibleAgency(MoreI18N::xlate('Agency')),
+            '_LOC:FACT:CAUS'                  => new CauseOfEvent(MoreI18N::xlate('Cause')),
+            '_LOC:FACT:DATE'                  => new DateValue(MoreI18N::xlate('Date')),
+            '_LOC:FACT:EMAIL'                 => new AddressEmail(MoreI18N::xlate('Email address')),
+            '_LOC:FACT:FAX'                   => new AddressFax(MoreI18N::xlate('Fax')),
+            '_LOC:FACT:NOTE'                  => new NoteStructure(MoreI18N::xlate('Note')),
+            '_LOC:FACT:OBJE'                  => new XrefMedia(MoreI18N::xlate('Media object')),
+            '_LOC:FACT:PHON'                  => new PhoneNumber(MoreI18N::xlate('Phone')),
+            '_LOC:FACT:PLAC'                  => new PlaceName(MoreI18N::xlate('Place')),
+            '_LOC:FACT:PLAC:FONE'             => new PlacePhoneticVariation(MoreI18N::xlate('Phonetic place')),
+            '_LOC:FACT:PLAC:FONE:TYPE'        => new PhoneticType(MoreI18N::xlate('Type')),
+            '_LOC:FACT:PLAC:FORM'             => new PlaceHierarchy(MoreI18N::xlate('Format')),
+            '_LOC:FACT:PLAC:MAP'              => new EmptyElement(MoreI18N::xlate('Coordinates'), ['LATI' => '1:1', 'LONG' => '1:1']),
+            '_LOC:FACT:PLAC:MAP:LATI'         => new PlaceLatitude(MoreI18N::xlate('Latitude')),
+            '_LOC:FACT:PLAC:MAP:LONG'         => new PlaceLongtitude(MoreI18N::xlate('Longitude')),
+            '_LOC:FACT:PLAC:NOTE'             => new NoteStructure(MoreI18N::xlate('Note on place')),
+            '_LOC:FACT:PLAC:ROMN'             => new PlaceRomanizedVariation(MoreI18N::xlate('Romanized place')),
+            '_LOC:FACT:PLAC:ROMN:TYPE'        => new RomanizedType(MoreI18N::xlate('Type')),
+            //see below
+            //'_LOC:FACT:PLAC:_LOC'             => new XrefLocation(MoreI18N::xlate('Location')),
+            '_LOC:FACT:RELI'                  => new ReligiousAffiliation(MoreI18N::xlate('Religion'), []),
+            '_LOC:FACT:RESN'                  => new RestrictionNotice(MoreI18N::xlate('Restriction')),
+            '_LOC:FACT:SOUR'                  => new XrefSource(MoreI18N::xlate('Source citation')),
+            '_LOC:FACT:TYPE'                  => new EventAttributeType(MoreI18N::xlate('Type of fact')),
+            '_LOC:FACT:WWW'                   => new CustomElement(MoreI18N::xlate('URL')),
+
+            //fix #206 (see also customSubTags)
+            '_LOC:EVEN:_ASSO'                => new XrefAssociate(MoreI18N::xlate('Associate')),
+            '_LOC:EVEN:_ASSO:NOTE'           => new NoteStructure(MoreI18N::xlate('Note on association')),
+            '_LOC:EVEN:_ASSO:RELA'           => new RelationIsDescriptor(MoreI18N::xlate('Relationship')),
+            '_LOC:EVEN:_ASSO:SOUR'           => new XrefSource(MoreI18N::xlate('Source citation')),
+            '_LOC:EVEN:_ASSO:SOUR:DATA'      => new SourceData(MoreI18N::xlate('Data')),
+            '_LOC:EVEN:_ASSO:SOUR:DATA:DATE' => new DateValue(MoreI18N::xlate('Date of entry in original source')),
+            '_LOC:EVEN:_ASSO:SOUR:DATA:TEXT' => new TextFromSource(MoreI18N::xlate('Text')),
+            '_LOC:EVEN:_ASSO:SOUR:EVEN'      => new EventTypeCitedFrom(MoreI18N::xlate('Event')),
+            '_LOC:EVEN:_ASSO:SOUR:EVEN:ROLE' => new RoleInEvent(MoreI18N::xlate('Role')),
+            '_LOC:EVEN:_ASSO:SOUR:NOTE'      => new NoteStructure(MoreI18N::xlate('Note on source citation')),
+            '_LOC:EVEN:_ASSO:SOUR:OBJE'      => new XrefMedia(MoreI18N::xlate('Media object')),
+            '_LOC:EVEN:_ASSO:SOUR:PAGE'      => new WhereWithinSource(MoreI18N::xlate('Citation details')),
+            '_LOC:EVEN:_ASSO:SOUR:QUAY'      => new CertaintyAssessment(MoreI18N::xlate('Quality of data')),             
 
             //'Place' seems confusing here - if hierarchical shared places are used, this should be just one part of the place name
             '_LOC:NAME' => new PlaceName(MoreI18N::xlate('Name'), ['ABBR' => '0:1', 'DATE' => '0:1', 'LANG' => '0:1', 'SOUR' => '0:M']),
@@ -407,7 +485,11 @@ class SharedPlacesModule extends AbstractModule implements
             //these types of links are problematic because they mess up the shared place hierarchy (#140)
             //but we have to support them at least this far, in oprder to avoid router errors
             '_LOC:EVEN:PLAC:_LOC' => new XrefSharedPlace(I18N::translate('Location')),
+            '_LOC:FACT:PLAC:_LOC' => new XrefSharedPlace(I18N::translate('Location')),
         ]);
+
+        //but we need more (this partially overlaps with customSubTags() in Gedcom.php)
+        $ef->registerSubTags($this->customSubTags());
 
         //register fallback in case Gov4Webtrees isn't active:
         //(webtrees registers this as CustomElement via gedcomLTags(),
@@ -462,6 +544,13 @@ class SharedPlacesModule extends AbstractModule implements
             'INDI:ORDN:PLAC' => [['_LOC', '0:1']],
             'INDI:RESI:PLAC' => [['_LOC', '0:1']],
             'INDI:SLGC:PLAC' => [['_LOC', '0:1']],
+            
+            //fix #206
+            //3rd arg means 'before NOTE' cf ElementInterface::subtag
+            //with proper types this would be much easier to understand
+            '_LOC:EVEN'      => [['_ASSO', '0:M', 'NOTE']],
+            
+            '_LOC'      => [['FACT', '0:M']],
         ];
     }
 
@@ -534,7 +623,8 @@ class SharedPlacesModule extends AbstractModule implements
 
         //use these regardless of any PLAC set there
         //(which is anyway dubious and perhaps should be removed from the spec?)
-    return $record->facts(['FACT','EVEN']);
+        //effect: these are shown on 'place history' 
+        return $record->facts(['FACT','EVEN']);
     }
 
     public function hFactsTabGetOutputInDBox(

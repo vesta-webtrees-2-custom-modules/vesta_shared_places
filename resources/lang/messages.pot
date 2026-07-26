@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2023-10-14 10:31+0200\n"
+"POT-Creation-Date: 2026-07-26 17:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,63 +51,64 @@ msgstr ""
 msgid "Place names should be entered as a comma-separated list, starting with the smallest place and ending with the country. For example, “Westminster, London, England”."
 msgstr ""
 
-#: SharedPlacesListController.php:53 SharedPlacesModule.php:172
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:213
 #: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
 msgstr ""
 
-#: SharedPlacesModule.php:220
+#: SharedPlacesModule.php:261
 msgid "View Shared places hierarchy"
 msgstr ""
 
-#: SharedPlacesModule.php:226
+#: SharedPlacesModule.php:267
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr ""
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:368 SharedPlacesModule.php:419
+#: SharedPlacesModule.php:394 SharedPlacesModule.php:487
+#: SharedPlacesModule.php:488
 msgid "Location"
 msgstr ""
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:369
+#: SharedPlacesModule.php:395
 msgid "Locations"
 msgstr ""
 
-#: SharedPlacesModule.php:395 SharedPlacesModule.php:397
-#: SharedPlacesModule.php:400 SharedPlacesModule.php:403
-#: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
+#: SharedPlacesModule.php:410 SharedPlacesModule.php:412
+#: SharedPlacesModule.php:415 SharedPlacesModule.php:418
+#: SharedPlacesModule.php:762 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
 msgstr ""
 
-#: SharedPlacesModule.php:411
+#: SharedPlacesModule.php:479
 msgid "Higher-level shared place"
 msgstr ""
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:413
+#: SharedPlacesModule.php:481
 msgid "Type of hierarchical relationship"
 msgstr ""
 
-#: SharedPlacesModule.php:428
+#: SharedPlacesModule.php:500
 msgid "GOV id for type of location"
 msgstr ""
 
-#: SharedPlacesModule.php:558 SharedPlacesModule.php:978
+#: SharedPlacesModule.php:638 SharedPlacesModule.php:1070
 msgid "Shared place data"
 msgstr ""
 
-#: SharedPlacesModule.php:993
+#: SharedPlacesModule.php:1085
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr ""
 
-#: SharedPlacesModule.php:994
+#: SharedPlacesModule.php:1086
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr ""
 
-#: SharedPlacesModule.php:1081
+#: SharedPlacesModule.php:1173
 msgid "shared places"
 msgstr ""
 
@@ -273,7 +274,7 @@ msgstr ""
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:194
-#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:129
+#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:130
 msgid "Summary"
 msgstr ""
 
@@ -322,27 +323,32 @@ msgstr ""
 msgid "This shared place does not exist or you do not have permission to view it."
 msgstr ""
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:52
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:51
 #, php-format
 msgid "The shared place %s already exists."
 msgstr ""
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:60
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:59
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr ""
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:61
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
 msgstr ""
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:77
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:123
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:76
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:122
 #, php-format
 msgid "The shared place %s has been created."
 msgstr ""
 
-#: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
+#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:138
+#, php-format
+msgid "Facts and events of this shared place are displayed on the %1$s tab."
+msgstr ""
+
+#: patchedWebtrees/SharedPlace.php:1055 patchedWebtrees/SharedPlace.php:1137
 msgid "circular shared place hierarchy"
 msgstr ""
 

@@ -2,16 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the vesta package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2023-10-14 10:31+0200\n"
+"POT-Creation-Date: 2026-07-26 17:42+0200\n"
 "PO-Revision-Date: 2025-06-30 17:01+0000\n"
 "Last-Translator: ro-la <lacoros@gmail.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,21 +18,21 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
 "X-Generator: Weblate 5.13-dev\n"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:62
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:61
 #, php-format
 msgid " (Note: %s higher-level shared places have also been created)"
 msgstr " (Poznámka: bolo vytvorených aj %s zdieľaných miest vyššej úrovne)"
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:60
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:59
 msgid " (Note: A higher-level shared place has also been created)"
 msgstr " (Poznámka: Bolo vytvorené aj zdieľané miesto vyššej úrovne)"
 
-#: SharedPlacesModule.php:994
+#: SharedPlacesModule.php:1086
 #, php-format
 msgid "%s and the individuals and families that reference it, including parents, siblings, spouses and children of each individual."
 msgstr "%s a osoby a rodiny, ktoré sa k nemu vzťahujú, včítane rodičov, súrodencov, partnerov a detí príslušnej osoby."
 
-#: SharedPlacesModule.php:993
+#: SharedPlacesModule.php:1085
 #, php-format
 msgid "%s and the individuals and families that reference it."
 msgstr "%s a osoby a rodiny, ktoré sú s týmto miestom spojené."
@@ -109,13 +108,18 @@ msgstr "Oprava údajov"
 msgid "Determining the link counts (linked individual/families) is expensive when assigning shared places via name, and therefore causes delays when the shared places list is displayed. It's recommended to only select this option if places are assigned via XREFs."
 msgstr "Zisťovanie počtu odkazov (pripojených osôb/rodín) je náročné ak sú prepojené zdieľané miesta cez meno a preto môže spôsobiť oneskorenie pri zobrazovaní zoznamu zdieľaných miest. Túto voľbu sa odporúča zvoliť len v prípade, ak sú miesta prepojené prostredníctvom XREF."
 
-#: SharedPlacesModule.php:226
+#: SharedPlacesModule.php:267
 msgid "Enable the Vesta Places and Pedigree map module to view the shared places hierarchy."
 msgstr "Povoľte modul „Vesta Mapa miest a predkov“, aby ste mohli prezerať hierarchiu zdieľaných miest."
 
 #: resources/views/data-fix-options.phtml:63
 msgid "Enhance existing shared places with tree-independent data"
 msgstr "Doplniť existujúce zdieľané miesta údajmi nezávislými na rodokmeni"
+
+#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:138
+#, php-format
+msgid "Facts and events of this shared place are displayed on the %1$s tab."
+msgstr ""
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:231
@@ -127,7 +131,7 @@ msgstr "Fakty pre zdieľané miesta"
 msgid "Filter to unique shared places"
 msgstr "Vyfiltrovať jedinečné zdieľané miesta"
 
-#: SharedPlacesModule.php:428
+#: SharedPlacesModule.php:500
 msgid "GOV id for type of location"
 msgstr "Identifikátor GOV pre typy miesta"
 
@@ -139,7 +143,7 @@ msgstr "GOV id?"
 msgid "Hierarchize Shared Places"
 msgstr "Vytvoriť hierarchické zdieľané miesta"
 
-#: SharedPlacesModule.php:411
+#: SharedPlacesModule.php:479
 msgid "Higher-level shared place"
 msgstr "Zdieľané miesto vyššej úrovne"
 
@@ -214,12 +218,13 @@ msgid "Linking of shared places to places"
 msgstr "Prepojenie zdieľaných miest ku miestam"
 
 #. I18N: translate just like 'Shared Place' for consistency
-#: SharedPlacesModule.php:368 SharedPlacesModule.php:419
+#: SharedPlacesModule.php:394 SharedPlacesModule.php:487
+#: SharedPlacesModule.php:488
 msgid "Location"
 msgstr "Miesto"
 
 #. I18N: translate just like 'Shared Places' for consistency
-#: SharedPlacesModule.php:369
+#: SharedPlacesModule.php:395
 msgid "Locations"
 msgstr "Zdieľané miesta"
 
@@ -227,10 +232,7 @@ msgstr "Zdieľané miesta"
 #: resources/views/data-fix-options.phtml:102
 #: resources/views/data-fix-options.phtml:129
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name', including parent levels if set."
-msgstr ""
-"Príslušné zdieľané miesta sa zistia tak, ako cez konfiguračnú možnosť „"
-"Dodatočne prepojiť zdieľané miesta cez meno“, včítane vyšších úrovní, ak sú "
-"nastavené."
+msgstr "Príslušné zdieľané miesta sa zistia tak, ako cez konfiguračnú možnosť „Dodatočne prepojiť zdieľané miesta cez meno“, včítane vyšších úrovní, ak sú nastavené."
 
 #: resources/views/data-fix-options.phtml:68
 msgid "Matching shared places are determined as via the configuration option 'Additionally link shared places via name'."
@@ -296,13 +298,13 @@ msgstr "Obmedziť na špecifické fakty a udalosti"
 msgid "See %1$s for details."
 msgstr "Podrobnosti pozrite v %1$s."
 
-#: SharedPlacesModule.php:395 SharedPlacesModule.php:397
-#: SharedPlacesModule.php:400 SharedPlacesModule.php:403
-#: SharedPlacesModule.php:682 resources/views/lists/locations-table.phtml:48
+#: SharedPlacesModule.php:410 SharedPlacesModule.php:412
+#: SharedPlacesModule.php:415 SharedPlacesModule.php:418
+#: SharedPlacesModule.php:762 resources/views/lists/locations-table.phtml:48
 msgid "Shared place"
 msgstr "Zdieľané miesto"
 
-#: SharedPlacesModule.php:558 SharedPlacesModule.php:978
+#: SharedPlacesModule.php:638 SharedPlacesModule.php:1070
 msgid "Shared place data"
 msgstr "Údaje zdieľaného miesta"
 
@@ -328,7 +330,7 @@ msgstr "Štruktúra zdieľaného miesta"
 msgid "Shared place summary"
 msgstr "Zhrnutie zdieľaného miesta"
 
-#: SharedPlacesListController.php:53 SharedPlacesModule.php:172
+#: SharedPlacesListController.php:53 SharedPlacesModule.php:213
 #: resources/views/lists/locations-table.phtml:43
 msgid "Shared places"
 msgstr "Zdieľané miesta"
@@ -345,7 +347,7 @@ msgstr "Zobraziť počet odkazov pre zoznam zdieľaných miest"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:194
-#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:129
+#: patchedWebtrees/Http/RequestHandlers/SharedPlacePage.php:130
 msgid "Summary"
 msgstr "Zhrnutie"
 
@@ -362,13 +364,13 @@ msgstr "Vyhľadávanie sa nedá implementovať efektívne a môže trvať dlhši
 msgid "The search for this data fix currently does not match any records, because the configuration option to 'Use hierarchical shared places' isn't set."
 msgstr "Vyhľadávanie pre túto opravu údajov nezodpovedá žiadnemu záznamu, lebo v nastaveniach nie je zvolená možnosť „Používať hierarchické zdieľané miesta“."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:52
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:51
 #, php-format
 msgid "The shared place %s already exists."
 msgstr "Zdieľané miesto %s už existuje."
 
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:77
-#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:123
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:76
+#: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:122
 #, php-format
 msgid "The shared place %s has been created."
 msgstr "Zdieľané miesto %s bolo vytvorené."
@@ -453,7 +455,7 @@ msgid "This tree has shared places with comma-separated name parts, while at the
 msgstr "Tento rodokmeň obsahuje zdieľané miesta s časťami oddelenými čiarkami a súčasne je zapnutá možnosť \"Používať hierarchické zdieľané miesta\"."
 
 #. I18N::translate('Type of location')), //anyway requires subtags!
-#: SharedPlacesModule.php:413
+#: SharedPlacesModule.php:481
 msgid "Type of hierarchical relationship"
 msgstr "Druh hierarchického vzťahu"
 
@@ -472,7 +474,7 @@ msgstr "Používať hierarchické zdieľané miesta"
 msgid "Use the separate tag '%1$s' in order to model a place hierarchy."
 msgstr "Na modelovanie hierarchie miest použite samostatný tag „%1$s“."
 
-#: SharedPlacesModule.php:220
+#: SharedPlacesModule.php:261
 msgid "View Shared places hierarchy"
 msgstr "Zobraziť hierarchiu zdieľaných miest"
 
@@ -491,11 +493,11 @@ msgstr "Keď nie je zvolené, tak sa použije predchádzajúci spôsob, v ktorom
 msgid "You can set a reference year (which may be evaluated by other modules, such as %1$s) in the module configuration."
 msgstr "V konfigurácii modulu môžete nastaviť referenčný rok, ktorý môžu využiť iné moduly, ako napr. %1$s."
 
-#: patchedWebtrees/SharedPlace.php:1052 patchedWebtrees/SharedPlace.php:1128
+#: patchedWebtrees/SharedPlace.php:1055 patchedWebtrees/SharedPlace.php:1137
 msgid "circular shared place hierarchy"
 msgstr "zacyklená hierarchia zdieľaných miest"
 
-#: SharedPlacesModule.php:1081
+#: SharedPlacesModule.php:1173
 msgid "shared places"
 msgstr "zdieľané miesta"
 

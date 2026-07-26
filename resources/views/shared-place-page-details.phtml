@@ -2,12 +2,14 @@
 
 use Cissee\WebtreesExt\Contracts\FallbackAssociateFactUtils;
 use Cissee\WebtreesExt\Module\ModuleVestalInterface;
+use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\GedcomRecord;
 use Vesta\VestaUtils;
 
 /**
  * @var string                    $hierarchyHtml
  * @var string                    $summaryHtml
+ * @var string                    $placeHistoryHtml
  * @var Collection<int,Fact>|null $clipboard_facts
  * @var GedcomRecord              $record
  * @var ModuleVestalInterface     $module
@@ -19,8 +21,12 @@ use Vesta\VestaUtils;
     <?php
         echo $hierarchyHtml;
         echo $summaryHtml;
+        echo $placeHistoryHtml;
+        
+        //filter FACT/EVEN, they are displayed on the "Place History" tab
+        //cf hFactsTabGetAdditionalFacts
     ?>
-    <?php foreach ($record->facts([], true) as $fact) : ?>
+    <?php foreach ($record->facts([], true)->filter(fn (Fact $fact): bool => ($fact->tag() !== '_LOC:EVEN') && ($fact->tag() !== '_LOC:FACT')) as $fact) : ?>
         <?php
         //we need the enhanced fact view here, e.g. for resetting GOV data
         //view('fact', ['fact' => $fact, 'record' => $record])

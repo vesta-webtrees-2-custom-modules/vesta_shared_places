@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Cissee\WebtreesExt\Elements;
 
-use Fisharebest\Webtrees\Elements\AbstractEventElement;
+use Fisharebest\Webtrees\Elements\AbstractElement;
 
 /**
  * CustomEvent
  */
-class CustomLocationEvent extends AbstractEventElement
+class CustomLocationEvent extends AbstractElement
 {
-    protected const VESTA_SUBTAGS = [
+    protected const array SUBTAGS = [
         'TYPE'  => '0:1',
         'DATE'  => '0:1',
-        //'AGE'   => '0:1', //should probably be removed from webtrees CustomEvent
+        //'AGE'   => '0:1', //seems misplaced here
         'PLAC'  => '0:1',
         'ADDR'  => '0:1',
         'EMAIL' => '0:1:?',
@@ -29,9 +29,4 @@ class CustomLocationEvent extends AbstractEventElement
         'SOUR'  => '0:M',
         'RESN'  => '0:1',
     ];
-    
-     public function __construct(string $label, $subtags = null)
-    {
-        parent::__construct($label, self::VESTA_SUBTAGS);
-    }
 }
