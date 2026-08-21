@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2026-07-26 17:42+0200\n"
-"PO-Revision-Date: 2025-08-02 18:38+0000\n"
-"Last-Translator: Richard Cissée <ric@richard-cissee.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-shared-places/de/>\n"
+"PO-Revision-Date: 2026-08-17 11:51+0000\n"
+"Last-Translator: Peter Schulz <pesz@gmx.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/vesta-webtrees-"
+"custom-modules/vesta-shared-places/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: patchedWebtrees/Http/RequestHandlers/CreateSharedPlaceAction.php:61
 #, php-format
@@ -120,6 +121,8 @@ msgstr "Verbessere vorhandene gemeinsame Orte mit vom Stammbaum unabhängigen Da
 #, php-format
 msgid "Facts and events of this shared place are displayed on the %1$s tab."
 msgstr ""
+"Tatsachen und Ereignisse dieses gemeinsamen Ortes werden im Reiter %1$s "
+"angezeigt."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:231
