@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2026-07-26 17:42+0200\n"
-"PO-Revision-Date: 2026-10-25 02:51+0000\n"
+"PO-Revision-Date: 2026-10-25 05:51+0000\n"
 "Last-Translator: Firdaus kapin "
 "<firdauskapin@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Malay <https://hosted.weblate.org/projects/vesta-webtrees-"
@@ -162,57 +162,77 @@ msgstr "Tapis kepada tempat kongsi yang unik"
 
 #: SharedPlacesModule.php:500
 msgid "GOV id for type of location"
-msgstr ""
+msgstr "ID GOV untuk jenis lokasi"
 
 #: resources/views/lists/locations-table.phtml:53
 msgid "GOV id?"
-msgstr ""
+msgstr "GOV id?"
 
 #: resources/views/data-fix-options.phtml:29
 msgid "Hierarchize Shared Places"
-msgstr ""
+msgstr "Menentukan Hierarki Tempat Bersama"
 
 #: SharedPlacesModule.php:479
 msgid "Higher-level shared place"
-msgstr ""
+msgstr "Ruang berkongsi peringkat lebih tinggi"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:87
 msgid "However, you can still check this option and link shared places via the place name itself. In this case, links are established internally by searching for a shared place with any name matching case-insensitively."
 msgstr ""
+"Walau bagaimanapun, anda masih boleh memilih opsyen ini dan memautkan lokasi "
+"yang dikongsi melalui nama lokasi itu sendiri. Dalam kes ini, pautan "
+"diwujudkan secara dalaman dengan mencari lokasi yang dikongsi yang mempunyai "
+"nama yang sepadan, tanpa mengira perbezaan huruf besar atau kecil."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:70
 msgid "If checked, relations between shared places are modelled via an explicit hierarchy, where shared places have XREFs to higher-level shared places, as described in the specification."
 msgstr ""
+"Jika ditanda, hubungan antara tempat yang dikongsi dimodelkan melalui "
+"hierarki eksplisit, dengan tempat yang dikongsi mempunyai rujukan silang "
+"(XREF) kepada tempat yang dikongsi pada peringkat lebih tinggi, seperti yang "
+"diterangkan dalam spesifikasi."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:149
 msgid "If this option is checked, shared place data is only displayed for the following facts and events. "
 msgstr ""
+"Jika pilihan ini ditanda, data tempat yang dikongsi hanya dipaparkan untuk "
+"fakta dan peristiwa berikut. "
 
 #: resources/views/data-fix-options.phtml:127
 msgid "If tree-independent data is available, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"Jika data yang tidak bergantung pada pokok tersedia, koordinat peta daripada "
+"'Data geografi' (Geographic data) dalam webtrees serta ID GOV daripada modul "
+"Gov4Webtrees akan ditambah."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:88
 msgid "If you are using hierarchical shared places, a place with the name \"A, B, C\" is mapped to a shared place \"A\" with a higher-level shared place that maps to \"B, C\"."
 msgstr ""
+"Jika anda menggunakan ruang kongsi berhierarki, sesuatu ruang dengan nama "
+"\"A, B, C\" dipetakan kepada ruang kongsi \"A\" yang mempunyai ruang kongsi "
+"peringkat lebih tinggi yang dipetakan kepada \"B, C\"."
 
 #: resources/views/shared-places-list-page.phtml:16
 msgid "Important note:"
-msgstr ""
+msgstr "Nota penting:"
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:72
 msgid "In particular, hierarchical shared places do not have names with comma-separated name parts."
 msgstr ""
+"Secara khususnya, lokasi berkongsi yang berhierarki tidak mempunyai nama "
+"yang bahagian-bahagian namanya dipisahkan oleh koma."
 
 #: resources/views/data-fix-options.phtml:67
 #: resources/views/data-fix-options.phtml:100
 msgid "In particular, map coordinates from webtrees 'Geographic data' and GOV ids from the Gov4Webtrees module are added."
 msgstr ""
+"Khususnya, koordinat peta daripada 'Data geografi' (Geographic data) "
+"webtrees serta ID GOV daripada modul Gov4Webtrees telah ditambah."
 
 #. I18N: Module Configuration
 #: SharedPlacesModuleTrait.php:218
@@ -228,10 +248,15 @@ msgstr ""
 #: SharedPlacesModuleTrait.php:86
 msgid "It is now recommended to use XREFs, as this improves performance and flexibility. There is a data fix available which may be used to add XREFs. "
 msgstr ""
+"Penggunaan XREF kini disyorkan kerana ia meningkatkan prestasi dan "
+"fleksibiliti. Terdapat pembaikan data yang boleh digunakan untuk menambah "
+"XREF. "
 
 #: resources/views/shared-places-list-page.phtml:23
 msgid "It is recommended to run the data fix for this custom module to resolve this issue."
 msgstr ""
+"Adalah disyorkan untuk menjalankan pembetulan data bagi modul tersuai ini "
+"bagi menyelesaikan isu tersebut."
 
 #: resources/views/data-fix-options.phtml:13
 msgid "It is strongly recommended to backup your tree first."
